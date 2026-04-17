@@ -33,6 +33,66 @@ description: 如何为本手册新增页面、修订内容、参与评审
 - **一句话理解先行**：每个页面顶部必须有 `!!! tip "一句话理解"` admonition，让读者"就算不往下读也带走一个主要事实"
 - **文献优先权威**：延伸阅读优先引用 spec / 论文 / 官方博客，次选高质量二手解读
 
+## 画图规范
+
+静态架构图（主打视觉的那 3–5 张）用 **Excalidraw** 作者源；流程 / 数据流图继续用 **Mermaid**（文本可 diff）。
+
+### 色板（match 站点 Material Indigo 主题）
+
+| 用途 | Hex | 用法 |
+| --- | --- | --- |
+| 主干强调 | `#3949ab` | 主要节点边框、箭头 |
+| 主干填充 | `#5c6bc0` | 主要节点背景 |
+| 次要节点 | `#c5cae9` | 辅助填充 |
+| 层级背景 | `#e8eaf6` | 分层 band 淡底 |
+| 强调焦点 | `#1a237e` | 关键层（如 Catalog） |
+| 文本 | `#1a237e` / `#e8eaf6`（深/浅模式） |
+| 箭头 | `#3949ab` / `#7986cb`（深/浅模式） |
+
+### 排版约定
+
+- **字体**：`"Noto Sans SC", system-ui, sans-serif`（和站点一致）
+- **字号**：Layer 标题 18–20px / 700；Node 标签 14px / 500；副标 11px / 400
+- **圆角**：统一 8px；节点描边 1.5px
+- **箭头**：2px 实线，实心三角，**绝不交叉**（布局时手工避开）
+- **层级分 band**：每个逻辑层单独一条横 band，背景色递进
+
+### 文件与命名
+
+每张图在 `docs/assets/diagrams/` 下交付 3 个文件：
+
+```text
+<slug>.svg           # 浅色，主展示
+<slug>.dark.svg      # 深色变体
+<slug>.excalidraw    # JSON 源（后续迭代起点）
+```
+
+Markdown 引用模式：
+
+```markdown
+![图标题](../assets/diagrams/<slug>.svg#only-light){ loading=lazy }
+![图标题](../assets/diagrams/<slug>.dark.svg#only-dark){ loading=lazy }
+```
+
+`#only-light` / `#only-dark` 是 Material 的原生语法，自动跟随主题切换。
+
+### 工作流（在 Excalidraw 里迭代）
+
+1. 打开 <https://excalidraw.com> → 左上角菜单 → **Open** → 选 `.excalidraw` 文件
+2. 编辑，右上角 **Export image** → **SVG** → 覆盖 `<slug>.svg`
+3. 切暗色背景 → 再导一次 → 覆盖 `<slug>.dark.svg`
+4. 左上角菜单 → **Save to...** → 覆盖 `.excalidraw` 源文件
+5. 开 PR
+
+### 什么时候用 Mermaid、什么时候用 SVG
+
+| 场景 | 选 |
+| --- | --- |
+| 数据流 / 流程（任意节点数）| **Mermaid**（自动布局、可文本 diff）|
+| 系统拓扑 / 架构分层 / ≥ 3 张并列的对比图 | **SVG（Excalidraw）**（需要精细控制）|
+| 论文笔记 / ADR 里的小图 | **Mermaid**（简洁够用）|
+| 主线页面的 hero 图 | **SVG**（读者第一眼就看到，值得精修）|
+
 ## 本地预览
 
 ```bash
