@@ -1,0 +1,24 @@
+name: 新增对比页
+description: 提议一个横向对比页
+title: "[Compare] <A> vs <B>"
+labels: ["content/comparison"]
+body:
+  - type: input
+    id: subjects
+    attributes:
+      label: 对比对象
+      placeholder: Iceberg vs Paimon vs Hudi vs Delta
+    validations:
+      required: true
+  - type: textarea
+    id: dims
+    attributes:
+      label: 预计对比维度
+      placeholder: 表格式 / 并发模型 / 流式能力 / 生态成熟度
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: 读者典型决策
+      description: 读完这一页读者能回答什么选型问题

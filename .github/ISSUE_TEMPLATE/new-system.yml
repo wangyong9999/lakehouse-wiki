@@ -1,0 +1,35 @@
+name: 新增系统页
+description: 提议一个新的 OSS/系统介绍页
+title: "[System] <系统名>"
+labels: ["content/system"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 系统名
+      placeholder: Apache Iceberg
+    validations:
+      required: true
+  - type: input
+    id: path
+    attributes:
+      label: 目标目录
+      description: 例如 lakehouse、catalog、retrieval、query-engines
+      placeholder: lakehouse
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: 上游仓库 URL
+      placeholder: https://github.com/apache/iceberg
+  - type: textarea
+    id: summary
+    attributes:
+      label: 它解决什么问题（一句话）
+    validations:
+      required: true
+  - type: textarea
+    id: modules
+    attributes:
+      label: 关键模块（草稿）

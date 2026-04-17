@@ -1,0 +1,141 @@
+site_name: Lakehouse + Multimodal Wiki
+site_description: 多模一体化湖仓 · AI+BI 负载知识库
+site_url: https://wangyong9999.github.io/lakehouse-wiki/
+repo_url: https://github.com/wangyong9999/lakehouse-wiki
+repo_name: wangyong9999/lakehouse-wiki
+edit_uri: edit/main/docs/
+
+exclude_docs: |
+  _templates/
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换到暗色
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到亮色
+  font:
+    text: Noto Sans SC
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - tags
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      permalink_title: 锚点
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - 首页: index.md
+  - 基础:
+      - foundations/index.md
+      - 对象存储: foundations/object-storage.md
+      - Parquet: foundations/parquet.md
+  - 湖仓表格式:
+      - lakehouse/index.md
+      - 湖表: lakehouse/lake-table.md
+      - Snapshot: lakehouse/snapshot.md
+      - Apache Iceberg: lakehouse/iceberg.md
+  - 元数据与 Catalog:
+      - catalog/index.md
+      - Nessie: catalog/nessie.md
+  - 查询引擎:
+      - query-engines/index.md
+  - 多模检索:
+      - retrieval/index.md
+      - 向量数据库: retrieval/vector-database.md
+      - HNSW: retrieval/hnsw.md
+      - Hybrid Search: retrieval/hybrid-search.md
+  - AI 负载:
+      - ai-workloads/index.md
+      - RAG: ai-workloads/rag.md
+  - BI 负载:
+      - bi-workloads/index.md
+  - 一体化架构:
+      - unified/index.md
+  - 运维与生产:
+      - ops/index.md
+  - 研究前沿:
+      - frontier/index.md
+  - 横向对比:
+      - compare/index.md
+      - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
+  - 场景指南:
+      - scenarios/index.md
+      - RAG on Lake: scenarios/rag-on-lake.md
+  - 学习路径:
+      - learning-paths/index.md
+      - 一周新人路径: learning-paths/week-1-newcomer.md
+  - ADR:
+      - adr/index.md
+      - 0001 选择 MkDocs Material: adr/0001-mkdocs-material.md
+  - 术语表: glossary.md
+  - 贡献指南: contributing.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/wangyong9999/lakehouse-wiki
+
+copyright: 内容采用 CC BY 4.0 协议 · 欢迎贡献

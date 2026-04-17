@@ -1,0 +1,22 @@
+name: 勘误 / 内容修订
+description: 报告一处错误、过时内容，或建议改进
+title: "[Erratum] <页面标题>: <一句话>"
+labels: ["content/erratum"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 页面路径
+      placeholder: docs/retrieval/hnsw.md
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: 问题描述
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: 建议的修改

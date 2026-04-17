@@ -1,0 +1,34 @@
+name: 新增概念页
+description: 提议一个新的概念词条
+title: "[Concept] <概念名>"
+labels: ["content/concept"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 概念名（中 / 英）
+      placeholder: 湖表 / Lake Table
+    validations:
+      required: true
+  - type: input
+    id: path
+    attributes:
+      label: 目标目录
+      description: 例如 lakehouse、retrieval、foundations
+      placeholder: lakehouse
+    validations:
+      required: true
+  - type: textarea
+    id: oneliner
+    attributes:
+      label: 一句话理解（草稿）
+    validations:
+      required: true
+  - type: textarea
+    id: related
+    attributes:
+      label: 相关概念 / 相关系统
+  - type: textarea
+    id: refs
+    attributes:
+      label: 延伸阅读（至少 2 条）
