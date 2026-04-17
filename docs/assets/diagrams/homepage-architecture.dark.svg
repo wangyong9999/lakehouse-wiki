@@ -145,19 +145,19 @@
     <text class="ns" x="1140" y="201" text-anchor="middle">vLLM · TGI</text>
   </g>
 
-  <!-- ===== Layer 6: 消费 (4 nodes, top) ===== -->
+  <!-- ===== Layer 6: 消费 (4 nodes, top) - BI|ML 左传统, RAG|多模检索 右 AI ===== -->
   <g>
     <rect x="185" y="38" width="225" height="56" rx="8" fill="#1e2135" stroke="#5c6bc0" stroke-width="1.5"/>
     <text class="nl" x="297" y="63" text-anchor="middle">BI · 仪表盘</text>
     <text class="ns" x="297" y="80" text-anchor="middle">Superset · Tableau · 自研</text>
 
     <rect x="425" y="38" width="225" height="56" rx="8" fill="#1e2135" stroke="#5c6bc0" stroke-width="1.5"/>
-    <text class="nl" x="537" y="63" text-anchor="middle">RAG · Agent</text>
-    <text class="ns" x="537" y="80" text-anchor="middle">知识问答 · 工具调用</text>
+    <text class="nl" x="537" y="63" text-anchor="middle">ML 训练</text>
+    <text class="ns" x="537" y="80" text-anchor="middle">PyTorch · Ray Train</text>
 
     <rect x="665" y="38" width="225" height="56" rx="8" fill="#1e2135" stroke="#5c6bc0" stroke-width="1.5"/>
-    <text class="nl" x="777" y="63" text-anchor="middle">ML 训练</text>
-    <text class="ns" x="777" y="80" text-anchor="middle">PyTorch · Ray Train</text>
+    <text class="nl" x="777" y="63" text-anchor="middle">RAG · Agent</text>
+    <text class="ns" x="777" y="80" text-anchor="middle">知识问答 · 工具调用</text>
 
     <rect x="905" y="38" width="275" height="56" rx="8" fill="#1e2135" stroke="#5c6bc0" stroke-width="1.5"/>
     <text class="nl" x="1042" y="63" text-anchor="middle">多模检索</text>
@@ -182,8 +182,8 @@
 
   <line x1="1000" y1="408" x2="1000" y2="226" stroke="#c5cae9" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-alt)"/>
 
-  <line x1="400" y1="162" x2="297" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="690" y1="162" x2="777" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="950" y1="162" x2="537" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="340" y1="162" x2="297" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="572" y1="162" x2="537" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1140" y1="162" x2="777" y2="102" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
   <line x1="1046" y1="162" x2="1042" y2="102" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
 </svg>
