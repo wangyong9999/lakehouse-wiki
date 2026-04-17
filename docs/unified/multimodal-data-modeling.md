@@ -25,6 +25,9 @@ status: stable
 
 ## 推荐表结构模板
 
+![multimodal_assets 表的 7 类字段分组](../assets/diagrams/multimodal-schema.svg#only-light){ loading=lazy }
+![multimodal_assets 表的 7 类字段分组](../assets/diagrams/multimodal-schema.dark.svg#only-dark){ loading=lazy }
+
 ```sql
 CREATE TABLE multimodal_assets (
   -- 标识

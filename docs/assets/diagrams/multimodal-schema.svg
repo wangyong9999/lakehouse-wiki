@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="多模数据建模：一张湖表承载多种向量与元数据">
+  <title>多模数据建模 · 一表多向量</title>
+  <desc>单表 multimodal_assets 的字段分组：标识 / 模态 / 资产指针 / 文本派生 / 多向量 / 治理 / 时间。</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6bc0"/>
+    </marker>
+    <style>
+      .hdr  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 17px; font-weight: 700; fill: #1a237e; }
+      .sub  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11px; fill: #5c6bc0; letter-spacing: 0.3px; }
+      .tbl  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 18px; font-weight: 700; fill: #ffffff; }
+      .grp  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11px; font-weight: 700; fill: #3949ab; letter-spacing: 0.6px; }
+      .col  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; fill: #1a237e; }
+      .typ  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 11.5px; font-weight: 400; fill: #5c6bc0; }
+      .note { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11px; fill: #546e7a; }
+      .tag  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 10px; font-weight: 700; fill: #ffffff; letter-spacing: 0.4px; }
+      .anno-hdr { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 13px; font-weight: 700; fill: #1a237e; }
+      .anno-body { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11.5px; fill: #37474f; }
+      .vec-hl   { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11px; font-weight: 700; fill: #1a237e; }
+    </style>
+  </defs>
+
+  <!-- Top title -->
+  <text class="hdr" x="600" y="32" text-anchor="middle">多模数据建模 · 一张表承载多种向量</text>
+  <text class="sub" x="600" y="52" text-anchor="middle">identity · modality · pointers · text · vectors · governance · time</text>
+
+  <!-- ===== Table card (left) ===== -->
+  <rect x="40" y="82" width="700" height="608" rx="14" fill="#ffffff" stroke="#3949ab" stroke-width="2"/>
+
+  <!-- Table name header -->
+  <rect x="40" y="82" width="700" height="44" rx="14" fill="#3949ab"/>
+  <rect x="40" y="108" width="700" height="18" fill="#3949ab"/>
+  <text class="tbl" x="60" y="112">multimodal_assets</text>
+  <text class="sub" x="720" y="112" text-anchor="end" fill="#c5cae9">· USING iceberg · PARTITIONED BY (kind, days(ts), bucket(16, asset_id))</text>
+
+  <!-- Group 1: 标识 -->
+  <rect x="40" y="126" width="700" height="50" fill="#f8fafc"/>
+  <rect x="40" y="126" width="6"   height="50" fill="#9fa8da"/>
+  <text class="grp" x="60" y="143">IDENTITY</text>
+  <text class="col" x="60"  y="166">asset_id</text>
+  <text class="typ" x="190" y="166">BIGINT NOT NULL</text>
+  <text class="col" x="360" y="166">asset_version</text>
+  <text class="typ" x="500" y="166">INT DEFAULT 1</text>
+
+  <!-- Group 2: 模态 -->
+  <rect x="40" y="176" width="700" height="50" fill="#f1f5f9"/>
+  <rect x="40" y="176" width="6"   height="50" fill="#9fa8da"/>
+  <text class="grp" x="60" y="193">MODALITY</text>
+  <text class="col" x="60"  y="216">kind</text>
+  <text class="typ" x="190" y="216">STRING</text>
+  <text class="note" x="250" y="216">image / video / audio / text / doc</text>
+  <text class="col" x="60"  y="232" font-size="12">modality_tags</text>
+  <text class="typ" x="190" y="232" font-size="11">ARRAY&lt;STRING&gt;</text>
+
+  <!-- Group 3: 资产指针（只存 URI） -->
+  <rect x="40" y="226" width="700" height="76" fill="#ecf0f8"/>
+  <rect x="40" y="226" width="6"   height="76" fill="#7986cb"/>
+  <text class="grp" x="60" y="243">ASSET POINTERS</text>
+  <text class="note" font-style="italic" x="160" y="243">二进制不进表 · 只存对象存储 URI</text>
+  <text class="col" x="60"  y="266">raw_uri</text>
+  <text class="typ" x="190" y="266">STRING NOT NULL</text>
+  <text class="col" x="360" y="266">raw_sha256</text>
+  <text class="typ" x="500" y="266">STRING(64)</text>
+  <text class="col" x="60"  y="286">raw_size_bytes</text>
+  <text class="typ" x="190" y="286">BIGINT</text>
+  <text class="col" x="360" y="286">thumb_uri</text>
+  <text class="typ" x="500" y="286">STRING</text>
+
+  <!-- Group 4: 文本派生 -->
+  <rect x="40" y="302" width="700" height="70" fill="#e8eaf6"/>
+  <rect x="40" y="302" width="6"   height="70" fill="#5c6bc0"/>
+  <text class="grp" x="60" y="319">TEXT (DERIVED)</text>
+  <text class="note" font-style="italic" x="190" y="319">caption / OCR / ASR 产出回表</text>
+  <text class="col" x="60"  y="342">caption</text>
+  <text class="typ" x="190" y="342">STRING</text>
+  <text class="note" x="260" y="342">VLM 生成 / 人工</text>
+  <text class="col" x="60"  y="358">ocr_text</text>
+  <text class="typ" x="190" y="358">STRING</text>
+  <text class="col" x="360" y="358">transcript</text>
+  <text class="typ" x="500" y="358">STRING (ASR)</text>
+
+  <!-- Group 5: VECTORS (key highlight) -->
+  <rect x="40" y="372" width="700" height="100" fill="#dde1f3" stroke="#3949ab" stroke-width="1" stroke-dasharray="5 3"/>
+  <rect x="40" y="372" width="6"   height="100" fill="#1a237e"/>
+  <text class="grp" x="60" y="389" fill="#1a237e">VECTORS · 按用途 / 模型分列 · 可多个并存</text>
+
+  <rect x="60" y="397" width="16" height="16" rx="3" fill="#1a237e"/>
+  <text class="tag" x="68" y="409">★</text>
+  <text class="col" x="84" y="409">clip_vec</text>
+  <text class="typ" x="200" y="409">VECTOR&lt;FLOAT, 512&gt;</text>
+  <text class="vec-hl" x="380" y="409">多模通用检索</text>
+  <text class="note" x="500" y="409">CLIP · SigLIP</text>
+
+  <rect x="60" y="417" width="16" height="16" rx="3" fill="#3949ab"/>
+  <text class="tag" x="68" y="429">★</text>
+  <text class="col" x="84" y="429">text_vec</text>
+  <text class="typ" x="200" y="429">VECTOR&lt;FLOAT, 1024&gt;</text>
+  <text class="vec-hl" x="380" y="429">文本精细检索</text>
+  <text class="note" x="500" y="429">BGE-v2-m3 · Jina v3</text>
+
+  <rect x="60" y="437" width="16" height="16" rx="3" fill="#5c6bc0"/>
+  <text class="tag" x="68" y="449">★</text>
+  <text class="col" x="84" y="449">audio_vec</text>
+  <text class="typ" x="200" y="449">VECTOR&lt;FLOAT, 512&gt;</text>
+  <text class="vec-hl" x="380" y="449">音频 / 音色检索</text>
+  <text class="note" x="500" y="449">CLAP · Wav2Vec2</text>
+
+  <text class="note" font-style="italic" x="60" y="466">+ embedding_version_clip / _text / _audio （记录哪一版模型生的这组向量）</text>
+
+  <!-- Group 6: 治理 -->
+  <rect x="40" y="472" width="700" height="104" fill="#f1f5f9"/>
+  <rect x="40" y="472" width="6"   height="104" fill="#7986cb"/>
+  <text class="grp" x="60" y="489">GOVERNANCE</text>
+  <text class="col" x="60"  y="512">owner</text>
+  <text class="typ" x="190" y="512">STRING</text>
+  <text class="col" x="360" y="512">visibility</text>
+  <text class="typ" x="500" y="512">STRING</text>
+  <text class="note" x="602" y="512">public / internal / restricted</text>
+  <text class="col" x="60"  y="532">source</text>
+  <text class="typ" x="190" y="532">STRING</text>
+  <text class="note" x="260" y="532">来源 pipeline</text>
+  <text class="col" x="360" y="532">tags</text>
+  <text class="typ" x="500" y="532">ARRAY&lt;STRING&gt;</text>
+  <text class="note" x="60"  y="552" font-style="italic">→ 供 row-level / column-mask policy 作锚点</text>
+
+  <!-- Group 7: 时间 & 分区 -->
+  <rect x="40" y="576" width="700" height="104" fill="#f8fafc"/>
+  <rect x="40" y="576" width="6"   height="104" fill="#9fa8da"/>
+  <text class="grp" x="60" y="593">TIME &amp; PARTITION</text>
+  <text class="col" x="60"  y="616">ts</text>
+  <text class="typ" x="190" y="616">TIMESTAMP</text>
+  <text class="col" x="360" y="616">partition_date</text>
+  <text class="typ" x="500" y="616">DATE</text>
+  <text class="note" font-style="italic" x="60" y="642">分区：kind × partition_date × bucket(16, asset_id)</text>
+  <text class="note" x="60" y="662">· kind 天然隔离流量节奏</text>
+  <text class="note" x="370" y="662">· bucket 稳并行度</text>
+
+  <!-- ===== Right side annotations ===== -->
+  <!-- 三原则 -->
+  <rect x="780" y="82" width="390" height="210" rx="10" fill="#ecf0f8" stroke="#5c6bc0" stroke-width="1.5"/>
+  <text class="anno-hdr" x="800" y="112">三条原则</text>
+  <circle cx="810" cy="142" r="12" fill="#3949ab"/><text class="tag" x="810" y="146" text-anchor="middle">1</text>
+  <text class="anno-body" x="830" y="138">二进制不直接进表</text>
+  <text class="note" x="830" y="156">只存 raw_uri · sha256 · size；原文件留对象存储</text>
+  <circle cx="810" cy="184" r="12" fill="#3949ab"/><text class="tag" x="810" y="188" text-anchor="middle">2</text>
+  <text class="anno-body" x="830" y="180">向量列按用途 / 模型分列</text>
+  <text class="note" x="830" y="198">clip_vec / text_vec / audio_vec 并存 · 换模型只重建一列</text>
+  <circle cx="810" cy="226" r="12" fill="#3949ab"/><text class="tag" x="810" y="230" text-anchor="middle">3</text>
+  <text class="anno-body" x="830" y="222">元数据是一等公民</text>
+  <text class="note" x="830" y="240">owner · visibility · tags · 过滤 &amp; 权限的锚点</text>
+
+  <!-- 演化友好 -->
+  <rect x="780" y="310" width="390" height="168" rx="10" fill="#f1f5f9" stroke="#5c6bc0" stroke-width="1.5"/>
+  <text class="anno-hdr" x="800" y="340">演化友好（Schema Evolution 天然支持）</text>
+  <text class="anno-body" x="800" y="368">· 新增一种模态 →</text>
+  <text class="note" x="950" y="368">加一个 kind 取值，历史行不动</text>
+  <text class="anno-body" x="800" y="394">· 换 embedding 模型 →</text>
+  <text class="note" x="985" y="394">加新向量列，老列保留，A/B 后切换</text>
+  <text class="anno-body" x="800" y="420">· 加治理字段 →</text>
+  <text class="note" x="930" y="420">加列 + 批回填（Iceberg 列 ID 机制）</text>
+  <text class="anno-body" x="800" y="446">· 永不覆盖旧向量列 →</text>
+  <text class="note" x="990" y="446">新模型效果回退时能回滚</text>
+
+  <!-- 查询形态 -->
+  <rect x="780" y="496" width="390" height="184" rx="10" fill="#e8eaf6" stroke="#3949ab" stroke-width="1.5"/>
+  <text class="anno-hdr" x="800" y="526">一条 SQL 就能跨模态查</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="550">SELECT asset_id, raw_uri,</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="566">  cosine_distance(clip_vec, :q) AS sim</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="582">FROM multimodal_assets</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="598">WHERE kind = 'image'</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="614">  AND visibility = 'internal'</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="630">  AND ts &gt; now() - INTERVAL '7' DAY</text>
+  <text class="note" font-family="ui-monospace, Menlo, monospace" font-size="11" x="800" y="646">ORDER BY sim LIMIT 20;</text>
+  <text class="note" font-style="italic" x="800" y="668">→ 结构化过滤 + 向量 ANN 一条 SQL</text>
+</svg>
