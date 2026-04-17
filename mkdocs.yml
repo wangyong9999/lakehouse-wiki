@@ -92,28 +92,53 @@ nav:
       - foundations/index.md
       - 对象存储: foundations/object-storage.md
       - Parquet: foundations/parquet.md
+      - Lance Format: foundations/lance-format.md
+      - 列式 vs 行式: foundations/columnar-vs-row.md
   - 湖仓表格式:
       - lakehouse/index.md
       - 湖表: lakehouse/lake-table.md
       - Snapshot: lakehouse/snapshot.md
+      - Manifest: lakehouse/manifest.md
+      - Schema Evolution: lakehouse/schema-evolution.md
+      - Time Travel: lakehouse/time-travel.md
+      - Puffin: lakehouse/puffin.md
       - Apache Iceberg: lakehouse/iceberg.md
+      - Apache Paimon: lakehouse/paimon.md
+      - Apache Hudi: lakehouse/hudi.md
+      - Delta Lake: lakehouse/delta-lake.md
   - 元数据与 Catalog:
       - catalog/index.md
+      - Hive Metastore: catalog/hive-metastore.md
+      - Iceberg REST Catalog: catalog/iceberg-rest-catalog.md
       - Nessie: catalog/nessie.md
+      - Unity Catalog: catalog/unity-catalog.md
   - 查询引擎:
       - query-engines/index.md
+      - Trino: query-engines/trino.md
+      - Apache Spark: query-engines/spark.md
+      - DuckDB: query-engines/duckdb.md
   - 多模检索:
       - retrieval/index.md
       - 向量数据库: retrieval/vector-database.md
+      - Embedding: retrieval/embedding.md
+      - 多模 Embedding: retrieval/multimodal-embedding.md
       - HNSW: retrieval/hnsw.md
+      - IVF-PQ: retrieval/ivf-pq.md
       - Hybrid Search: retrieval/hybrid-search.md
+      - Rerank: retrieval/rerank.md
+      - Milvus: retrieval/milvus.md
+      - LanceDB: retrieval/lancedb.md
   - AI 负载:
       - ai-workloads/index.md
       - RAG: ai-workloads/rag.md
+      - Feature Store: ai-workloads/feature-store.md
   - BI 负载:
       - bi-workloads/index.md
   - 一体化架构:
       - unified/index.md
+      - Lake + Vector 融合架构: unified/lake-plus-vector.md
+      - 多模数据建模: unified/multimodal-data-modeling.md
+      - 统一 Catalog 策略: unified/unified-catalog-strategy.md
   - 运维与生产:
       - ops/index.md
   - 研究前沿:
@@ -121,12 +146,18 @@ nav:
   - 横向对比:
       - compare/index.md
       - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
+      - 四大表格式对比: compare/iceberg-vs-paimon-vs-hudi-vs-delta.md
+      - ANN 索引对比: compare/ann-index-comparison.md
+      - 向量数据库对比: compare/vector-db-comparison.md
   - 场景指南:
       - scenarios/index.md
       - RAG on Lake: scenarios/rag-on-lake.md
+      - BI on Lake: scenarios/bi-on-lake.md
+      - 多模检索流水线: scenarios/multimodal-search-pipeline.md
   - 学习路径:
       - learning-paths/index.md
       - 一周新人路径: learning-paths/week-1-newcomer.md
+      - 一月 AI 方向: learning-paths/month-1-ai-track.md
   - ADR:
       - adr/index.md
       - 0001 选择 MkDocs Material: adr/0001-mkdocs-material.md
