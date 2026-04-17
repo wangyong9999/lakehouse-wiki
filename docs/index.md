@@ -15,7 +15,7 @@ hide:
 ## 整体架构视图
 
 ```mermaid
-flowchart TB
+flowchart BT
   subgraph "数据源"
     direction LR
     oltp[(OLTP)]
