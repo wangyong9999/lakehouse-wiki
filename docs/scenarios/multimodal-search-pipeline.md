@@ -24,6 +24,12 @@ status: stable
 
 ## 架构总览
 
+![多模检索流水线（离线索引 + 在线查询）](../assets/diagrams/multimodal-search-pipeline.svg#only-light){ loading=lazy }
+![多模检索流水线（离线索引 + 在线查询）](../assets/diagrams/multimodal-search-pipeline.dark.svg#only-dark){ loading=lazy }
+
+<details>
+<summary>Mermaid 文本版本（便于 diff 数据流）</summary>
+
 ```mermaid
 flowchart LR
   subgraph Ingest
@@ -50,6 +56,8 @@ flowchart LR
   retrieve --> rerank[Cross-encoder Rerank]
   rerank --> out[Top-K + 引用]
 ```
+
+</details>
 
 ## 数据流拆解
 
