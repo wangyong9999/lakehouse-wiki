@@ -74,22 +74,22 @@
     <text class="ns" x="1035" y="599" text-anchor="middle">S3 API · 多模原始资产</text>
   </g>
 
-  <!-- ===== Layer 3: 湖仓底座 (3 nodes, emphasized) ===== -->
+  <!-- ===== Layer 3: 湖仓底座 - 上层表格式 / 下层对象存储（支撑） ===== -->
   <g>
-    <rect x="170" y="408" width="300" height="104" rx="10" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
-    <text class="nl" x="320" y="445" text-anchor="middle">对象存储</text>
-    <text class="ns" x="320" y="466" text-anchor="middle">S3 · GCS · OSS · ADLS</text>
-    <text class="ns" x="320" y="484" text-anchor="middle" font-style="italic">不可变 · 强一致 · 弹性</text>
+    <rect x="170" y="398" width="520" height="52" rx="10" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
+    <text class="nl" x="430" y="420" text-anchor="middle">Iceberg / Paimon · 结构化事实表</text>
+    <text class="ns" x="430" y="438" text-anchor="middle" font-style="italic">Snapshot · Manifest · Schema &amp; Partition Evolution</text>
 
-    <rect x="510" y="408" width="300" height="104" rx="10" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
-    <text class="nl" x="660" y="445" text-anchor="middle">Iceberg / Paimon</text>
-    <text class="ns" x="660" y="466" text-anchor="middle">结构化事实表</text>
-    <text class="ns" x="660" y="484" text-anchor="middle" font-style="italic">Snapshot · Manifest · Schema Evolution</text>
+    <rect x="710" y="398" width="440" height="52" rx="10" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
+    <text class="nl" x="930" y="420" text-anchor="middle">Lance / Iceberg + Puffin · 多模 + 向量表</text>
+    <text class="ns" x="930" y="438" text-anchor="middle" font-style="italic">ANN 索引 · 随机访问 · 零拷贝更新</text>
 
-    <rect x="850" y="408" width="300" height="104" rx="10" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
-    <text class="nl" x="1000" y="445" text-anchor="middle">Lance / Iceberg + Puffin</text>
-    <text class="ns" x="1000" y="466" text-anchor="middle">多模 + 向量表</text>
-    <text class="ns" x="1000" y="484" text-anchor="middle" font-style="italic">ANN 索引 · 随机访问</text>
+    <rect x="170" y="470" width="980" height="46" rx="8" fill="#252a45" stroke="#7986cb" stroke-width="2"/>
+    <text class="nl" x="660" y="493" text-anchor="middle">对象存储 · S3 · GCS · OSS · ADLS</text>
+    <text class="ns" x="660" y="510" text-anchor="middle" font-style="italic">不可变 · 强一致 · 弹性容量 · 物理载体</text>
+
+    <line x1="430" y1="470" x2="430" y2="452" stroke="#c5cae9" stroke-width="1.5" marker-end="url(#arrow-alt)"/>
+    <line x1="930" y1="470" x2="930" y2="452" stroke="#c5cae9" stroke-width="1.5" marker-end="url(#arrow-alt)"/>
   </g>
 
   <!-- ===== Layer 4: Catalog (1 wide, focal) ===== -->
@@ -169,18 +169,17 @@
   <line x1="685" y1="656" x2="685" y2="615"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
   <line x1="1035" y1="656" x2="1035" y2="615" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <line x1="335" y1="561" x2="335" y2="518"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="685" y1="561" x2="685" y2="518"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="1035" y1="561" x2="1035" y2="518" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="335" y1="561" x2="335" y2="452"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="685" y1="561" x2="685" y2="452"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1035" y1="561" x2="1035" y2="452" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <line x1="320" y1="408" x2="400" y2="368"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="660" y1="408" x2="600" y2="368"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="1000" y1="408" x2="800" y2="368" stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="398" x2="500" y2="362"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="930" y1="398" x2="700" y2="362"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
 
   <line x1="500" y1="318" x2="400" y2="226"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
   <line x1="700" y1="318" x2="950" y2="226"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <line x1="1000" y1="408" x2="1000" y2="226" stroke="#c5cae9" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-alt)"/>
+  <line x1="930" y1="398" x2="930" y2="226" stroke="#c5cae9" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-alt)"/>
 
   <line x1="340" y1="162" x2="297" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
   <line x1="572" y1="162" x2="537" y2="102"  stroke="#9fa8da" stroke-width="2" marker-end="url(#arrow)"/>
