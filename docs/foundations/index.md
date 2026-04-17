@@ -20,11 +20,11 @@ description: 存储、文件格式、计算、分布式等前置知识
 - [MVCC](mvcc.md) —— 多版本并发控制，湖仓 Snapshot 的思想源头
 - [OLTP vs OLAP](oltp-vs-olap.md) —— 两种负载为什么物理底层相反
 - [一致性模型](consistency-models.md) —— CAP / SI / Eventual 和湖仓的位置
+- [事件时间 · Watermark · 乱序](event-time-watermark.md) —— 流处理的时间维度
+- [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输的公共层
 
 ## 待补
 
 - Avro
 - 共识协议（Raft / Paxos 简述）
 - SQL 优化器基础 / Codegen
-- Arrow / FlightSQL / ADBC
-- 事件时间 / Watermark / 乱序处理

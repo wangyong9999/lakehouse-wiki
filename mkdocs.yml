@@ -132,6 +132,8 @@ nav:
       - MVCC: foundations/mvcc.md
       - OLTP vs OLAP: foundations/oltp-vs-olap.md
       - 一致性模型: foundations/consistency-models.md
+      - 事件时间 · Watermark: foundations/event-time-watermark.md
+      - Arrow · FlightSQL · ADBC: foundations/arrow-ecosystem.md
   - 湖仓表格式:
       - lakehouse/index.md
       - 湖表: lakehouse/lake-table.md
@@ -227,6 +229,8 @@ nav:
       - 成本优化: ops/cost-optimization.md
       - 安全与权限: ops/security-permissions.md
       - 数据治理: ops/data-governance.md
+      - 多租户隔离: ops/multi-tenancy.md
+      - 灾难恢复 DR: ops/disaster-recovery.md
       - 迁移手册: ops/migration-playbook.md
       - 故障排查手册: ops/troubleshooting.md
   - 研究前沿:
@@ -242,6 +246,8 @@ nav:
       - ANN 索引对比: compare/ann-index-comparison.md
       - 向量数据库对比: compare/vector-db-comparison.md
       - Embedding 模型横比: compare/embedding-models.md
+      - 计算引擎对比: compare/compute-engines.md
+      - Puffin vs Lance: compare/puffin-vs-lance.md
   - 场景指南:
       - scenarios/index.md
       - RAG on Lake: scenarios/rag-on-lake.md
@@ -250,6 +256,7 @@ nav:
       - 流式入湖: scenarios/streaming-ingestion.md
       - 离线训练数据流水线: scenarios/offline-training-pipeline.md
       - Feature Serving: scenarios/feature-serving.md
+      - Real-time Lakehouse: scenarios/real-time-lakehouse.md
   - 学习路径:
       - learning-paths/index.md
       - 一周新人路径: learning-paths/week-1-newcomer.md
@@ -260,6 +267,7 @@ nav:
       - tutorials/index.md
       - 你的第一张 Iceberg 表: tutorials/first-iceberg-table.md
       - 30 分钟湖上多模检索 Demo: tutorials/multimodal-search-demo.md
+      - 60 分钟 RAG on Iceberg: tutorials/rag-on-iceberg.md
   - 速查单:
       - cheatsheets/index.md
       - Iceberg 速查: cheatsheets/iceberg.md
