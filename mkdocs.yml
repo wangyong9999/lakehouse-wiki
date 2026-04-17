@@ -65,6 +65,14 @@ plugins:
       type: iso_date
       fallback_to_build_date: true
       enable_creation_date: false
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      zoomable: true
+      draggable: true
+      width: 90%
+      height: auto
   - social:
       cards: !ENV [SOCIAL_CARDS, false]
       cards_layout_options:
