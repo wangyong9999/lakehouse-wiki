@@ -223,8 +223,9 @@ flowchart BT
 
 ## 跨向视图
 
-- **[横向对比 `compare/`](compare/index.md)** —— 7 大选型决策
-- **[场景指南 `scenarios/`](scenarios/index.md)** —— 6 条端到端叙事
+- **[E2E 业务场景全景 `scenarios/business-scenarios.md`](scenarios/business-scenarios.md)** ⭐ —— 带着业务问题进来先看这里（Top 10 主流业务场景 + 前沿 + 决策矩阵）
+- **[横向对比 `compare/`](compare/index.md)** —— 9 大选型决策
+- **[场景指南 `scenarios/`](scenarios/index.md)** —— 端到端叙事 + 业务深挖
 - **[学习路径 `learning-paths/`](learning-paths/index.md)** —— 4 条时间脚手架
 - **[速查单 `cheatsheets/`](cheatsheets/index.md)** —— 4 张一页式参数速查
 - **[ADR `adr/`](adr/index.md)** —— 5 条团队技术决策记录

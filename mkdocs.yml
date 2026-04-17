@@ -250,6 +250,7 @@ nav:
       - Puffin vs Lance: compare/puffin-vs-lance.md
   - 场景指南:
       - scenarios/index.md
+      - E2E 业务场景全景: scenarios/business-scenarios.md
       - RAG on Lake: scenarios/rag-on-lake.md
       - BI on Lake: scenarios/bi-on-lake.md
       - 多模检索流水线: scenarios/multimodal-search-pipeline.md
@@ -257,6 +258,8 @@ nav:
       - 离线训练数据流水线: scenarios/offline-training-pipeline.md
       - Feature Serving: scenarios/feature-serving.md
       - Real-time Lakehouse: scenarios/real-time-lakehouse.md
+      - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
+      - Agentic 工作流: scenarios/agentic-workflows.md
   - 学习路径:
       - learning-paths/index.md
       - 一周新人路径: learning-paths/week-1-newcomer.md
