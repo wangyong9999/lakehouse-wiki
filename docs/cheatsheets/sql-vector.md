@@ -1,6 +1,7 @@
 ---
 title: 向量 SQL 语法对照
 description: 各引擎向量查询语法 + 距离函数
+type: reference
 tags: [cheatsheet, vector, sql]
 ---
 

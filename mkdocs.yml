@@ -52,6 +52,9 @@ theme:
     repo: fontawesome/brands/github
     edit: material/pencil
 
+hooks:
+  - hooks/page_badges.py
+
 plugins:
   - search:
       lang:

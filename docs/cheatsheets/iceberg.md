@@ -1,6 +1,7 @@
 ---
 title: Iceberg 速查
 description: 建表 / 维护 / 时间旅行 / 分支一张表
+type: reference
 tags: [cheatsheet, iceberg]
 ---
 

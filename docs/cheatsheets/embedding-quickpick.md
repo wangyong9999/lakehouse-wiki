@@ -1,6 +1,7 @@
 ---
 title: Embedding 模型速查
 description: 按语种 / 维度 / 许可 1 分钟选型
+type: reference
 tags: [cheatsheet, embedding]
 ---
 

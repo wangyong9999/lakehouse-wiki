@@ -1,6 +1,7 @@
 ---
 title: ANN 参数速查
 description: HNSW / IVF-PQ / DiskANN 调参 + 选择表
+type: reference
 tags: [cheatsheet, ann, vector]
 ---
 
