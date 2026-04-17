@@ -1,6 +1,6 @@
 ---
 title: 贡献指南
-description: 如何为本 Wiki 新增页面、修订内容、参与评审
+description: 如何为本手册新增页面、修订内容、参与评审
 ---
 
 # 贡献指南

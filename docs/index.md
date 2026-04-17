@@ -1,13 +1,13 @@
 ---
 title: 首页
-description: 多模一体化湖仓 · 支撑 AI+BI 负载 · 团队知识库
+description: 多模一体化湖仓 · 面向 AI 与 BI 负载的工程手册
 hide:
   - toc
 ---
 
-# 多模一体化湖仓 · Wiki
+# 多模一体化湖仓手册
 
-面向数据湖上**多模检索 + 多模分析**（BI + AI 一体化）的团队知识库。
+面向数据湖上**多模检索 + 多模分析**（BI 与 AI 一体化）的工程手册。
 目标：任一工程师 **30 秒内**找到一个概念、一个系统、一种对比、一条学习路径。
 
 ---
@@ -84,20 +84,21 @@ flowchart TB
   cat --> duckdb
   cat --> star
 
+  iceberg --> ann
   lance --> ann
   ann --> hybrid
   hybrid --> rerank
+  rerank --> mm
   rerank --> llm
 
   trino --> bi
   star --> bi
   llm --> rag
-  rerank --> mm
   spark --> ml
   flink --> ml
 ```
 
-一张图串起本 Wiki 所有章节 —— 顺着"数据源 → 入湖 → 底座 → Catalog → 计算 → 检索/AI → 消费"读下去。
+一张图串起本手册所有章节 —— 顺着"数据源 → 入湖 → 底座 → Catalog → 计算 → 检索 / AI → 消费"读下去。
 
 ---
 
@@ -151,7 +152,7 @@ flowchart TB
 
 -   :material-source-branch: **团队技术决策**
     ---
-    [ADR](adr/index.md) · 0001 Wiki 选型、0002 Iceberg、0003 LanceDB、0004 Catalog、0005 引擎组合
+    [ADR](adr/index.md) · 0001 站点框架、0002 Iceberg、0003 LanceDB、0004 Catalog、0005 引擎组合
 
 -   :material-flash: **速查单**
     ---
@@ -220,7 +221,7 @@ flowchart TB
 - **[速查单 `cheatsheets/`](cheatsheets/index.md)** —— 4 张一页式参数速查
 - **[ADR `adr/`](adr/index.md)** —— 5 条团队技术决策记录
 - **[FAQ](faq.md)** —— 25+ 条跨目录速答
-- **[Changelog](changelog.md)** —— Wiki 变更记录
+- **[Changelog](changelog.md)** —— 手册变更记录
 - **[术语表](glossary.md)** —— 字母序兜底索引
 
 ---

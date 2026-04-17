@@ -1,12 +1,12 @@
 ---
-title: 0001 选择 MkDocs Material 作为 Wiki 框架
+title: 0001 选择 MkDocs Material 作为站点框架
 type: adr
 status: accepted
 date: 2026-04-17
 deciders: [wangyong9999]
 ---
 
-# 0001. 选择 MkDocs Material 作为 Wiki 框架
+# 0001. 选择 MkDocs Material 作为站点框架
 
 ## 背景
 
@@ -67,7 +67,7 @@ Docusaurus 偏"产品站 + 版本化发布 + 博客"，对于一个偏"概念百
 **负面**：
 
 - 国内访问 GitHub Pages 偶有速度问题 → 后续叠加 Cloudflare Pages 镜像（另行 ADR）
-- Markdown 对非工程师贡献者仍有门槛（但本 Wiki 贡献者主体是工程师，影响小）
+- Markdown 对非工程师贡献者仍有门槛（但本手册贡献者主体是工程师，影响小）
 - 富交互（如可编辑架构图）需要额外插件支持
 
 **后续**：

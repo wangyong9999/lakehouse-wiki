@@ -62,5 +62,5 @@ status: stable
 ## 进阶
 
 - 深读一篇 TPC-DS / TPC-H benchmark 的论文或测评博客
-- 贡献一个"BI on Lake 选型 ADR" 到本 Wiki
+- 贡献一个"BI on Lake 选型 ADR" 到本手册
 - 尝试把团队一张最慢的仪表盘全链路优化，把结果写成场景页 PR

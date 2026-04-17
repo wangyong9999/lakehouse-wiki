@@ -1,6 +1,8 @@
-# Lakehouse + Multimodal Wiki
+# Multimodal Lakehouse Handbook
 
-多模一体化湖仓知识库 · 支撑 AI + BI 负载 · 面向工程师的概念查找与系统入门。
+多模一体化湖仓 · 面向 AI 与 BI 负载的工程手册。
+
+面向数据湖上**多模检索 + 多模分析**的团队知识库。当前 143 页，覆盖从存储底座到检索 + AI + BI 的完整工程主题。
 
 ## 在线访问
 
@@ -27,19 +29,23 @@ mkdocs serve
 
 | 目录 | 内容 |
 | --- | --- |
-| `foundations/` | 存储、文件格式、计算、分布式等基础 |
-| `lakehouse/` | 湖表、Snapshot、Manifest、Schema Evolution 等 |
-| `catalog/` | Hive / REST / Nessie / Unity / Polaris |
-| `query-engines/` | Trino、Spark、Flink、DuckDB、StarRocks |
-| `retrieval/` | 向量数据库、ANN 索引、Hybrid Search |
-| `ai-workloads/` | RAG、Feature Store、Embedding 流水线 |
+| `foundations/` | 存储、文件格式、计算、分布式、一致性、谓词下推 |
+| `lakehouse/` | 湖表、Snapshot、Manifest、Schema & Partition Evolution、Compaction、Delete Files 等 |
+| `catalog/` | Hive / REST / Nessie / Unity / Polaris / Gravitino |
+| `query-engines/` | Trino / Spark / Flink / DuckDB / StarRocks / ClickHouse / Doris |
+| `pipelines/` | 入湖、多模预处理（图/视/音/文档）、编排 |
+| `retrieval/` | 向量数据库、ANN、Hybrid、Rerank、Embedding、多模对齐、评估 |
+| `ai-workloads/` | RAG、Agent、Prompt、Feature Store、微调数据准备 |
+| `ml-infra/` | Model Registry、Serving、Training、GPU 调度 |
 | `bi-workloads/` | OLAP 建模、物化视图、查询加速 |
-| `unified/` | 湖 + 向量一体化、多模数据建模 |
-| `ops/` | 可观测性、成本优化、治理 |
-| `frontier/` | 论文笔记、趋势 |
-| `compare/` | 横向对比（对象 A vs 对象 B） |
-| `scenarios/` | 端到端场景（BI on Lake、RAG on Lake …） |
-| `learning-paths/` | 新人上手路径 |
+| `unified/` | 湖 + 向量融合、多模建模、统一 Catalog、跨模态查询、案例 |
+| `ops/` | 可观测性、性能、成本、安全、治理、迁移、排障 |
+| `frontier/` | 论文笔记、Benchmark |
+| `compare/` | 横向对比（7 套选型决策） |
+| `scenarios/` | 端到端场景（BI on Lake、RAG、多模检索、流式入湖 等） |
+| `learning-paths/` | 4 条时间脚手架：一周 / 一月 AI / 一月 BI / 一季度 |
+| `roles/` | 按角色阅读清单（数据 / ML / 平台 / BI） |
+| `cheatsheets/` | 一页式参数速查 |
 | `adr/` | 团队技术决策记录 |
 
 ## License

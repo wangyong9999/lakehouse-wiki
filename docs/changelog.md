@@ -1,11 +1,35 @@
 ---
 title: Changelog
-description: Wiki 版本变更记录
+description: 手册版本变更记录
 hide:
   - toc
 ---
 
 # Changelog
+
+!!! note "关于日期"
+    早期版本（v0.1 – v0.7）集中在同一天完成多轮推进，日期为当次 commit 时间而非真实迭代周期。手册进入稳定期后才采用月度 / 季度节奏。真实历史见 [commit log](https://github.com/wangyong9999/lakehouse-wiki/commits/main)。
+
+## 2026-04-17 · v0.8 · 品牌化与一致性修复
+
+**品牌**
+
+- 站点改名 `Lakehouse + Multimodal Wiki` → **`Multimodal Lakehouse Handbook`**（"手册"替"Wiki"，去符号堆砌）
+- 子标题统一：**多模一体化湖仓 · 面向 AI 与 BI 负载的工程手册**
+- LICENSE 持有方同步更新
+
+**一致性修复**
+
+- 13 处"本 Wiki"、"Wiki 框架"、"Wiki 变更记录" 等行文改为"本手册" / "站点框架" / "手册变更记录"
+- 首页 H1 调整：`多模一体化湖仓 · Wiki` → `多模一体化湖仓手册`
+- 首页架构图：`rerank → mm` 改回合理流向（`rerank → mm / llm`）；新增 `iceberg → ann` 表明 Puffin 路径
+- ADR 0001 标题：`作为 Wiki 框架` → `作为站点框架`（正文里对 GitHub Wiki / Outline 等具名系统保留原称）
+- README 同步到 143 页现状，更新目录树（加 pipelines / ml-infra / roles / cheatsheets）
+
+**说明**
+
+- ADR 0001 正文里对 "GitHub Wiki"、"自托管 Wiki"、"富文本 Wiki" 等具名系统的称谓保留，那些是通用概念指代不是本站
+- `lakehouse-wiki` 仓库名和 Pages URL 保持不变（迁移成本 > 收益）
 
 ## 2026-04-17 · v0.7 · 完善版：管线 / ML 基础设施 / 角色 / 速查
 
