@@ -14,13 +14,17 @@ description: 向量数据库、ANN 索引、Hybrid Search、多模 Embedding
 - [多模 Embedding](multimodal-embedding.md) —— 把图 / 文 / 音 / 视对齐到同一空间
 - [HNSW](hnsw.md) —— 最常见的 ANN 索引
 - [IVF-PQ](ivf-pq.md) —— 亿级规模 + 内存预算紧的首选
+- [DiskANN](diskann.md) —— 十亿级 + SSD 友好
 - [Hybrid Search](hybrid-search.md) —— 稠密 + 稀疏融合
 - [Rerank](rerank.md) —— 两阶段检索的第二阶段，决定最终质量
+- [检索评估](evaluation.md) —— Recall@K / MRR / nDCG
 
 ## 主流系统
 
 - [Milvus](milvus.md) —— 分布式，亿级到百亿级
 - [LanceDB](lancedb.md) —— 嵌入式 + 湖原生，多模检索的天然选项
+- [Qdrant](qdrant.md) —— Rust 实现，filter-aware 图搜索
+- [pgvector](pgvector.md) —— PostgreSQL 扩展，结构化主导场景最小路径
 
 ## 横向对比
 
@@ -29,7 +33,6 @@ description: 向量数据库、ANN 索引、Hybrid Search、多模 Embedding
 
 ## 待补
 
-- DiskANN / ScaNN 独立页
-- Qdrant / Weaviate / pgvector 系统页
-- 检索评估（Recall@K / MRR / nDCG）
-- Embedding 流水线（批生成 + 增量刷新）
+- ScaNN（Google）
+- Weaviate 系统页
+- 检索下沉到湖表（Iceberg Puffin + Lance 深度对比）

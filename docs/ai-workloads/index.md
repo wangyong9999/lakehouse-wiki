@@ -10,14 +10,15 @@ description: 在湖仓 / 多模检索之上跑的 AI 应用与基础设施
 ## 已有
 
 - [RAG](rag.md) —— 检索增强生成
+- [Embedding 流水线](embedding-pipelines.md) —— 持续把语料转成向量并回落到湖
 - [Feature Store](feature-store.md) —— ML 特征的一等公民
+- [Semantic Cache](semantic-cache.md) —— 降低 LLM 调用成本的语义缓存
 
 ## 待补
 
 - Online / Offline 特征一致性
-- Embedding 流水线（批生成 + 增量刷新）
-- Semantic Cache
 - LLM on Lakehouse（训练数据准备、评估集管理）
+- Agent + 湖上工具调用
 
 ## 相关
 
