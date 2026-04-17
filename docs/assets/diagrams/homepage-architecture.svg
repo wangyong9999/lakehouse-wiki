@@ -191,7 +191,7 @@
   <line x1="700" y1="318" x2="950" y2="226"  stroke="#3949ab" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- Layer 3 → 5 retrieval (Lance directly feeds ANN, bypasses Catalog) -->
-  <line x1="930" y1="398" x2="930" y2="226" stroke="#7986cb" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-alt)"/>
+  <line x1="830" y1="398" x2="838" y2="214" stroke="#7986cb" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-alt)"/>
 
   <!-- Layer 5 → 6 (compute → BI/ML, retrieval+AI → RAG/多模检索) -->
   <line x1="340" y1="162" x2="297" y2="102"  stroke="#3949ab" stroke-width="2" marker-end="url(#arrow)"/>
