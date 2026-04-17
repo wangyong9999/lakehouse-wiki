@@ -11,6 +11,9 @@ exclude_docs: |
 theme:
   name: material
   language: zh
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  custom_dir: overrides
   features:
     - navigation.instant
     - navigation.tracking
@@ -25,6 +28,7 @@ theme:
     - content.code.annotate
     - content.tabs.link
     - content.action.edit
+    - content.action.view
     - toc.follow
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -54,6 +58,10 @@ plugins:
         - zh
         - en
   - tags
+  - git-revision-date-localized:
+      type: iso_date
+      fallback_to_build_date: true
+      enable_creation_date: false
 
 markdown_extensions:
   - abbr
@@ -253,8 +261,16 @@ nav:
   - 贡献指南: contributing.md
 
 extra:
+  generator: false
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/wangyong9999/lakehouse-wiki
+      name: GitHub 仓库
+    - icon: material/book-open-variant
+      link: https://wangyong9999.github.io/lakehouse-wiki/changelog/
+      name: Changelog
 
-copyright: 内容采用 CC BY 4.0 协议 · 欢迎贡献
+copyright: >-
+  Copyright &copy; 2026 Multimodal Lakehouse Handbook ·
+  <a href="https://github.com/wangyong9999/lakehouse-wiki/blob/main/LICENSE">CC BY 4.0</a> ·
+  <a href="https://github.com/wangyong9999/lakehouse-wiki/commits/main">最近更新</a>
