@@ -13,6 +13,7 @@ description: Lakehouse 表格式的核心概念与主流实现
 - [Snapshot](snapshot.md) —— 快照如何让"时间旅行"成为可能
 - [Manifest](manifest.md) —— 元数据的二层索引，湖表性能的基石
 - [Schema Evolution](schema-evolution.md) —— 不重写历史就能改表结构
+- [Partition Evolution](partition-evolution.md) —— 改分区策略也不重写历史
 - [Time Travel](time-travel.md) —— 查过去某一时刻 / 版本的样子
 - [Puffin](puffin.md) —— Iceberg 的辅助索引侧车文件（向量索引下沉的关键）
 - [Streaming Upsert / CDC](streaming-upsert-cdc.md) —— 流式变更持续入湖
@@ -30,8 +31,8 @@ description: Lakehouse 表格式的核心概念与主流实现
 
 - [DB 存储引擎 vs 湖表](../compare/db-engine-vs-lake-table.md)
 - [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md)
+- [Parquet vs ORC vs Lance](../compare/parquet-vs-orc-vs-lance.md)
 
-## 待补
+## 团队决策
 
-- Partition Evolution 专页
-- File Layout 深度（row group / page 级调优）
+- [ADR-0002 选择 Iceberg 作为主表格式](../adr/0002-iceberg-as-primary-table-format.md)

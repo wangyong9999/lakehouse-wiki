@@ -24,15 +24,21 @@ description: 向量数据库、ANN 索引、Hybrid Search、多模 Embedding
 - [Milvus](milvus.md) —— 分布式，亿级到百亿级
 - [LanceDB](lancedb.md) —— 嵌入式 + 湖原生，多模检索的天然选项
 - [Qdrant](qdrant.md) —— Rust 实现，filter-aware 图搜索
+- [Weaviate](weaviate.md) —— 自带向量化 + Reranker module
 - [pgvector](pgvector.md) —— PostgreSQL 扩展，结构化主导场景最小路径
 
 ## 横向对比
 
 - [ANN 索引对比](../compare/ann-index-comparison.md)
 - [向量数据库对比](../compare/vector-db-comparison.md)
+- [Embedding 模型横比](../compare/embedding-models.md)
+
+## 团队决策
+
+- [ADR-0003 多模向量存储选 LanceDB](../adr/0003-lancedb-for-multimodal-vectors.md)
 
 ## 待补
 
 - ScaNN（Google）
-- Weaviate 系统页
-- 检索下沉到湖表（Iceberg Puffin + Lance 深度对比）
+- 检索下沉到湖表（Iceberg Puffin vs Lance 深度对比）
+- 各家 rerank 模型横比

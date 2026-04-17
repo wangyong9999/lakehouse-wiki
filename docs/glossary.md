@@ -5,34 +5,42 @@ description: 字母序的概念兜底索引
 
 # 术语表
 
-字母序的概念索引。若你不确定该去哪个目录查，先来这里。
+字母序的概念索引。若你不确定该去哪个目录查，先来这里；具体问题去 [FAQ](faq.md)。
 
 ## A – C
 
 - **ACID on Object Store** —— 对象存储上怎么做 ACID，见 [湖表](lakehouse/lake-table.md)
-- **ANN（Approximate Nearest Neighbor）** —— 近似最近邻搜索，见 [HNSW](retrieval/hnsw.md) / [IVF-PQ](retrieval/ivf-pq.md) / [DiskANN](retrieval/diskann.md)
+- **ANN（Approximate Nearest Neighbor）** —— 近似最近邻，见 [HNSW](retrieval/hnsw.md) / [IVF-PQ](retrieval/ivf-pq.md) / [DiskANN](retrieval/diskann.md)
+- **Case Studies（案例拆解）** —— 业内一体化案例，见 [案例拆解](unified/case-studies.md)
 - **Catalog** —— 湖仓的表注册中心与治理平面，见 [Catalog 章节](catalog/index.md)
 - **CDC（Change Data Capture）** —— 见 [Streaming Upsert / CDC](lakehouse/streaming-upsert-cdc.md)
 - **CLIP / SigLIP** —— 多模 Embedding 模型，见 [多模 Embedding](retrieval/multimodal-embedding.md)
-- **ClickHouse** —— 明细事实表引擎（待补）
+- **ClickHouse** —— 明细事实表 OLAP 引擎，见 [ClickHouse](query-engines/clickhouse.md)
 - **Columnar Storage（列式存储）** —— 见 [列式 vs 行式](foundations/columnar-vs-row.md)
 - **Compaction** —— 小文件合并，见 [Compaction](lakehouse/compaction.md)
+- **Compute Pushdown** —— 见 [Compute Pushdown](unified/compute-pushdown.md)
+- **Consistency（一致性模型）** —— 见 [一致性模型](foundations/consistency-models.md)
 - **CoW / MoR** —— Copy-on-Write / Merge-on-Read，见 [Hudi](lakehouse/hudi.md) / [Delete Files](lakehouse/delete-files.md)
 - **Cost Optimization** —— 见 [成本优化](ops/cost-optimization.md)
+- **Cross-modal Query（跨模态查询）** —— 见 [跨模态查询](unified/cross-modal-queries.md)
 
 ## D – F
 
+- **Data Governance（数据治理）** —— 见 [数据治理](ops/data-governance.md)
 - **Delete Files** —— 行级删除背后的机制，见 [Delete Files](lakehouse/delete-files.md)
 - **Delta Lake** —— Databricks 主推的湖表格式，见 [Delta Lake](lakehouse/delta-lake.md)
-- **DiskANN** —— 磁盘友好 ANN 图索引，见 [DiskANN](retrieval/diskann.md)
+- **DiskANN** —— 磁盘友好 ANN 图索引，见 [DiskANN](retrieval/diskann.md) / [论文笔记](frontier/diskann-paper.md)
+- **Doris** —— MPP 湖仓融合引擎，见 [Apache Doris](query-engines/doris.md)
 - **DuckDB** —— 嵌入式 OLAP 引擎，见 [DuckDB](query-engines/duckdb.md)
 - **Embedding** —— 语义向量化，见 [Embedding](retrieval/embedding.md)
 - **Embedding Pipeline** —— 见 [Embedding 流水线](ai-workloads/embedding-pipelines.md)
 - **Feature Store（特征存储）** —— ML 特征管理，见 [Feature Store](ai-workloads/feature-store.md)
+- **Feature Serving** —— 在线特征服务，见 [Feature Serving](scenarios/feature-serving.md)
 - **Flink** —— 流优先计算引擎，见 [Apache Flink](query-engines/flink.md)
 
 ## G – I
 
+- **Gravitino** —— 多元数据源联邦 Catalog，见 [Apache Gravitino](catalog/gravitino.md)
 - **Hive Metastore** —— Hadoop 时代 Catalog 事实标准，见 [Hive Metastore](catalog/hive-metastore.md)
 - **HNSW** —— 分层图 ANN 索引，见 [HNSW](retrieval/hnsw.md)
 - **Hybrid Search** —— 稠密 + 稀疏混合检索，见 [Hybrid Search](retrieval/hybrid-search.md)
@@ -46,6 +54,7 @@ description: 字母序的概念兜底索引
 - **Lake + Vector** —— 一体化湖仓架构主线，见 [Lake + Vector 融合架构](unified/lake-plus-vector.md)
 - **Lance Format** —— 多模原生列式格式，见 [Lance Format](foundations/lance-format.md)
 - **LanceDB** —— 湖原生向量库，见 [LanceDB](retrieval/lancedb.md)
+- **Lineage（血缘）** —— 见 [数据治理](ops/data-governance.md)
 - **Manifest** —— 湖表的二层元数据索引，见 [Manifest](lakehouse/manifest.md)
 - **Materialized View（物化视图）** —— 见 [物化视图](bi-workloads/materialized-view.md)
 - **Milvus** —— 分布式向量数据库，见 [Milvus](retrieval/milvus.md)
@@ -59,13 +68,17 @@ description: 字母序的概念兜底索引
 - **Nessie** —— Git-like 事务 Catalog，见 [Nessie](catalog/nessie.md)
 - **Object Storage（对象存储）** —— 见 [对象存储](foundations/object-storage.md)
 - **Observability（可观测性）** —— 见 [可观测性](ops/observability.md)
+- **Offline Training Pipeline** —— 见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)
 - **OLAP Modeling** —— 见 [OLAP 建模](bi-workloads/olap-modeling.md)
+- **OLTP vs OLAP** —— 见 [OLTP vs OLAP](foundations/oltp-vs-olap.md)
 - **ORC** —— 列式文件格式，见 [ORC](foundations/orc.md)
 - **Paimon** —— 流式原生湖表格式，见 [Apache Paimon](lakehouse/paimon.md)
 - **Parquet** —— 最主流的列式存储格式，见 [Parquet](foundations/parquet.md)
+- **Partition Evolution** —— 改分区策略不重写历史，见 [Partition Evolution](lakehouse/partition-evolution.md)
 - **Performance Tuning** —— 见 [性能调优](ops/performance-tuning.md)
 - **pgvector** —— PostgreSQL 向量扩展，见 [pgvector](retrieval/pgvector.md)
 - **Polaris** —— Snowflake 开源 Catalog，见 [Apache Polaris](catalog/polaris.md)
+- **Predicate Pushdown（谓词下推）** —— 见 [谓词下推](foundations/predicate-pushdown.md)
 - **Puffin** —— Iceberg 辅助索引文件格式，见 [Puffin](lakehouse/puffin.md)
 - **Qdrant** —— Rust 向量数据库，见 [Qdrant](retrieval/qdrant.md)
 - **Query Acceleration** —— 见 [查询加速](bi-workloads/query-acceleration.md)
@@ -76,6 +89,7 @@ description: 字母序的概念兜底索引
 ## S – Z
 
 - **Schema Evolution** —— 不重写历史改表结构，见 [Schema Evolution](lakehouse/schema-evolution.md)
+- **Security（安全与权限）** —— 见 [安全与权限](ops/security-permissions.md)
 - **Semantic Cache** —— LLM 语义缓存，见 [Semantic Cache](ai-workloads/semantic-cache.md)
 - **Snapshot** —— 湖表的时间切片，见 [Snapshot](lakehouse/snapshot.md)
 - **Spark** —— 湖仓的重型瑞士军刀，见 [Apache Spark](query-engines/spark.md)
@@ -86,9 +100,10 @@ description: 字母序的概念兜底索引
 - **Unity Catalog** —— 多模资产统一目录，见 [Unity Catalog](catalog/unity-catalog.md)
 - **Vectorized Execution（向量化执行）** —— 见 [向量化执行](foundations/vectorized-execution.md)
 - **Vector Database（向量数据库）** —— 见 [向量数据库](retrieval/vector-database.md)
+- **Weaviate** —— Module 生态丰富的向量库，见 [Weaviate](retrieval/weaviate.md)
 - **Z-order / Liquid Clustering** —— 见 [查询加速](bi-workloads/query-acceleration.md)
 
 ---
 
 !!! note "维护约定"
-    本页手工维护。新增概念页时顺手加一行。未来条目数 > 100 时改脚本自动生成。
+    本页手工维护。新增概念页时顺手加一行。未来条目数 > 150 时改脚本自动生成。

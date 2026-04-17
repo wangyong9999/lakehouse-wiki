@@ -96,13 +96,17 @@ nav:
       - Lance Format: foundations/lance-format.md
       - 列式 vs 行式: foundations/columnar-vs-row.md
       - 向量化执行: foundations/vectorized-execution.md
+      - 谓词下推: foundations/predicate-pushdown.md
       - MVCC: foundations/mvcc.md
+      - OLTP vs OLAP: foundations/oltp-vs-olap.md
+      - 一致性模型: foundations/consistency-models.md
   - 湖仓表格式:
       - lakehouse/index.md
       - 湖表: lakehouse/lake-table.md
       - Snapshot: lakehouse/snapshot.md
       - Manifest: lakehouse/manifest.md
       - Schema Evolution: lakehouse/schema-evolution.md
+      - Partition Evolution: lakehouse/partition-evolution.md
       - Time Travel: lakehouse/time-travel.md
       - Puffin: lakehouse/puffin.md
       - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
@@ -119,6 +123,7 @@ nav:
       - Nessie: catalog/nessie.md
       - Unity Catalog: catalog/unity-catalog.md
       - Apache Polaris: catalog/polaris.md
+      - Apache Gravitino: catalog/gravitino.md
   - 查询引擎:
       - query-engines/index.md
       - Trino: query-engines/trino.md
@@ -126,6 +131,8 @@ nav:
       - Apache Flink: query-engines/flink.md
       - DuckDB: query-engines/duckdb.md
       - StarRocks: query-engines/starrocks.md
+      - ClickHouse: query-engines/clickhouse.md
+      - Apache Doris: query-engines/doris.md
   - 多模检索:
       - retrieval/index.md
       - 向量数据库: retrieval/vector-database.md
@@ -140,6 +147,7 @@ nav:
       - Milvus: retrieval/milvus.md
       - LanceDB: retrieval/lancedb.md
       - Qdrant: retrieval/qdrant.md
+      - Weaviate: retrieval/weaviate.md
       - pgvector: retrieval/pgvector.md
   - AI 负载:
       - ai-workloads/index.md
@@ -157,26 +165,36 @@ nav:
       - Lake + Vector 融合架构: unified/lake-plus-vector.md
       - 多模数据建模: unified/multimodal-data-modeling.md
       - 统一 Catalog 策略: unified/unified-catalog-strategy.md
+      - 跨模态查询: unified/cross-modal-queries.md
+      - Compute Pushdown: unified/compute-pushdown.md
+      - 案例拆解: unified/case-studies.md
   - 运维与生产:
       - ops/index.md
       - 可观测性: ops/observability.md
       - 性能调优: ops/performance-tuning.md
       - 成本优化: ops/cost-optimization.md
+      - 安全与权限: ops/security-permissions.md
+      - 数据治理: ops/data-governance.md
   - 研究前沿:
       - frontier/index.md
+      - DiskANN 论文笔记: frontier/diskann-paper.md
   - 横向对比:
       - compare/index.md
       - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
       - 四大表格式对比: compare/iceberg-vs-paimon-vs-hudi-vs-delta.md
       - Catalog 全景对比: compare/catalog-landscape.md
+      - Parquet vs ORC vs Lance: compare/parquet-vs-orc-vs-lance.md
       - ANN 索引对比: compare/ann-index-comparison.md
       - 向量数据库对比: compare/vector-db-comparison.md
+      - Embedding 模型横比: compare/embedding-models.md
   - 场景指南:
       - scenarios/index.md
       - RAG on Lake: scenarios/rag-on-lake.md
       - BI on Lake: scenarios/bi-on-lake.md
       - 多模检索流水线: scenarios/multimodal-search-pipeline.md
       - 流式入湖: scenarios/streaming-ingestion.md
+      - 离线训练数据流水线: scenarios/offline-training-pipeline.md
+      - Feature Serving: scenarios/feature-serving.md
   - 学习路径:
       - learning-paths/index.md
       - 一周新人路径: learning-paths/week-1-newcomer.md
@@ -185,6 +203,9 @@ nav:
   - ADR:
       - adr/index.md
       - 0001 选择 MkDocs Material: adr/0001-mkdocs-material.md
+      - 0002 选择 Iceberg: adr/0002-iceberg-as-primary-table-format.md
+      - 0003 多模向量选 LanceDB: adr/0003-lancedb-for-multimodal-vectors.md
+  - FAQ: faq.md
   - 术语表: glossary.md
   - 贡献指南: contributing.md
 

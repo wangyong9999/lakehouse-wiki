@@ -14,11 +14,12 @@ description: 直接读湖仓表的主流 SQL / 分析引擎
 - [Apache Flink](flink.md) —— 流优先，CDC 入湖主力
 - [DuckDB](duckdb.md) —— 嵌入式 OLAP，开发态 / 单机分析利器
 - [StarRocks](starrocks.md) —— MPP + 物化视图，BI 加速层首选
+- [ClickHouse](clickhouse.md) —— 单表大扫描 + 高并发聚合的极致
+- [Apache Doris](doris.md) —— MPP + 湖仓融合，StarRocks 的同源兄弟
 
 ## 待补
 
-- Apache Doris —— 同源兄弟
-- ClickHouse —— 明细事实表的极致
+- Apache Hive（作为计算引擎，非 Catalog 维度）
 
 ## 相关
 
