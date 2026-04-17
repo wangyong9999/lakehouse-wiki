@@ -62,6 +62,11 @@ plugins:
       type: iso_date
       fallback_to_build_date: true
       enable_creation_date: false
+  - social:
+      cards: !ENV [SOCIAL_CARDS, false]
+      cards_layout_options:
+        background_color: "#3949ab"
+        color: "#ffffff"
 
 markdown_extensions:
   - abbr
