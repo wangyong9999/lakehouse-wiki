@@ -25,7 +25,18 @@ Lake + Vector 的主张是：**别搬家，让湖支持向量就地检索**。
 
 ## 三种落地范式
 
+![Lake + Vector 三范式对比](../assets/diagrams/lake-plus-vector.svg#only-light){ loading=lazy }
+![Lake + Vector 三范式对比](../assets/diagrams/lake-plus-vector.dark.svg#only-dark){ loading=lazy }
+
 ### 范式 A：向量下沉到湖表（Iceberg + Puffin）
+
+Iceberg 把**辅助索引**（含 HNSW / IVF-PQ 向量索引）放进 Puffin 侧车文件，和 Parquet 数据文件并列、被同一 Manifest 引用。读端引擎认识 Puffin blob 就能直接做 ANN，不需要独立向量服务。
+
+- **优点**：保持 Iceberg 生态（所有引擎都能读），索引和数据同表演化
+- **状态**：Puffin 容器标准已稳定，向量索引 blob 类型在社区化
+
+<details>
+<summary>Mermaid 文本版本</summary>
 
 ```mermaid
 flowchart LR
@@ -37,10 +48,17 @@ flowchart LR
   engine --> data
 ```
 
-- **优点**：保持 Iceberg 生态（所有引擎都能读），索引和数据同表演化
-- **状态**：Puffin 容器标准已稳定，向量索引 blob 类型在社区化
+</details>
 
 ### 范式 B：多模原生湖表格式（Lance / LanceDB）
+
+Lance 从零为"多模 + 向量 + 随机访问"设计：**数据、向量索引、版本元数据**三位一体封在同一组 Fragment 里。LanceDB 作为嵌入式库直接打开对象存储；Spark / Ray 也能读同一份 Fragment 做批处理和训练。
+
+- **优点**：为向量 + ML 训练原生设计，随机访问、向量索引、零拷贝更新
+- **代价**：生态比 Parquet 新
+
+<details>
+<summary>Mermaid 文本版本</summary>
 
 ```mermaid
 flowchart LR
@@ -49,10 +67,17 @@ flowchart LR
   lance --> spark[Spark / Python reader]
 ```
 
-- **优点**：为向量 + ML 训练原生设计，随机访问、向量索引、零拷贝更新
-- **代价**：生态比 Parquet 新
+</details>
 
 ### 范式 C：独立向量库 + Catalog 统一
+
+保留已有 Milvus / Qdrant 作为向量层（大规模 + 高 QPS 强项），但用 Unity / Polaris / Gravitino **统一 Catalog 把 Iceberg 表和向量 Collection 管进同一套治理视图**（权限、血缘、发现）。
+
+- **优点**：继续用成熟向量库能力（分布式、高 QPS）
+- **代价**：仍是两套存储，Catalog 只是"把它们对齐"
+
+<details>
+<summary>Mermaid 文本版本</summary>
 
 ```mermaid
 flowchart LR
@@ -62,8 +87,7 @@ flowchart LR
   ai[AI 应用] --> cat
 ```
 
-- **优点**：继续用成熟向量库能力（分布式、高 QPS）
-- **代价**：仍是两套存储，Catalog 只是"把它们对齐"
+</details>
 
 ## 怎么选
 

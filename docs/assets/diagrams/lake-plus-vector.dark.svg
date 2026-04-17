@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-label="Lake + Vector 融合架构三种范式对比（深色）">
+  <title>Lake + Vector 融合架构三范式</title>
+  <desc>并列对比 A. Iceberg+Puffin / B. Lance(LanceDB) / C. 独立向量库+统一 Catalog 三种一体化模式。</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9fa8da"/>
+    </marker>
+    <style>
+      .hdr  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 17px; font-weight: 700; fill: #e8eaf6; }
+      .sub  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11px; font-weight: 400; fill: #9fa8da; letter-spacing: 0.3px; }
+      .nl   { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 13px; font-weight: 600; fill: #e8eaf6; }
+      .ns   { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 10.5px; font-weight: 400; fill: #b0bec5; }
+      .tag  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 10.5px; font-weight: 600; fill: #e8eaf6; }
+      .row  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 11.5px; font-weight: 400; fill: #cfd8dc; }
+      .lbl  { font-family: "Noto Sans SC","PingFang SC",system-ui,sans-serif; font-size: 10px; font-weight: 700; fill: #9fa8da; letter-spacing: 0.8px; }
+    </style>
+  </defs>
+
+  <text class="hdr" x="600" y="32" text-anchor="middle">Lake + Vector · 融合架构三范式</text>
+  <text class="sub" x="600" y="52" text-anchor="middle">同一问题的三条技术路径 · 不互斥</text>
+
+  <!-- Column A -->
+  <rect x="30"  y="80" width="370" height="440" rx="14" fill="#1e2135" stroke="#5c6bc0" stroke-width="1.5"/>
+  <rect x="30"  y="80" width="370" height="40"  rx="14" fill="#3949ab"/>
+  <rect x="30"  y="100" width="370" height="20" fill="#3949ab"/>
+  <text class="tag" x="215" y="106" text-anchor="middle">范式 A</text>
+  <text class="hdr" x="215" y="145" text-anchor="middle">Iceberg + Puffin</text>
+  <text class="sub" x="215" y="163" text-anchor="middle">向量索引下沉到湖表</text>
+
+  <g>
+    <rect x="70"  y="200" width="290" height="34" rx="6" fill="#252a45" stroke="#7986cb" stroke-width="1.5"/>
+    <text class="nl" x="215" y="222" text-anchor="middle">metadata.json · Snapshot</text>
+    <rect x="70"  y="250" width="290" height="34" rx="6" fill="#252a45" stroke="#7986cb" stroke-width="1.5"/>
+    <text class="nl" x="215" y="272" text-anchor="middle">Manifest List → Manifests</text>
+    <rect x="70"  y="300" width="135" height="44" rx="6" fill="#252a45" stroke="#5c6bc0" stroke-width="1.5"/>
+    <text class="nl" x="137" y="322" text-anchor="middle">Data Files</text>
+    <text class="ns" x="137" y="336" text-anchor="middle">Parquet · ORC</text>
+    <rect x="225" y="300" width="135" height="44" rx="6" fill="#252a45" stroke="#9fa8da" stroke-width="2"/>
+    <text class="nl" x="293" y="322" text-anchor="middle">Puffin Blob</text>
+    <text class="ns" x="293" y="336" text-anchor="middle">HNSW / IVF-PQ</text>
+    <line x1="215" y1="234" x2="215" y2="247" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="137" y1="284" x2="137" y2="297" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="293" y1="284" x2="293" y2="297" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+
+  <text class="lbl" x="50" y="376">优 · PROS</text>
+  <text class="row" x="50" y="396">· Iceberg 全生态都能读</text>
+  <text class="row" x="50" y="414">· 索引与数据同表演化</text>
+  <text class="row" x="50" y="432">· 多引擎开放 · 无独立服务</text>
+  <text class="lbl" x="50" y="462">劣 · CONS</text>
+  <text class="row" x="50" y="482">· Vector-blob 协议刚稳定</text>
+  <text class="row" x="50" y="500">· 引擎侧 ANN 支持在演进</text>
+
+  <!-- Column B -->
+  <rect x="415" y="80" width="370" height="440" rx="14" fill="#232a47" stroke="#7986cb" stroke-width="1.5"/>
+  <rect x="415" y="80" width="370" height="40"  rx="14" fill="#283593"/>
+  <rect x="415" y="100" width="370" height="20" fill="#283593"/>
+  <text class="tag" x="600" y="106" text-anchor="middle">范式 B · 团队首选</text>
+  <text class="hdr" x="600" y="145" text-anchor="middle">Lance / LanceDB</text>
+  <text class="sub" x="600" y="163" text-anchor="middle">多模原生湖表格式</text>
+
+  <g>
+    <rect x="455" y="200" width="290" height="34" rx="6" fill="#252a45" stroke="#7986cb" stroke-width="1.5"/>
+    <text class="nl" x="600" y="222" text-anchor="middle">对象存储 · S3 / GCS / OSS</text>
+    <rect x="455" y="250" width="290" height="70" rx="10" fill="#2a3150" stroke="#c5cae9" stroke-width="2"/>
+    <text class="nl" x="600" y="272" text-anchor="middle">Lance Fragment</text>
+    <text class="ns" x="600" y="290" text-anchor="middle">数据 · 向量索引 · 版本元数据</text>
+    <text class="ns" x="600" y="306" text-anchor="middle" font-style="italic">三位一体，随机访问原生</text>
+    <rect x="455" y="340" width="135" height="44" rx="6" fill="#252a45" stroke="#5c6bc0" stroke-width="1.5"/>
+    <text class="nl" x="522" y="362" text-anchor="middle">LanceDB</text>
+    <text class="ns" x="522" y="376" text-anchor="middle">嵌入式 · 向量 API</text>
+    <rect x="610" y="340" width="135" height="44" rx="6" fill="#252a45" stroke="#5c6bc0" stroke-width="1.5"/>
+    <text class="nl" x="677" y="362" text-anchor="middle">Spark / Ray</text>
+    <text class="ns" x="677" y="376" text-anchor="middle">批 · 训练 · ETL</text>
+    <line x1="600" y1="234" x2="600" y2="247" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="522" y1="323" x2="522" y2="337" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="677" y1="323" x2="677" y2="337" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+
+  <text class="lbl" x="435" y="416">优 · PROS</text>
+  <text class="row" x="435" y="436">· 多模 / 向量 / 训练全适配</text>
+  <text class="row" x="435" y="454">· 嵌入式，无独立集群</text>
+  <text class="row" x="435" y="472">· 零拷贝更新 · 随机访问</text>
+  <text class="lbl" x="435" y="496">劣 · CONS</text>
+  <text class="row" x="435" y="516">· 生态相对新，工具成熟度追赶中</text>
+
+  <!-- Column C -->
+  <rect x="800" y="80" width="370" height="440" rx="14" fill="#2c3260" stroke="#9fa8da" stroke-width="1.5"/>
+  <rect x="800" y="80" width="370" height="40"  rx="14" fill="#1a237e"/>
+  <rect x="800" y="100" width="370" height="20" fill="#1a237e"/>
+  <text class="tag" x="985" y="106" text-anchor="middle">范式 C</text>
+  <text class="hdr" x="985" y="145" text-anchor="middle">独立向量库 + 统一 Catalog</text>
+  <text class="sub" x="985" y="163" text-anchor="middle">大规模 · 高 QPS · 已有存量</text>
+
+  <g>
+    <rect x="840" y="200" width="290" height="44" rx="8" fill="#2f3663" stroke="#c5cae9" stroke-width="2"/>
+    <text class="nl" x="985" y="222" text-anchor="middle">Unity / Polaris / Gravitino</text>
+    <text class="ns" x="985" y="237" text-anchor="middle">统一 Catalog 治理平面</text>
+    <rect x="840" y="270" width="135" height="50" rx="6" fill="#252a45" stroke="#7986cb" stroke-width="1.5"/>
+    <text class="nl" x="907" y="292" text-anchor="middle">Iceberg 表</text>
+    <text class="ns" x="907" y="308" text-anchor="middle">结构化</text>
+    <rect x="995" y="270" width="135" height="50" rx="6" fill="#252a45" stroke="#7986cb" stroke-width="1.5"/>
+    <text class="nl" x="1062" y="292" text-anchor="middle">向量 Collections</text>
+    <text class="ns" x="1062" y="308" text-anchor="middle">Milvus · Qdrant</text>
+    <rect x="840" y="340" width="135" height="44" rx="6" fill="#252a45" stroke="#5c6bc0" stroke-width="1.5"/>
+    <text class="nl" x="907" y="362" text-anchor="middle">BI 引擎</text>
+    <text class="ns" x="907" y="376" text-anchor="middle">Trino · Spark</text>
+    <rect x="995" y="340" width="135" height="44" rx="6" fill="#252a45" stroke="#5c6bc0" stroke-width="1.5"/>
+    <text class="nl" x="1062" y="362" text-anchor="middle">AI 应用</text>
+    <text class="ns" x="1062" y="376" text-anchor="middle">RAG · Agent</text>
+    <line x1="907" y1="244" x2="907" y2="267" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="1062" y1="244" x2="1062" y2="267" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="907" y1="320" x2="907" y2="337" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="1062" y1="320" x2="1062" y2="337" stroke="#9fa8da" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+
+  <text class="lbl" x="820" y="416">优 · PROS</text>
+  <text class="row" x="820" y="436">· 大规模 · 高 QPS 成熟</text>
+  <text class="row" x="820" y="454">· 保留既有 Milvus / Qdrant</text>
+  <text class="row" x="820" y="472">· Catalog 统一把两套管起来</text>
+  <text class="lbl" x="820" y="496">劣 · CONS</text>
+  <text class="row" x="820" y="516">· 两套存储 · 同步与一致性成本</text>
+
+  <!-- Decision band -->
+  <rect x="30" y="550" width="1140" height="56" rx="10" fill="#1e2135" stroke="#7986cb" stroke-width="1" stroke-dasharray="5 3"/>
+  <text class="lbl" x="55" y="575">选谁？</text>
+  <text class="row" x="55" y="593">· 多模 AI 主线、嵌入式部署、中等规模 → <tspan font-weight="700" fill="#c5cae9">B (Lance)</tspan></text>
+  <text class="row" x="560" y="575">· 纯 BI + Iceberg 存量、向量需求轻 → <tspan font-weight="700" fill="#c5cae9">A (Puffin)</tspan></text>
+  <text class="row" x="560" y="593">· 亿级向量 + 既有 Milvus/Qdrant → <tspan font-weight="700" fill="#c5cae9">C (统一 Catalog)</tspan></text>
+</svg>
