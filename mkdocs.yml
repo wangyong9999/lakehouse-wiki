@@ -262,6 +262,7 @@ nav:
       - 0005 引擎组合: adr/0005-engine-combination.md
   - FAQ: faq.md
   - 术语表: glossary.md
+  - 按 Tag 浏览: tags/index.md
   - Changelog: changelog.md
   - 贡献指南: contributing.md
 
