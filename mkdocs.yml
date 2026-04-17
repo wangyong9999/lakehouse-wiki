@@ -250,6 +250,10 @@ nav:
       - 一月 AI 方向: learning-paths/month-1-ai-track.md
       - 一月 BI 方向: learning-paths/month-1-bi-track.md
       - 一季度资深路径: learning-paths/quarter-advanced.md
+  - Tutorials:
+      - tutorials/index.md
+      - 你的第一张 Iceberg 表: tutorials/first-iceberg-table.md
+      - 30 分钟湖上多模检索 Demo: tutorials/multimodal-search-demo.md
   - 速查单:
       - cheatsheets/index.md
       - Iceberg 速查: cheatsheets/iceberg.md
