@@ -10,10 +10,15 @@ description: 按时间维度的认知脚手架 —— 给新人一条路
 ## 已有
 
 - [一周新人路径](week-1-newcomer.md) —— 最小集，一周跑通湖仓 + 检索的心智模型
-- [一月 AI 方向路径](month-1-ai-track.md) —— 完成新人路径后深入 AI / 检索
-- [一月 BI 方向路径](month-1-bi-track.md) —— 完成新人路径后深入 BI / OLAP
+- [一月 AI 方向](month-1-ai-track.md) —— 完成新人路径后深入 AI / 检索
+- [一月 BI 方向](month-1-bi-track.md) —— 完成新人路径后深入 BI / OLAP
+- [一季度资深路径](quarter-advanced.md) —— 成为能独立设计一体化方案的资深工程师
+
+## 按角色入门
+
+如果你还没选路径，先看 [按角色入门](../roles/index.md)——数据 / ML / 平台 / BI 四种角色的优先阅读清单。
 
 ## 待补
 
-- 一季度资深方向（能独立设计一体化方案）
-- 引擎方向（Iceberg / Paimon 源码入门）
+- 引擎源码入门（Iceberg / Paimon / Lance）
+- 贡献者路径（从读者到贡献者）

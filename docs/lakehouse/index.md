@@ -15,7 +15,8 @@ description: Lakehouse 表格式的核心概念与主流实现
 - [Schema Evolution](schema-evolution.md) —— 不重写历史就能改表结构
 - [Partition Evolution](partition-evolution.md) —— 改分区策略也不重写历史
 - [Time Travel](time-travel.md) —— 查过去某一时刻 / 版本的样子
-- [Puffin](puffin.md) —— Iceberg 的辅助索引侧车文件（向量索引下沉的关键）
+- [Branching & Tagging](branching-tagging.md) —— Iceberg 原生分支 / 标签
+- [Puffin](puffin.md) —— Iceberg 的辅助索引侧车文件
 - [Streaming Upsert / CDC](streaming-upsert-cdc.md) —— 流式变更持续入湖
 - [Compaction](compaction.md) —— 小文件治理，运维必修
 - [Delete Files](delete-files.md) —— 行级删除背后的机制
@@ -36,3 +37,7 @@ description: Lakehouse 表格式的核心概念与主流实现
 ## 团队决策
 
 - [ADR-0002 选择 Iceberg 作为主表格式](../adr/0002-iceberg-as-primary-table-format.md)
+
+## 速查
+
+- [Iceberg 速查](../cheatsheets/iceberg.md)

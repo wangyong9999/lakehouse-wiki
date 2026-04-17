@@ -10,6 +10,7 @@ description: 存储、文件格式、计算、分布式等前置知识
 ## 已有
 
 - [对象存储](object-storage.md) —— S3/GCS/OSS 语义、原子性与一致性
+- [存算分离](compute-storage-separation.md) —— 现代湖仓的架构原语
 - [Parquet](parquet.md) —— 最主流的列式文件格式
 - [ORC](orc.md) —— Hive 生态的列式格式，与 Parquet 平行
 - [Lance Format](lance-format.md) —— 为多模 + 向量 + 随机访问重写的列式格式
@@ -25,3 +26,5 @@ description: 存储、文件格式、计算、分布式等前置知识
 - Avro
 - 共识协议（Raft / Paxos 简述）
 - SQL 优化器基础 / Codegen
+- Arrow / FlightSQL / ADBC
+- 事件时间 / Watermark / 乱序处理

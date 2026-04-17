@@ -1,6 +1,6 @@
 ---
 title: 研究前沿
-description: 论文速读、趋势观察、早期项目
+description: 论文速读、趋势观察、Benchmark
 ---
 
 # 研究前沿
@@ -10,15 +10,15 @@ description: 论文速读、趋势观察、早期项目
 ## 已有
 
 - [DiskANN 论文笔记](diskann-paper.md) —— NeurIPS 2019 · 单机 SSD 十亿级 ANN
+- [Benchmark 参考](benchmarks.md) —— 湖仓 / 向量 / LLM 常用 Benchmark 汇总
 
 ## 待补
 
 - 月更 Digest（向量 / 湖仓 / AI 方向）
-- 年度清单：CIDR / SIGMOD / VLDB 的相关论文
-- 早期项目追踪（每季度一次）
-- Lakehouse 方向的综述 paper（如 CIDR 2021 Lakehouse 原始论文）
+- Lakehouse 论文综述（CIDR 2021 原始 Lakehouse paper）
+- RAG 方向关键论文（RAGAS / GraphRAG / Self-RAG）
 - Iceberg / Paimon / Lance 的 design doc 摘要
-- RAG 评估相关论文（如 RAGAS、Self-RAG、GraphRAG）
+- 季度趋势 report
 
 ## 贡献方式
 

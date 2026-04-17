@@ -88,9 +88,16 @@ markdown_extensions:
 
 nav:
   - 首页: index.md
+  - 按角色:
+      - roles/index.md
+      - 数据工程师: roles/data-engineer.md
+      - ML / AI 工程师: roles/ml-engineer.md
+      - 平台工程师: roles/platform-engineer.md
+      - BI 分析师: roles/bi-analyst.md
   - 基础:
       - foundations/index.md
       - 对象存储: foundations/object-storage.md
+      - 存算分离: foundations/compute-storage-separation.md
       - Parquet: foundations/parquet.md
       - ORC: foundations/orc.md
       - Lance Format: foundations/lance-format.md
@@ -108,6 +115,7 @@ nav:
       - Schema Evolution: lakehouse/schema-evolution.md
       - Partition Evolution: lakehouse/partition-evolution.md
       - Time Travel: lakehouse/time-travel.md
+      - Branching & Tagging: lakehouse/branching-tagging.md
       - Puffin: lakehouse/puffin.md
       - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
       - Compaction: lakehouse/compaction.md
@@ -133,6 +141,15 @@ nav:
       - StarRocks: query-engines/starrocks.md
       - ClickHouse: query-engines/clickhouse.md
       - Apache Doris: query-engines/doris.md
+  - 数据管线:
+      - pipelines/index.md
+      - Kafka 到湖: pipelines/kafka-ingestion.md
+      - Bulk Loading: pipelines/bulk-loading.md
+      - 图像管线: pipelines/image-pipeline.md
+      - 视频管线: pipelines/video-pipeline.md
+      - 音频管线: pipelines/audio-pipeline.md
+      - 文档管线: pipelines/document-pipeline.md
+      - 编排系统: pipelines/orchestration.md
   - 多模检索:
       - retrieval/index.md
       - 向量数据库: retrieval/vector-database.md
@@ -152,9 +169,19 @@ nav:
   - AI 负载:
       - ai-workloads/index.md
       - RAG: ai-workloads/rag.md
-      - Embedding 流水线: ai-workloads/embedding-pipelines.md
-      - Feature Store: ai-workloads/feature-store.md
+      - RAG 评估: ai-workloads/rag-evaluation.md
+      - Prompt 管理: ai-workloads/prompt-management.md
+      - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
       - Semantic Cache: ai-workloads/semantic-cache.md
+      - Feature Store: ai-workloads/feature-store.md
+      - Embedding 流水线: ai-workloads/embedding-pipelines.md
+      - 微调数据准备: ai-workloads/fine-tuning-data.md
+  - ML 基础设施:
+      - ml-infra/index.md
+      - Model Registry: ml-infra/model-registry.md
+      - Model Serving: ml-infra/model-serving.md
+      - 训练编排: ml-infra/training-orchestration.md
+      - GPU 调度: ml-infra/gpu-scheduling.md
   - BI 负载:
       - bi-workloads/index.md
       - OLAP 建模: bi-workloads/olap-modeling.md
@@ -175,9 +202,12 @@ nav:
       - 成本优化: ops/cost-optimization.md
       - 安全与权限: ops/security-permissions.md
       - 数据治理: ops/data-governance.md
+      - 迁移手册: ops/migration-playbook.md
+      - 故障排查手册: ops/troubleshooting.md
   - 研究前沿:
       - frontier/index.md
       - DiskANN 论文笔记: frontier/diskann-paper.md
+      - Benchmark 参考: frontier/benchmarks.md
   - 横向对比:
       - compare/index.md
       - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
@@ -200,13 +230,23 @@ nav:
       - 一周新人路径: learning-paths/week-1-newcomer.md
       - 一月 AI 方向: learning-paths/month-1-ai-track.md
       - 一月 BI 方向: learning-paths/month-1-bi-track.md
+      - 一季度资深路径: learning-paths/quarter-advanced.md
+  - 速查单:
+      - cheatsheets/index.md
+      - Iceberg 速查: cheatsheets/iceberg.md
+      - ANN 参数速查: cheatsheets/ann-params.md
+      - 向量 SQL 语法对照: cheatsheets/sql-vector.md
+      - Embedding 模型速查: cheatsheets/embedding-quickpick.md
   - ADR:
       - adr/index.md
       - 0001 选择 MkDocs Material: adr/0001-mkdocs-material.md
       - 0002 选择 Iceberg: adr/0002-iceberg-as-primary-table-format.md
       - 0003 多模向量选 LanceDB: adr/0003-lancedb-for-multimodal-vectors.md
+      - 0004 Catalog 选型: adr/0004-catalog-choice.md
+      - 0005 引擎组合: adr/0005-engine-combination.md
   - FAQ: faq.md
   - 术语表: glossary.md
+  - Changelog: changelog.md
   - 贡献指南: contributing.md
 
 extra:
