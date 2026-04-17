@@ -1,12 +1,12 @@
-"""MkDocs hook: render Diátaxis kind + depth badges at page top.
+"""MkDocs hook: render Diátaxis badge + prerequisites block at page top.
 
-Mapping rules:
-- frontmatter `kind` wins if set
-- else: frontmatter `type` auto-maps to Diátaxis kind
-- frontmatter `depth` (入门 / 进阶 / 资深) renders alongside
-- badges inject after first H1 in markdown body
+Features (all opt-in via frontmatter):
+- `kind` (or auto-derived from `type`) → colored badge
+- `depth` (入门 / 进阶 / 资深) → second badge
+- `prerequisites: [slug1, slug2]` → "建议先读" box with resolved links
+- `hide_badges: true` → opt this page out entirely
 
-Usage: enable via `hooks: [hooks/page_badges.py]` in mkdocs.yml.
+Injected immediately after the first H1 of the markdown body.
 """
 
 from __future__ import annotations
@@ -14,17 +14,17 @@ from __future__ import annotations
 import re
 
 TYPE_TO_KIND = {
-    "concept": ("explanation", "explanation"),
-    "system": ("explanation", "explanation"),
-    "comparison": ("reference", "reference"),
-    "scenario": ("how-to", "how-to"),
-    "learning-path": ("tutorial", "tutorial"),
-    "tutorial": ("tutorial", "tutorial"),
-    "adr": ("reference", "reference"),
-    "paper-note": ("reference", "reference"),
-    "reference": ("reference", "reference"),
-    "how-to": ("how-to", "how-to"),
-    "explanation": ("explanation", "explanation"),
+    "concept": "explanation",
+    "system": "explanation",
+    "comparison": "reference",
+    "scenario": "how-to",
+    "learning-path": "tutorial",
+    "tutorial": "tutorial",
+    "adr": "reference",
+    "paper-note": "reference",
+    "reference": "reference",
+    "how-to": "how-to",
+    "explanation": "explanation",
 }
 
 KIND_LABEL = {
@@ -57,48 +57,96 @@ def _badge(label: str, color: str) -> str:
     )
 
 
+def _find_file_by_slug(files, slug: str):
+    """Resolve a slug to a files.File. Tries several match patterns."""
+    slug = slug.strip().replace("\\", "/")
+    for f in files:
+        sp = f.src_path.replace("\\", "/")
+        if sp == f"{slug}.md":
+            return f
+        if sp == f"{slug}/index.md":
+            return f
+        if sp.endswith(f"/{slug}.md"):
+            return f
+    # Fallback: basename match
+    for f in files:
+        sp = f.src_path.replace("\\", "/")
+        if sp.rsplit("/", 1)[-1] == f"{slug}.md":
+            return f
+    return None
+
+
+def _render_prerequisites(prerequisites, page, files):
+    if not prerequisites:
+        return ""
+    items = []
+    for p in prerequisites:
+        file_obj = _find_file_by_slug(files, p)
+        if file_obj is None:
+            items.append(f"<li><code>{p}</code> <em>（未找到对应页）</em></li>")
+            continue
+        try:
+            rel = file_obj.url_relative_to(page.file)
+        except Exception:
+            rel = "/" + file_obj.url
+        title = p
+        if getattr(file_obj, "page", None) is not None:
+            pmeta = getattr(file_obj.page, "meta", None) or {}
+            title = pmeta.get("title") or p
+        items.append(f'<li><a href="{rel}">{title}</a></li>')
+    body = "".join(items)
+    return (
+        '<div class="admonition note" style="margin:0.6em 0 1.4em 0;">'
+        '<p class="admonition-title">建议先读</p>'
+        f'<ul style="margin:0.2em 0 0.2em 1.5em;">{body}</ul>'
+        "</div>\n"
+    )
+
+
 def on_page_markdown(markdown, page, config, files, **kwargs):
-    """Inject badges right after the first H1."""
     meta = page.meta or {}
 
-    # Skip pages opting out (home, 404, tags index, role landings etc.)
     if meta.get("hide_badges"):
         return markdown
-    # Skip pages with no H1 candidate
-    if "\n#" not in markdown and not markdown.lstrip().startswith("# "):
-        return markdown
 
+    # --- Kind / Depth badges ---
     kind = meta.get("kind")
     type_ = meta.get("type")
     if not kind and type_:
-        kind, _ = TYPE_TO_KIND.get(str(type_), (None, None))
+        kind = TYPE_TO_KIND.get(str(type_))
 
     depth = meta.get("depth")
 
-    if not kind and not depth:
-        return markdown
-
-    parts = []
+    badge_parts = []
     if kind and kind in KIND_LABEL:
-        parts.append(_badge(KIND_LABEL[kind], KIND_COLOR[kind]))
+        badge_parts.append(_badge(KIND_LABEL[kind], KIND_COLOR[kind]))
     if depth:
-        depth_label, depth_color = DEPTH_LABEL.get(str(depth), (str(depth), "#546e7a"))
-        parts.append(_badge(depth_label, depth_color))
+        lbl, color = DEPTH_LABEL.get(str(depth), (str(depth), "#546e7a"))
+        badge_parts.append(_badge(lbl, color))
 
-    if not parts:
+    badge_block = ""
+    if badge_parts:
+        badge_block = (
+            '<div class="page-badges" style="margin:0.2em 0 1em 0;">'
+            + "".join(badge_parts)
+            + "</div>\n"
+        )
+
+    # --- Prerequisites block ---
+    prereq_raw = meta.get("prerequisites") or []
+    if isinstance(prereq_raw, str):
+        prereq_raw = [prereq_raw]
+    prereq_block = _render_prerequisites(prereq_raw, page, files)
+
+    if not badge_block and not prereq_block:
         return markdown
 
-    badge_block = (
-        '<div class="page-badges" style="margin:0.2em 0 1.4em 0;">'
-        + "".join(parts)
-        + "</div>\n"
-    )
-
-    # Find first H1 and inject immediately after
+    # --- Inject after first H1 ---
     pattern = re.compile(r"^(#\s+.*?)(\r?\n)", re.MULTILINE)
     match = pattern.search(markdown)
     if not match:
         return markdown
 
     insert_at = match.end()
-    return markdown[:insert_at] + "\n" + badge_block + markdown[insert_at:]
+    injection = "\n" + badge_block + prereq_block
+    return markdown[:insert_at] + injection + markdown[insert_at:]
