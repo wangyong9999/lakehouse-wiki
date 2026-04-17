@@ -13,6 +13,8 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - 'requirements.txt'
+      - '.markdownlint.jsonc'
+      - '.github/workflows/quality.yml'
 
 jobs:
   markdownlint:
