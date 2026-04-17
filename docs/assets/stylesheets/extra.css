@@ -1,0 +1,32 @@
+/* ==========================================================================
+ * Lightbox (glightbox) sizing overrides
+ * ========================================================================== */
+
+/* Make the lightbox media container use most of the viewport instead of
+ * falling back to the image's natural size. Without this, a 1200x760 SVG
+ * shown on a 1920px screen appears as a small 1200px card in the middle. */
+.glightbox-clean .gslide-media,
+.glightbox-modern .gslide-media {
+  width: 95vw !important;
+  max-width: none !important;
+}
+
+/* Force the inner <img> to fill the media container width while preserving
+ * aspect ratio and respecting viewport height. */
+.gslide-image img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  object-fit: contain;
+}
+
+/* Hint to the reader that the image is clickable. */
+.md-content img {
+  cursor: zoom-in;
+}
+
+/* But don't show cursor on icons / small inline images. */
+.md-content .twemoji img,
+.md-content svg.twemoji {
+  cursor: inherit;
+}

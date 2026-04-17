@@ -71,8 +71,6 @@ plugins:
       effect: zoom
       zoomable: true
       draggable: true
-      width: 90%
-      height: auto
   - social:
       cards: !ENV [SOCIAL_CARDS, false]
       cards_layout_options:
@@ -280,6 +278,9 @@ nav:
   - 按 Tag 浏览: tags/index.md
   - Changelog: changelog.md
   - 贡献指南: contributing.md
+
+extra_css:
+  - assets/stylesheets/extra.css
 
 extra:
   generator: false
