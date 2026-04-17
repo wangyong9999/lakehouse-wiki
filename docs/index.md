@@ -14,6 +14,13 @@ hide:
 
 ## 整体架构视图
 
+![多模一体化湖仓整体架构](assets/diagrams/homepage-architecture.svg){ loading=lazy }
+
+一张图串起本手册所有章节 —— 自底向上：**数据源 → 入湖 → 湖仓底座 → Catalog 治理平面 → 计算与检索 → 消费**。
+
+<details>
+<summary>Mermaid 版本（可编辑、便于 diff 数据流）</summary>
+
 ```mermaid
 flowchart BT
   subgraph "数据源"
@@ -98,7 +105,7 @@ flowchart BT
   flink --> ml
 ```
 
-一张图串起本手册所有章节 —— 顺着"数据源 → 入湖 → 底座 → Catalog → 计算 → 检索 / AI → 消费"读下去。
+</details>
 
 ---
 
