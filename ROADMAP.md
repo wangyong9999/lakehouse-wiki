@@ -209,6 +209,17 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
   - `compare/sparse-retrieval.md` —— BM25 / SPLADE / ColBERT / Elser
 - [x] **N5 · 章节 index + nav 同步**
 
+### F 轮（深度审视 → 精准修复）
+
+- [x] **F1 · 首页改造** —— 18 个 ⭐ 精华分 4 组突出 + index-by-technology 入链
+- [x] **F2 · FAQ 补 8 条** —— MCP / Semantic / Gateway / v3 / SLO / Data Contract / RAG 提效 / 厂商锁定
+- [x] **F3 · 辩证性精准降温 8 处** —— LLM Gateway / Hybrid / Sparse / Streaming / OLAP / Rerank / Lake Table / Qdrant 的 hype 表达条件化
+- [x] **F4 · last_reviewed 批量回填 41 页**
+- [x] **F5a · 四表格式对比升 A 级** (84 → 230+ 行) · 含 2024-2026 重大事件（Databricks 收购 Tabular 等）+ 决策矩阵 + 现实检视
+- [x] **F5b · 向量库对比升 A 级** (110 → 290+ 行) · 新增 Pinecone + 决策树 + 市场变化
+- [x] **F5c · ANN 索引对比升 A 级** (108 → 340+ 行) · 新增 Binary Embedding + 分层检索策略
+- [x] **命名去年份化**：全站"2025 前沿" → "前沿" · "2025 视角" → "2026 视角"（11 页）
+
 ### M 轮（最优方案精选补强 + 运营奠基）
 
 - [x] **M1 · 真空补齐 5 页**：
@@ -229,19 +240,21 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
   - `.github/CODEOWNERS` 完善分域 owner 结构
 - [x] **M5 · nav + index 同步**
 
-**交付累计**（三轮）：
-- **核心深化 29 页**（15 S + 6 A + 8 A 级补强，约 7500 行）
+**交付累计**（四轮）：
+- **核心深化 32 页**（15 S + 6 A + 8 A + 3 大对比，约 8400 行）
 - **新增内容 29 页**（S/A 级，约 8800 行）
-- **辩证性段落 + 现实检视** 贯穿
-- **运营机制奠基**（frontmatter 规范 / Issue 模板 / CODEOWNERS）
-- **总计 58 页 / 新增 ~16,300 行**
+- **辩证性强化 + 现实检视** 贯穿 14 页（N2 · F3 · F5a/b/c 等）
+- **运营机制奠基**（frontmatter 规范 · Issue 模板 · CODEOWNERS · **last_reviewed 回填 41 页**）
+- **命名去年份化** 11 页（2025 前沿 → 2026 视角）
+- **首页 + FAQ** 大改（18 个 ⭐ 精华 + 8 条新主题）
+- **总计 61 页更新 / 新增 ~17,500 行**
 
-已覆盖 ROADMAP 核心要素 **~95%**；剩余**运营化落地 + 季度 review + 可选 SVG/Playbook**。
+已覆盖 ROADMAP 核心要素 **~98%**；剩余**运营化落地 + 季度 review 执行**。
 
-**下阶段重点不是加内容，而是运营**：
-1. 季度 review 机制跑起来
-2. Owner 填充
-3. frontmatter `last_reviewed` 回填
-4. 遇生产事件 / 新技术驱动相关页更新
+**下阶段重点（不加内容，转运营）**：
+1. 第一次季度 review（2026 Q3）
+2. Owner 填充（CODEOWNERS 分域）
+3. 根据生产事件触发页面更新
+4. 每季度刷新 `last_reviewed` 日期
 
 每批 PR 在这里更新勾选。
