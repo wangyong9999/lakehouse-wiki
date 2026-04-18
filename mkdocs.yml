@@ -318,6 +318,7 @@ nav:
       - 0005 引擎组合: adr/0005-engine-combination.md
   - FAQ: faq.md
   - 术语表: glossary.md
+  - 数据来源声明: about-sources.md
   - 按技术栈索引: index-by-technology.md
   - 按 Tag 浏览: tags/index.md
   - Changelog: changelog.md
