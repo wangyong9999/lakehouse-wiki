@@ -2,11 +2,16 @@
 title: 你的第一张 Iceberg 表
 type: tutorial
 depth: 入门
+applies_to: pyiceberg 0.7+ · DuckDB 1.0+（2025-04）
+last_reviewed: 2026-04-18
 tags: [tutorial, iceberg, duckdb, pyiceberg]
 status: stable
 ---
 
 # 你的第一张 Iceberg 表
+
+!!! warning "教程代码说明"
+    本教程为**说明性示例**，基于文中标注版本编写。API 在新版本可能微调——**实际运行以 [pyiceberg 官方文档](https://py.iceberg.apache.org/) 和 [DuckDB Iceberg 扩展文档](https://duckdb.org/docs/extensions/iceberg) 为准**。如果示例失败，请先查对应库的 changelog，并考虑在 Issue 区反馈。
 
 !!! tip "你会做完"
     - 本地跑起来一个 Iceberg 目录（不用集群、不用云）
