@@ -113,7 +113,7 @@ status: stable
 - **跨区域流量爆账单**：compute 和 bucket 不在同一 region → 带宽成本占比可达 30%+
 - **小对象（<1MB）泛滥**：S3 最小计费单位 · LIST 成本陡增 → 必须 Compaction
 - **Presigned URL 过期 / 权限泄露**：有效期管理 + bucket policy 要严
-- **Versioning 没开启**：误删不可恢复（湖仓 Time Travel 依赖这个）
+- **Versioning 没开启**：误删 / 误覆盖**对象级不可恢复**。注意：湖仓 Time Travel **不依赖**它——Iceberg / Delta 的 Time Travel 走的是 metadata 里的 snapshot / manifest 链。bucket versioning 的真正价值是**防误删兜底**（配合 `expire_snapshots`，让"过期后还能再回退 N 天"成为可能）
 - **Lifecycle 乱配**：把 Iceberg 未提交 snapshot 的数据文件过早归档 / 删除 → 表损坏
 - **跨云 S3 兼容**：R2 / B2 / MinIO 有语义微差（multipart · ETag 计算），上游库版本要够新
 - **Object Lock / WORM**：合规场景有用，但误启用会让 Compaction 失败

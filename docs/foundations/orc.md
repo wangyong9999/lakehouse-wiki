@@ -37,7 +37,7 @@ File
 | 统计精度 | 更细（索引层次更多）| 够用 |
 | 嵌套类型 | 支持（定义/重复级别扁平化）| Dremel 式 levels |
 | 字典压缩 | 支持 | 支持 |
-| Bloom filter | 内建 | 可选（独立文件或 Page Index） |
+| Bloom filter | 内建 | 可选（文件内独立 section · per column chunk · 和 Page Index 是两套机制） |
 | 生态覆盖 | Hive 生态强 | 几乎所有引擎、工具、云服务 |
 | 湖表格式支持 | Iceberg / Hudi 支持但非默认 | Iceberg / Paimon / Delta / Hudi 默认 |
 

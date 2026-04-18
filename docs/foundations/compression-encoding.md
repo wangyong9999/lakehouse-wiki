@@ -112,12 +112,13 @@ Delta：1700000001, [2, 2, 2, ...]（base + deltas）
 | **LZO** | ★★ | ★★★★ | ★★★★ | 老系统 · 专利限制已过 |
 | **无压缩** | — | ★★★★★ | ★★★★★ | 已压缩的 binary（图像 / Parquet of Parquet） |
 
-### 3.2 Zstd：2020+ 的默认
+### 3.2 Zstd：2020+ 的主流推荐
 
 **Zstd（Facebook 2016）的优势**：
 - 压缩率接近 Gzip，但解压速度接近 Snappy
 - **level 可调**（1-22），同一算法一套参数覆盖从"实时流"到"冷归档"
-- 2020+ Parquet / ORC / Iceberg / Paimon / ClickHouse 都改默认为 Zstd
+- **在"新建湖表"场景**越来越多系统的推荐默认——Iceberg 的 `write.parquet.compression-codec` 默认已是 `zstd`；Delta / ClickHouse 的新建表也普遍切换到 Zstd
+- **但不是所有库的现行默认**：PyArrow `write_table` 仍默认 `snappy`；ORC / Paimon / 旧 Parquet 客户端很多也还是 Snappy / ZLIB。写入端真正用什么，取决于**客户端库默认 + 显式参数**，不是 Parquet/ORC 文件 spec（spec 不规定默认压缩）
 
 **level 建议**：
 - **Zstd-1 到 -3**：写密集（Kafka → 湖 CDC 流，写吞吐 > 压缩率）
@@ -140,11 +141,10 @@ Delta：1700000001, [2, 2, 2, ...]（base + deltas）
 
 ## 4. 和列式格式的对应
 
-| 格式 | Encoding 层 | 默认 Compression |
+| 格式 | Encoding 层 | 常见 Compression（spec 不规定默认） |
 |---|---|---|
-| **Parquet v1** | Dictionary · RLE · Bit-pack · Delta · Delta-of-Delta | Snappy（老）→ Zstd（新） |
-| **Parquet v2** | 同上 + Byte Stream Split · Delta Length Byte Array | Zstd |
-| **ORC** | 同上 + FOR · 紧致字典 | Zstd（新） · Zlib（老） |
+| **Parquet v1 / v2** | Dictionary · RLE · Bit-pack · Delta · Delta-of-Delta（v2 增 Byte Stream Split · Delta Length Byte Array）| 客户端库决定：PyArrow 默认 Snappy；Iceberg / Delta 的写入默认多为 Zstd；可显式选 |
+| **ORC** | 同上 + FOR · 紧致字典 | ZLIB（历史默认）· Zstd（推荐新建表切换）· Snappy |
 | **Lance** | Dictionary · Bit-pack · Byte Stream Split | Zstd / LZ4（可配） |
 
 **关键**：格式自动选编码（根据统计），**开发者基本只选 compression 算法 + level**。
