@@ -248,6 +248,8 @@ nav:
       - Embedding 模型横比: compare/embedding-models.md
       - 计算引擎对比: compare/compute-engines.md
       - Puffin vs Lance: compare/puffin-vs-lance.md
+      - Feature Store 横比: compare/feature-store-comparison.md
+      - OLAP 加速副本横比: compare/olap-accelerator-comparison.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md
@@ -259,6 +261,8 @@ nav:
       - Feature Serving: scenarios/feature-serving.md
       - Real-time Lakehouse: scenarios/real-time-lakehouse.md
       - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
+      - 欺诈检测 · 风险控制: scenarios/fraud-detection.md
+      - CDP · 用户分群: scenarios/cdp-segmentation.md
       - Agentic 工作流: scenarios/agentic-workflows.md
   - 学习路径:
       - learning-paths/index.md

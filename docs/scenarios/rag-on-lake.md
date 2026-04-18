@@ -204,7 +204,6 @@ chunk_config = {
 
 - **版式感知 OCR**（Nougat · MinerU · PaddleOCR-VL）而不是纯文字
 - 表格、公式、图表**单独 chunk**，带描述
-- 参考：[OCR & 版式理解](../retrieval/ocr-layout.md)（如已有）
 
 ---
 

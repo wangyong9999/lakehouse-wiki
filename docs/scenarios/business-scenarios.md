@@ -290,11 +290,13 @@ Query → Hybrid (dense + BM25) → Rerank (Cross-encoder) → Prompt → LLM (v
 - Neo4j / Nebula Graph 建账户关系
 - GNN 训练识别欺诈团伙
 
-**Benchmark**：**IEEE-CIS Fraud Detection** · **PaySim** (模拟金融交易) · **KDD Cup 2024 金融数据集**
+详见 **[欺诈检测深挖](fraud-detection.md)**。
+
+**Benchmark**：**IEEE-CIS Fraud Detection** · **PaySim** (模拟金融交易) · **Elliptic Bitcoin** (图) · **DGraphFin**
 
 **可部署参考**：
-- Feast + Spark + sklearn 最小闭环
-- PyG / DGL 做 GNN baseline
+- Feast + Spark + XGBoost 最小闭环
+- PyG / DGL + DGraphFin 做 GNN baseline
 
 ---
 
@@ -322,11 +324,14 @@ Query → Hybrid (dense + BM25) → Rerank (Cross-encoder) → Prompt → LLM (v
   标签表 → 营销系统 (SMS / Push / 广告投放)
 ```
 
-**Benchmark**：公开 CDP 数据集较少；用 [Brazilian E-commerce (Olist)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) 可做全流程
+详见 **[CDP / 用户分群深挖](cdp-segmentation.md)**。
+
+**Benchmark**：**[Olist 巴西电商](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)** · **[Online Retail II](https://archive.ics.uci.edu/dataset/502/online+retail+ii)** · **[Retailrocket](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset)**
 
 **可部署参考**：
-- GrowingIO / 神策公开 demo
+- GrowingIO / 神策 / Segment 公开 demo
 - 自研：Iceberg + dbt + Superset 的最小 CDP
+- Apache Unomi（开源 CDP 标准实现）
 
 ---
 
