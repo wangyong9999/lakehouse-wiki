@@ -18,6 +18,7 @@ description: 论文速读、趋势观察、Benchmark、AI 治理
 - [**RAG 前沿 2025**](rag-advances-2025.md) —— Contextual Retrieval / CRAG / Self-RAG / Agentic RAG 及其边界
 - [**向量检索前沿**](vector-trends.md) —— Matryoshka / Binary / SPLADE v3 / ColBERT v2 的实务选择
 - [**AI 治理**](ai-governance.md) —— EU AI Act / Guardrails / Red Teaming，合规视角
+- [**Lakehouse 厂商与开源生态格局**](vendor-landscape.md) —— Databricks/Snowflake/BigQuery/国内大厂的客观对比
 
 ## 论文笔记
 

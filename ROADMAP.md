@@ -186,7 +186,7 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
 - [x] R0 · 业务场景深化已完成（recommender / fraud / CDP / RAG / BI / FS / OLAP）
 - [x] R1.S1 · 模板骨架升级
 - [x] **R1A · 核心 S 级资产 15 页深化** (lake-table / iceberg / paimon / snapshot / hnsw / vector-database / hybrid-search / rerank / trino / spark / flink / rag / feature-store / iceberg-rest-catalog / unity-catalog)
-- [ ] R1B · 15 页 A 级补强（**下一轮推进**）
+- [x] **R1B 精选 · 6 页 A 级深化** （hudi / delta-lake / manifest / streaming-upsert-cdc / ivf-pq / diskann）
 - [x] **R2.1 · 压轴总论 4 页** (data-systems-evolution / modern-data-stack / mlops-lifecycle / mcp)
 - [x] **R2.2 · 新增横向对比 3 页** (streaming-engines / rerank-models / orchestrators)
 - [x] **R2.3 · 前沿专题 4 页** (llm-inference-opt / rag-advances-2025 / vector-trends / ai-governance)
@@ -195,14 +195,26 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
 - [x] **S2 · Benchmark 数字总汇页**
 - [x] **R3.1 · 深度案例 3 页** (case-netflix / case-linkedin / case-uber)
 - [x] **R3.4 + R3.5 · 反模式 / 容量 / 索引** (anti-patterns / capacity-planning / glossary 扩充 / index-by-technology)
-- [ ] R3.2 · 精工 SVG 10 张（**下一轮推进**）
-- [ ] R3.3 · 可运行教程 3 个（**下一轮推进**）
+- [ ] R3.2 · 精工 SVG 10 张（**延后**，ROI 边际）
+- [ ] R3.3 · 可运行教程 3 个（**延后**，改为 playbook 更合适）
 
-**总计本轮交付**：
-- **核心深化 15 页**（S 级，约 4400 行）
-- **新增内容 22 页**（S/A 级，约 6500 行）
-- **总计 37 页 / 新增 ~11,000 行内容**
+### N 轮（辩证性优化 + 新价值）
 
-已覆盖 ROADMAP 总量 ~70%；剩余 30%（R1B 补强 · SVG · 教程）留给下一轮。
+- [x] **N1 · 5 章节 index.md 同步 + FAQ 补强**
+- [x] **N2 · 辩证性强化** —— 给 MCP / RAG 前沿 / 向量前沿 / LLM 推理优化 加"现实检视"段落反 hype
+- [x] **N3 · R1B 精选 6 页 A 级深化**（见上）
+- [x] **N4 · 3 个新高价值页**：
+  - `ops/sla-slo.md` —— 数据 SRE / DRE 体系
+  - `frontier/vendor-landscape.md` —— 客观厂商格局
+  - `compare/sparse-retrieval.md` —— BM25 / SPLADE / ColBERT / Elser
+- [x] **N5 · 章节 index + nav 同步**
+
+**交付累计**（两轮）：
+- **核心深化 21 页**（15 S 级 + 6 A 级，约 5500 行）
+- **新增内容 25 页**（S/A 级，约 7500 行）
+- **辩证性段落 + 索引修复** 贯穿
+- **总计 46 页 / 新增 ~13,000 行内容**
+
+已覆盖 ROADMAP 核心要素 ~85%；剩余 SVG + 可运行教程为"样式提升"，ROI 边际，延后。
 
 每批 PR 在这里更新勾选。

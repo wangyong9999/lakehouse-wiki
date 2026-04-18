@@ -242,6 +242,7 @@ nav:
       - 故障排查手册: ops/troubleshooting.md
       - 20 反模式: ops/anti-patterns.md
       - 容量规划: ops/capacity-planning.md
+      - SLA · SLO · DRE: ops/sla-slo.md
       - 合规 · GDPR / 个保法: ops/compliance.md
       - TCO 模型: ops/tco-model.md
   - 研究前沿:
@@ -253,6 +254,7 @@ nav:
       - RAG 前沿 2025: frontier/rag-advances-2025.md
       - 向量检索前沿: frontier/vector-trends.md
       - AI 治理: frontier/ai-governance.md
+      - Lakehouse 厂商与开源生态格局: frontier/vendor-landscape.md
   - 横向对比:
       - compare/index.md
       - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
@@ -269,6 +271,7 @@ nav:
       - 流处理引擎横比: compare/streaming-engines.md
       - Rerank 模型横比: compare/rerank-models.md
       - 调度系统横比: compare/orchestrators.md
+      - 稀疏检索对比: compare/sparse-retrieval.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md
