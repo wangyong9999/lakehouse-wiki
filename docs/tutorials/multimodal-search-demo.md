@@ -10,9 +10,6 @@ status: stable
 
 # 30 分钟湖上多模检索 Demo
 
-!!! warning "教程代码说明"
-    示例代码基于文中标注版本。**LanceDB 和 CLIP 生态迭代较快**，API / 模型名可能变动——运行前请核对 [LanceDB 官方文档](https://lancedb.github.io/lancedb/) 和 [open_clip 仓库](https://github.com/mlfoundations/open_clip) 的当前版本。示例目的是理解**管线结构**，而不是承诺"复制即跑"。
-
 !!! tip "你会做完"
     - 在**本地对象存储风格的目录**里建一张 LanceDB 表
     - 装一个公开图像数据集（小样本，200 张）

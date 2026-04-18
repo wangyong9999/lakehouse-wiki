@@ -10,12 +10,6 @@ status: stable
 
 # 60 分钟 RAG on Iceberg
 
-!!! warning "教程代码说明"
-    示例代码基于文中标注版本。**Iceberg / LanceDB / BGE / LLM SDK 迭代较快**，API 可能调整。**本教程设计目标是理解端到端管线结构**，不承诺"原样可运行"。运行前请核对：
-    
-    - [pyiceberg 文档](https://py.iceberg.apache.org/) · [LanceDB 文档](https://lancedb.github.io/lancedb/) · [FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding) 的当前 API
-    - 若使用云端 LLM（OpenAI / Anthropic / Bedrock），参数与计费以各家最新文档为准
-
 !!! tip "你会做完"
     - 把一个**内部文档库**（若干 Markdown / PDF）**处理成 Iceberg chunks 表**
     - 用 CLIP / BGE 生成 embedding，落到 **LanceDB** 向量库
