@@ -331,7 +331,7 @@ spark.read.table("iceberg.features.user_stats") \
 - **[Tecton 白皮书](https://www.tecton.ai/resources/)**
 - **[Uber Palette](https://eng.uber.com/feature-store/)** —— 工业级参考
 - **[LinkedIn Venice](https://github.com/linkedin/venice)** —— 开源
-- **[自建 Iceberg + Redis 教程](../tutorials/feature-store-setup.md)**（TODO）
+- 自建 Iceberg + Redis playbook（规划中，路径 `tutorials/feature-store-setup.md`）
 
 ## 11. 陷阱与反模式
 
