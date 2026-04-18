@@ -1,112 +1,413 @@
 ---
-title: BI on Lake
+title: BI on Lake · 湖上分析与仪表盘
 type: scenario
-tags: [scenario, bi, lakehouse, olap]
-related: [lake-table, iceberg, trino, duckdb]
+depth: 资深
+prerequisites: [lake-table, iceberg, trino, duckdb]
+tags: [scenario, bi, lakehouse, olap, data-warehouse]
+related: [lake-table, iceberg, paimon, trino, duckdb, starrocks-duckdb, real-time-lakehouse, cdp-segmentation]
 status: stable
 ---
 
-# BI on Lake
+# BI on Lake · 湖上分析与仪表盘
 
-!!! tip "一句话场景"
-    把传统数仓的 BI 负载（仪表盘、即席查询、报表）搬到湖仓之上 —— **湖就是数仓**，不再有独立的数仓层。
+!!! tip "一句话理解"
+    **湖就是数仓**——传统 BI 负载（月报、仪表盘、即席查询）直接跑在 Iceberg/Paimon 之上，不再搬到独立的数仓层。核心收益：**一份数据多引擎消费、历史可追溯、AI + BI 共底座**；核心挑战：**查询性能** + **并发隔离** + **数据建模**。
 
-## 场景输入与输出
+!!! abstract "TL;DR"
+    - **Medallion 架构**：ODS → DWD → DWS → ADS 四层，每层 SLA / 更新频率不同
+    - **查询引擎分工**：Trino 交互 / Spark 批 / DuckDB 探索 / StarRocks 加速副本
+    - **SLO 典型值**：仪表盘 p95 < 3s · 数据新鲜度 小时或分钟 · 数百-千并发
+    - **命中率 > 95% 的三板斧**：分区 + Clustering + 物化视图
+    - **别把 Iceberg 当行存打**：行级高频更新应该用 Paimon 主键表或推到副本
+    - **语义层（dbt / Semantic Layer）** 是让 BI 好用的关键
 
-- **输入**：
-    - 业务库 CDC / 日志 / 埋点 / 第三方数据
-    - BI 工具（Superset / Metabase / Tableau / 内部 Dashboard）的查询
-- **输出**：
-    - 仪表盘 / 报表 / 即席分析
-- **SLO 典型值**：
-    - 仪表盘查询 p95 **< 3s**
-    - 数据新鲜度：小时级（批）或分钟级（流）
-    - 并发：数百到数千同时在线
+## 业务图景
 
-## 架构总览
+BI 下的典型子场景：
+
+| 子场景 | 数据新鲜度 | 查询模式 | 并发 | 代表工具 |
+|---|---|---|---|---|
+| **定期报表** | T+1 | 批查询固定 SQL | 低 | Tableau 调度 |
+| **仪表盘** | 小时 / 分钟 | 结构化查询（预聚合） | 中-高 | Superset / Tableau |
+| **即席探索** | 现有最新 | 任意 SQL | 低但要求快 | DuckDB / Jupyter |
+| **运营监控** | 分钟 | 实时聚合 + 告警 | 中 | Grafana / 自研大屏 |
+| **财务 / 审计** | T+1 | 历史追溯 | 低 | 专用系统 + Iceberg Time Travel |
+| **指标中台** | 混合 | 指标 API | 高 | dbt + Cube.js |
+
+---
+
+## Medallion 架构（分层建模）
+
+```mermaid
+flowchart LR
+  subgraph "ODS · 原始层"
+    ods1[(OLTP CDC)]
+    ods2[(日志 / 埋点)]
+    ods3[(第三方)]
+  end
+  subgraph "DWD · 明细层"
+    dwd[(清洗 + 标准化<br/>Iceberg / Paimon)]
+  end
+  subgraph "DWS · 汇总层"
+    dws[(轻度汇总<br/>按主题域宽表)]
+  end
+  subgraph "ADS · 集市层"
+    ads[(面向消费的指标表<br/>预聚合)]
+  end
+
+  ods1 & ods2 & ods3 --> dwd --> dws --> ads
+  ads --> mv[(物化视图)]
+  ads --> rep[(加速副本<br/>StarRocks)]
+  mv --> bi1[BI]
+  rep --> bi2[BI]
+  ads --> bi3[BI]
+  ads -.-> du[DuckDB 探索]
+```
+
+### 各层职责
+
+| 层 | 表内容 | 更新频率 | 存储 | 谁消费 |
+|---|---|---|---|---|
+| **ODS** | 原始明细 / CDC / 日志 | 实时 / 小时 | Paimon（主键表）· Iceberg（追加） | 下游 ETL |
+| **DWD** | 清洗后明细，一事一表 | 小时 / 天 | Iceberg | 数据工程 |
+| **DWS** | 按主题域汇总宽表 | 小时 / 天 | Iceberg | 分析师、下游集市 |
+| **ADS** | 面向报表的指标表 | 小时 / 天 | Iceberg + MV | BI 工具 |
+
+### 分层原则
+
+- **越下游越汇总、越宽、越为查询优化**
+- **ODS 做原则上不修改**（只追加），保证溯源
+- **DWS / ADS 是"为 BI 优化"的表**，分区、排序、clustering 都按查询模式打
+- **一张表一个业务口径**——别让一张表同时做 BI 和训练特征
+
+### Kimball / Inmon / Data Vault 选哪个？
+
+| 建模范式 | 适合 | 不适合 |
+|---|---|---|
+| **Kimball（星型 / 雪花）** | 报表场景主流、BI 工具友好 | 跨域共享维度需治理 |
+| **Inmon（三范式）** | 企业数仓、金融合规 | 查询复杂、BI 需要再建数据集市 |
+| **Data Vault 2.0** | 大型企业、审计严格 | 学习曲线陡、BI 仍需建集市 |
+| **One Big Table** | 埋点、日志、探索 | 维护差，多表关联成本 |
+
+**实务**：ADS 层用 **星型**（事实 + 维度），DWS 用**宽表**；两者并存。
+
+---
+
+## 查询引擎分工
+
+### 四引擎矩阵
+
+| 场景 | 推荐 | 原因 | 备选 |
+|---|---|---|---|
+| **仪表盘 / BI 交互** | **Trino** | 低延迟、多租户 | StarRocks（加速） |
+| **大规模 ETL / 集市构建** | **Spark** | 吞吐、生态 | Flink（流批一体） |
+| **即席探索 / 单机 / Notebook** | **DuckDB** | 零配置、快 | Polars、Trino |
+| **流处理 / 增量物化** | **Flink / Paimon** | 原生流 | Spark Streaming |
+| **极致低延迟仪表盘（< 1s）** | **StarRocks / Doris** | 本地列存 + 向量化 | ClickHouse |
+
+详见 [计算引擎对比](../compare/compute-engines.md)。
+
+### Trino 的调优要点
+
+- **资源组（Resource Groups）**：仪表盘 / 探索 / ETL 分开，避免长查询吃满
+- **Spill-to-disk**：大 shuffle 溢出本地盘，避免 OOM
+- **Dynamic Filtering**：维度小表自动下推 filter 到事实表扫描
+- **Metadata Cache**：Iceberg manifest 缓存，减少小查询开销
+- **Reuse Exchange**：相同子查询并发时重用结果
+
+### Spark 批处理要点
+
+- **AQE (Adaptive Query Execution)**：运行时自适应 shuffle
+- **Bloom Filter Join**：大表 join 大表的神器
+- **Iceberg Snapshot ID** 锁定训练可复现
+- **Z-Order / Liquid Clustering** 在 DWS / ADS 层落
+- **`OPTIMIZE` / `VACUUM`** 定期跑（合并小文件、清理旧版本）
+
+---
+
+## 查询加速三板斧
+
+### 1. 分区 · 让引擎跳过大部分数据
+
+```sql
+-- Iceberg hidden partitioning（推荐）
+CREATE TABLE sales (
+  sale_id BIGINT, shop_id INT, region STRING, amount DECIMAL, ts TIMESTAMP
+) USING iceberg
+PARTITIONED BY (days(ts), bucket(16, shop_id));
+```
+
+- **Hidden partitioning**：SQL 里直接 `WHERE ts >= '...'` 自动走分区
+- **bucket** 打散避免数据倾斜
+- **千万别过度分区**：每个分区 1GB+ 比较健康；太小会有"小文件问题"
+
+### 2. Clustering · 物理排序让谓词下推
+
+- **Iceberg Liquid Clustering**（Databricks 推动的演进版 Z-Order）
+- **Paimon Order / Zorder** 物理排序
+- 让 min/max 统计对 where 条件有效
+- 经验：按**最常 filter 的列**排序；通常 2–3 列足够
+
+### 3. 物化视图 · 预聚合
+
+```sql
+-- StarRocks 增量物化视图
+CREATE MATERIALIZED VIEW dashboard_daily_shop_gmv
+REFRESH ASYNC EVERY (INTERVAL 10 MINUTE)
+AS SELECT dt, shop_id, sum(amount) AS gmv FROM sales GROUP BY dt, shop_id;
+```
+
+- **Trino 和 Iceberg 都支持物化视图**（Iceberg MV 还在成熟中）
+- **StarRocks 的增量 MV** 最成熟（自动路由、rewrite）
+- Top 10 热查询打 MV → 剩下走原表
+- **不要 MV 一切**——维护成本高，覆盖率低于 70% 就要考虑合并
+
+### 其它手段
+
+- **Caching 层**：Alluxio · 本地 SSD 缓存热 Parquet 块
+- **加速副本**（下文详述）
+- **Columnar Stats 收集**：建表后 `ANALYZE` 让 CBO 准
+
+---
+
+## 加速副本（StarRocks / ClickHouse / Doris）
+
+**什么时候要加速副本？**
+
+- 仪表盘 p95 硬性要求 **< 1s**
+- 并发 > 500 QPS
+- 频繁 TopN / 精确去重（COUNT DISTINCT）
+
+**架构**：
+
+```
+Iceberg / Paimon (真相源)
+    │
+    │ (增量 / 全量同步)
+    ↓
+StarRocks / ClickHouse (加速层)
+    │
+    ↓
+BI Dashboard
+```
+
+**同步方式**：
+- **StarRocks** 可以**原生读 Iceberg 外表** + **增量物化视图** 同步到本地列存
+- **ClickHouse** 常用方式：Flink / 自研同步器把热数据持续写入 MergeTree
+- **Apache Doris** 类似 StarRocks，生态较新
+
+### 选型对比
+
+| 引擎 | 强项 | 弱项 | 社区 |
+|---|---|---|---|
+| **StarRocks** | 物化视图 + 湖联邦最成熟 | 国内社区为主 | 活跃 |
+| **ClickHouse** | 极致单表 TPS / 聚合 | Join 弱 | Yandex + 社区 |
+| **Apache Doris** | 国产、兼容 MySQL | 生态比 StarRocks 小 | 活跃 |
+| **Druid** | 实时 + OLAP | 运维重、Schema 改动成本高 | 稳定 |
+| **Pinot** | LinkedIn 出品、实时强 | 中文资料少 | 稳定 |
+
+详见 [OLAP 加速副本对比](../compare/olap-accelerator-comparison.md)。
+
+### 陷阱
+
+- **加速副本当真相源**：一定记住这是**镜像**，挂了能重建
+- **全量导 ClickHouse**：不区分冷热成本爆 → **只同步热 30 天**
+- **同步延迟没监控**：副本 lag 2 小时还在跑 → 看板数据过时
+
+---
+
+## 语义层（Semantic Layer）
+
+BI 里最头疼的事：**同一个指标**（比如 GMV），不同报表定义不同（含不含退款？税前税后？）。
+
+**解决方案**：把**指标定义** + **关系定义**集中到一个地方，所有 BI 工具共用。
+
+### 两个主流方案
+
+| 工具 | 定位 | 特点 |
+|---|---|---|
+| **dbt** | 数据转换 + 语义 | SQL-first，业界事实标准 |
+| **Cube** | 独立语义层 / API | 多前端消费、权限模型强 |
+| **Looker (LookML)** | BI 自带语义层 | 闭源、绑定 Looker |
+| **MetricFlow** | 开源语义层 | Transform 收购，与 dbt 融合中 |
+
+### dbt 最佳实践
+
+```yaml
+# models/marts/sales.yml
+metrics:
+  - name: gmv
+    label: "GMV (含退款)"
+    calculation_method: sum
+    expression: amount
+    timestamp: ts
+    time_grains: [day, week, month]
+    dimensions: [region, shop_id]
+```
+
+然后 Superset / Tableau / Metabase 都从这里拉定义，口径统一。
+
+---
+
+## 并发与隔离
+
+仪表盘同时 **100+ 用户刷新**时，长查询可以拖垮整个引擎。
+
+### 硬隔离手段
+
+- **Trino Resource Groups**：按租户 / 查询类型分资源池
+- **Cluster 层面隔离**：不同业务不同 Trino 集群（小代价换可用性）
+- **查询 timeout + memory 上限**：单查询不能吃死集群
+- **AdmissionControl**：超并发直接排队拒绝
+
+### 用户友好
+
+- **Query 可取消**：用户不耐烦 → 他关闭浏览器后后端也立即取消
+- **Partial Result**：超大查询先给前 1000 行
+- **Query History UI**：分析师能看自己的查询、杀自己的查询
+
+---
+
+## 数据新鲜度 SLA
+
+### 批 T+1（传统）
+
+- Spark 每天凌晨跑 ETL → 早上看板
+- **关键**：失败告警（Airflow / DolphinScheduler）+ 重跑机制
+
+### 小时级
+
+- 增量 CDC + 小时物化视图刷新
+- 成本比 T+1 增加不大，体验提升明显
+
+### 分钟级（准实时）
+
+- Paimon 主键表 + Flink 持续消费 → StarRocks 增量 MV
+- 详见 [Real-time Lakehouse](real-time-lakehouse.md)
+- **关键**：watermark、迟到事件处理
+
+### 秒级（实时大屏）
+
+- 用 StarRocks / ClickHouse 直接消费 Kafka
+- 湖表作为归档（非查询路径）
+- 延迟成本显著增加，只在必要场景用
+
+---
+
+## 完整 SLO 打法
+
+仪表盘 p95 < 3s 的实现路径：
+
+```
+1. ADS 层建模，别直查 DWD
+2. 分区打到查询 where 列
+3. Clustering 物理排序 top 2 维度
+4. Trino 资源组隔离仪表盘
+5. Top 10 热查询打物化视图
+6. 若还达不到：StarRocks 加速副本
+7. 监控 + 告警：p95、命中率、慢查询
+```
+
+### 关键监控
+
+- **查询 p50 / p95 / p99**
+- **失败率 / 排队率**
+- **MV 命中率**（没命中的查询才是优化对象）
+- **小文件数**（每分区 > 100 需要合并）
+- **Snapshot 延迟**（ETL 是否准时完成）
+
+---
+
+## 完整组件链路
 
 ```mermaid
 flowchart LR
   subgraph "数据源"
-    db[(业务 OLTP)]
-    log[(日志 / 埋点)]
-    ext[(第三方)]
+    db[(OLTP)]
+    log[(日志)]
+    ext[(三方)]
   end
   db -->|CDC| flink[Flink CDC]
   log --> kafka[(Kafka)]
-  ext --> spark_batch[Spark 批]
+  ext --> sparkb[Spark 批]
 
-  flink --> paimon[(Paimon: 流式明细)]
+  flink --> paimon[(Paimon: 明细)]
   kafka --> paimon
-  spark_batch --> iceberg[(Iceberg: 批事实表)]
+  sparkb --> iceberg_ods[(Iceberg ODS)]
 
-  paimon --> spark_agg[Spark 聚合]
-  iceberg --> spark_agg
-  spark_agg --> iceberg_mart[(Iceberg: 数据集市)]
+  paimon & iceberg_ods --> spark_etl[Spark ETL]
+  spark_etl --> dwd[(DWD)] --> dws[(DWS)] --> ads[(ADS)]
 
-  iceberg_mart --> mv[物化视图]
-  mv --> trino[Trino]
-  iceberg_mart --> trino
+  ads --> mv[物化视图]
+  ads --> sr_sync[增量同步]
+  sr_sync --> starrocks[(StarRocks)]
 
-  trino --> bi[BI 工具 / Dashboard]
-  duckdb[DuckDB] -.开发态.-> iceberg_mart
+  ads & mv --> trino[Trino]
+  trino --> bi[Superset / Tableau]
+  starrocks --> bi
+
+  ads -.-> duck[DuckDB 探索]
+  ads -.-> dbt[dbt 语义层]
 ```
 
-## 数据流拆解
+---
 
-### 1. 入湖分层
+## Benchmark · Dataset
 
-- **ODS / 明细层** —— Paimon（流 + CDC 原生）或 Iceberg（纯批场景）
-- **DWD / DWS 汇总层** —— Iceberg，批 Spark 生成
-- **ADS / 数据集市** —— Iceberg，进一步汇总，直接给 BI 工具用
+- **[TPC-DS](https://www.tpc.org/tpcds/)** —— 数仓黄金 benchmark（99 个查询，多种 join）
+- **[TPC-H](https://www.tpc.org/tpch/)** —— 更经典、更简单
+- **[SSB](https://www.cs.umb.edu/~poneil/StarSchemaB.PDF)** —— Star Schema Benchmark
+- **[ClickBench](https://benchmark.clickhouse.com/)** —— 单表聚合，ClickHouse 家族擅长
+- **[NYC Taxi](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)** —— 真实数据练手
+- **[Brazilian E-commerce (Olist)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)** —— 完整电商链路
 
-一句话：**越往下游越汇总、越宽、越"为查询优化"**。
+---
 
-### 2. 查询加速
+## 可部署参考
 
-- **Iceberg 物化视图** —— 高频查询预聚合（Trino / Spark 都能生成与消费）
-- **Zone Maps / Liquid Clustering** —— 列级 min/max 让 Trino 谓词下推跳过大片数据
-- **Caching 层**（Alluxio / 本地 SSD）—— 热 Parquet 块缓存
-- **一定程度的"加速副本"**：StarRocks / ClickHouse 作为 BI 前置层（非强制）
+- **[Superset + Trino + Iceberg docker-compose](https://github.com/apache/superset)** —— 官方 recipe
+- **[Apache Superset 演示](https://superset.apache.org/)**
+- **[dbt + DuckDB](https://duckdb.org/docs/guides/python/using_pandas)** —— 本地零成本全流程
+- **[Metabase + Trino + Iceberg](https://github.com/metabase/metabase)**
+- **[Databricks Lakehouse Tutorial](https://docs.databricks.com/en/lakehouse-architecture/index.html)** —— 商业参考
+- **[StarRocks + Iceberg Tutorial](https://docs.starrocks.io/docs/data_source/catalog/iceberg_catalog/)**
 
-### 3. 查询引擎选择
+---
 
-| 查询类型 | 推荐 |
-| --- | --- |
-| 仪表盘 / 交互式 | **Trino** |
-| 大规模 ETL / 数据集市构建 | **Spark** |
-| 探索 / 单机分析 / 开发态 | **DuckDB** |
-| 极致低延迟（<1s）| **StarRocks / ClickHouse**（加速副本） |
+## 陷阱
 
-## SLO 怎么打
+- **直接让 BI 连 OLTP**：业务量一大两边都崩；**一定**走湖
+- **一张明细表又做 BI 又做训练特征**：优化目标冲突；拆开
+- **把加速副本当真相源**：它崩了就找不到数据；Iceberg 才是真相
+- **MV 建了不维护**：ETL 改了 MV 没刷 → 数据不一致
+- **不收集统计信息**：CBO 选烂计划；**记得 `ANALYZE`**
+- **分区过度**：每个分区几 MB → 小文件灾难 → `OPTIMIZE`
+- **没有资源隔离**：一个大查询吃满集群，仪表盘全崩
+- **dbt 不分 staging / marts**：所有逻辑堆一起 → 不可维护
+- **语义层缺失**：每个报表自己算 GMV，十个报表十种结果
 
-- **p95 < 3s** 是挑战目标。先做：
-    - 数据集市层（ADS）而不是直查明细
-    - 配合物化视图
-    - 分区 / clustering 合理（按查询 where 的列）
-    - 查询引擎的 resource group 隔离仪表盘和探索
-- 如果还是达不到：加速副本层（StarRocks / ClickHouse）针对 Top 10 热查询做增量同步
+---
 
-## 失败模式与兜底
+## 和其他场景的关系
 
-- **某张热表查不动** —— 看是否分区设计与查询 pattern 对不上；加物化视图或加速副本
-- **dashboard 同时开启 100 张查询引擎爆** —— Trino resource group 做硬隔离
-- **数据延迟** —— Paimon 流式 changelog 的 latency 监控；`_etl_ts` 字段让 BI 显示数据新鲜度
-- **Schema Evolution 导致 BI 报错** —— 引入 Iceberg Schema Evolution 协议（列 ID）+ 对下游保证字段名不变
+- **vs [Real-time Lakehouse](real-time-lakehouse.md)**：RT 是 BI 的**加速版**；同一底座
+- **vs [CDP / 用户分群](cdp-segmentation.md)**：CDP 是面向用户的 BI；共享 Trino / StarRocks
+- **vs [RAG on Lake](rag-on-lake.md)**：共享底座不同查询链路；BI 看数字、RAG 看文档
+- **vs [即席探索 / Notebook](business-scenarios.md)**：DuckDB 零成本版的 BI
 
-## 不要做的事
-
-- **直接让 BI 工具连 OLTP**（除非业务量极小）
-- **同一张明细表承担 BI 和 AI 两种优化目标** —— 分离数据集市层（面向 BI）与训练集 / 检索语料（面向 AI）
-- **把加速副本当原始数据源** —— 加速层是镜像，不是真相来源
+---
 
 ## 相关
 
 - 底座：[湖表](../lakehouse/lake-table.md) · [Iceberg](../lakehouse/iceberg.md) · [Paimon](../lakehouse/paimon.md)
 - 引擎：[Trino](../query-engines/trino.md) · [Spark](../query-engines/spark.md) · [DuckDB](../query-engines/duckdb.md)
-- 和 [RAG on Lake](rag-on-lake.md) 可以共底座
+- 对比：[计算引擎对比](../compare/compute-engines.md) · [OLAP 加速副本对比](../compare/olap-accelerator-comparison.md)
+- 业务：[业务场景全景](business-scenarios.md) · [CDP / 用户分群](cdp-segmentation.md)
 
 ## 延伸阅读
 
-- *Lakehouse: A New Generation of Open Platforms* (CIDR 2021)
-- Netflix / Airbnb / Pinterest 公开的湖仓 BI blueprint
+- *The Data Warehouse Toolkit* (Ralph Kimball) — Kimball 建模圣经
+- *Lakehouse: A New Generation of Open Platforms* (CIDR 2021, Databricks)
+- *Building a Modern Data Stack* — Chip Huyen / dbt Labs 博客合集
+- Netflix / Airbnb / Pinterest / Uber 的 Lakehouse BI 技术博客
+- Databricks / Snowflake / StarRocks 官方 BI 案例
