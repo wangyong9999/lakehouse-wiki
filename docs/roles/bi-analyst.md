@@ -18,10 +18,14 @@ hide:
 
 ## BI 核心
 
-- [OLAP 建模](../bi-workloads/olap-modeling.md)
+- [OLAP 建模](../bi-workloads/olap-modeling.md) —— 星型 / 雪花 / 宽表 / Data Vault
+- [**语义层 · Semantic Layer**](../bi-workloads/semantic-layer.md) ⭐ —— dbt / Cube / LookML 指标中台，BI 近年最大演进
 - [物化视图](../bi-workloads/materialized-view.md)
-- [查询加速](../bi-workloads/query-acceleration.md)
+- [查询加速](../bi-workloads/query-acceleration.md) —— Zone Maps / Sort / Z-order
 - [BI on Lake 场景](../scenarios/bi-on-lake.md)
+
+!!! tip "你要不要当 Analytics Engineer"
+    如果你的工作越来越偏"**定义指标、写 dbt models、管语义层**"，而不只是写 SQL 取数，那你其实在做 Analytics Engineering。除了上面 BI 核心，额外读 [Semantic Layer](../bi-workloads/semantic-layer.md) 的 dbt / Cube 章节 + [数据治理](../ops/data-governance.md) + [OLAP 建模](../bi-workloads/olap-modeling.md) 里的 Data Vault 2.0 段。
 
 ## 查询引擎（按遇到的）
 
