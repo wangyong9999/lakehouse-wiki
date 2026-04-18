@@ -237,7 +237,7 @@ Auto Loader → Delta → dbt / Notebook → Dashboard
 - 一站式体验
 - 绑定 Databricks
 
-### 组合 D · AI-native（2025 前沿）
+### 组合 D · AI-native（前沿）
 
 ```
 数据源 → Paimon (实时入湖)

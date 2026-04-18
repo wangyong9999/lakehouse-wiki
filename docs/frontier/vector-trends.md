@@ -192,7 +192,7 @@ Score(Q, D) = Σ MaxSim(qi)
 - **PLAID**（ColBERT 优化，索引更快）
 - **Vespa** 原生支持 ColBERT
 
-## 6. 综合选型矩阵（2025）
+## 6. 综合选型矩阵
 
 ### 按"精度 × 成本 × 延迟"权衡
 
@@ -272,4 +272,4 @@ Score(Q, D) = Σ MaxSim(qi)
 
 - [HNSW](../retrieval/hnsw.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Rerank](../retrieval/rerank.md)
 - [Embedding](../retrieval/embedding.md) · [Embedding 模型横比](../compare/embedding-models.md)
-- [RAG 前沿 2025](rag-advances-2025.md)
+- [RAG 前沿](rag-advances-2025.md)

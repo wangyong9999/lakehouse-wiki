@@ -1,5 +1,5 @@
 ---
-title: RAG 前沿 2025 · CRAG / Self-RAG / Agentic RAG / Contextual Retrieval
+title: RAG 前沿 · CRAG / Self-RAG / Agentic RAG / Contextual Retrieval
 type: concept
 depth: 资深
 level: A
@@ -193,7 +193,7 @@ Small LLM 压缩器
 
 ## 4. 工程选型
 
-### 2025 推荐的现代 RAG 管线
+### 现代 RAG 管线（2026 主流）
 
 ```
 Indexing 阶段：

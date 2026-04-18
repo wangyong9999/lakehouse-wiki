@@ -221,18 +221,18 @@ flowchart BT
 
 ---
 
-## 🌟 近期推荐阅读（2025-2026 重点）
+## 🌟 近期推荐阅读（2026 重点）
 
 ### 业务闭环（带问题进来先看）
 - ⭐ [**E2E 业务场景全景**](scenarios/business-scenarios.md) — Top 10 + 前沿 + 决策矩阵
 - [推荐系统深挖](scenarios/recommender-systems.md) · [欺诈检测](scenarios/fraud-detection.md) · [CDP 分群](scenarios/cdp-segmentation.md) · [Agentic 工作流](scenarios/agentic-workflows.md) · [Text-to-SQL 平台](scenarios/text-to-sql-platform.md)
 
-### 2025 前沿专题
-- ⭐ [**RAG 前沿 2025**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
+### 前沿专题
+- ⭐ [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
 - ⭐ [**LLM 推理优化**](frontier/llm-inference-opt.md) — vLLM / Flash Attn / Speculative / MoE
 - ⭐ [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
 - ⭐ [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
-- ⭐ [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — 2025-2026 spec 演进
+- ⭐ [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — spec 演进与团队实务
 - ⭐ [**Lakehouse 厂商与开源生态格局**](frontier/vendor-landscape.md) — 客观厂商对比
 
 ### 工程底座深化

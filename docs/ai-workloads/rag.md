@@ -22,7 +22,7 @@ status: stable
     - **为什么不直接微调**：私有数据每天变、微调成本高、易忘记
     - **工业管线**：**chunk → embed → Hybrid 检索 → Rerank → Prompt → LLM → 引用**
     - **评估必做**：**RAGAS**（faithfulness / relevancy / context precision / context recall）
-    - **2025 前沿**：Contextual Retrieval（Anthropic）· CRAG · Self-RAG · Agentic RAG
+    - **前沿**：Contextual Retrieval（Anthropic）· CRAG · Self-RAG · Agentic RAG
     - **不加 Rerank 是 RAG 第一大死因**；其次是 chunk 策略
 
 ## 1. 业务痛点 · LLM 为什么不够用

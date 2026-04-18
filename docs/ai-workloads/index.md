@@ -25,7 +25,7 @@ description: 在湖仓 / 多模检索之上跑的 AI 应用与基础设施
 
 ## 前沿专题（跳转 frontier）
 
-- [RAG 前沿 2025](../frontier/rag-advances-2025.md) —— CRAG / Self-RAG / Agentic RAG / Contextual Retrieval
+- [RAG 前沿](../frontier/rag-advances-2025.md) —— CRAG / Self-RAG / Agentic RAG / Contextual Retrieval
 - [LLM 推理优化](../frontier/llm-inference-opt.md) —— vLLM / Flash Attention / Speculative / MoE
 - [向量检索前沿](../frontier/vector-trends.md) —— Matryoshka / Binary / SPLADE v3
 - [AI 治理](../frontier/ai-governance.md) —— EU AI Act / Guardrails / Red Teaming
