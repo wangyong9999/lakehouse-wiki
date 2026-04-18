@@ -221,17 +221,48 @@ flowchart BT
 
 ---
 
-## 跨向视图
+## 🌟 近期推荐阅读（2025-2026 重点）
 
-- **[E2E 业务场景全景 `scenarios/business-scenarios.md`](scenarios/business-scenarios.md)** ⭐ —— 带着业务问题进来先看这里（Top 10 主流业务场景 + 前沿 + 决策矩阵）
-- **[横向对比 `compare/`](compare/index.md)** —— 11 大选型决策（+ Feature Store / OLAP 加速副本）
-- **[场景指南 `scenarios/`](scenarios/index.md)** —— 7 个业务深挖 + 4 个架构视角（推荐 / 欺诈 / CDP / RAG / BI / Agentic / 多模）
-- **[学习路径 `learning-paths/`](learning-paths/index.md)** —— 4 条时间脚手架
-- **[速查单 `cheatsheets/`](cheatsheets/index.md)** —— 4 张一页式参数速查
-- **[ADR `adr/`](adr/index.md)** —— 5 条团队技术决策记录
-- **[FAQ](faq.md)** —— 25+ 条跨目录速答
-- **[Changelog](changelog.md)** —— 手册变更记录
-- **[术语表](glossary.md)** —— 字母序兜底索引
+### 业务闭环（带问题进来先看）
+- ⭐ [**E2E 业务场景全景**](scenarios/business-scenarios.md) — Top 10 + 前沿 + 决策矩阵
+- [推荐系统深挖](scenarios/recommender-systems.md) · [欺诈检测](scenarios/fraud-detection.md) · [CDP 分群](scenarios/cdp-segmentation.md) · [Agentic 工作流](scenarios/agentic-workflows.md) · [Text-to-SQL 平台](scenarios/text-to-sql-platform.md)
+
+### 2025 前沿专题
+- ⭐ [**RAG 前沿 2025**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
+- ⭐ [**LLM 推理优化**](frontier/llm-inference-opt.md) — vLLM / Flash Attn / Speculative / MoE
+- ⭐ [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
+- ⭐ [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
+- ⭐ [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — 2025-2026 spec 演进
+- ⭐ [**Lakehouse 厂商与开源生态格局**](frontier/vendor-landscape.md) — 客观厂商对比
+
+### 工程底座深化
+- ⭐ [**MCP · Model Context Protocol**](ai-workloads/mcp.md) — Anthropic 2024 开放协议
+- ⭐ [**MLOps 生命周期**](ai-workloads/mlops-lifecycle.md) — 数据 → 训练 → 评估 → 上线 → 监控闭环
+- ⭐ [**语义层 · Semantic Layer**](bi-workloads/semantic-layer.md) — dbt / Cube 指标中台
+- ⭐ [**LLM Gateway**](ml-infra/llm-gateway.md) — LiteLLM / Portkey / Helicone 统一代理
+- ⭐ [**SLA · SLO · DRE**](ops/sla-slo.md) — 数据产品可靠性工程
+- ⭐ [**TCO 模型**](ops/tco-model.md) — 自建 vs 云 vs SaaS 真实成本
+
+### 选型决策（工业最常查）
+- ⭐ [**量级数字总汇**](frontier/benchmark-numbers.md) — 湖仓 / 检索 / LLM 各场景量级参考
+- ⭐ [**湖仓 20 反模式**](ops/anti-patterns.md) — 上线前自查清单
+- [Feature Store 横比](compare/feature-store-comparison.md) · [OLAP 加速副本](compare/olap-accelerator-comparison.md) · [流处理引擎](compare/streaming-engines.md) · [Rerank 模型](compare/rerank-models.md) · [稀疏检索](compare/sparse-retrieval.md) · [调度系统](compare/orchestrators.md)
+
+### 深度案例
+- ⭐ [**Netflix**](unified/case-netflix.md) · [**LinkedIn**](unified/case-linkedin.md) · [**Uber**](unified/case-uber.md) — 工业数据平台完整拆解
+
+---
+
+## 跨向导航
+
+- **[横向对比 `compare/`](compare/index.md)** — 16 大选型决策
+- **[场景指南 `scenarios/`](scenarios/index.md)** — 10 个业务深挖 + 4 个架构视角
+- **[学习路径 `learning-paths/`](learning-paths/index.md)** — 4 条时间脚手架
+- **[速查单 `cheatsheets/`](cheatsheets/index.md)** — 4 张一页式参数速查
+- **[按技术栈索引](index-by-technology.md)** — AWS / GCP / Azure / Databricks / Snowflake / 开源 / 国产化
+- **[ADR `adr/`](adr/index.md)** — 团队技术决策记录
+- **[FAQ](faq.md)** — 跨目录速答
+- **[术语表](glossary.md)** — 字母序兜底索引 · **[Changelog](changelog.md)** · **[贡献指南](contributing.md)**
 
 ---
 

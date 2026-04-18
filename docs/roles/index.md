@@ -63,3 +63,7 @@ hide:
 - [首页架构视图](../index.md) —— 理解全局
 - [一周新人路径](../learning-paths/week-1-newcomer.md)
 - [FAQ](../faq.md) —— 常见问题速答
+
+## 第四轴：按技术栈找
+
+- [**按技术栈索引**](../index-by-technology.md) —— 你团队用 AWS / GCP / Databricks / Snowflake / 开源 / 国产化？找到对应的手册重点
