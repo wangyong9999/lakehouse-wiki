@@ -263,6 +263,54 @@ def tool_agent(s, query):
 state = tool_agent.run_batch([{"query": q} for q in queries], concurrency=16)
 ```
 
+## 6.5. 现实检视 · 商业 vs 技术 vs 硬件
+
+### 商业驱动与技术价值的区分
+
+LLM 推理优化这个领域**商业博弈和技术演进交织**，阅读时需要辨别：
+
+- **厂商白皮书的"N× 提速"** ——多数是**在特定场景 + 特定硬件 + 特定模型**下最优解，不一定适用你的工作负载
+- **开源 vs 闭源差距**：TensorRT-LLM 的某些最佳优化**只在 H100+ FP8**上能复现，GPU 架构换一代效果可能倒退
+- **硬件锁定**：NVIDIA 生态好但贵；AMD MI300 / Groq / Cerebras 性价比有优势但**生态不完整**，迁移成本高
+
+### 工业真实瓶颈
+
+不是每个团队都在"跑 70B 模型 QPS 上不去"，更常见的**真正瓶颈**：
+
+| 瓶颈 | 频率 | 解决 |
+|---|---|---|
+| **LLM 调用账单爆** | 🔥🔥🔥 | 选模型 + prompt caching + 限流 |
+| **首 token 延迟** | 🔥🔥 | 流式输出 + prefix caching |
+| **GPU 利用率低** | 🔥🔥 | batching + continuous batching |
+| **并发抖动** | 🔥 | 队列 + 预留资源 |
+| **真正极致 TPS** | 🔥（大厂专属） | vLLM / TensorRT-LLM / FP8 |
+
+**绝大多数团队的正确路径**：
+1. 先用**托管 API**（OpenAI / Anthropic / Bedrock）跑起来
+2. 成本 / 延迟真成问题再自建
+3. 自建**先选 vLLM**，跑到瓶颈再考虑 TensorRT-LLM
+4. 硬件**租比买**，需求稳定再议自采
+
+### 已验证 vs 营销口号
+
+| 技术 | 状态 |
+|---|---|
+| **PagedAttention**（vLLM） | 工业标准、强推 |
+| **Continuous Batching** | 标准 |
+| **Flash Attention 2/3** | 所有主流框架内置 |
+| **Speculative Decoding** | 正在采用，效果视数据分布 |
+| **MoE（Mixtral / DeepSeek）** | 主流，显存节省有限 |
+| **FP8** | H100+ 硬件新宠，但精度损失**在长生成任务上仍在评估** |
+| **2-bit 量化** | 研究阶段，精度掉得很明显 |
+| **"无损 8× 量化"** | 警惕这种声称，看具体任务评估 |
+
+### 2026 前瞻
+
+- **大模型竞争白热化**使推理优化成为核心壁垒
+- **Speculative + Prompt Caching + FP8** 会被更多系统默认集成
+- **硬件层面**：B200 / MI300X / Groq / 自研芯片多样化
+- **Serverless LLM** 会成为主流（类似 Lambda 的 per-token 计费）
+
 ## 7. 陷阱与反模式
 
 - **直接用 HF Transformers 做 Production 服务**：10× 慢还未收尾延迟

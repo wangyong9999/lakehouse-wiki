@@ -335,6 +335,36 @@ Claude Desktop 的 `claude_desktop_config.json`：
 | 资源（非 tool）| ✅ | ❌ | ❌ |
 | 用户体验 | 标准化 | 框架定义 | 框架定义 |
 
+## 6.5. 现实检视 · 2026 视角
+
+MCP 在 2024.11 发布后生态推进很快，但工程落地有几点**需要清醒看待**：
+
+### 争议与不确定
+
+- **"USB-C of AI" 的比喻还在验证**：目前 MCP 主要优势是**消除客户端层集成**，但 server 端的通用性仍然有限——多数 server 仍是"为 Claude Desktop 单场景写的"而非真正跨 host 通吃
+- **ChatGPT / OpenAI 并未采纳**：OpenAI 继续走 GPTs / Custom Tools 路线，大模型 host 层尚未完全统一
+- **企业采用曲线**：直接上生产的比例不高；多数还在 POC / 内部工具层。**真正"把企业 API 通过 MCP 给 LLM"**的大规模案例，到 2026.04 仍是少数
+- **安全边界**：prompt injection + tool poisoning 这两类攻击对 MCP server 是天然风险，至今**没有成熟的 host 侧 sandbox 标准**
+
+### 已验证的有价值的场景
+
+- 个人生产力（Cursor / Claude Desktop + 本地工具）—— **这是 MCP 最成熟的场景**
+- 内部工具集成（团队给自己 Agent 搭 MCP 接业务 API）—— 主流正在做
+- 代码辅助（VSCode / IDE 插件）—— 被大量采用
+
+### 暂时别 over-invest 的方向
+
+- **把所有业务 API 全包装成 MCP server**：多数业务逻辑不适合 LLM 直接调用
+- **替换自有 function calling 架构**：如果已有 OpenAI / LangChain 栈在稳定运行，迁移收益边际
+- **相信"协议完整性解决 agent 可靠性"**：agent 可靠性问题 90% 来自 LLM 规划 / 理解能力，不是 tool 协议
+
+### 结论
+
+MCP **是方向**，也是 2024-2025 年 AI infra 最重要的协议进展之一。但**当前成熟度仅适合**：
+- 内部工具 / 生产力场景优先
+- 企业业务场景先 POC
+- 大规模替换已有 function calling 请再等一轮迭代
+
 ## 7. 陷阱与反模式
 
 - **把 MCP 当万能适配层**：复杂业务逻辑还是应该在 Server 内处理、别全暴露给 LLM

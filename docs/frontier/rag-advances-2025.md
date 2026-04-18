@@ -217,6 +217,41 @@ Query 阶段：
 | 科研 / 论文分析 | Agentic RAG + 多跳 |
 | 长文档处理 | Contextual + LLMLingua 压缩 |
 
+## 4.5. 现实检视 · 哪些"被验证"哪些"仅在论文"
+
+面对前沿 RAG 的风潮，**需要分清三类信号**：
+
+### 已在工业规模验证（可以上）
+
+- **Hybrid Search（BM25 + Dense + RRF）**—— 多家公司产品化、BEIR 稳定
+- **Cross-Encoder Rerank** —— 2023+ 全行业标配
+- **Contextual Retrieval**（Anthropic）—— Anthropic 自己产品 + 多个云厂商复现报告；**但 +35% 的数字**依赖数据 + 领域，自家数据可能 +10%-+25%
+
+### 论文结论好、工业复现有限
+
+- **CRAG**：检索打分 + Web fallback 思想好，但"Retrieval Evaluator 小模型"在企业闭域效果差异大，**很多团队复现不出论文级提升**
+- **Self-RAG**：需要专门 fine-tune、零样本上难、落地门槛高
+- **Agentic RAG**：多跳推理理论好，**延迟与成本实际吃不消**；单个 p99 经常 > 10s，LLM 调用费指数涨
+- **HyDE**：在 factoid 问题有效、在复杂问题可能误导；**实测提升常 < 5%**
+
+### 学术信号但商业化尚未
+
+- **ColBERTv2**：精度好但存储成本 10-20×，规模上不去
+- **LLM-as-Reranker**：精度高但延迟成本难承受
+
+### 实务建议
+
+1. **先上 Hybrid + Rerank + Contextual Retrieval** —— 这三个组合已是 2025 "新 baseline"
+2. **复杂范式（CRAG / Agentic）先 POC、测自家 recall/cost/latency 再决定**
+3. **警惕 benchmark 数字**：论文报告 +30%，自家业务可能只 +5% 或 0%；**必做自测**
+4. **成本预算先算清**：Contextual chunking 一次性 LLM 成本可以接受；Agentic RAG 每次 query N 倍 LLM call 要算账
+
+### 坏信号识别
+
+- 论文 NDCG 提升 20%+ 但**没提及推理成本** → 警惕
+- 论文声称通用，但**只在 Wikipedia / 新闻数据集**验证 → 自家企业闭域可能失效
+- 博客文案"我们用 XXX RAG 把准确率做到 95%"但**不说 baseline** → 几乎无信息
+
 ## 5. 陷阱
 
 - **加完所有进展还没好**：检查 evaluation 数据真实性、**baseline 是否测对**

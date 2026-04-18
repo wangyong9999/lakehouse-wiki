@@ -211,6 +211,43 @@ Score(Q, D) = Σ MaxSim(qi)
 - **OpenAI text-embedding-3**（商业、Matryoshka）
 - **Voyage v3**（代码 / 法律领域 SOTA）
 
+## 6.5. 现实检视 · 哪些真值得上
+
+向量检索前沿"新技术"很多，**要避免追 hype**：
+
+### 已广泛验证（可以上）
+
+- **Hybrid Search（Dense + Sparse + RRF）** —— 全行业标配
+- **Rerank** —— 必选，精度差距显著
+- **HNSW** —— 仍然是 < 100M 规模**稳妥首选**
+- **Matryoshka embedding 的 256-512 维截断** —— 精度损失很小，成本下降 2-3×；OpenAI 官方支持
+
+### 值得 POC 但别仓促上
+
+- **Binary Embedding**：压缩显著但 recall 波动 5-10%；**只在对精度容忍度高 + 规模极大的场景经济**
+- **SPLADE v3**：比 BM25 强、比 Dense 快，但推理成本不低；**已有 BM25 管线的团队**换 SPLADE 收益边际
+- **ColBERTv2**：精度好但**存储 10-20×**；只在小-中规模 + 精度极致场景
+
+### 暂时别 all-in
+
+- **把所有 dense 换 binary**：用户感知的精度下降可能抵销成本收益
+- **同时上 dense + sparse + ColBERT 三路**：运维复杂度爆
+- **追最新 MTEB 冠军模型**：MTEB 指标和你业务检索效果**不直接相关**
+
+### 业务与技术的耦合
+
+- **向量前沿的技术突破**很多，但**业务价值**取决于你的瓶颈：
+  - 如果瓶颈在 **recall**（漏召回）→ 应该 Hybrid + Rerank，不是换 embedding
+  - 如果瓶颈在 **成本**（向量库费用炸）→ Binary / IVF-PQ 可以考虑
+  - 如果瓶颈在 **精度**（排序不准）→ Rerank 模型升级
+
+### 2026 前瞻
+
+- **多模 embedding 统一**（文本 + 图像 + 音频）会继续进化
+- **长 context LLM vs 外部 RAG** 的边界会模糊——但短期 RAG 依然有存在价值（成本 + 新鲜度 + 审计）
+- **向量库 + 湖表 融合**（Lance / Iceberg Puffin）会成为 Lakehouse 标配
+- **Binary + 分层**可能成为大规模标准方案
+
 ## 7. 陷阱
 
 - **Matryoshka 截得太狠**：64d 在某些领域掉 10 点
