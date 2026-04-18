@@ -3,6 +3,7 @@ title: Apache Paimon
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Paimon 0.9+ / 1.0 GA
 tags: [lakehouse, table-format, streaming]
 category: table-format

@@ -3,6 +3,7 @@ title: AI 治理 · EU AI Act / Guardrails / Red Teaming
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: EU AI Act 2024+, 生成式 AI 管理办法 2024+
 tags: [frontier, governance, compliance, safety, ai]
 aliases: [AI Governance, AI 合规]

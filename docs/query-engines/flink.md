@@ -3,6 +3,7 @@ title: Apache Flink · 流处理 + CDC + 流批一体
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Flink 1.18+, Flink CDC 3.0+
 tags: [query-engine, streaming, cdc, real-time]
 category: query-engine

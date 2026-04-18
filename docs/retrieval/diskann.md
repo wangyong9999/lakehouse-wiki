@@ -3,6 +3,7 @@ title: DiskANN · 磁盘友好的十亿级 ANN
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Microsoft DiskANN 0.7+, Milvus 2.4+ DiskANN 索引
 tags: [retrieval, vector, ann, index, ssd]
 aliases: [Vamana]

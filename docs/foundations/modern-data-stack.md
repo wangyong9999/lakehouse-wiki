@@ -3,6 +3,7 @@ title: Modern Data Stack · 现代数据栈全景
 type: concept
 depth: 进阶
 level: S
+last_reviewed: 2026-04-18
 applies_to: 2024-2025 业界主流
 tags: [foundations, mds, ecosystem]
 aliases: [现代数据栈, MDS]

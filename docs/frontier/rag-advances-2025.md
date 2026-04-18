@@ -3,6 +3,7 @@ title: RAG 前沿 2025 · CRAG / Self-RAG / Agentic RAG / Contextual Retrieval
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: 2024-2025 主要进展
 tags: [frontier, rag, retrieval, llm]
 aliases: [Advanced RAG]

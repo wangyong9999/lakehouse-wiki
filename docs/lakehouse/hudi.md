@@ -3,6 +3,7 @@ title: Apache Hudi
 type: system
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Hudi 0.14+ / 1.0 GA
 tags: [lakehouse, table-format, streaming]
 category: table-format

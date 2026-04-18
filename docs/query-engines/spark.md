@@ -3,6 +3,7 @@ title: Apache Spark · 批处理 + SQL + ML 的多面手
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Spark 3.5+ (Spark Connect · AQE · Photon 类对标)
 tags: [query-engine, batch, streaming, ml, etl]
 category: query-engine

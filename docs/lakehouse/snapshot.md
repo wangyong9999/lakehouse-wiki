@@ -3,6 +3,7 @@ title: Snapshot（快照）· MVCC on Object Store
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Iceberg v2, Paimon 0.9+, Hudi 0.14+, Delta 3.0+
 tags: [lakehouse, table-format, mvcc]
 aliases: [快照, Table Snapshot, Table Version]

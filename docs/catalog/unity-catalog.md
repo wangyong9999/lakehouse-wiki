@@ -3,6 +3,7 @@ title: Unity Catalog · 多模态数据 + AI 资产统一目录
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Unity Catalog OSS 0.2+（2024 开源）· Databricks Unity Catalog（商业）
 tags: [catalog, governance, multimodal, ai-assets]
 category: catalog

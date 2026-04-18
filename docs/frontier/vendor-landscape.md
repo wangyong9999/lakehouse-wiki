@@ -3,6 +3,7 @@ title: Lakehouse 厂商与开源生态格局（2025-2026）
 type: reference
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: 2025-2026 市场 · 定价有效期请以官方为准
 tags: [frontier, market, vendor, ecosystem]
 aliases: [Vendor Landscape]

@@ -3,6 +3,7 @@ title: Trino · 交互式 SQL 联邦引擎
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Trino 450+（Presto 分叉后演进主流）
 tags: [query-engine, olap, federated]
 category: query-engine

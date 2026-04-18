@@ -3,6 +3,7 @@ title: Delta Lake
 type: system
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Delta 3.2+ / 4.0 · Databricks Runtime 15+
 tags: [lakehouse, table-format, databricks]
 category: table-format

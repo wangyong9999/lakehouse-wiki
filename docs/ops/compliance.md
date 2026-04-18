@@ -3,6 +3,7 @@ title: 数据合规 · GDPR / HIPAA / PDPA / 个保法 / 跨境
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: GDPR · HIPAA · PDPA · 个保法 · CCPA · SOC2 · 2024-2025
 tags: [ops, compliance, governance, privacy]
 aliases: [Compliance, Data Privacy]

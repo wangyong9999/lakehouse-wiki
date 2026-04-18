@@ -3,6 +3,7 @@ title: OLAP 建模 · 星型 / 雪花 / 宽表 / Data Vault
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Kimball 维度建模（1996+）· Data Vault 2.0 · 湖仓宽表范式
 tags: [bi, modeling, olap, kimball]
 aliases: [数据建模, Dimensional Modeling, Data Warehouse Modeling]

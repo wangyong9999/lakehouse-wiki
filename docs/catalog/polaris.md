@@ -3,6 +3,7 @@ title: Apache Polaris · Snowflake 开源 Iceberg Catalog
 type: system
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Apache Polaris 0.9+ / 1.0 · Snowflake Open Catalog (商业托管)
 tags: [catalog, iceberg, rest, snowflake]
 category: catalog

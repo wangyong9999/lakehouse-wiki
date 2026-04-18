@@ -3,6 +3,7 @@ title: Iceberg REST Catalog · 跨引擎元数据协议
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Iceberg REST Catalog spec v1（2024+）
 tags: [catalog, iceberg, protocol]
 category: catalog

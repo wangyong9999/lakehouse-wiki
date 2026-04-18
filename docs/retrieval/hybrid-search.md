@@ -3,6 +3,7 @@ title: Hybrid Search · 混合检索
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Milvus 2.4+, LanceDB 0.8+, Qdrant 1.10+, Weaviate 1.25+, Elasticsearch 8.11+
 tags: [retrieval, vector, hybrid, sparse, bm25, splade]
 aliases: [混合检索, Sparse-Dense Retrieval]

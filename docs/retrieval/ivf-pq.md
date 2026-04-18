@@ -3,6 +3,7 @@ title: IVF-PQ · 倒排 + 量化的 ANN 索引
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: FAISS 1.8+, Milvus 2.4+, LanceDB 0.8+
 tags: [retrieval, vector, ann, index, quantization]
 aliases: [Inverted File + Product Quantization]

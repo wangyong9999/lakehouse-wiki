@@ -3,6 +3,7 @@ title: 向量检索前沿 · Matryoshka / Binary / SPLADE-v3 / ColBERTv2
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: 2024-2025 最新进展
 tags: [frontier, vector, embedding, retrieval]
 aliases: [Vector Retrieval Frontier]

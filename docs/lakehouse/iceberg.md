@@ -3,6 +3,7 @@ title: Apache Iceberg
 type: system
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Iceberg 1.4+（spec v2 / v3 预览）
 tags: [lakehouse, table-format]
 category: table-format

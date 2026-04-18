@@ -3,6 +3,7 @@ title: Rerank · 重排（Cross-Encoder 精排）
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: bge-reranker v2+, Cohere Rerank 3, Jina Reranker v2
 tags: [retrieval, rerank, cross-encoder, llm]
 aliases: [重排, Cross-Encoder, 精排, Re-ranking]

@@ -3,6 +3,7 @@ title: Project Nessie · Git-like Lakehouse Catalog
 type: system
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Nessie 0.97+ / 2024-2025 生产
 tags: [catalog, lakehouse, git-like, branching]
 category: catalog

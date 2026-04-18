@@ -3,6 +3,7 @@ title: 三代数据系统演进史 · Database → Data Warehouse → Lakehouse
 type: concept
 depth: 进阶
 level: S
+last_reviewed: 2026-04-18
 applies_to: 历史梳理（1970s-2025）
 tags: [foundations, history, evolution]
 aliases: [数据系统简史, Data Systems Evolution]

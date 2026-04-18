@@ -3,6 +3,7 @@ title: MLOps 生命周期 · 数据 → 训练 → 评估 → 上线 → 监控
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: MLflow 2+, Kubeflow 1.7+, Ray 2.x, Databricks / SageMaker / Vertex AI
 tags: [ai, mlops, lifecycle, lakehouse]
 aliases: [MLOps, ML 工程闭环]

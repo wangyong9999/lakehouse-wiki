@@ -3,6 +3,7 @@ title: Manifest · 湖表元数据索引核心
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Iceberg v2, Delta 3+, Paimon 0.9+, Hudi 0.14+
 tags: [lakehouse, metadata]
 aliases: [Manifest File, Manifest List, 清单文件]

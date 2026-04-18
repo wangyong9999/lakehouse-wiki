@@ -3,6 +3,7 @@ title: TCO 模型 · 自建 vs 云 vs SaaS 的真实成本
 type: concept
 depth: 进阶
 level: A
+last_reviewed: 2026-04-18
 applies_to: 2024-2025 云 + 商业产品定价
 tags: [ops, cost, tco, economics]
 aliases: [TCO, Total Cost of Ownership]

@@ -3,6 +3,7 @@ title: MCP · Model Context Protocol（Anthropic 2024）
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: MCP 1.0+（2024.11 发布）
 tags: [ai, mcp, agent, protocol, llm, tool-use]
 aliases: [Model Context Protocol, MCP 协议]

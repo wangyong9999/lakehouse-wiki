@@ -3,6 +3,7 @@ title: LLM 推理优化 · vLLM / Flash Attention / Speculative / MoE
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: vLLM 0.6+, SGLang, TensorRT-LLM, Flash Attention 3, 2024-2025 前沿
 tags: [frontier, llm, inference, gpu, optimization]
 aliases: [LLM Inference Optimization]

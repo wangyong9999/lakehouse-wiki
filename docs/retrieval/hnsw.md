@@ -3,6 +3,7 @@ title: HNSW · Hierarchical Navigable Small World
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: FAISS 1.8+, hnswlib 0.8+, Milvus 2.4+, Lucene 9.x HNSW, pgvector 0.7+
 tags: [retrieval, vector, ann, index]
 aliases: [Hierarchical Navigable Small World, 分层可导航小世界]

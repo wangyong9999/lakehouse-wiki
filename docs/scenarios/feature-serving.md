@@ -3,6 +3,7 @@ title: Feature Serving · 在线特征服务
 type: scenario
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Feast 0.40+ / Tecton / Hopsworks · Redis 7+ / Aerospike / ScyllaDB
 tags: [scenario, feature-store, serving, ai, online-ml]
 related: [feature-store, offline-training-pipeline, recommender-systems, fraud-detection]

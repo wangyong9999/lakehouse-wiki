@@ -3,6 +3,7 @@ title: 语义层 · Semantic Layer / Metrics Layer
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: dbt Semantic Layer · Cube.js · MetricFlow · LookML · Malloy
 tags: [bi, semantic-layer, metrics, dbt, cube]
 aliases: [指标中台, Metrics Layer, Headless BI]

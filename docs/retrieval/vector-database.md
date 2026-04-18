@@ -3,6 +3,7 @@ title: 向量数据库 · Vector Database
 type: concept
 depth: 资深
 level: S
+last_reviewed: 2026-04-18
 applies_to: Milvus 2.4+, LanceDB 0.8+, Qdrant 1.10+, Weaviate 1.25+, pgvector 0.7+
 tags: [retrieval, vector-database]
 aliases: [Vector DB, 向量库]

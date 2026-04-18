@@ -3,6 +3,7 @@ title: Streaming Upsert / CDC · 流式入湖机制
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Paimon 0.9+, Hudi 0.14+, Iceberg v2, Flink CDC 3.0+
 tags: [lakehouse, streaming, cdc]
 aliases: [流式 upsert, Change Data Capture]

@@ -3,6 +3,7 @@ title: Iceberg v3 预览 · 2025-2026 spec 演进
 type: concept
 depth: 资深
 level: A
+last_reviewed: 2026-04-18
 applies_to: Iceberg spec v3（2024-2025 起草 · 2025-2026 推进）
 tags: [frontier, iceberg, lakehouse, spec]
 aliases: [Iceberg V3, Iceberg Next Spec]
