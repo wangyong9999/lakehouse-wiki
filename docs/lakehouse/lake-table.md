@@ -242,11 +242,11 @@ TBLPROPERTIES (
 - [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 四大湖表格式选型
 - [DB 存储引擎 vs 湖表](../compare/db-engine-vs-lake-table.md) —— 底层差异与何时选谁
 
-**一句话差异**：
-- **Iceberg** = 最中立、协议最强
-- **Paimon** = 流式 + 高频 upsert 最强
-- **Hudi** = Spark 生态 + CoW/MoR 选择丰富
-- **Delta** = 与 Databricks 深耦合、最早商用化
+**一句话差异（相对倾向，非绝对）**：
+- **Iceberg** = 引擎中立度高 · REST Catalog 协议生态完整
+- **Paimon** = 流式 + 高频 upsert 场景原生（和 Flink 深度协同）
+- **Hudi** = Spark 生态历史久 · CoW/MoR + 索引选项丰富（Uber 规模化验证）
+- **Delta** = Databricks 生态最深 · Uniform 向 Iceberg 兼容中
 
 ## 8. 延伸阅读
 

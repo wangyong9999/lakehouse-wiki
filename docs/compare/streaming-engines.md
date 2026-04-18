@@ -10,7 +10,7 @@ status: stable
 # 流处理引擎横比
 
 !!! tip "一句话回答"
-    **Flink** 在**有状态流 + Exactly-Once + 事件时间**三件事上综合最强，湖仓场景配 Paimon 天作之合。**Spark Streaming** 是 batch 思维的流，适合已有 Spark 栈。**Kafka Streams** 是**库**不是引擎，适合嵌入 Kafka 生态的微服务。**RisingWave** 是"流 + SQL 一体" 2024+ 新星，PostgreSQL 协议。
+    **Flink** 在**有状态流 + Exactly-Once + 事件时间**三件事上在四家中相对最成熟，配 Paimon 在湖仓场景广泛采用。**Spark Streaming** 是 batch 思维的流，适合已有 Spark 栈。**Kafka Streams** 是**库**不是引擎，适合嵌入 Kafka 生态的微服务。**RisingWave** 是"流 + SQL 一体" 2024+ 新选手，PostgreSQL 协议；社区规模相对 Flink 更小，但在物化视图场景有差异化。
 
 !!! abstract "TL;DR"
     - **四家本质差异**：Flink（纯流）· Spark Structured Streaming（批微分流）· Kafka Streams（库）· RisingWave（PG-compatible 流 DB）

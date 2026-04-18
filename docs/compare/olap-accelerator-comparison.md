@@ -15,7 +15,7 @@ status: stable
 
 !!! abstract "TL;DR"
     - **用不用副本先判断**：Trino 能打 p95 < 3s、并发 < 50 QPS 就别自找麻烦
-    - **StarRocks** = 湖联邦 + 物化视图最强 · BI 场景首选加速副本
+    - **StarRocks** = 湖联邦 + 物化视图在四家里最成熟 · BI 场景常见加速副本选项（与 Doris 生态接近、互有侧重）
     - **ClickHouse** = 单表极致 · 日志 / 时序 / 大宽表 · Join 弱
     - **Apache Doris** = StarRocks 的国产开源伙伴 · 兼容 MySQL 协议
     - **Apache Druid** = 实时大屏专业 · Segment 模型 · 运维重

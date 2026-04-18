@@ -10,7 +10,7 @@ status: stable
 # Rerank 模型横比
 
 !!! tip "一句话回答"
-    **bge-reranker-v2-m3** 在开源多语场景综合最强。**Cohere Rerank 3** 是商业 API 最稳。**Jina Reranker v2** 长文本 + 多语平衡好。纯英场景有 **Voyage Rerank**。**LLM-as-Reranker**（GPT-4 / Claude）精度最高但贵 10-100×。
+    **bge-reranker-v2-m3** 在开源多语场景是多数 benchmark 上表现较强的选项。**Cohere Rerank 3** 是商业 API 中采用广、SLA 稳定的代表。**Jina Reranker v2** 长文本 + 多语平衡好。纯英场景可考虑 **Voyage Rerank**。**LLM-as-Reranker**（GPT-4 / Claude）在复杂 query 上精度高但延迟成本显著更高（10-100× vs Cross-Encoder）。
 
 !!! abstract "TL;DR"
     - **开源首选**：**bge-reranker-v2-m3**（多语、BAAI）或 **v2-gemma**（最高精度）

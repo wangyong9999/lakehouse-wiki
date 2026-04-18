@@ -14,7 +14,7 @@ status: stable
 # LLM Gateway · 统一模型代理层
 
 !!! tip "一句话理解"
-    **LLM 版的 API Gateway**。统一不同厂商（OpenAI / Anthropic / Google / 开源 vLLM）的调用接口，集中做**限流 / 重试 / 缓存 / 成本监控 / 路由 / 灰度**。**生产 AI 团队几乎必备** —— 没有 Gateway 的 LLM 服务是裸奔。
+    **LLM 版的 API Gateway**。统一不同厂商（OpenAI / Anthropic / Google / 开源 vLLM）的调用接口，集中做**限流 / 重试 / 缓存 / 成本监控 / 路由 / 灰度**。**当 LLM 调用多于单源、且规模成本可观时，Gateway 价值明显**；**单模型单用例早期阶段可以不上**。
 
 !!! abstract "TL;DR"
     - **核心价值**：统一协议 + 限流 + 成本监控 + 重试 / fallback + 灰度

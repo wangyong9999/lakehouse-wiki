@@ -33,7 +33,7 @@ status: stable
 ### 工业共识（2024-2025）
 
 - **纯 BM25**：仍然是 2024 新系统的起步选项
-- **Hybrid（Dense + Sparse）**：事实标配
+- **Hybrid（Dense + Sparse）**：在多数公开 benchmark 和工业案例中显著优于单路，已在主流 RAG / 搜索栈广泛采用
 - **稀疏侧选 BM25 还是 SPLADE** 看成本和精度诉求
 
 ## 2. 四家对比
@@ -58,7 +58,7 @@ $$
 - 毫秒级（倒排）
 - 可解释
 - 30 年稳定
-- 所有搜索引擎标配
+- Lucene / Elasticsearch / OpenSearch / Solr 等主流全文搜索都内置 BM25
 
 **劣**：
 - 不理解同义词
