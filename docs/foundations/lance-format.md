@@ -13,6 +13,14 @@ status: stable
 !!! tip "一句话理解"
     为**多模 + 向量 + 随机访问**重写的列式文件格式。保持 Parquet 的"列式 + 压缩"优点，但额外支持**行级随机读**、**向量索引内嵌**、**Fragment 级原子替换**（更新 / 删除不需要整表重写，但仍需写新 Fragment + 更新 manifest，不是原地改）——让"湖上做向量检索 + 机器学习"成为一等公民。
 
+!!! note "Lance 的双重身份"
+    Lance 同时具备两种身份，在本手册里分视角讲：
+
+    - **文件格式视角**（本页）：和 [Parquet](parquet.md) · [ORC](orc.md) 并列的列式文件格式 —— 讨论物理布局 / 编码 / 随机读
+    - **湖表底座视角**：Lance 自带 fragment 级事务 + manifest 版本化，作为 [LanceDB](../retrieval/lancedb.md) 的表协议；在 Iceberg 生态里也可作为 data file 格式之一（见 [湖表](../lakehouse/lake-table.md) 的数据文件层段）
+
+    这是 Lance 与 Parquet/ORC 最大的结构差异 —— Parquet/ORC 只做"文件"，Lance 把"文件 + 简易表"打包了。
+
 ## 它为什么出现
 
 Parquet 是为**批扫描**设计的：行号不是一等公民，随机读一行等于"解压整个 Page"。这对 BI 完全够用，但对**机器学习训练 + 向量检索**就不行：

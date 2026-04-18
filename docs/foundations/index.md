@@ -7,6 +7,13 @@ description: 存储、文件格式、计算、分布式等前置知识
 
 湖仓与多模检索系统的共同"石头地基"。先把这一节过掉，再读后面 Snapshot、ANN、向量化执行就不会卡壳。
 
+!!! info "和 `lakehouse/` 的分界"
+    **这一节是物理存储 + 通用计算原理**——对象存储、列式文件（Parquet / ORC / Lance）、编码、向量化、MVCC——都是**格式无关 / 引擎无关**的底层。
+
+    **[湖表](../lakehouse/lake-table.md) 及其构件**（Snapshot / Manifest / Time Travel / Iceberg / Paimon）是**建在这些物理文件之上的逻辑协议层**，因此归到 `lakehouse/`。
+
+    **Lance 是灰色地带**：既是列式文件格式（本节讨论），又自带 fragment 级事务（也有湖表属性）。从"文件格式"视角读 [Lance Format](lance-format.md)；从"湖表底座"视角参见 [湖表](../lakehouse/lake-table.md) 的数据文件层段。
+
 ## 一条主线 · 湖仓的性能与一致性因果链
 
 这一节的核心页面**不是平行词条**，而是同一条因果链的不同层。理解这条链之后，上层内容（Iceberg commit 流程 / Trino pruning / StarRocks MV 加速 / Snapshot 时间旅行）会自然串起来。

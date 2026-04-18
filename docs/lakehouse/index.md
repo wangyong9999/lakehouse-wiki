@@ -7,6 +7,16 @@ description: Lakehouse 表格式的核心概念与主流实现
 
 聚焦"建在对象存储上的表"——它怎么组织元数据、怎么做 ACID、怎么支持演化与时间旅行。
 
+!!! info "和 `foundations/` 的分界 · 湖表的物理底座"
+    本节是**逻辑表协议层**（Snapshot / Manifest / CAS 提交 / Schema 演化 / 具体产品）。它**建在物理文件之上**——物理层（对象存储 + 列式文件 + 编码）归到 `foundations/`：
+
+    - [对象存储](../foundations/object-storage.md) —— 湖表的地基（读写语义、CAS、Conditional PUT）
+    - [Parquet](../foundations/parquet.md) · [ORC](../foundations/orc.md) —— Iceberg / Paimon / Hudi / Delta 最常用的数据文件格式
+    - [Lance Format](../foundations/lance-format.md) —— 为多模 + 向量 + ML 训练重写的列式格式（也是 LanceDB 的底座）
+    - [压缩与编码](../foundations/compression-encoding.md) · [列式 vs 行式](../foundations/columnar-vs-row.md) —— 文件内部的组织方式
+
+    如果还没读过上面这些物理层，建议先过一遍 [基础模块的主线](../foundations/index.md)。
+
 ## 核心概念
 
 - [湖表](lake-table.md) —— 为什么它和传统 DB 存储引擎不是一回事
