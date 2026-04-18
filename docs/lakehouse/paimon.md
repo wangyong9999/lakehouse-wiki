@@ -320,10 +320,22 @@ GROUP BY status;
 
 ### 权威阅读
 
-- [Apache Paimon 官方文档](https://paimon.apache.org/)
-- *Apache Paimon: Streaming Lakehouse is Here*（ASF 官方博客）
-- [阿里 / 字节 / 小米的 Paimon 实践分享](https://github.com/apache/paimon/discussions) —— 社区讨论区
-- [Flink Forward 会议 Paimon track](https://www.flink-forward.org/)
+**一手规范与博客**
+
+- **[Apache Paimon 官方文档](https://paimon.apache.org/)** · **[Spec · File Layout](https://paimon.apache.org/docs/master/concepts/spec/overview/)**
+- **[Paimon 官方博客](https://paimon.apache.org/blog/)** —— 1.0 GA、CDC、压缩策略
+- **[Paimon 设计思路（Jingsong Lee 原作者）](https://paimon.apache.org/blog/2024/01/30/apache-paimon-the-streaming-lakehouse/)** —— 为什么要重新做一个 Flink-native 的表格式
+
+**演讲与工程实践**
+
+- [Flink Forward Asia 2023 · Paimon Track](https://asia.flink-forward.org/) —— 阿里 / 字节 生产实践
+- [《Streaming Lakehouse · Ververica Tech Talk》](https://www.ververica.com/blog) —— Ververica（Flink 商业公司）视角
+- 阿里云 RealtimeCompute Paimon 文档 —— 生产级调优指南
+- [Paimon GitHub Discussions](https://github.com/apache/paimon/discussions) —— 社区活跃问答
+
+**对比理解**
+
+- [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 本手册深度对比
 
 ## 相关
 

@@ -251,12 +251,22 @@ TBLPROPERTIES (
 
 ## 8. 延伸阅读
 
-- [Apache Iceberg spec v2](https://iceberg.apache.org/spec/)
-- *Lakehouse: A New Generation of Open Platforms That Unify Data Warehousing and Advanced Analytics* (Armbrust et al., CIDR 2021)
-- *Building the Data Lakehouse* (Bill Inmon, O'Reilly 2023)
-- [Netflix Iceberg journey blog](https://netflixtechblog.com/) — 搜 "Iceberg"
-- [Apache Paimon 官方文档](https://paimon.apache.org/)
-- *Apache Hudi: The Data Lake Platform* (Onehouse / Apache 社区白皮书)
+**奠基论文**
+
+- **[*Lakehouse · A New Generation of Open Platforms*](https://www.cidrdb.org/cidr2021/papers/cidr2021_paper17.pdf)** (Armbrust et al., CIDR 2021) —— Lakehouse 概念原论文（Databricks）
+- **[*Delta Lake · High-Performance ACID Table Storage over Cloud Object Stores*](https://www.vldb.org/pvldb/vol13/p3411-armbrust.pdf)** (VLDB 2020) —— Delta 的 ACID 设计
+- **[*Apache Hudi · The Data Lakehouse Platform*](https://hudi.apache.org/blog/2021/07/21/streaming-data-lake-platform)** —— Uber 起源设计
+
+**官方规范**
+
+- **[Apache Iceberg Spec](https://iceberg.apache.org/spec/)** · **[Paimon Spec](https://paimon.apache.org/docs/master/concepts/spec/overview/)** · **[Delta Protocol](https://github.com/delta-io/delta/blob/master/PROTOCOL.md)** · **[Hudi Spec](https://hudi.apache.org/tech-specs/)**
+
+**工程实践**
+
+- [Netflix · Iceberg Journey](https://netflixtechblog.com/tagged/iceberg)
+- [Uber · Hudi Origins](https://www.uber.com/blog/hoodie/) —— Hudi 诞生背景
+- [Databricks · Delta vs Iceberg · Uniform](https://www.databricks.com/blog/2023/06/28/delta-lake-30-universal-format-uniform.html)
+- 《Building the Data Lakehouse》(Bill Inmon, Ranjeet Kukkillaya, O'Reilly 2023)
 
 ## 相关
 

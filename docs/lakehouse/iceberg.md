@@ -295,12 +295,24 @@ CALL system.fast_forward('db.events', 'main', 'feature-xyz');
 
 ### 权威阅读
 
-- [Iceberg spec v2](https://iceberg.apache.org/spec/) · [REST Catalog spec](https://iceberg.apache.org/docs/nightly/rest-catalog/)
-- *Iceberg: A modern table format for big data* (Ryan Blue 原始提案 2018)
-- [Netflix Iceberg 系列博客](https://netflixtechblog.com/tagged/iceberg)
-- [Apple 在 Iceberg 上的实践](https://www.youtube.com/watch?v=IxjaFjiKIrM)（Summit 分享）
-- [Tabular 官方博客](https://www.tabular.io/blog/) —— Ryan Blue 团队
-- *Data Engineering with Apache Iceberg* (O'Reilly, 2024)
+**一手规范**
+
+- **[Iceberg Table Spec (v2)](https://iceberg.apache.org/spec/)** —— 规范主页
+- **[REST Catalog OpenAPI Spec](https://github.com/apache/iceberg/blob/main/open-api/rest-catalog-open-api.yaml)** —— 跨引擎互操作的接口真相
+- **[Iceberg v3 spec（草案）](https://iceberg.apache.org/spec/#version-3)** —— Deletion Vectors / Variant / Row Lineage
+
+**原始文献与演讲**
+
+- **[*Apache Iceberg · An Architectural Look Under the Covers*（Ryan Blue, 2018 提案）](https://iceberg.apache.org/terms/)** —— 设计动机
+- **[*Netflix · Incremental Processing with Maestro + Iceberg* (2022)](https://netflixtechblog.com/incremental-processing-using-netflix-maestro-and-apache-iceberg-b8ba072ddeeb)**
+- **[Apple · Iceberg at Scale (Subsurface 2021)](https://www.dremio.com/resources/webinars/subsurface-live-summer-2021/)**
+
+**工程博客 / 长期更新**
+
+- [Netflix Iceberg 系列](https://netflixtechblog.com/tagged/iceberg)
+- [Tabular 博客（Ryan Blue 团队）](https://www.tabular.io/blog/) · 2024 被 Databricks 收购
+- [Dremio Subsurface · Iceberg Track](https://www.dremio.com/subsurface/)
+- 《Data Engineering with Apache Iceberg》(O'Reilly · Tomer Shiran / Jason Hughes / Alex Merced, 2024)
 
 ## 相关
 

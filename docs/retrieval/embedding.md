@@ -4,7 +4,9 @@ type: concept
 tags: [retrieval, vector, embedding]
 aliases: [向量嵌入]
 related: [vector-database, multimodal-embedding, rag]
-systems: [bge, e5, jina, openai, cohere]
+systems: [bge, e5, jina, openai, cohere, voyage]
+applies_to: 2024-2026 模型矩阵（bge-m3 · gte-Qwen2 · jina-v3 · voyage-3 · text-embedding-3）
+last_reviewed: 2026-04-18
 status: stable
 ---
 
@@ -65,6 +67,20 @@ Embedding 模型一旦换了，**库侧所有历史向量都要重新算**，且
 
 ## 延伸阅读
 
-- MTEB Leaderboard（文本 embedding 基准）: <https://huggingface.co/spaces/mteb/leaderboard>
-- *Matryoshka Representation Learning* (Kusupati et al., 2022)
-- *Text and Code Embeddings by Contrastive Pre-Training* (Neelakantan et al., 2022)
+**榜单与评估**
+
+- **[MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard)** —— 文本 embedding 通用 benchmark
+- **[C-MTEB](https://huggingface.co/spaces/mteb/leaderboard)**（中文子榜）
+- **[MTEB 论文](https://arxiv.org/abs/2210.07316)** (Muennighoff et al., 2023)
+
+**核心方法论文**
+
+- **[*Matryoshka Representation Learning*](https://arxiv.org/abs/2205.13147)** (Kusupati et al., NeurIPS 2022) —— 一模型多维度
+- **[*Text and Code Embeddings by Contrastive Pre-Training*](https://arxiv.org/abs/2201.10005)** (OpenAI, Neelakantan et al., 2022)
+- **[*BGE-M3*](https://arxiv.org/abs/2402.03216)** (BAAI, 2024) —— 多语言 / 多粒度 / 多功能
+- **[*E5 · Text Embeddings by Weakly-Supervised Contrastive Pre-training*](https://arxiv.org/abs/2212.03533)** (Microsoft, 2022)
+
+**模型仓库**
+
+- **[BGE / FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding)** (BAAI) · **[jina-embeddings-v3](https://huggingface.co/jinaai/jina-embeddings-v3)**
+- **[Voyage AI 模型文档](https://docs.voyageai.com/)** · **[OpenAI text-embedding-3 指南](https://platform.openai.com/docs/guides/embeddings)**
