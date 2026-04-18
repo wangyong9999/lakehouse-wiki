@@ -112,7 +112,7 @@ sequenceDiagram
 关键字段：
 - `parent-snapshot-id` → **形成 DAG**，支持分支 / 回滚 / 审计
 - `sequence-number` → 全局顺序（v2 spec 引入）
-- `summary` → 快速回答"这次 commit 改了多少" 而无需扫 manifest
+- `summary` → 快速回答"这次 commit 改了多少" 而无需扫 manifest。`summary.operation` 合法枚举：`append` · `replace` · `overwrite` · `delete`（spec v2 定义）
 
 ### Snapshot Ancestry（DAG 而非链表）
 

@@ -104,8 +104,8 @@ flowchart TD
 | 方式 | 典型系统 | 语义强度 |
 |---|---|---|
 | **HDFS rename** | 早期 Hive / Iceberg | 原子但依赖 HDFS |
-| **S3 Conditional PUT**（`If-None-Match`）| Iceberg v2+ 直接 on S3 | 原生 S3 原子，无需外部 Catalog |
-| **外部 Catalog CAS** | Iceberg REST / HMS / Glue / Nessie | Catalog 保证 CAS；推荐 |
+| **S3 Conditional PUT**（`If-None-Match`）| 部分 Iceberg catalog 实现（Hadoop / S3 filesystem catalog） | S3 原子；**注意：Iceberg spec 不标准化提交协议**，Conditional PUT 是 catalog 实现选择而不是 spec 定义 |
+| **外部 Catalog CAS** | Iceberg REST / HMS / Glue / Nessie（主流生产路径） | Catalog 保证 CAS；推荐 |
 
 **关键：**没有任何"湖仓进程"在中间。**原子性全压在指针切换的那一瞬间**。写入方准备好新 Snapshot 所有文件后，尝试 CAS 指针——成功则提交，失败则重试（或放弃）。
 

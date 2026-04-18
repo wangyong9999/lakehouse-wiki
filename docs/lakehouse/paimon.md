@@ -166,9 +166,8 @@ TBLPROPERTIES (
 
 ### 机制 3 · Compaction 策略
 
-- **Universal**（默认）：类似 RocksDB Universal，合并代价均衡
-- **Leveled**：每层固定大小，读放大小但写放大大
-- **触发**：L0 文件数阈值、时间、手动
+- **Universal-style**（默认，实际只此一种）：类似 RocksDB Universal，合并代价均衡。Paimon 不像 RocksDB 那样暴露 "leveled" 切换选项
+- **触发**：L0 文件数阈值（`num-sorted-run.compaction-trigger`）、时间、手动（`CALL compact`）；或走 **full-compaction** 触发全量合并（配合 `full-compaction` changelog producer）
 
 **专用 Compaction Job**（生产推荐）：
 

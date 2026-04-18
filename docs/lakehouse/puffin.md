@@ -28,7 +28,7 @@ Iceberg 数据文件是 Parquet / ORC / Lance，它们自带的统计（min/max/
 
 Puffin 是一个**容器格式**，里面可以装若干 **Blob**。每个 Blob 有：
 
-- `type` —— 字符串，标识这块数据的种类（例如 `apache-datasketches-theta-v1`、`ndv-v1`）
+- `type` —— 字符串，标识这块数据的种类。**官方 spec 当前只定义两种 blob type**：`apache-datasketches-theta-v1`（NDV 去重 sketch）、`deletion-vector-v1`（v3 引入的行级删除位图）
 - `fields` —— 对应哪些列
 - `snapshot-id` —— 属于哪个 Snapshot 的时刻
 - `properties` —— 自定义元数据
@@ -61,9 +61,11 @@ Puffin 是一个**容器格式**，里面可以装若干 **Blob**。每个 Blob 
 
 ## 当下状态
 
-- **已稳定**：Theta Sketch / NDV Blob（被 Trino / Spark 消费）
-- **进行中**：向量索引 Blob 类型、Bloom Filter 标准化
-- **生态**：Netflix、Tabular、Polaris 等在不同方向推进
+- **官方 blob**（Puffin spec 定义）：
+  - `apache-datasketches-theta-v1` —— 已稳定，Trino / Spark 消费
+  - `deletion-vector-v1` —— v3 引入，取代 v2 的 position-delete file（Roaring bitmap 格式）
+- **社区 proposal（未接纳 spec）**：向量索引（HNSW / IVF-PQ）、Bloom Filter、位图索引
+- **生态**：Netflix / Tabular / Polaris 等在不同方向推进；湖上向量检索的真正落地仍需等 blob type 标准化（或用 Lance 走另一条路）
 
 ## 相关概念
 

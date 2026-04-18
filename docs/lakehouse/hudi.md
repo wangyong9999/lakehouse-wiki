@@ -92,14 +92,19 @@ Hudi 把所有表状态变化记录在 `.hoodie/` 下：
 
 ### 索引机制
 
-Hudi 为了加速"给定主键找到对应文件"有多种索引：
+Hudi 1.0 的索引都承载在 **Metadata Table** 上（`.hoodie/metadata/`），共有七类：
 
-| 索引 | 机制 | 适合 |
+| Metadata Table 索引 | 机制 | 用途 |
 |---|---|---|
-| **Bloom Filter**（默认）| 每 data file 存 bloom 过滤器 | 主键随机分布 |
-| **Simple Index** | 直接扫 | 小表 |
-| **HBase Index** | 外部 HBase 存主键 → file 映射 | 大表、主键集中 |
-| **Record-level Index**（1.0+）| 内嵌索引 | 新版首选 |
+| **Files** | 每分区的 file list | 消除 S3 LIST |
+| **Column Stats** | 列级 min/max/null_count | File pruning |
+| **Bloom Filter** | per-file Bloom | 主键点查 |
+| **Partition Stats** | 分区级聚合统计 | 分区剪枝 |
+| **Record-level Index**（RLI，0.14+ 引入 / 1.0 成熟） | 主键 → file group 映射 | **大表主键 upsert 首选** |
+| **Secondary Index**（1.0+） | 非主键列索引 | 非 PK 字段查询加速 |
+| **Expression Index**（1.0+） | 函数表达式索引（如 `year(ts)`） | 派生字段查询加速 |
+
+此外还有历史外部索引（写表配置，不在 Metadata Table 里）：**HBase Index**（外部 HBase）、**Simple Index**（小表直接扫）。新项目优先用 Metadata Table 内置索引。
 
 ## 3. 关键机制
 

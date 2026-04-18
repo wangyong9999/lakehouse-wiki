@@ -89,7 +89,7 @@ _delta_log/
 
 提交原子性：**PUT 新 JSON 文件到 `_delta_log/`** 的**命名空间是否已存在**的判定。云存储支持 `PutIfAbsent`（S3 Conditional PUT、Azure Blob IfMatch）→ 原生原子 CAS。
 
-早期没 Conditional PUT 时，Delta 依赖 DynamoDB 做 `LogStore` 层 CAS。
+**时间线**：早期（2024-08 前）S3 没有原生 Conditional PUT，Delta OSS 依赖 **DynamoDB** 做 `LogStore` 层 CAS（`spark.databricks.delta.logStore.class = io.delta.storage.S3DynamoDBLogStore`）。2024-08 S3 推出 `If-None-Match` 后，Delta 3.2+ 可直接在 S3 上原子提交，无需 DynamoDB 外挂。
 
 ### 机制 2 · Deletion Vectors（v3+）
 
@@ -118,8 +118,8 @@ SELECT * FROM table_changes('db.orders', 1000, 1100);
 
 **Z-order 的演进**：
 - 不需要预先定义分区
-- 基于 **Hilbert curve 的多维聚簇**
-- 支持**在线重聚簇**（OPTIMIZE）
+- **多维聚簇 + 自适应重聚簇**（底层曲线 Databricks 未完全公开，社区推测是 Hilbert-like，但官方从未 claim 使用 Hilbert curve）
+- 支持**在线增量重聚簇**（OPTIMIZE；无需全表重写）
 
 实际效果接近 Iceberg 的 **Sort Order + Clustering**。
 
@@ -141,7 +141,7 @@ SELECT * FROM table_changes('db.orders', 1000, 1100);
 | `delta.enableChangeDataFeed` | `true`（流消费下游需要）|
 | `delta.logRetentionDuration` | 30 天（default）|
 | `delta.deletedFileRetentionDuration` | 7 天 |
-| `delta.checkpointInterval` | 10 commits |
+| `delta.checkpointInterval` | 10 commits（Spark 实现默认；Delta 协议不强制）|
 | `delta.feature.liquidClustering` | `supported`（v3.1+） |
 
 ### 运维命令

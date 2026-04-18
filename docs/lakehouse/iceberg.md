@@ -20,10 +20,10 @@ status: stable
 !!! abstract "TL;DR"
     - 三层元数据：`metadata.json` → `Manifest List` → `Manifest` → Data / Delete File
     - 写入**不会**修改历史：全 snapshot 化、Time Travel 免费
-    - 提交靠 **Catalog 的 CAS** 或 **S3 Conditional PUT**（v2 spec 原生支持）
+    - 提交靠 **Catalog 的 CAS** 或 **S3 Conditional PUT**（catalog 实现层选择，spec 不标准化提交协议）
     - **列 ID 机制**让 schema 演化不破历史
     - **Hidden Partitioning**：表不暴露分区列，SQL 自动利用分区裁剪
-    - **Puffin 扩展索引**：未来放向量索引 / bloom / theta sketch
+    - **Puffin 扩展索引**：当前官方 blob 仅 `theta sketch` + `deletion-vector`（v3）；向量索引 / bloom 是社区 proposal
     - **REST Catalog**：协议化的 catalog 接入，解耦引擎与元数据实现
 
 ## 1. 它解决什么 · 没有 Iceberg 的世界
@@ -148,12 +148,11 @@ Iceberg：`PARTITIONED BY (days(ts))`——**表不暴露 dt 列**，查询写 `
 
 ### 机制 5 · Puffin 索引
 
-Puffin 是 Iceberg 独立的**辅助索引文件格式**（二进制）。当前放：
-- Apache DataSketches（Theta / HLL 精确去重）
-- 位图索引
-- 统计直方图
+Puffin 是 Iceberg 独立的**辅助索引文件格式**（二进制）。**官方 blob 类型目前只有两种**（按 [Puffin spec](https://iceberg.apache.org/puffin-spec/)）：
+- `apache-datasketches-theta-v1` —— NDV 精确去重（Trino / Spark 已消费）
+- `deletion-vector-v1` —— v3 引入的行级删除载体，取代 v2 的 position-delete file
 
-未来：**向量索引**（Iceberg + Lance / 自研）是一体化架构的重要选项。
+**Bloom Filter / HNSW / 位图索引等是社区 proposal，尚未被 Puffin spec 接纳**。"湖上跑向量"的完整落地仍需等 blob type 标准化或走 Lance 那条路径。
 
 ## 4. 工程细节
 
@@ -299,7 +298,7 @@ CALL system.fast_forward('db.events', 'main', 'feature-xyz');
 
 - **[Iceberg Table Spec (v2)](https://iceberg.apache.org/spec/)** —— 规范主页
 - **[REST Catalog OpenAPI Spec](https://github.com/apache/iceberg/blob/main/open-api/rest-catalog-open-api.yaml)** —— 跨引擎互操作的接口真相
-- **[Iceberg v3 spec（草案）](https://iceberg.apache.org/spec/#version-3)** —— Deletion Vectors / Variant / Row Lineage
+- **[Iceberg v3 spec（草案）](https://iceberg.apache.org/spec/#version-3)** —— Binary Deletion Vectors · Row Lineage · Variant · geometry / geography · nanosecond timestamp(tz) · default values · multi-arg partition transforms · encryption keys
 
 **原始文献与演讲**
 

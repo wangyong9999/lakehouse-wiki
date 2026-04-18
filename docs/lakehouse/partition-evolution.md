@@ -85,7 +85,7 @@ SELECT * FROM events WHERE ts > '2026-04-01';
 ## 坑
 
 - **演化多次后 Manifest 会有多版本 spec 共存** —— compaction 可以选择是否重写成最新 spec（`rewrite_data_files(strategy='sort')` + 目标 spec）
-- **不能删除掉"所有分区"**：表至少要有一种分区策略（即使 `ALWAYS(void)`）
+- **unpartitioned 表合法**：Iceberg 允许 partition spec 为空（`fields=[]`），并非必须有分区字段。`void` transform 用于 v1 兼容场景——让某个字段"看起来还在分区里但实际无效"
 - **和 Hive 兼容性**：老 Hive 工具看到 Iceberg 多版本 spec 可能无法解析
 - **Snapshot 过期** 会同步让老版本 spec 下的数据消失 —— 和 [Time Travel](time-travel.md) 语义一致
 

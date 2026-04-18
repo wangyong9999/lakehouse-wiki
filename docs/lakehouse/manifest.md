@@ -118,13 +118,13 @@ Step 4: 只打开幸存的 Data File 扫描
 | **Iceberg** | Manifest + Manifest List | Avro | 分区 + 列 min/max + Bloom（v3+） |
 | **Paimon** | Manifest + Manifest List | Avro（同 Iceberg） | 同上 + bucket |
 | **Delta** | `_delta_log/*.json` + checkpoint Parquet | JSON + Parquet | add action 有 stats |
-| **Hudi** | Timeline instant + commit metadata | Avro + JSON | Bloom / Record Index 索引 |
+| **Hudi** | Timeline instant + **Metadata Table**（1.0+）| Avro + JSON + Parquet | Metadata Table 七类索引：Files / Column Stats / Bloom / Partition Stats / Record-level / Secondary / Expression |
 
 **深层差异**：
 
 - **Iceberg / Paimon**：Manifest-per-batch，多次写入产生多 Manifest，periodic 合并
 - **Delta**：每次 commit 产生一个 JSON 事务日志，**checkpoint 成 Parquet**（周期压缩）
-- **Hudi**：Timeline 是**事件流**而非索引，依赖 commit metadata + 索引层
+- **Hudi**：Timeline 是**事件流**（commit / clean / compaction / rollback 的全序日志）；**Metadata Table**（1.0 成熟）才是现代 Hudi 的主元数据载体，提供七类索引
 
 本质都是"不扫目录、读索引文件"——但**索引的组织方式** + **合并策略**不同。
 

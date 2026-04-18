@@ -59,9 +59,9 @@ metadata.json → manifest-list → manifest
 
 Reader 读 `data_file_a` 时，同时加载引用它的 delete file，把 row 42/87 过滤掉。
 
-## Deletion Vectors（Delta 风格）
+## Deletion Vectors —— 跨格式的共同方向
 
-Delta Lake 的 `Deletion Vectors` 本质是 per-data-file 的**位图**：
+DV 不是 Delta 独有——Delta（v3+）、Iceberg（v3）、Paimon（0.9+）都采用了类似机制。本质是 per-data-file 的**位图**（Roaring bitmap）：
 
 ```
 data_file_a.parquet → DV = bitmap(42, 87)
@@ -69,7 +69,7 @@ data_file_a.parquet → DV = bitmap(42, 87)
 
 优点是读时直接按 bitmap 跳过，比 position delete 文件还快；缺点是 metadata 粒度更细，小文件问题更严重。
 
-Paimon 的 "deletion vector" 模式也借鉴了这个思路。
+**Iceberg v3 的 DV 存在 Puffin 里**（`deletion-vector-v1` blob type），取代 v2 的独立 position-delete file。Delta DV 存 `_delta_log` + sidecar；Paimon 内置 DV 模式。未来湖表行级删除会逐步统一到 DV 形态。
 
 ## 和 CoW / MoR 的关系
 

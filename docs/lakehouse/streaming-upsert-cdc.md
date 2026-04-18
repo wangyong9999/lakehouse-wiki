@@ -70,11 +70,12 @@ flowchart LR
 
 | 策略 | 说明 | 成本 | 精度 |
 | --- | --- | --- | --- |
-| `input` | 直接把上游 CDC 流当 changelog | 最低 | 假设上游已去重 |
+| `none` | 不产 Changelog，下游只能全量或快照读 | 最低 | 无 changelog |
+| `input` | 直接把上游 CDC 流当 changelog | 低 | 假设上游已去重 |
 | `lookup` | 写时查历史对比生成 changelog | 高 | 最精准 |
 | `full-compaction` | Compaction 时产出 | 中 | 延迟到 compaction |
 
-Paimon 把三种策略作为一等选项；Iceberg 目前偏向 `input` 路线；Hudi 走 Incremental Query + CDC 字段混合。
+Paimon 把四种策略作为一等选项；Iceberg 目前偏向 `input` 路线；Hudi 走 Incremental Query + CDC 字段混合。
 
 ## 主键设计的影响
 
