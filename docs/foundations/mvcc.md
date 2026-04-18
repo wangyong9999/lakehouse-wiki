@@ -40,6 +40,21 @@ status: stable
 
 事务开始时拿一个"全局快照"（读视图），整个事务都按这个快照读。大多数实现等价于 SI，严格 Serializable 要额外机制（SSI / 冲突检测）。
 
+!!! warning "SI 不防 Lost Update（经典陷阱）"
+    Snapshot Isolation **不等于** Serializable。经典反例：两个并发事务都"读-改-写"同一行余额。
+    ```
+    T1 read balance=100 ---- ... ---- write 90 (扣 10) commit
+    T2 read balance=100 ---- ... ---- write 80 (扣 20) commit  ← 丢失了 T1 的扣款！
+    ```
+    在 SI 下两事务读的是同一快照，各自看到 balance=100，按 SI 定义**不是写-写冲突**（两人写的是不同的逻辑意图），commit 都会成功——后者覆盖前者。
+
+    **防止 Lost Update 的三种做法**：
+    - **显式锁**：`SELECT ... FOR UPDATE`
+    - **SSI / Serializable**：Postgres 的 Serializable 级别会检测并 abort
+    - **Compare-And-Swap**：`UPDATE ... WHERE balance = 100`，冲突时重试
+    
+    湖表层面同样存在——这是为什么 Iceberg / Delta 的 UPDATE / DELETE 都是"读-改-写"批操作而非单行操作；并发 writer 必须通过 Catalog CAS 检测冲突。
+
 ### 垃圾回收 / Vacuum
 
 旧版本占空间，需要定期回收：
@@ -61,12 +76,35 @@ GC 配得不好就"膨胀"——Postgres bloat 是经典问题。
 
 这也是"湖仓为什么天生支持 [Time Travel](../lakehouse/time-travel.md)"的根源——旧版本**必然保留一段时间**。
 
+### Iceberg 的 MVCC 如何落地
+
+湖表的 MVCC 不能走"行级版本链"——对象存储不可原地改。实际实现：
+
+1. **数据文件不可变**：要修改某行，写新文件（或写 delete file 标记）+ 原文件不动
+2. **Manifest 引用集合**：每个 Snapshot = 一组 Manifest = 一组数据文件引用
+3. **metadata.json 是指针**：当前表版本 = metadata.json 指向的 Snapshot ID
+4. **commit = 原子替换指针**：写新 metadata.json + 通过 Catalog CAS 把"当前指针"切过去
+
+```
+T1 commit:  metadata.json v5 (snap_5, parent=snap_4)
+             ↑ Catalog CAS: compare-and-set {v4 → v5}
+T2 并发:    尝试 {v4 → v5'} → CAS 失败 → 重新基于 v5 rebase → 重试
+```
+
+**写冲突检测** = Catalog 层面的 CAS 冲突。这和传统 DB 用隐藏版本号做行级 MVCC 是同一思想的**粒度放大版**（从行 → 表快照）。
+
+详见 [一致性模型](consistency-models.md) 的"湖表的快照隔离"段 与 [湖表](../lakehouse/lake-table.md)。
+
 ## 相关
 
 - [Snapshot](../lakehouse/snapshot.md) —— 湖表版 MVCC
 - [Time Travel](../lakehouse/time-travel.md)
+- [一致性模型](consistency-models.md) —— SI / Serializable / Linearizable 的精确定义
+- [湖表](../lakehouse/lake-table.md) —— Catalog CAS 在 commit 路径上的作用
 
 ## 延伸阅读
 
-- *An Empirical Evaluation of In-Memory Multi-Version Concurrency Control* (VLDB 2017)
-- PostgreSQL MVCC 章节
+- **[*An Empirical Evaluation of In-Memory Multi-Version Concurrency Control*](https://www.vldb.org/pvldb/vol10/p781-Wu.pdf)** (VLDB 2017)
+- **[PostgreSQL · MVCC 章节](https://www.postgresql.org/docs/current/mvcc.html)**
+- **[*Serializable Snapshot Isolation* (SSI)](https://drkp.net/papers/ssi-vldb12.pdf)** (Ports & Grittner, VLDB 2012)
+- **[Iceberg · Snapshot Spec](https://iceberg.apache.org/spec/#snapshots)** —— 湖表版 MVCC 的一手规范

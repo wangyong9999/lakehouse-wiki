@@ -44,8 +44,9 @@ flowchart TB
 
 ### 级 3：Page / Column 层
 
-- Parquet 的 Page Index 或 Dictionary
-- 某些列上如果建了 Bloom Filter，点查直接跳过 page
+- **[Parquet Page Index](parquet.md)**（v2，参见该页 "Page Index" 段）：在命中的 Row Group 内按 Page 过滤，把粒度从 128MB 细到 1MB。**点查 / 小范围扫描 10-100× 加速**
+- **Dictionary 层过滤**：Dict 编码的列，先查字典确认"值在不在"，再决定是否要读 Data Page
+- **Bloom Filter**（可选）：高基数等值查询点查直接跳过 page（见 [Parquet](parquet.md) 的 Bloom Filter 段）
 
 ### 级 4：行级 filter
 
@@ -102,6 +103,7 @@ flowchart TB
 
 ## 延伸阅读
 
-- Parquet Page Index 文档
-- Iceberg Predicate Pushdown 实现说明（spec）
-- *Data Skipping Algorithms* —— ClickHouse 的对应机制
+- **[Parquet Page Index](https://github.com/apache/parquet-format/blob/master/PageIndex.md)** —— 规范一手
+- **[Iceberg Scan Planning](https://iceberg.apache.org/spec/#scan-planning)** —— Manifest 级过滤的语义
+- **[ClickHouse · Data Skipping Indexes](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-data_skipping-indexes)**
+- [本手册 · Parquet](parquet.md) · [压缩与编码](compression-encoding.md)

@@ -102,6 +102,32 @@ DataStream<Event> stream = env.fromSource(...,
 3. **Allowed Lateness**：窗口关闭后再保留 N 分钟；迟到数据触发**增量再输出**（覆盖之前的结果）
 4. **Materialized 覆盖**：湖仓场景下，迟到数据作为 upsert 覆盖原聚合行
 
+## Delivery Semantics · At-least-once vs Exactly-once
+
+事件时间不能单独工作，**必须配合 delivery semantics**——一条消息从上游到下游最终"出现几次"。流处理三档：
+
+| 语义 | 现象 | 如何做到 |
+|---|---|---|
+| **At-most-once** | 最多一次，可能丢 | 源不重放 · 下游不去重 · 崩了就丢 |
+| **At-least-once** | 至少一次，可能重 | 源可重放（Kafka offset 持久化）· 下游接收重复 |
+| **Exactly-once** | 恰好一次 | 源可重放 + 下游去重 / 幂等 / 事务性提交 |
+
+**关键**："exactly-once" 在不同层面意思不同：
+
+- **处理语义上的 exactly-once**（Flink checkpoint / Kafka transaction）：算子内部状态每条消息只算一次。**不等于**下游看到一次
+- **端到端 exactly-once**：需要 **sink 可参与两阶段提交**（Kafka transactions · JDBC sink XA · 湖表 commit 原子性）
+
+**湖仓的 exactly-once 机制**：
+
+- **Iceberg / Paimon** 通过 Flink checkpoint + 原子 commit 实现端到端 exactly-once —— Flink 每个 checkpoint 完成时，Paimon 做一次 commit；如果 checkpoint 失败，数据不可见、回放重试
+- **Kafka → Iceberg** 典型路径：Kafka source + Flink 2PC sink + Iceberg commit（需要连接器支持）
+- **幂等写入**：给每条消息一个稳定 ID，下游 upsert on ID —— 这是 at-least-once 环境下做到"effectively-once"的常用方法，比真正的 2PC 简单
+
+**选型口诀**：
+- 指标准确性要求极高（金额 / 风控）→ 端到端 exactly-once
+- 指标可容忍少量重复 / 缺失（日志 / 推荐）→ at-least-once + 业务层去重
+- 实时监控 / 告警 → at-most-once 也可以（宁可丢也要快）
+
 ## 在湖仓 / 入湖里的具体意义
 
 - **CDC 入湖的"新鲜度"** = Watermark 推进速度

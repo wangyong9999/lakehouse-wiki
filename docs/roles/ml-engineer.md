@@ -80,9 +80,9 @@ hide:
 
 ## 建议学习路径
 
-走 [一周新人路径](../learning-paths/week-1-newcomer.md) →
-[一月 AI 方向](../learning-paths/month-1-ai-track.md) →
-之后按 "多模管线 → ML 基础设施 → Agent" 推进。
+先走 [一周新人路径](../learning-paths/week-1-newcomer.md)（湖 + 检索心智模型），再走 [一月 AI 方向](../learning-paths/month-1-ai-track.md)，之后按 "多模管线 → ML 基础设施 → Agent" 推进。
+
+> **一月 AI 方向** 覆盖：Embedding 与多模 · 向量检索三大索引（HNSW / IVF-PQ / DiskANN） · Hybrid Search + Rerank · RAG 原理与评估 · Feature Store · MLOps 生命周期 · Agent 基础。
 
 ## 常用速查
 

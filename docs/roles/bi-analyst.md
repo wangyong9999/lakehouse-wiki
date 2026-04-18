@@ -41,8 +41,9 @@ hide:
 
 ## 建议学习路径
 
-走 [一周新人路径](../learning-paths/week-1-newcomer.md) →
-[一月 BI 方向](../learning-paths/month-1-bi-track.md)。
+先走 [一周新人路径](../learning-paths/week-1-newcomer.md)（湖 + 检索心智模型），再走 [一月 BI 方向](../learning-paths/month-1-bi-track.md)。
+
+> **一月 BI 方向** 覆盖：OLAP 建模（星型 / 宽表 / Data Vault）· 物化视图与查询加速 · 语义层 / dbt · OLAP 加速副本（StarRocks / ClickHouse）· BI on Lake 场景端到端 · SLA / SLO 打法。
 
 ## 常用速查
 

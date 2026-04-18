@@ -1,10 +1,13 @@
 ---
 title: 向量化执行（Vectorized Execution）
 type: concept
+depth: 进阶
 tags: [foundations, execution]
 aliases: [Vectorized Query Processing, 向量化查询]
-related: [columnar-vs-row, parquet]
-systems: [duckdb, clickhouse, starrocks, spark]
+related: [columnar-vs-row, parquet, compression-encoding]
+systems: [duckdb, clickhouse, starrocks, spark, velox]
+applies_to: DuckDB · ClickHouse · StarRocks · Velox · Photon · Spark Tungsten · Polars
+last_reviewed: 2026-04-18
 status: stable
 ---
 
@@ -40,6 +43,35 @@ filter.next()   ← 一行              filter.next()   ← 一批 1024 行
 
 在典型 TPCH / SSB 场景下，向量化执行器相对 Volcano 往往 **5–20 倍**吞吐提升，硬件一致。
 
+## 不同算子的向量化
+
+"向量化" 不只是过滤 —— 每种算子都有对应的批处理实现：
+
+| 算子 | 向量化做法 | 关键技巧 |
+|---|---|---|
+| **Filter** | `for i in batch: mask[i] = pred(data[i])` | SIMD 比较 + selection vector |
+| **Project / Expression** | 批内逐列算，算完再拼 | Const folding · 短路求值 |
+| **Hash Aggregation** | 分批插入 hash table，冲突链 SIMD 探测 | 预 hash 整批 · 线性探测缓存友好 |
+| **Hash Join** | Build 端批量建 hash table；Probe 端批量探测 | Bloom prefilter · radix 分桶 |
+| **Sort** | 批内 radix sort / pdqsort | 基于列切片而非行 |
+| **Top-N** | 维护 N 大小的堆，批量比较 | 可以结合 Bloom 早停 |
+
+**关键**：hash aggregation 和 hash join 是 OLAP 最重的算子，它们的向量化实现（分桶 + SIMD 探测）是现代引擎打败老系统的关键。
+
+## 延迟解码 · 在压缩数据上直接 SIMD
+
+**现代向量化的杀手锏**：尽量"不解码"地处理数据。
+
+经 [Dictionary 编码](compression-encoding.md) 后，`country` 列从字符串变成 int index（如 `0=CN, 1=US, 2=JP`）。执行 `WHERE country = 'CN'` 时：
+
+```
+1. 查字典：'CN' → 0  （一次）
+2. 对整列 int index 做 SIMD 比较 ==0  （每 CPU cycle 16 元素）
+3. 延迟解码：只对命中的行去解字典（或压根不解）
+```
+
+这比"先全表解成字符串再比较"**快几十倍**。DuckDB · Velox · ClickHouse · Polars 都大量使用这条路径。[压缩与编码](compression-encoding.md) 有更完整的讨论（见"和向量化执行的协同"段）。
+
 ## 延展：Compile-time 代码生成（Codegen）
 
 有些引擎把"循环内的表达式"JIT 成机器码：
@@ -63,9 +95,13 @@ filter.next()   ← 一行              filter.next()   ← 一批 1024 行
 ## 相关概念
 
 - [列式 vs 行式](columnar-vs-row.md) —— 存储侧的前提
+- [压缩与编码](compression-encoding.md) —— "在压缩数据上 SIMD" 的另一半
 - [Parquet](parquet.md) / [Lance Format](lance-format.md) —— 典型列式源
+- [谓词下推](predicate-pushdown.md) —— 减少进入向量化引擎的数据量
 
 ## 延伸阅读
 
-- *MonetDB/X100: Hyper-Pipelining Query Execution* (Boncz et al., CIDR 2005) —— 向量化的原始论文
-- *Everything You Always Wanted to Know About Compiled and Vectorized Queries But Were Afraid to Ask* (Kersten et al., VLDB 2018)
+- **[*MonetDB/X100 · Hyper-Pipelining Query Execution*](https://www.cidrdb.org/cidr2005/papers/P19.pdf)** (Boncz et al., CIDR 2005) —— 向量化的原始论文
+- **[*Everything You Always Wanted to Know About Compiled and Vectorized Queries*](https://www.vldb.org/pvldb/vol11/p2209-kersten.pdf)** (Kersten et al., VLDB 2018) —— 向量化 vs JIT 对比
+- **[*Velox · Meta's Unified Execution Engine*](https://research.facebook.com/publications/velox-metas-unified-execution-engine/)** (VLDB 2022) —— 工业级向量化引擎的抽象
+- **[DuckDB · Execution Format](https://duckdb.org/why_duckdb#fast)** · **[ClickHouse · Columnar Engine](https://clickhouse.com/docs/en/development/architecture)**
