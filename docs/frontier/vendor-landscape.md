@@ -320,5 +320,5 @@ status: stable
 ## 相关
 
 - [TCO 模型](../ops/tco-model.md) —— 具体成本分析
-- [三代数据系统演进史](../foundations/data-systems-evolution.md) · [Modern Data Stack](../foundations/modern-data-stack.md)
+- [三代数据系统演进史](data-systems-evolution.md) · [Modern Data Stack](modern-data-stack.md)
 - [业务场景全景](../scenarios/business-scenarios.md) · [横向对比](../compare/index.md)

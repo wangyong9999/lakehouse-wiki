@@ -94,8 +94,8 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
 ## Round 2 · 前沿扩主线
 
 ### R2.1 · 压轴总论（4 新页 · S 级）
-- [ ] `foundations/data-systems-evolution.md` —— 三代数据系统演进史（数据库→数仓→湖仓）
-- [ ] `foundations/modern-data-stack.md` —— MDS 全景（Airbyte/Fivetran/dbt/Airflow/Reverse ETL）
+- [ ] `frontier/data-systems-evolution.md` —— 三代数据系统演进史（数据库→数仓→湖仓）
+- [ ] `frontier/modern-data-stack.md` —— MDS 全景（Airbyte/Fivetran/dbt/Airflow/Reverse ETL）
 - [ ] `ai-workloads/mlops-lifecycle.md` —— 数据→训练→评估→上线→监控闭环
 - [ ] `ai-workloads/mcp.md` —— Anthropic MCP 协议深度
 

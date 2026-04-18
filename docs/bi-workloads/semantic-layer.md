@@ -418,5 +418,5 @@ r = requests.post("https://cube.corp/cubejs-api/v1/load", json={
 
 - [OLAP 建模](olap-modeling.md) —— 语义层建在维度建模之上
 - [物化视图](materialized-view.md) · [查询加速](query-acceleration.md)
-- [Modern Data Stack](../foundations/modern-data-stack.md) —— Semantic Layer 是其中一环
+- [Modern Data Stack](../frontier/modern-data-stack.md) —— Semantic Layer 是其中一环
 - [BI on Lake 场景](../scenarios/bi-on-lake.md)

@@ -269,4 +269,4 @@ status: stable
 
 - [成本优化](cost-optimization.md) —— 具体技术手段
 - [合规](compliance.md) · [数据治理](data-governance.md)
-- [三代数据系统演进史](../foundations/data-systems-evolution.md)
+- [三代数据系统演进史](../frontier/data-systems-evolution.md)

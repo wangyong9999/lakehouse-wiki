@@ -135,8 +135,6 @@ nav:
       - 一致性模型: foundations/consistency-models.md
       - 事件时间 · Watermark: foundations/event-time-watermark.md
       - Arrow · FlightSQL · ADBC: foundations/arrow-ecosystem.md
-      - 三代数据系统演进史: foundations/data-systems-evolution.md
-      - Modern Data Stack 全景: foundations/modern-data-stack.md
   - 湖仓表格式:
       - lakehouse/index.md
       - 湖表: lakehouse/lake-table.md
@@ -259,6 +257,8 @@ nav:
       - AI 治理: frontier/ai-governance.md
       - Lakehouse 厂商与开源生态格局: frontier/vendor-landscape.md
       - Iceberg v3 预览: frontier/iceberg-v3-preview.md
+      - 三代数据系统演进史: frontier/data-systems-evolution.md
+      - Modern Data Stack 全景: frontier/modern-data-stack.md
   - 横向对比:
       - compare/index.md
       - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md

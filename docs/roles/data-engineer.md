@@ -9,6 +9,12 @@ hide:
 
 **你的主战场**：湖表怎么建、数据怎么进、作业怎么稳、性能怎么调。
 
+!!! note "不必深入（交给其他角色）"
+    - **LLM / RAG / Agent 内部机制** · **向量检索算法调优** → [ML / AI 工程师](ml-engineer.md)
+    - **OLAP 建模 / dbt / 语义层** → [BI 分析师](bi-analyst.md)
+    - **Catalog 权限设计 / 多租户 / FinOps / K8s** → [平台工程师](platform-engineer.md)
+    - **Model Serving / GPU 调度** → [ML / AI 工程师](ml-engineer.md) 或 [平台工程师](platform-engineer.md)
+
 ## 入门 · 先把心智模型搭起来
 
 - [湖表](../lakehouse/lake-table.md)

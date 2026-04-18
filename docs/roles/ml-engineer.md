@@ -9,6 +9,12 @@ hide:
 
 **你的主战场**：在湖上做检索、训练、RAG、Agent、多模。
 
+!!! note "不必深入（交给其他角色）"
+    - **Compaction / Delete Files / 入湖 CDC 运维** → [数据工程师](data-engineer.md)
+    - **Catalog 权限 / 多租户 / FinOps / K8s** → [平台工程师](platform-engineer.md)
+    - **OLAP 建模 / 物化视图 / 语义层** → [BI 分析师](bi-analyst.md)
+    - **引擎内部算法**（Spark Catalyst · Trino Planner · StarRocks 向量化细节）→ 了解定位即可，不需要深入
+
 !!! tip "你是哪种 ML / AI 工程师"
     本页覆盖两类工作，入口不同：
 

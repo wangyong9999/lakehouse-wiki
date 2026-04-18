@@ -293,6 +293,6 @@ def my_dbt_assets(context, dbt: DbtCliResource):
 
 ## 相关
 
-- [Modern Data Stack](../foundations/modern-data-stack.md) —— Orchestration 是其中一环
+- [Modern Data Stack](../frontier/modern-data-stack.md) —— Orchestration 是其中一环
 - [Kafka Ingestion](../pipelines/kafka-ingestion.md) · [Bulk Loading](../pipelines/bulk-loading.md)
 - [编排系统概览](../pipelines/orchestration.md)

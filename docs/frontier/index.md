@@ -21,6 +21,13 @@ description: 论文速读、趋势观察、Benchmark、AI 治理
 - [**Lakehouse 厂商与开源生态格局**](vendor-landscape.md) —— Databricks/Snowflake/BigQuery/国内大厂的客观对比
 - [**Iceberg v3 预览**](iceberg-v3-preview.md) —— spec 演进（Deletion Vector / Row Lineage / Multi-Table / Geo）
 
+## 历史与生态视角
+
+> 不是技术地基，而是"从哪里来、当前生态怎么连"的背景阅读。做架构决策 / 方案评审前翻一翻很值。
+
+- [**三代数据系统演进史**](data-systems-evolution.md) —— 50 年关系库 → 数仓 → 湖仓
+- [**Modern Data Stack 全景**](modern-data-stack.md) —— 现代数据栈十大环节
+
 ## 论文笔记
 
 - [DiskANN 论文笔记](diskann-paper.md) —— NeurIPS 2019 · 单机 SSD 十亿级 ANN

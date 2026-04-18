@@ -208,4 +208,4 @@ Iceberg spec 持续演进（v1 → v2 → v3）靠 Netflix + Apple + LinkedIn + 
 - [Iceberg](../lakehouse/iceberg.md) —— Netflix 创造的协议
 - [案例拆解（全家公司）](case-studies.md)
 - [案例 · LinkedIn](case-linkedin.md) · [案例 · Uber](case-uber.md)
-- [湖表](../lakehouse/lake-table.md) · [三代数据系统演进史](../foundations/data-systems-evolution.md)
+- [湖表](../lakehouse/lake-table.md) · [三代数据系统演进史](../frontier/data-systems-evolution.md)

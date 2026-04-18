@@ -51,7 +51,7 @@ hide:
 - **ML**：[MLflow](ai-workloads/mlops-lifecycle.md) · [Databricks Feature Store](compare/feature-store-comparison.md) · Vector Search
 - **协作**：Notebook / Workflows / DLT
 - **优势**：一站式；**劣势**：锁定
-- 对比：[湖仓演进史](foundations/data-systems-evolution.md)
+- 对比：[湖仓演进史](frontier/data-systems-evolution.md)
 
 ---
 
@@ -159,7 +159,7 @@ hide:
 
 ## 安全 / 合规栈
 
-- **治理 Catalog**：[Unity](catalog/unity-catalog.md) / [DataHub / OpenMetadata](foundations/modern-data-stack.md)
+- **治理 Catalog**：[Unity](catalog/unity-catalog.md) / [DataHub / OpenMetadata](frontier/modern-data-stack.md)
 - **血缘**：DataHub / OpenLineage
 - **质量**：Great Expectations / Soda / dbt tests
 - **合规**：[GDPR / HIPAA / PDPA / 个保法](ops/compliance.md)

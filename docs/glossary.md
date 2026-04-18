@@ -50,7 +50,7 @@ description: 字母序的概念兜底索引
 ## D – F
 
 - **Data Governance** —— 见 [数据治理](ops/data-governance.md)
-- **Data Systems Evolution（演进史）** —— 见 [三代数据系统演进史](foundations/data-systems-evolution.md)
+- **Data Systems Evolution（演进史）** —— 见 [三代数据系统演进史](frontier/data-systems-evolution.md)
 - **Debezium** —— 见 [Kafka 到湖](pipelines/kafka-ingestion.md)
 - **Delete Files** —— 见 [Delete Files](lakehouse/delete-files.md)
 - **Delta Lake** —— 见 [Delta Lake](lakehouse/delta-lake.md)
@@ -102,7 +102,7 @@ description: 字母序的概念兜底索引
 - **MLOps Lifecycle** —— 见 [MLOps 生命周期](ai-workloads/mlops-lifecycle.md)
 - **Model Registry** —— 见 [Model Registry](ml-infra/model-registry.md)
 - **Model Serving** —— 见 [Model Serving](ml-infra/model-serving.md)
-- **Modern Data Stack（现代数据栈）** —— 见 [Modern Data Stack](foundations/modern-data-stack.md)
+- **Modern Data Stack（现代数据栈）** —— 见 [Modern Data Stack](frontier/modern-data-stack.md)
 - **MoE（Mixture of Experts）** —— 见 [LLM 推理优化](frontier/llm-inference-opt.md)
 - **MRR / nDCG** —— 见 [检索评估](retrieval/evaluation.md)
 - **Multimodal Data Modeling** —— 见 [多模数据建模](unified/multimodal-data-modeling.md)

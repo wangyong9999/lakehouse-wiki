@@ -221,35 +221,35 @@ flowchart BT
 
 ---
 
-## 🌟 近期推荐阅读（2026 重点）
-
-### 业务闭环（带问题进来先看）
-- ⭐ [**E2E 业务场景全景**](scenarios/business-scenarios.md) — Top 10 + 前沿 + 决策矩阵
-- [推荐系统深挖](scenarios/recommender-systems.md) · [欺诈检测](scenarios/fraud-detection.md) · [CDP 分群](scenarios/cdp-segmentation.md) · [Agentic 工作流](scenarios/agentic-workflows.md) · [Text-to-SQL 平台](scenarios/text-to-sql-platform.md)
-
-### 前沿专题
-- ⭐ [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
-- ⭐ [**LLM 推理优化**](frontier/llm-inference-opt.md) — vLLM / Flash Attn / Speculative / MoE
-- ⭐ [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
-- ⭐ [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
-- ⭐ [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — spec 演进与团队实务
-- ⭐ [**Lakehouse 厂商与开源生态格局**](frontier/vendor-landscape.md) — 客观厂商对比
+## 精选主题
 
 ### 工程底座深化
-- ⭐ [**MCP · Model Context Protocol**](ai-workloads/mcp.md) — Anthropic 2024 开放协议
-- ⭐ [**MLOps 生命周期**](ai-workloads/mlops-lifecycle.md) — 数据 → 训练 → 评估 → 上线 → 监控闭环
-- ⭐ [**语义层 · Semantic Layer**](bi-workloads/semantic-layer.md) — dbt / Cube 指标中台
-- ⭐ [**LLM Gateway**](ml-infra/llm-gateway.md) — LiteLLM / Portkey / Helicone 统一代理
-- ⭐ [**SLA · SLO · DRE**](ops/sla-slo.md) — 数据产品可靠性工程
-- ⭐ [**TCO 模型**](ops/tco-model.md) — 自建 vs 云 vs SaaS 真实成本
+- [**MCP · Model Context Protocol**](ai-workloads/mcp.md) — Anthropic 2024 开放协议
+- [**MLOps 生命周期**](ai-workloads/mlops-lifecycle.md) — 数据 → 训练 → 评估 → 上线 → 监控闭环
+- [**语义层 · Semantic Layer**](bi-workloads/semantic-layer.md) — dbt / Cube 指标中台
+- [**LLM Gateway**](ml-infra/llm-gateway.md) — LiteLLM / Portkey / Helicone 统一代理
+- [**SLA · SLO · DRE**](ops/sla-slo.md) — 数据产品可靠性工程
+- [**TCO 模型**](ops/tco-model.md) — 自建 vs 云 vs SaaS 真实成本
+
+### 业务闭环（带问题进来先看）
+- [**E2E 业务场景全景**](scenarios/business-scenarios.md) — Top 10 + 前沿 + 决策矩阵
+- [推荐系统深挖](scenarios/recommender-systems.md) · [欺诈检测](scenarios/fraud-detection.md) · [CDP 分群](scenarios/cdp-segmentation.md) · [Agentic 工作流](scenarios/agentic-workflows.md) · [Text-to-SQL 平台](scenarios/text-to-sql-platform.md)
 
 ### 选型决策（工业最常查）
-- ⭐ [**量级数字总汇**](frontier/benchmark-numbers.md) — 湖仓 / 检索 / LLM 各场景量级参考
-- ⭐ [**湖仓 20 反模式**](ops/anti-patterns.md) — 上线前自查清单
+- [**量级数字总汇**](frontier/benchmark-numbers.md) — 湖仓 / 检索 / LLM 各场景量级参考
+- [**湖仓 20 反模式**](ops/anti-patterns.md) — 上线前自查清单
 - [Feature Store 横比](compare/feature-store-comparison.md) · [OLAP 加速副本](compare/olap-accelerator-comparison.md) · [流处理引擎](compare/streaming-engines.md) · [Rerank 模型](compare/rerank-models.md) · [稀疏检索](compare/sparse-retrieval.md) · [调度系统](compare/orchestrators.md)
 
 ### 深度案例
-- ⭐ [**Netflix**](unified/case-netflix.md) · [**LinkedIn**](unified/case-linkedin.md) · [**Uber**](unified/case-uber.md) — 工业数据平台完整拆解
+- [**Netflix**](unified/case-netflix.md) · [**LinkedIn**](unified/case-linkedin.md) · [**Uber**](unified/case-uber.md) — 工业数据平台完整拆解
+
+### 前沿研究
+- [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
+- [**LLM 推理优化**](frontier/llm-inference-opt.md) — vLLM / Flash Attn / Speculative / MoE
+- [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
+- [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
+- [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — spec 演进与团队实务
+- [**Lakehouse 厂商与开源生态格局**](frontier/vendor-landscape.md) — 客观厂商对比
 
 ---
 

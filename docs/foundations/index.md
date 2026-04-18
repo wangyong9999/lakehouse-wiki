@@ -7,41 +7,44 @@ description: 存储、文件格式、计算、分布式等前置知识
 
 湖仓与多模检索系统的共同"石头地基"。先把这一节过掉，再读后面 Snapshot、ANN、向量化执行就不会卡壳。
 
-!!! tip "按时间预算选路径"
-    - **2 小时最小路径**：[对象存储](object-storage.md) → [Parquet](parquet.md) → [存算分离](compute-storage-separation.md) · 了解"湖仓存什么、怎么存、怎么算"
-    - **一周标准路径**：最小路径 + [列式 vs 行式](columnar-vs-row.md) · [向量化执行](vectorized-execution.md) · [谓词下推](predicate-pushdown.md) · [MVCC](mvcc.md) · 理解"为什么湖仓快 / 并发如何保证"
-    - **完整路径**：加上 [Arrow 生态](arrow-ecosystem.md) · [一致性模型](consistency-models.md) · [事件时间 · Watermark](event-time-watermark.md) · 覆盖流批共性
-    - **导读**（湖仓来龙去脉）：[数据系统演进史](data-systems-evolution.md) + [Modern Data Stack 全景](modern-data-stack.md) —— 不急着读，但做架构决策前翻一翻很值
+## 一条主线 · 湖仓的性能与一致性因果链
+
+这一节的核心页面**不是平行词条**，而是同一条因果链的不同层。理解这条链之后，上层内容（Iceberg commit 流程 / Trino pruning / StarRocks MV 加速 / Snapshot 时间旅行）会自然串起来。
+
+```mermaid
+flowchart TB
+  OS[对象存储语义<br/>只读不改 · 强一致 · CAS]
+  FMT[列式文件 + 编码<br/>Parquet · Dict / RLE / Zstd]
+  STAT[footer · 统计 · 索引<br/>min/max · Page Index · Bloom]
+  PUSH[谓词 / 投影下推<br/>Row Group 跳过 · 只读所需列]
+  VEC[向量化执行<br/>SIMD · 延迟解码]
+  MVCC[MVCC · 快照隔离<br/>Snapshot / Manifest CAS]
+  LAKE[湖表 + 查询引擎]
+
+  OS --> FMT --> STAT --> PUSH --> VEC --> MVCC --> LAKE
+```
+
+**湖仓"快且一致"不是某一层的魔法**——而是每层都能多剪一点数据、少抖一点一致性。上层引擎的优化经常是在这条链里换一个环节的实现（换编码、换索引、换下推时机、换 MVCC 粒度）。
+
+### 主线推荐阅读顺序（4–6 小时建立心智模型）
+
+1. [对象存储](object-storage.md) —— 湖仓地基的语义
+2. [存算分离](compute-storage-separation.md) —— 这个架构为什么能成立
+3. [Parquet](parquet.md) · [压缩与编码](compression-encoding.md) —— 文件内部怎么组织
+4. [列式 vs 行式](columnar-vs-row.md) —— 为什么 OLAP 选列式
+5. [谓词下推](predicate-pushdown.md) —— footer / 统计怎么变成"扫少"
+6. [向量化执行](vectorized-execution.md) —— 扫进来的 batch 怎么算快
+7. [MVCC](mvcc.md) · [一致性模型](consistency-models.md) —— 湖表 commit 的思想源头
+
+赶时间只读前三条（约 2 小时）也能建立最小可用心智模型；做架构评审 / 深度选型时再回来补完整 7 条。
 
 ---
 
-## 导读（历史与生态）
+## 主线之外 · 特定场景的前置
 
-> 这两篇是"战略 context"，不是技术底层。新人先跳过，做方案评审前回头读。
+- [OLTP vs OLAP](oltp-vs-olap.md) —— 两种负载的物理底层为什么相反
+- [事件时间 · Watermark · 乱序](event-time-watermark.md) —— 流处理时间维度（做流式入湖 / 实时湖仓时读）
+- [ORC](orc.md) · [Lance Format](lance-format.md) —— Parquet 之外的两种列式格式（选型对比时读）
+- [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输公共层
 
-- [**三代数据系统演进史**](data-systems-evolution.md) ⭐ —— 从关系数据库到数仓到湖仓的 50 年史
-- [**Modern Data Stack 全景**](modern-data-stack.md) ⭐ —— 现代数据栈十大环节
-
-## 技术底层 · 存储
-
-- [对象存储](object-storage.md) —— S3/GCS/OSS 语义、原子性与一致性
-- [存算分离](compute-storage-separation.md) —— 现代湖仓的架构原语
-- [Parquet](parquet.md) · [ORC](orc.md) · [Lance Format](lance-format.md) —— 三种列式格式
-- [**压缩与编码**](compression-encoding.md) ⭐ —— Zstd / Snappy / LZ4 + RLE / Dictionary / Bit-packing 的取舍
-- [列式 vs 行式存储](columnar-vs-row.md)
-
-## 技术底层 · 计算
-
-- [向量化执行](vectorized-execution.md) —— 现代 OLAP 的核心技术
-- [谓词下推](predicate-pushdown.md) —— 湖仓性能的关键机制
-- [MVCC](mvcc.md) —— 多版本并发控制，湖仓 Snapshot 的思想源头
-
-## 技术底层 · 分布式 / 并发
-
-- [OLTP vs OLAP](oltp-vs-olap.md) —— 两种负载为什么物理底层相反
-- [一致性模型](consistency-models.md) —— CAP / SI / Eventual 和湖仓的位置
-- [事件时间 · Watermark · 乱序](event-time-watermark.md) —— 流处理的时间维度
-
-## 生态协议
-
-- [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输的公共层
+> 想看"湖仓怎么来的"或"现代数据栈十大环节"这类**历史与生态视角**？移到了 [研究前沿 · 演进史](../frontier/data-systems-evolution.md) 与 [Modern Data Stack 全景](../frontier/modern-data-stack.md)。

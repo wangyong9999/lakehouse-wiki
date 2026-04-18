@@ -9,6 +9,11 @@ hide:
 
 **你的主战场**：Catalog、治理、权限、K8s、成本、迁移、多租户。整个湖仓平台是否"长治久安"在你手里。
 
+!!! note "不必深入（交给其他角色）"
+    - **SQL 优化 / OLAP 建模 / dbt / 语义层** → [BI 分析师](bi-analyst.md)
+    - **特定模型架构 / Embedding 训练 / RAG pattern** → [ML / AI 工程师](ml-engineer.md)（你只需关心它们对平台的需求：GPU / Gateway / Registry / 隔离）
+    - **单个引擎内部算法 / Compaction 调优细节** → 了解定位即可（什么负载选什么引擎）
+
 ## 必读：平台骨架
 
 - [存算分离](../foundations/compute-storage-separation.md)
