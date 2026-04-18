@@ -1,0 +1,49 @@
+name: 内容过时 / Outdated
+description: 报告某页内容因技术/产品/版本演进已过时，需要刷新
+title: "[Outdated] <页面标题>: <一句话>"
+labels: ["content/outdated", "priority/medium"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 页面路径
+      placeholder: docs/frontier/llm-inference-opt.md
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 哪部分过时了
+      description: 指出具体章节 / 段落 / 数据
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 为什么过时
+      description: 新版本发布 · 行业格局变化 · 生产数据更新 · 研究进展等
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: 参考来源
+      description: 新的官方文档 / 论文 / 博客 / benchmark 链接
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: 紧迫度
+      options:
+        - 低 - 季度 review 时处理
+        - 中 - 本月处理
+        - 高 - 导致决策错误，本周
+      default: 0
+    validations:
+      required: true
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: 你愿意提交 PR 吗
+      options:
+        - label: 我愿意提 PR 修复
+        - label: 需要原 owner 跟进

@@ -1,0 +1,39 @@
+name: 讨论 / Discussion
+description: 对某技术选型 / 范式 / 手册结构等开放讨论
+title: "[Discussion] <主题>"
+labels: ["discussion"]
+body:
+  - type: dropdown
+    id: topic
+    attributes:
+      label: 讨论主题类型
+      options:
+        - 技术选型（A vs B）
+        - 架构范式（某路线的利弊）
+        - 手册结构 / 导航
+        - 内容覆盖（该不该加某主题）
+        - 运营机制（review 节奏 / owner）
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 背景 / 现状
+      description: 一段描述现在的情况
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: 具体讨论的问题
+    validations:
+      required: true
+  - type: textarea
+    id: my_view
+    attributes:
+      label: 你的观点 / 建议（可选）
+  - type: textarea
+    id: reference
+    attributes:
+      label: 参考资料（可选）

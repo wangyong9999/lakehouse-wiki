@@ -1,7 +1,12 @@
-# 默认 owner
+# 默认 owner —— PR 默认指派
 * @wangyong9999
 
 # 分域 owner（随贡献者加入逐步填写）
+# 每章节 owner 职责：
+#   1. 审核本章 PR
+#   2. 季度 review 并更新 last_reviewed frontmatter
+#   3. 回应 [Outdated] 和 [Erratum] Issue
+#
 # /docs/lakehouse/       @user-a
 # /docs/catalog/         @user-b
 # /docs/retrieval/       @user-c
@@ -11,3 +16,12 @@
 # /docs/foundations/     @user-g
 # /docs/unified/         @user-h
 # /docs/ops/             @user-i
+# /docs/scenarios/       @user-j
+# /docs/frontier/        @user-k
+# /docs/compare/         @user-l
+
+# 模板与运营机制
+/docs/_templates/        @wangyong9999
+/ROADMAP.md              @wangyong9999
+/docs/contributing.md    @wangyong9999
+/.github/                @wangyong9999
