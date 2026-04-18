@@ -23,6 +23,13 @@ hide:
 
     两类有大量共享基础（湖表 / Feature Store / Model Serving），但**检索 / LLM 相关的内容** A 重 B 轻，**特征工程 / 训练编排 / 评估**则 B 重 A 轻。下面按 A 的主线排，B 方向的重点用"📊 Classical ML 重点"标签。
 
+!!! tip "高频任务速跳"
+    - **搭 RAG MVP** → [RAG](../ai-workloads/rag.md) · [60 分钟 RAG on Iceberg tutorial](../tutorials/rag-on-iceberg.md) · [RAG on Lake 场景](../scenarios/rag-on-lake.md)
+    - **选向量库** → [向量数据库对比](../compare/vector-db-comparison.md) · [ADR-0003 选 LanceDB](../adr/0003-lancedb-for-multimodal-vectors.md)
+    - **检索质量评估** → [检索评估](../retrieval/evaluation.md) · [RAG 评估](../ai-workloads/rag-evaluation.md)
+    - **多模流水线** → [多模检索流水线](../scenarios/multimodal-search-pipeline.md) · [文档管线](../pipelines/document-pipeline.md) · [图像管线](../pipelines/image-pipeline.md)
+    - **Feature Store / 离线训练** 📊 → [Feature Store](../ai-workloads/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md) · [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
+
 ## 入门 · 先理解"湖 + 向量"
 
 - [湖表](../lakehouse/lake-table.md)

@@ -168,9 +168,19 @@ flowchart BT
 
 </div>
 
+!!! tip "或者，直接按你手头的具体事"
+    - **选表格式** → [四大表格式对比](compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) · [ADR-0002](adr/0002-iceberg-as-primary-table-format.md)
+    - **查询慢定位** → [性能调优](ops/performance-tuning.md) · [20 反模式](ops/anti-patterns.md) · [量级数字](frontier/benchmark-numbers.md)
+    - **已有数仓做 RAG** → [RAG](ai-workloads/rag.md) · [RAG on Lake 场景](scenarios/rag-on-lake.md) · [Embedding 流水线](ai-workloads/embedding-pipelines.md)
+    - **平台权限 / 多租户** → [安全与权限](ops/security-permissions.md) · [统一 Catalog 策略](unified/unified-catalog-strategy.md) · [多租户隔离](ops/multi-tenancy.md)
+    - **小文件治理** → [Compaction](lakehouse/compaction.md) · [FAQ](faq.md)
+    - **选向量库** → [向量数据库对比](compare/vector-db-comparison.md) · [ADR-0003](adr/0003-lancedb-for-multimodal-vectors.md)
+
 ---
 
 ## 团队主线：一体化架构
+
+> 这是**本团队的推荐主线**，不是普适最优。纯 BI / 纯 OLTP / 纯 Classical ML 训练团队可以跳过整块；同时做"湖仓 + 向量检索 + 多模"的团队才需要把这里读透。
 
 <div class="grid cards" markdown>
 

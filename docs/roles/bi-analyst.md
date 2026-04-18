@@ -9,6 +9,13 @@ hide:
 
 **你的主战场**：写 SQL 出数、做报表、搭仪表盘、解释业务指标。理解湖的底层够用，**不必深到操作内核**。
 
+!!! tip "高频任务速跳"
+    - **报表跑得慢** → [谓词下推](../foundations/predicate-pushdown.md) · [性能调优](../ops/performance-tuning.md) · [查询加速](../bi-workloads/query-acceleration.md)
+    - **建语义层 / 指标中台** → [Semantic Layer](../bi-workloads/semantic-layer.md)（dbt / Cube / LookML）
+    - **选加速副本** → [OLAP 加速副本对比](../compare/olap-accelerator-comparison.md) · [物化视图](../bi-workloads/materialized-view.md)
+    - **建模（星型 / 宽表 / Data Vault）** → [OLAP 建模](../bi-workloads/olap-modeling.md)
+    - **端到端 BI on Lake** → [BI on Lake 场景](../scenarios/bi-on-lake.md)
+
 ## 必读：知道数据在哪里、怎么来
 
 - [湖表](../lakehouse/lake-table.md)（粗读即可）
