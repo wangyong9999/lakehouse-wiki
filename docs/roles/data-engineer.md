@@ -44,7 +44,17 @@ hide:
 
 ## 建议学习路径
 
-走 [一周新人路径](../learning-paths/week-1-newcomer.md) → 之后按"入湖 → 运维 → 深入某个引擎"推进。
+先走 [一周新人路径](../learning-paths/week-1-newcomer.md)（湖 + 检索心智模型）。之后按下面 4-6 周节奏推进：
+
+| 周 | 主题 | 重点页 |
+|---|---|---|
+| **Week 2** | 入湖链路：CDC / Kafka / Bulk | [Streaming Upsert · CDC](../lakehouse/streaming-upsert-cdc.md) · [Kafka 到湖](../pipelines/kafka-ingestion.md) · [Bulk Loading](../pipelines/bulk-loading.md) · [流式入湖场景](../scenarios/streaming-ingestion.md) |
+| **Week 3** | 运维日常：Compaction / 小文件 / 删除 | [Compaction](../lakehouse/compaction.md) · [Delete Files](../lakehouse/delete-files.md) · [20 反模式](../ops/anti-patterns.md) |
+| **Week 4** | 性能与可观测 | [性能调优](../ops/performance-tuning.md) · [可观测性](../ops/observability.md) · [故障排查](../ops/troubleshooting.md) |
+| **Week 5-6** | 深入一个引擎（按负载选） | [Spark](../query-engines/spark.md) · [Flink](../query-engines/flink.md) · [Trino](../query-engines/trino.md) · [DuckDB](../query-engines/duckdb.md) |
+| **后续** | 资深路径 | [一季度资深路径](../learning-paths/quarter-advanced.md) |
+
+> AI / BI 方向的同事有独立 month-1 路径；数据工程角色跨度大，按"实际在处理什么"选一两周深入即可，不必线性读完。
 
 ## 常用速查
 

@@ -9,6 +9,14 @@ hide:
 
 **你的主战场**：在湖上做检索、训练、RAG、Agent、多模。
 
+!!! tip "你是哪种 ML / AI 工程师"
+    本页覆盖两类工作，入口不同：
+
+    - **A · LLM / 检索 / Agent 方向**（以下称 **AI 工程**）：做 RAG、向量检索、Agent、多模搜索。主线：向量库 + Embedding + RAG + Agent。
+    - **B · Classical ML 方向**（以下称 **数据科学 / ML 建模**）：做 GBDT / 深度学习 / 推荐召排 / 欺诈检测。主线：Feature Store + 离线训练 + 在线服务。
+
+    两类有大量共享基础（湖表 / Feature Store / Model Serving），但**检索 / LLM 相关的内容** A 重 B 轻，**特征工程 / 训练编排 / 评估**则 B 重 A 轻。下面按 A 的主线排，B 方向的重点用"📊 Classical ML 重点"标签。
+
 ## 入门 · 先理解"湖 + 向量"
 
 - [湖表](../lakehouse/lake-table.md)
@@ -33,9 +41,21 @@ hide:
 - [Prompt 管理](../ai-workloads/prompt-management.md)
 - [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md)
 - [Semantic Cache](../ai-workloads/semantic-cache.md)
-- [Feature Store](../ai-workloads/feature-store.md)
+- [**Feature Store**](../ai-workloads/feature-store.md) 📊 **Classical ML 重点** —— 离线 / 在线一致的特征中台
 - [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
-- [微调数据准备](../ai-workloads/fine-tuning-data.md)
+- [微调数据准备](../ai-workloads/fine-tuning-data.md) 📊 Classical ML 也可借鉴（数据质量）
+
+### Classical ML · 数据科学方向补充 📊
+
+如果你做 GBDT / 深度学习 / 推荐 / 风控，下面这条线更关键：
+
+- [**Feature Store**](../ai-workloads/feature-store.md) —— PIT Join · Train-Serve Skew · Online-Offline 一致
+- [**离线训练数据流水线**](../scenarios/offline-training-pipeline.md) —— 可复现 · 点时间正确的训练集生成
+- [**Feature Serving**](../scenarios/feature-serving.md) —— 毫秒级特征在线拉取
+- [**推荐系统 · 搜索 · 发现**](../scenarios/recommender-systems.md) —— 四阶段流水线（召回 → 粗排 → 精排 → 重排）
+- [**欺诈检测**](../scenarios/fraud-detection.md) —— 四层拦截 · 样本不平衡 · 标签延迟
+- [**Classical ML 场景**](../scenarios/classical-ml.md) —— 综述
+- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md) —— 数据 → 训练 → 评估 → 上线 → 监控
 
 ## ML 基础设施
 
