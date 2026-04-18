@@ -8,3 +8,18 @@ __pycache__/
 .idea/
 .vscode/
 .cache/
+
+# Agent / tooling 工作目录
+.codex
+.codex/
+.claude/
+.aider*
+.cursor/
+.copilot/
+*.swp
+*.swo
+
+# 本地草稿
+scratch/
+tmp/
+TODO.local.md
