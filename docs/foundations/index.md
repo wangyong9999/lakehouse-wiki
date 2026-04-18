@@ -33,6 +33,13 @@ flowchart TB
 
 **湖仓"快且一致"不是某一层的魔法**——而是每层都能多剪一点数据、少抖一点一致性。上层引擎的优化经常是在这条链里换一个环节的实现（换编码、换索引、换下推时机、换 MVCC 粒度）。
 
+**从"文件"到"表"有两条落地路径**：
+
+- **两层分离（主流）**：Parquet / ORC 作纯文件格式，[Iceberg / Paimon / Hudi / Delta](../lakehouse/lake-table.md) 在上面定义多引擎共享的表协议。湖仓主流走这条；详细展开见 [`lakehouse/`](../lakehouse/index.md) 模块。
+- **文件 + 表一体（AI 时代的另一条路）**：[Lance Format](lance-format.md) 把轻量表能力（fragment / manifest / version）直接打包进文件格式，为多模 + 向量 + 随机读重做；LanceDB 在此之上加 catalog 与检索 API。
+
+两条路径不互斥：湖表生态也在把 Lance 接为 data file 格式之一（演进中）。读完基础主线之后再进 `lakehouse/`，视野会自洽。
+
 ### 主线推荐阅读顺序（4–6 小时建立心智模型）
 
 1. [对象存储](object-storage.md) —— 湖仓地基的语义
@@ -51,7 +58,8 @@ flowchart TB
 
 - [OLTP vs OLAP](oltp-vs-olap.md) —— 两种负载的物理底层为什么相反
 - [事件时间 · Watermark · 乱序](event-time-watermark.md) —— 流处理时间维度（做流式入湖 / 实时湖仓时读）
-- [ORC](orc.md) · [Lance Format](lance-format.md) —— Parquet 之外的两种列式格式（选型对比时读）
+- [ORC](orc.md) —— Parquet 之外的传统列式格式（选型对比时读）
+- [Lance Format](lance-format.md) —— AI 时代"文件 + 轻表一体化"的另一条路径（见上文主线收尾的路径对照）
 - [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输公共层
 
 > 想看"湖仓怎么来的"或"现代数据栈十大环节"这类**历史与生态视角**？移到了 [研究前沿 · 演进史](../frontier/data-systems-evolution.md) 与 [Modern Data Stack 全景](../frontier/modern-data-stack.md)。
