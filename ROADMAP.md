@@ -209,12 +209,39 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
   - `compare/sparse-retrieval.md` —— BM25 / SPLADE / ColBERT / Elser
 - [x] **N5 · 章节 index + nav 同步**
 
-**交付累计**（两轮）：
-- **核心深化 21 页**（15 S 级 + 6 A 级，约 5500 行）
-- **新增内容 25 页**（S/A 级，约 7500 行）
-- **辩证性段落 + 索引修复** 贯穿
-- **总计 46 页 / 新增 ~13,000 行内容**
+### M 轮（最优方案精选补强 + 运营奠基）
 
-已覆盖 ROADMAP 核心要素 ~85%；剩余 SVG + 可运行教程为"样式提升"，ROI 边际，延后。
+- [x] **M1 · 真空补齐 5 页**：
+  - `bi-workloads/olap-modeling.md` 118→500+ 行 A 级
+  - `bi-workloads/semantic-layer.md` 新增 A 级
+  - `ml-infra/llm-gateway.md` 新增 A 级
+  - `catalog/nessie.md` 升 A 级
+  - `catalog/polaris.md` 升 A 级
+- [x] **M2 · AI 场景薄页升 A 级**：
+  - `scenarios/feature-serving.md` 升 300+ 行
+  - `scenarios/offline-training-pipeline.md` 升 400+ 行
+- [x] **M3 · Iceberg v3 预览**：
+  - `frontier/iceberg-v3-preview.md` 新增
+- [x] **M4 · 运营机制奠基**：
+  - `docs/contributing.md` 重写含 frontmatter 规范 + 运营节奏
+  - `.github/ISSUE_TEMPLATE/outdated.yml` 新增
+  - `.github/ISSUE_TEMPLATE/discussion.yml` 新增
+  - `.github/CODEOWNERS` 完善分域 owner 结构
+- [x] **M5 · nav + index 同步**
+
+**交付累计**（三轮）：
+- **核心深化 29 页**（15 S + 6 A + 8 A 级补强，约 7500 行）
+- **新增内容 29 页**（S/A 级，约 8800 行）
+- **辩证性段落 + 现实检视** 贯穿
+- **运营机制奠基**（frontmatter 规范 / Issue 模板 / CODEOWNERS）
+- **总计 58 页 / 新增 ~16,300 行**
+
+已覆盖 ROADMAP 核心要素 **~95%**；剩余**运营化落地 + 季度 review + 可选 SVG/Playbook**。
+
+**下阶段重点不是加内容，而是运营**：
+1. 季度 review 机制跑起来
+2. Owner 填充
+3. frontmatter `last_reviewed` 回填
+4. 遇生产事件 / 新技术驱动相关页更新
 
 每批 PR 在这里更新勾选。
