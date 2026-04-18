@@ -41,10 +41,12 @@ flowchart BT
   subgraph "湖仓底座"
     direction LR
     storage[(对象存储<br/>S3/GCS/OSS)]
-    iceberg[(Iceberg / Paimon<br/>结构化表)]
-    lance[(Lance / Puffin<br/>多模 + 向量表)]
+    iceberg[(Iceberg / Paimon<br/>通用湖表)]
+    lance[(Lance<br/>多模 + 向量文件)]
+    puffin[/"Puffin<br/>(Iceberg 索引侧车)"/]
     storage --- iceberg
     storage --- lance
+    iceberg -.-> puffin
   end
 
   subgraph "Catalog（治理平面）"
