@@ -299,11 +299,11 @@ code_version: pipelines/training/recsys@v3.2.1
 | Feast materialize_incremental 预计算 | 5-10× |
 | Lance 替代 Parquet（多 epoch） | 3-10× 训练读速度 |
 
-### 实际业务案例
+### 实际业务案例（带来源）
 
-- **Uber Michelangelo**：日产训练集 5000+ 个，PIT 框架化
-- **LinkedIn**：数百 TB 日训练集，Feathr + Spark + Lance
-- **字节 / 阿里**：内部 FS 处理百亿级样本
+- **Uber Michelangelo**：日产训练集 5000+ 个 · PIT 框架化 · 引自 [Uber Engineering 2017-2020 系列博客](https://www.uber.com/blog/michelangelo-machine-learning-platform/)（**数字约 2019-2020 时期，2026 实际不详**）
+- **LinkedIn Feathr**：Spark + Lance 栈 · 引自 [LinkedIn 2022 开源 Feathr 博客](https://engineering.linkedin.com/blog/2022/open-sourcing-feathr---linkedin-s-feature-store-for-productive-m)（数百 TB 量级为参考）
+- **字节 / 阿里**：内部 Feature Store 处理百亿级样本 · **基于公开技术分享推断**，未经官方确认的精确数字
 
 ## 6. 代码示例
 

@@ -208,7 +208,7 @@ CALL system.remove_orphan_files('db.sales');
 | metadata.json 大小 | 10k snapshots | 几 MB（需 expire） |
 | 单表规模 | PB 级 | Netflix 某表 > 10 PB |
 
-**Netflix 数据点**（2022 公开博客）：
+**Netflix 数据点**（引自 [Netflix Tech Blog · 2022](https://netflixtechblog.com/incremental-processing-using-netflix-maestro-and-apache-iceberg-b8ba072ddeeb) 及 Iceberg Summit 2022 演讲，**2024+ 实际规模未公开更新**）：
 - 全司 Iceberg 表 > 10 万张
 - 最大表 PB 级、数十亿 data files
 - Planning 从 Hive 的分钟级降到 Iceberg 的秒级

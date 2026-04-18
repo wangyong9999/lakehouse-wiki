@@ -2,6 +2,9 @@
 title: 量级数字总汇 · Benchmark Numbers at a Glance
 type: reference
 depth: 进阶
+level: A
+last_reviewed: 2026-04-18
+applies_to: 2024-2026 主流栈 · 硬件参考 H100 / A100 / NVMe
 tags: [frontier, benchmark, reference]
 aliases: [基准数字, Performance Cheat Sheet]
 status: stable
@@ -10,13 +13,18 @@ status: stable
 # 量级数字总汇
 
 !!! tip "一句话定位"
-    **团队决策时"心里有数"的数字一览**。不是精确 benchmark，是**量级参考**——让你快速判断"这个目标合理吗 / 那个延迟能做到吗 / 这个规模选哪个方案"。所有数字都注明来源和规模前提。
+    团队决策时"心里有数"的数字一览。**量级参考**（数量级 ~ ±2-5×）· **非精确 benchmark**。
 
 !!! warning "使用方法"
-    - 数字是**量级**（数量级 ~ ±2×），不是精确值
-    - **自家业务数据 benchmark 永远最权威**
-    - 版本升级、硬件迭代可能让数字 2-5× 变化
-    - 每半年刷新一次此页
+    - 数字仅为**数量级**（上下浮动 2-5× 常见）
+    - **自家业务 benchmark 永远是最终依据**
+    - 版本升级 / 硬件迭代 / 数据分布都会带来显著变化
+    - 本页每半年 review 一次；数字来源见每段标注
+
+**可信度标注**：
+- 🔵 引自官方 spec / benchmark
+- 🟢 公开博客 / 论文（注明来源）
+- 🟡 经验估算（多家工程师共识的量级）
 
 ## 1. 湖仓 / 表格式
 

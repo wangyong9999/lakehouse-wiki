@@ -320,11 +320,11 @@ spark.read.table("iceberg.features.user_stats") \
 | Materialization 吞吐 | 10k - 100k rows/s |
 | 日活 Materialize 频率 | 热特征分钟、冷特征小时 |
 
-### 工业案例
+### 工业案例（数据时效说明）
 
-- Uber Michelangelo Palette：3000+ 特征 · p99 < 15ms
-- LinkedIn Venice：数百万 QPS · p99 < 5ms
-- 某电商推荐：500 个在线特征 · p99 20ms 端到端
+- **Uber Michelangelo Palette**：3000+ 特征 · p99 < 15ms · 引自 [Uber Engineering Blog · 2022](https://www.uber.com/blog/michelangelo-machine-learning-platform/)（2024+ 规模未公开）
+- **LinkedIn Venice**：数百万 QPS · p99 < 5ms · 引自 [LinkedIn Engineering · 2022](https://engineering.linkedin.com/blog/topic/venice)
+- "某电商推荐：500 个在线特征 · p99 20ms 端到端" —— **工程经验估算**，不是特定公开来源 · 具体规模依业务差异极大
 
 ## 10. 可部署参考
 

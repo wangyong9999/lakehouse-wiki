@@ -236,9 +236,11 @@ SELECT * FROM orders /*+ OPTIONS(
 | 单表规模 | | TB - 几十 TB（超大建议分表） |
 | Snapshot 频率 | | 1-5 分钟 / commit |
 
-**阿里内部案例**（公开）：
+**阿里内部案例**（引自 [Paimon 官方博客 · 2023-2024](https://paimon.apache.org/blog/) 与 Flink Forward Asia 公开演讲）：
 - 某电商 CDC 入湖：MySQL 千万级日变更，Paimon 端到端 3 分钟可查
 - 某短视频：用户画像 partial-update 聚合 10+ 个源，lookup mode 延迟 5 分钟
+
+> 具体数据规模和硬件未公开 —— 自家场景请以 Paimon 1.0 GA release notes 和公开 benchmark 为基线。
 
 ## 6. 代码示例
 
