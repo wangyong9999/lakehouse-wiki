@@ -1,6 +1,9 @@
 ---
-title: Iceberg REST Catalog
+title: Iceberg REST Catalog · 跨引擎元数据协议
 type: system
+depth: 资深
+level: S
+applies_to: Iceberg REST Catalog spec v1（2024+）
 tags: [catalog, iceberg, protocol]
 category: catalog
 repo: https://github.com/apache/iceberg
@@ -11,55 +14,319 @@ status: stable
 # Iceberg REST Catalog
 
 !!! tip "一句话定位"
-    Iceberg 官方定义的 **HTTP/REST 层 Catalog 协议**。把"表在哪里、哪个 snapshot 是当前的、怎么 commit"标准化为一套 API，任何实现遵守协议即可互通。正在成为取代 HMS 的事实标准。
+    Iceberg 官方定义的 **HTTP/REST 层 Catalog 协议**。把"表在哪里、哪个 snapshot 是当前的、怎么 commit"标准化为一套 API——任何实现遵守协议即可互通。**正在取代 HMS 成为 Lakehouse 的 Catalog 事实标准**。
 
-## 它解决什么
+!!! abstract "TL;DR"
+    - **HTTP/REST 协议** + JSON body，引擎端用同一个 `RESTCatalog` 客户端
+    - 解决**引擎 × Catalog 矩阵爆炸**（以前每个引擎 × 每个 Catalog 各自实现）
+    - **CAS 提交**规范化——所有实现都做同一套并发冲突检测
+    - 协议层支持：**namespaces / tables / views / snapshot commit / config**
+    - **权限 / 多租户**协议留给实现方（OAuth + Bearer token 是常规选择）
+    - **实现方**：Apache Polaris · Nessie · Gravitino · Tabular · Snowflake Open Catalog · Databricks Unity OSS 版
 
-早期 Iceberg 每家 Catalog 自己一套实现：HiveCatalog、GlueCatalog、JDBCCatalog、NessieCatalog… 引擎端要各自适配。对上游使用者：
+## 1. 它解决什么 · Catalog 混战时代
 
-- 想在云 A 用 Glue、云 B 用自研 Catalog？引擎得两份代码
-- 想自己做一个轻量 Catalog 服务？没有标准 API 可参考
-- 企业想托管 Catalog 给多租户用？没有统一协议
+早期 Iceberg 每家 Catalog 自己一套实现：
+- HiveCatalog（接 HMS）
+- GlueCatalog（接 AWS Glue）
+- JDBCCatalog（自己用 MySQL/PG）
+- NessieCatalog（接 Nessie）
+- HadoopCatalog（file-based）
 
-REST Catalog 把这些问题统一：**一份协议，任何实现自取**。
+引擎端的挑战：
+- **Spark Iceberg 扩展**要适配 N 种 Catalog 实现 → 代码膨胀
+- **Trino Iceberg Connector** 同样要一一适配
+- **跨云**（A 云用 Glue、B 云用自建）→ 两份代码
+- **想自建 Catalog 服务** → 没有标准 API 可遵循
 
-## 协议能力
+**REST Catalog 的价值**：一份协议，任意实现，引擎端只认协议。
 
-主要 endpoint：
+### 对比 HMS 的优势
 
-| 类别 | endpoint 示例 |
-| --- | --- |
-| namespace | `GET /v1/namespaces` / `POST` / `DELETE` |
-| table | `GET /v1/{ns}/tables/{t}` / `POST` / `DELETE` / `PUT`（rename） |
-| snapshot | `POST /v1/{ns}/tables/{t}/commit` |
-| config | `GET /v1/config` |
-| view | `GET /v1/{ns}/views/{v}` |
+| 维度 | Hive Metastore | Iceberg REST Catalog |
+|---|---|---|
+| 协议 | Thrift（老、贵） | HTTP/REST + JSON |
+| 多租户 | 弱 | 内建（OAuth） |
+| 扩展性 | 锁定 Hive schema | 协议可演进 |
+| 云原生 | 自部署 thrift server | 容器化 friendly |
+| Commit 语义 | 表锁 | CAS 返回 409 冲突重试 |
+| 生态 | 逐渐淘汰 | 所有主流引擎都支持 |
 
-引擎（Spark / Trino / Flink）通过 `org.apache.iceberg.rest.RESTCatalog` 连接，URL 是服务端地址。
+### 工业现状（2024-2025）
 
-## 实现方
+- **Snowflake** 开源 **Apache Polaris** 作为参考实现
+- **Databricks** 把 **Unity Catalog** 部分开源（也兼容 Iceberg REST）
+- **Tabular**（Ryan Blue 团队）商业化托管 REST Catalog
+- **Nessie** 既有自有 API 也暴露 Iceberg REST
+- **Gravitino** 作为元数据统一层，也实现 Iceberg REST
 
-- **Tabular / Snowflake Open Catalog / Databricks UC** —— 商业服务
-- **Apache Polaris**（Snowflake 开源） —— 开源参考实现
-- **Apache Gravitino** —— 多引擎 / 多格式的统一元数据层，支持 Iceberg REST
-- **Nessie** —— 同时暴露自有协议和 Iceberg REST
-- **自研** —— 一些公司基于 Iceberg 社区参考实现包装内部服务
+REST Catalog 已成**Iceberg 生态的新默认**。
 
-## 为什么重要
+## 2. 协议深挖
 
-对"多模一体化湖仓"路线的影响特别大：
+### 端点总览
 
-- 把**引擎和元数据解耦**后，团队可以独立演进 Catalog 能力（分支、权限、多模资产管理）
-- 新能力（比如"向量表"作为一类表资产）可以通过 REST 协议扩展而不影响引擎
-- 跨云 / 跨区域场景只需部署 REST Catalog 服务即可统一管理
+| 类别 | 示例 | 作用 |
+|---|---|---|
+| Config | `GET /v1/config` | 客户端初始化、协议能力协商 |
+| Namespace | `GET/POST/DELETE /v1/namespaces` | 数据库级 |
+| Table | `GET/POST/DELETE /v1/{ns}/tables/{t}` | 表 CRUD |
+| Rename | `POST /v1/tables/rename` | 改名 |
+| **Commit** | `POST /v1/{ns}/tables/{t}` | 原子提交新 metadata |
+| Update | `POST /v1/{ns}/tables/{t}/metrics` | 统计上报 |
+| View | `GET/POST/DELETE /v1/{ns}/views/{v}` | View 管理 |
+| Transaction | `POST /v1/transactions/commit` | 多表事务 |
 
-## 陷阱与坑
+### 提交流程（CAS 语义）
 
-- **协议在演进**：关注 Iceberg 社区的协议版本，老版本客户端和新版本服务端的兼容不一定完美
-- **认证 / 多租户**：协议本身规定较松，OAuth / Bearer Token 是常见做法，实现时要一致
-- **commit 性能**：commit 路径的延迟和并发设计是服务端实现的核心差异
+```mermaid
+sequenceDiagram
+  participant C as Client (Spark/Trino)
+  participant R as REST Catalog
+  participant O as Object Store
+  C->>R: GET /v1/ns/tables/t  (读当前 metadata)
+  R-->>C: metadata v42 + base-location
+  C->>O: 写新 data files + metadata v43
+  C->>R: POST /v1/ns/tables/t<br/>body: {updates, requirements: [AssertCurrentMeta=v42]}
+  alt requirements 满足（没人并发修改）
+    R-->>C: 200 OK + new metadata v43
+  else 别人已提交 v43
+    R-->>C: 409 Conflict (CommitFailedException)
+    C->>C: retry or rebase
+  end
+```
 
-## 延伸阅读
+**关键**：`requirements` 字段是 CAS 的核心——提交时告诉服务端"我基于 v42 算的这次改动，请确保当前还是 v42"。
 
-- Iceberg REST Catalog spec: <https://iceberg.apache.org/docs/latest/rest-catalog/>
-- Apache Polaris: <https://github.com/apache/polaris>
+### 请求 / 响应示例
+
+**创建表**：
+
+```http
+POST /v1/namespaces/db/tables
+Content-Type: application/json
+
+{
+  "name": "orders",
+  "schema": {...},
+  "partition-spec": [{"name": "days_ts", "transform": "day", "source-id": 5}],
+  "properties": {"format-version": "2"}
+}
+```
+
+**Commit**（写入）：
+
+```http
+POST /v1/namespaces/db/tables/orders
+{
+  "requirements": [
+    {"type": "assert-ref-snapshot-id", "ref": "main", "snapshot-id": 1234}
+  ],
+  "updates": [
+    {"action": "add-snapshot", "snapshot": {...}},
+    {"action": "set-snapshot-ref", "ref-name": "main", "type": "branch", "snapshot-id": 1235}
+  ]
+}
+```
+
+### 协议支持的高级能力
+
+- **Branches / Tags**（Iceberg v2+）
+- **View（视图）**（v2+）
+- **Multi-table Transaction**（一个原子提交跨多张表）
+- **Vended Credentials**（服务端签发临时 S3 token，客户端不持长期 credential）
+
+## 3. 关键机制
+
+### 机制 1 · Vended Credentials
+
+安全机制：客户端**不直接持有**S3 长期 credential。
+
+```
+Client --auth--> REST Catalog
+REST Catalog --sts--> AWS STS (权限范围限定在此表)
+REST Catalog --> Client: 临时 token (TTL = 15 min)
+Client --temp token--> S3
+```
+
+好处：
+- 最小权限（每张表独立 token）
+- 审计每次数据访问
+- 多租户隔离
+
+### 机制 2 · 多租户隔离
+
+```
+Warehouse A  → Namespace A1, A2 ...
+Warehouse B  → Namespace B1, B2 ...
+```
+
+每个 Warehouse 独立 S3 bucket prefix + 独立 IAM Role。
+
+### 机制 3 · 协议扩展能力
+
+协议**预留扩展点**：
+- Custom metadata properties
+- 自定义 Request Body 字段（backward-compatible）
+- Signal capabilities in `/v1/config`
+
+例：新能力"向量索引"可以作为一类表资产，Catalog 实现支持就行，协议端不改。
+
+## 4. 工程细节
+
+### 典型部署
+
+```
+Client (Spark/Trino/Flink)
+        │ HTTPS
+        ↓
+Load Balancer
+        │
+        ↓
+REST Catalog Service (Polaris / 自研)
+        │
+        ├── Metadata DB (Postgres / MySQL / DynamoDB)
+        ├── IAM / OAuth
+        └── S3 (数据)
+```
+
+### 客户端配置
+
+**Spark**：
+
+```scala
+spark.conf.set("spark.sql.catalog.my_cat", "org.apache.iceberg.spark.SparkCatalog")
+spark.conf.set("spark.sql.catalog.my_cat.type", "rest")
+spark.conf.set("spark.sql.catalog.my_cat.uri", "https://catalog.corp/v1")
+spark.conf.set("spark.sql.catalog.my_cat.warehouse", "s3://my-lake/warehouse")
+spark.conf.set("spark.sql.catalog.my_cat.credential", "client:secret")
+```
+
+**Trino**：
+
+```properties
+connector.name=iceberg
+iceberg.catalog.type=rest
+iceberg.rest-catalog.uri=https://catalog.corp/v1
+iceberg.rest-catalog.security=OAUTH2
+iceberg.rest-catalog.oauth2.credential=client:secret
+```
+
+**PyIceberg**：
+
+```python
+from pyiceberg.catalog.rest import RestCatalog
+catalog = RestCatalog(
+    "prod",
+    uri="https://catalog.corp/v1",
+    warehouse="s3://my-lake/warehouse",
+    credential="client:secret",
+)
+```
+
+### 生产配置建议
+
+- **HA**：REST Catalog 服务至少 3 副本 + Load Balancer
+- **Metadata DB**：Postgres 主从 + 定时备份
+- **缓存**：客户端 metadata cache TTL 30s-5min（Iceberg 原生支持）
+- **限流**：按 client ID 限 commit QPS（避免雪崩）
+- **审计**：所有 commit / read 写 audit log
+
+## 5. 性能数字
+
+| 操作 | 典型延迟 |
+|---|---|
+| Load Table（读当前 metadata） | 5-30ms |
+| Commit（CAS 成功） | 10-100ms |
+| Commit（冲突重试） | +几十 ms 每次 |
+| Namespace list | < 10ms |
+| QPS（单 REST 节点） | 1k-5k |
+| Metadata DB 规模 | 10k+ tables 健康 |
+
+## 6. 代码示例
+
+### pyiceberg 端到端
+
+```python
+from pyiceberg.catalog.rest import RestCatalog
+from pyiceberg.schema import Schema
+from pyiceberg.types import NestedField, LongType, StringType, TimestampType
+import pyarrow as pa
+
+catalog = RestCatalog(
+    "prod",
+    uri="https://catalog.corp/v1",
+    warehouse="s3://my-lake/warehouse",
+)
+
+# 建表
+schema = Schema(
+    NestedField(1, "id", LongType(), required=True),
+    NestedField(2, "name", StringType()),
+    NestedField(3, "ts", TimestampType()),
+)
+catalog.create_table("db.users", schema=schema)
+
+# 读表
+table = catalog.load_table("db.users")
+df = table.scan(row_filter="id > 100").to_pandas()
+
+# 写表
+data = pa.Table.from_pydict({"id": [1, 2], "name": ["a", "b"], "ts": [...]})
+table.append(data)
+```
+
+### Spark 用法
+
+```sql
+-- 使用 REST Catalog 的表
+CREATE TABLE my_cat.db.orders (
+  order_id BIGINT,
+  amount   DECIMAL(18,2),
+  ts       TIMESTAMP
+) USING iceberg
+PARTITIONED BY (days(ts));
+
+-- Time Travel
+SELECT * FROM my_cat.db.orders VERSION AS OF 123456;
+```
+
+### Trino 用法
+
+```sql
+SHOW CATALOGS;
+USE my_cat.db;
+SHOW TABLES;
+SELECT * FROM orders WHERE ts >= DATE '2024-12-01';
+```
+
+## 7. 陷阱与反模式
+
+- **OAuth 配置错误**：客户端和服务端端点 / scope 不一致 → 403
+- **忽略 Vended Credentials**：直接给客户端长期 S3 Key → 权限泄露风险
+- **Commit 重试死循环**：冲突率高时 naive retry → CPU 飙；应加 **指数退避** + **rebase**
+- **Metadata DB 单点**：REST Service 多副本但 DB 没 HA → 单点故障
+- **协议版本错配**：客户端用新协议、服务端旧 → `/v1/config` 协商必做
+- **没做审计**：合规查不回"谁改了哪张表"
+- **跨 Warehouse 跨账号**：S3 Bucket Policy 没配对 → Access Denied
+- **长 Commit 未超时**：客户端挂起 → 资源泄露；服务端 timeout 30s
+
+## 8. 横向对比 · 延伸阅读
+
+- [Catalog 全景对比](../compare/catalog-landscape.md) —— HMS / REST / Nessie / Unity / Polaris / Gravitino
+- [Iceberg](../lakehouse/iceberg.md) —— 协议背后的表格式
+- [Nessie](nessie.md) / [Polaris](polaris.md) / [Unity Catalog](unity-catalog.md) / [Gravitino](gravitino.md) —— REST 实现方
+
+### 权威阅读
+
+- **[Iceberg REST Catalog Spec](https://iceberg.apache.org/docs/latest/rest-catalog/)** —— 官方协议
+- **[OpenAPI 定义](https://github.com/apache/iceberg/blob/main/open-api/rest-catalog-open-api.yaml)** —— 可生成 client
+- **[Apache Polaris](https://github.com/apache/polaris)** —— Snowflake 开源参考实现
+- **[Tabular Catalog Blog](https://www.tabular.io/blog/)** · **[Databricks Unity Catalog OSS](https://www.unitycatalog.io/)**
+- **[Nessie Iceberg REST 集成](https://projectnessie.org/)**
+
+## 相关
+
+- [湖表](../lakehouse/lake-table.md) · [Iceberg](../lakehouse/iceberg.md)
+- [Unity Catalog](unity-catalog.md) · [Nessie](nessie.md) · [Polaris](polaris.md) · [Gravitino](gravitino.md)
+- [Catalog 全景对比](../compare/catalog-landscape.md)
