@@ -1,86 +1,272 @@
 ---
-title: DiskANN
+title: DiskANN · 磁盘友好的十亿级 ANN
 type: concept
-tags: [retrieval, vector, ann, index]
+depth: 资深
+level: A
+applies_to: Microsoft DiskANN 0.7+, Milvus 2.4+ DiskANN 索引
+tags: [retrieval, vector, ann, index, ssd]
 aliases: [Vamana]
 related: [hnsw, ivf-pq, vector-database]
-systems: [milvus, faiss]
+systems: [milvus, faiss, diskannpy]
 status: stable
 ---
 
-# DiskANN
+# DiskANN · 磁盘友好的十亿级 ANN
 
 !!! tip "一句话理解"
-    **把向量索引放到 SSD 上**仍然能做到毫秒级检索。核心是 Microsoft 的 **Vamana** 图结构——为"随机读 SSD"优化，内存只放少量图元数据，主力数据在磁盘上。是"十亿级向量 + 成本敏感"场景的最优解。
+    **把 ANN 索引放到 NVMe SSD 上仍然毫秒级检索**。Microsoft 2019 NeurIPS 论文 + Vamana 图结构。HNSW 精度高但吃内存；IVF-PQ 省内存但精度损失；**DiskANN 是十亿级 + 成本敏感场景的第三条路**。
 
-## 它为什么出现
+!!! abstract "TL;DR"
+    - **核心**：**Vamana 图** + 磁盘友好布局，内存只放 ~10% 索引元数据
+    - **规模甜点**：**1 亿 - 100 亿向量**、NVMe SSD 可用
+    - **精度**：Recall 95-99%（略低于 HNSW 的 99%+）
+    - **延迟**：p99 2-10ms（比 HNSW 慢几倍，但内存省 10×）
+    - **硬件要求**：**NVMe 必须**，SATA SSD / HDD 完全不可行
+    - **增量弱**：FreshDiskANN 变种支持，但主路径仍是批建
 
-HNSW 精度高但内存吃满（全部向量 + 图结构在 RAM）；IVF-PQ 省内存但精度有损。**DiskANN 是第三条路**：精度接近 HNSW，但 90% 以上的数据放 SSD。
+## 1. 为什么需要 DiskANN
 
-适用场景：
+### 十亿级向量的规模墙
 
-- **十亿级向量**
-- **NVMe SSD 价格远低于 RAM**
-- **单机扛（不想分布式）**
+| 方案 | 1B × 768d 需要 |
+|---|---|
+| HNSW in-memory | **3 TB RAM** → 需分布式或放弃 |
+| IVF-PQ（压缩 20×）| 150 GB RAM → **单机可行但精度降** |
+| **DiskANN** | ~200 GB NVMe + **30 GB 内存** → 单机、高精度 |
 
-## 核心机制：Vamana 图
+**DiskANN 的价值**：**在普通商用硬件上（单机 + NVMe）搞定十亿级向量检索**。
 
-Vamana 和 HNSW 都是"图 + 贪心搜索"，但：
+### Microsoft 的贡献
 
-- **单层图**（HNSW 是分层）—— 简化磁盘布局
-- **α 修剪**（pruning）构建时只保留"真正必要"的边，使得搜索路径短
-- **磁盘友好的布局**：节点 + 邻居列表 + 原始向量打包在一起，一次 SSD read 拿到够走下一步的信息
+DiskANN 论文（NeurIPS 2019）提出：
+- **Vamana 图** 作为可磁盘化的图索引
+- **α-RNG pruning**（极端值修剪）让图稀疏
+- **随机入口点 + 贪心搜索**
+- **布局优化**让每次 SSD 读效率最大化
 
-查询过程：
+后续扩展（FreshDiskANN / Filtered DiskANN / OOD-DiskANN 等）持续发展。
 
-1. 内存里存一小部分 navigation 节点（用于入口）
-2. 从入口开始贪心走图；每一跳读一块 SSD
-3. 典型 10–20 次 SSD read 到达查询点附近
-4. 按查询向量对候选做精确距离计算
+## 2. Vamana 图结构
 
-## 性能特点
+HNSW 和 Vamana 都是"图 + 贪心搜索"，但：
 
-| 维度 | HNSW | DiskANN |
-| --- | --- | --- |
-| 内存 | 全量 | 少量（~10%） |
-| 存储 | 内存 | SSD（NVMe 最佳） |
-| 查询 latency | p95 < 1ms | p95 2–10ms |
-| 构建时间 | 中 | 慢 |
-| 规模上限 | ~亿 | ~百亿 |
+### HNSW vs Vamana
 
-## 变种
+| | HNSW | Vamana（DiskANN） |
+|---|---|---|
+| 层数 | 多层（log N 层） | **单层** |
+| 边选择 | 最近邻 M 个 | **α-RNG 修剪** |
+| 查询入口 | 固定顶层 entry | 随机 / 特定 entry |
+| 布局 | 指针散乱 | **邻居 + 原向量打包** |
+| 适合 | 内存 | **SSD** |
 
-- **FreshDiskANN** —— 支持增量插入
-- **Filtered DiskANN** —— 带元数据过滤的图搜索（filter-aware）
-- **DiskANN + 量化** —— 结合 PQ 进一步压缩
+### α-RNG Pruning（核心创新）
 
-## 在 OSS 里
+构建边时不是简单取最近 M 个邻居，而是**修剪"冗余"边**：
 
-- **Faiss** —— 有 DiskANN 风格实现
-- **Milvus** —— 原生支持 DiskANN 索引类型
-- **LanceDB** —— 路线图中
-- **Qdrant** —— 目前主走 HNSW（内存优先）
+```
+对每个节点 v，候选邻居按距离排序
+对每个候选 c：
+  如果 c 距离 < α × (现有邻居到 c 的距离)：
+    加 c 为邻居
+  否则：
+    跳过（冗余）
+```
 
-## 什么时候选 DiskANN
+**效果**：图稀疏但"覆盖方向"完整——搜索跳几次就能到达。
 
-- **向量规模 > 1 亿**，RAM 装不下
-- **NVMe SSD 充足**（DiskANN 极依赖 SSD 随机读性能，机械盘完全不可行）
-- **能接受较长建索引时间**
-- **recall 目标 95%–99%**（稍低于 HNSW 的上限）
+`α` 越大图越稀疏（α=1.0 是严格 RNG，2024 典型 α=1.2-1.4）。
 
-## 陷阱
+### 磁盘友好布局
 
-- **不是 NVMe 的 SSD 会很惨**：每次查询十几次 IO，SATA SSD 会打到 100ms 以上
-- **增量写支持弱**：主路径仍然是"批量建 + 定期重建"
-- **构建内存需求**：建索引时内存不低，可能 > 运行时
+每个节点在磁盘上的记录：
+```
+[node_id] [num_neighbors] [neighbor_id × K] [original_vector (float)]
+```
+
+一次随机读 SSD（~4KB 页）拿到：
+- 当前节点的邻居列表（下一跳候选）
+- 当前节点的原始向量（精确距离计算）
+
+每跳只需 1 次 SSD read → **总查询 = 10-20 次 SSD read**。
+
+### 内存侧（PQ-compressed）
+
+完整原向量只在 SSD，内存仅存：
+- **PQ 压缩版本**（用于搜索时快速距离估计）
+- 少量 entry 点（导航起点）
+
+**典型内存占用 = 总数据的 10-15%**。
+
+## 3. 查询流程
+
+```
+1. Query vector q 进来
+2. 用 PQ 版本在内存中快速找到几个候选 entry 点
+3. 从 entry 点开始贪心搜索：
+   a. 对当前节点：读 SSD 拿邻居列表
+   b. 计算 q 到邻居 PQ 压缩向量的距离（快）
+   c. 取 top ef 候选进入 next iter
+   d. 每 K 次迭代，用完整向量（读 SSD）验证一次
+4. 终止：ef 队列里全是已访问节点
+5. 返回 topK
+```
+
+**关键**：
+- **大部分迭代只用 PQ 距离**（快）
+- **少量迭代用精确距离**（从 SSD 拿原向量）
+- **总 SSD I/O**：10-50 次
+
+## 4. 性能对比
+
+| 维度 | HNSW | IVF-PQ | DiskANN |
+|---|---|---|---|
+| 内存 | 全量 | 全量（压缩）| **~10% + PQ** |
+| 存储 | 内存 | 内存 | **SSD** |
+| 查询 p99 | < 1ms | 5-20ms | **2-10ms** |
+| 构建时间 | 中 | 中 | **慢** |
+| 增量 | 友好 | 不友好 | 弱（FreshDiskANN 支持）|
+| 规模上限 | ~亿（单机）| ~百亿 | **~百亿单机** |
+| Recall 上限 | 99%+ | 95-99% | 95-99% |
+
+## 5. 工程要点
+
+### 硬件要求（必看）
+
+- **NVMe SSD**：随机读 IOPS > 100k（SATA SSD **只有 10k**，DiskANN 查询会崩到 100ms+）
+- **NVMe 模型**：Intel Optane / Samsung 980 Pro / Micron 9400 等
+- **内存**：总向量 × d × 4 的 10-20%（PQ 压缩后 + 图元数据）
+- **CPU**：查询是 CPU-bound 的距离计算 + SSD I/O
+
+### 核心参数
+
+| 参数 | 含义 | 典型 |
+|---|---|---|
+| `R` (max degree) | 图每个节点最大邻居数 | 64-128 |
+| `L` (build) | 构建时候选队列大小 | 100-200 |
+| `α` | 修剪参数 | 1.2-1.4 |
+| `Ls` (search) | 查询时候选队列大小 | 50-200 |
+| `B` | PQ 每向量字节数 | 64-128 |
+
+### 规模 vs 资源
+
+| 规模 | 内存 | NVMe 存储 | 构建时间 |
+|---|---|---|---|
+| 1 亿 × 128d | 5-8 GB | 50 GB | 1-2 小时 |
+| 10 亿 × 128d | 30-50 GB | 500 GB | 10-15 小时 |
+| 100 亿 × 128d | 200-300 GB | 5 TB | 分布式或几天 |
+
+## 6. 变种
+
+### FreshDiskANN（2021）
+
+- 支持**在线插入 / 删除**
+- 内存 delta + 后台合并
+- 工业生产场景必备
+
+### Filtered DiskANN（2023）
+
+- 带 metadata filter 的搜索（类似 HNSW filter-aware）
+- 支持 pre-filter / in-filter 策略
+
+### OOD-DiskANN
+
+- 针对"查询分布 ≠ 索引分布"的场景优化
+
+## 7. 代码示例
+
+### diskannpy (Python)
+
+```python
+import diskannpy as dap
+
+# 构建（批）
+dap.build_disk_index(
+    data_file="vectors.fbin",
+    index_prefix_path="index/",
+    complexity=100,
+    graph_degree=64,
+    search_memory_maximum=50,
+    build_memory_maximum=100,
+    vector_dtype=dap.VectorDType.FLOAT32,
+    distance_metric="l2",
+)
+
+# 查询
+index = dap.StaticDiskIndex(
+    index_directory="index/",
+    num_threads=16,
+    num_nodes_to_cache=10000,
+    distance_metric="l2"
+)
+neighbors, distances = index.search(
+    query=q_vec, k_neighbors=10, complexity=50
+)
+```
+
+### Milvus
+
+```python
+col.create_index(
+  field_name="vec",
+  index_params={
+    "index_type": "DISKANN",
+    "metric_type": "L2",
+    "params": {
+      "search_list": 100,
+      "beam_width_ratio": 4.0
+    }
+  }
+)
+```
+
+## 8. 现实检视 · 2026 视角
+
+### 适用场景
+
+- **百亿级向量**：DiskANN 几乎是**唯一的单机可行方案**
+- **成本敏感**：NVMe 价格 1/10 RAM
+- **离线 / 半离线**：批建索引、查询为主
+- **Recall 95-99%** 业务可接受
+
+### 不适合
+
+- **实时 upsert 频繁**：FreshDiskANN 有用但成本高
+- **Recall > 99.5%**：选 HNSW
+- **硬件受限**：没有 NVMe 别尝试
+- **中小规模**：< 1 亿用 HNSW 就够
+
+### 工业实际部署
+
+- **Microsoft**：Bing / Azure Cognitive Search 用
+- **Milvus DiskANN**：2024+ 成熟，企业级
+- **Pinecone / Weaviate**：走内存路线为主，未采用 DiskANN
+
+### 2024-2025 进展
+
+- **SPANN (SIGMOD 2021)** 是 DiskANN 的竞争者，思路类似但结构略有差异
+- **ScaNN + SSD** 变体也在研究
+- 主流向量库**把 DiskANN 作为可选索引**而非默认
+
+## 9. 陷阱
+
+- **SATA SSD 以为能用**：随机读 IOPS 不够，性能完全崩
+- **RAM 不够存 PQ**：实际上 PQ 也要内存（10-15% 数据量）
+- **构建内存估不足**：建索引时峰值内存 > 运行
+- **增量写用批 DiskANN**：重建成本爆；用 FreshDiskANN
+- **NVMe 共享文件系统**：I/O 延迟上涨，影响查询
+- **调参照搬 HNSW 思路**：R / α / Ls 有各自最佳实践
+
+## 10. 延伸阅读
+
+- **[*DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node* (NeurIPS 2019)](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/)**
+- **[*FreshDiskANN* (2021)](https://arxiv.org/abs/2105.09613)**
+- **[Filtered DiskANN (SIGMOD 2023)](https://dl.acm.org/doi/10.1145/3588931.3615606)**
+- **[DiskANN GitHub](https://github.com/microsoft/DiskANN)**
+- **[DiskANN 论文笔记](../frontier/diskann-paper.md)**
+- **[向量检索前沿](../frontier/vector-trends.md)**
 
 ## 相关
 
-- [HNSW](hnsw.md) / [IVF-PQ](ivf-pq.md)
+- [HNSW](hnsw.md) · [IVF-PQ](ivf-pq.md) · [向量数据库](vector-database.md)
 - [ANN 索引对比](../compare/ann-index-comparison.md)
-- [向量数据库](vector-database.md)
-
-## 延伸阅读
-
-- *DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node* (NeurIPS 2019)
-- *FreshDiskANN: A Fast and Accurate Graph-Based ANN Index for Streaming Similarity Search* (2021)

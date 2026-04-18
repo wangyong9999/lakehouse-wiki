@@ -1,6 +1,9 @@
 ---
 title: Apache Hudi
 type: system
+depth: 资深
+level: A
+applies_to: Hudi 0.14+ / 1.0 GA
 tags: [lakehouse, table-format, streaming]
 category: table-format
 repo: https://github.com/apache/hudi
@@ -11,52 +14,253 @@ status: stable
 # Apache Hudi
 
 !!! tip "一句话定位"
-    湖表格式的"早期选手"，把**流式 upsert** 在湖上做通的先驱。核心差异化是**CoW / MoR 两种表类型** 和**Timeline 事件模型**。
+    湖表格式的**最早登场者**（2017 Uber 开源）。核心差异化：**CoW / MoR 双表类型** + **Timeline 事件模型** + **原生 Incremental Query**。Spark 生态最深、流式 upsert 历史最长。**2024-2025 年在多引擎 / 新场景上被 Iceberg 和 Paimon 超越，但在 Spark 栈 + 主键 upsert 场景仍有价值**。
 
-## 它解决什么
+!!! abstract "TL;DR"
+    - **两种表类型**：CoW（读快写慢）· MoR（写快读合并）
+    - **三种查询**：Snapshot / Read-Optimized / **Incremental**（Hudi 特色）
+    - **Timeline 为中心**：commit / clean / compaction / rollback 事件流
+    - **索引丰富**：Bloom / Record-level / HBase-backed
+    - **选型辩证**：Spark 批 + 主键 upsert 重 → 看 Hudi；多引擎 / Flink 流 → Iceberg 或 Paimon
+    - **生态相对单一**：对比 Iceberg 多引擎，Hudi 在 Trino / Flink 支持不完整
 
-Hudi 最早面对的问题和 Paimon 类似 —— **CDC 持续入湖，湖上需要准实时 upsert**。Hudi 给出的答案是两种表：
+## 1. 业务痛点 · Hudi 的历史意义
 
-- **CoW（Copy-on-Write）** —— 每次写入重写包含受影响 key 的整个数据文件。读性能好（无合并），写放大大
-- **MoR（Merge-on-Read）** —— 写 delta log（Avro），读时合并。写快读慢，适合高吞吐写入场景
+Uber 2016 年面对：
+- **MySQL CDC 入湖** 每小时一批、业务等不起
+- **订单状态更新** 需要实时 upsert
+- **下游想知道"哪些行变了"** 用于增量处理
 
-## 架构一览
+Hudi 的贡献：
+- **把 upsert 语义带到 HDFS**（2016 年之前湖表只能 append）
+- **增量查询**（"自上次 commit 后新增了什么"）
+- **Bloom Filter + Partition pruning** 加速主键定位
+
+**历史价值**：
+- 证明了湖表可以做 ACID + upsert
+- 启发了后来的 Iceberg / Delta / Paimon
+- 在 Uber 自家是**主力湖表**至今
+
+## 2. 架构深挖
 
 ```mermaid
 flowchart LR
   writer[Writer<br/>Spark / Flink] --> tl[.hoodie/ Timeline]
-  tl --> ic[instants<br/>commit / clean / compaction]
+  tl --> ic[instants<br/>commit / clean / compaction / rollback]
   writer --> base[Base files<br/>Parquet]
   writer -->|MoR 模式| log[Log files<br/>Avro delta]
   reader[Reader] --> base
   reader -->|MoR 模式| merge[Merge base+log]
+  index[Index<br/>Bloom / Record-level] -.-> writer
 ```
 
-**Timeline** 是 Hudi 的心脏：`commit` / `clean` / `compaction` / `rollback` 等事件按时间线排列，所有表状态由时间线回放决定。
+### Timeline · Hudi 的心脏
 
-## 关键能力
+Hudi 把所有表状态变化记录在 `.hoodie/` 下：
 
-- **两种表类型** CoW / MoR 可按工作负载选
-- **三种查询类型**：Snapshot / Read-Optimized / Incremental（增量查询是 Hudi 特色）
-- **多种索引**：Bloom / Simple / HBase / Record-level
-- **Clustering / Compaction** 作为一等公民
-- **多 writer 支持**：需要外部 lock provider（Zookeeper / Hive Metastore / DynamoDB）
+```
+.hoodie/
+  20240101000000.commit          ← 提交事件
+  20240101010000.clean            ← 清理事件
+  20240101020000.compaction       ← 合并事件
+  20240101030000.rollback         ← 回滚事件
+  ...
+```
 
-## 和邻居对比
+每个 instant 有 `requested / inflight / completed` 三态。通过**回放 timeline**得到当前表状态。
 
-- 对比 **Iceberg** —— Hudi 流式 upsert 原生、增量查询语义更强；Iceberg 批分析 + 多引擎兼容更好
-- 对比 **Paimon** —— 定位最相近；Paimon 更 Flink 中心，Hudi 更 Spark 中心
-- 对比 **Delta** —— Delta 和 Spark 绑定更深
+### CoW vs MoR（核心选型）
 
-见对比页 [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md)。
+| | Copy-on-Write | Merge-on-Read |
+|---|---|---|
+| 写 | 重写整个 data file | 追加 delta log（Avro） |
+| 读 | 直接读 Parquet | 读 Parquet + Merge log |
+| 写放大 | 大 | 小 |
+| 读延迟 | 低 | 高（除非走 Read-Optimized 查询） |
+| 适合 | 批写、读 QPS 高 | 高频流写、读可接受合并 |
 
-## 陷阱与坑
+### 三种查询类型（Hudi 特色）
 
-- **多 writer 配置复杂**：不同 lock provider 有坑，社区推荐 DynamoDB / ZK
-- **文件索引选型**：大表用 Bloom 常常不够，Record-level Index 配置复杂度高
-- **MoR 合并**：compaction 跟不上时读延迟飙升
+| 查询类型 | 语义 | 用例 |
+|---|---|---|
+| **Snapshot** | 读当前最新视图 | 常规 OLAP 查询 |
+| **Read-Optimized** | MoR 表只读 Parquet 不合并 log | 快速但数据略旧 |
+| **Incremental** | "两次 commit 之间新增 / 变更的行" | CDC 下游消费、增量 ETL |
 
-## 延伸阅读
+**Incremental Query 是 Hudi 早期差异化的杀手锏**——下游作业只消费增量不用全扫。
 
-- Hudi docs: <https://hudi.apache.org/>
-- *Hoodie: Incremental Processing on Hadoop*（Uber 原始博客）
+### 索引机制
+
+Hudi 为了加速"给定主键找到对应文件"有多种索引：
+
+| 索引 | 机制 | 适合 |
+|---|---|---|
+| **Bloom Filter**（默认）| 每 data file 存 bloom 过滤器 | 主键随机分布 |
+| **Simple Index** | 直接扫 | 小表 |
+| **HBase Index** | 外部 HBase 存主键 → file 映射 | 大表、主键集中 |
+| **Record-level Index**（1.0+）| 内嵌索引 | 新版首选 |
+
+## 3. 关键机制
+
+### 机制 1 · 写入路径（CoW）
+
+```
+1. Writer 收到一批 records
+2. 查索引，定位每 record 对应哪个 file group（旧）
+3. 读旧 file → merge 新记录 → 写新 file
+4. 更新 Timeline 新 commit
+5. Cleaner 清理旧版本（按保留策略）
+```
+
+### 机制 2 · Compaction（MoR）
+
+- MoR 写后：log 文件堆积
+- 定期（或自动）Compaction 把 log 合并到 base parquet
+- 独立作业或 inline（随写执行）
+
+### 机制 3 · Multi-Writer
+
+Hudi 支持多 writer 并发（加锁）：
+- **Zookeeper** 或 **HiveMetastore** 或 **DynamoDB** 做 lock provider
+- 乐观锁策略
+
+相比 **Iceberg 的 CAS 语义**，Hudi 的锁**需要外部依赖**——这是运维负担。
+
+### 机制 4 · Clustering
+
+把小文件合并 + 重新排序（类似 Z-order）：
+
+```sql
+CALL run_clustering(table => 'hudi_db.orders');
+```
+
+## 4. 工程细节
+
+### 关键配置
+
+| 参数 | 含义 | 建议 |
+|---|---|---|
+| `hoodie.datasource.write.table.type` | CoW / MoR | CDC 场景 MoR |
+| `hoodie.index.type` | 索引类型 | RECORD_INDEX（1.0+） |
+| `hoodie.cleaner.policy` | 清理策略 | `KEEP_LATEST_COMMITS` |
+| `hoodie.cleaner.commits.retained` | 保留几个 commit | 10-50 |
+| `hoodie.compact.inline` | 同步 compact | 流场景 false |
+| `hoodie.write.lock.provider` | 多 writer 锁 | ZK / DynamoDB |
+
+### 运维命令
+
+```sql
+-- Spark SQL
+CALL run_compaction(op => 'run', table => 'hudi_db.orders');
+CALL run_clustering(op => 'run', table => 'hudi_db.orders');
+CALL run_clean(table => 'hudi_db.orders');
+```
+
+## 5. 性能数字
+
+基于 Uber 公开数据点：
+
+| 操作 | 规模 | 典型 |
+|---|---|---|
+| CoW 写入吞吐 | 单 Spark 作业 | 50-200 MB/s |
+| MoR 写入吞吐 | 单作业 | 200-500 MB/s |
+| Bloom Index 主键查找 | 10 亿主键 | 分钟级完成批 upsert |
+| Record-level Index | 同上 | 数倍提升 |
+| 增量查询 | - | 秒级（取决于两 commit 间数据量） |
+| 表规模 | Uber 生产 | PB 级 |
+
+## 6. 代码示例
+
+### Spark 写入
+
+```python
+df.write.format("hudi") \
+    .option("hoodie.table.name", "orders") \
+    .option("hoodie.datasource.write.recordkey.field", "order_id") \
+    .option("hoodie.datasource.write.precombine.field", "update_ts") \
+    .option("hoodie.datasource.write.table.type", "MERGE_ON_READ") \
+    .mode("append") \
+    .save("s3://lake/hudi/orders")
+```
+
+### Incremental Query
+
+```python
+incremental = spark.read.format("hudi") \
+    .option("hoodie.datasource.query.type", "incremental") \
+    .option("hoodie.datasource.read.begin.instanttime", "20240101") \
+    .load("s3://lake/hudi/orders")
+```
+
+### Flink SQL
+
+```sql
+CREATE TABLE hudi_orders (
+  order_id BIGINT, status STRING, ts TIMESTAMP,
+  PRIMARY KEY (order_id) NOT ENFORCED
+) WITH (
+  'connector' = 'hudi',
+  'path' = 's3://lake/hudi/orders',
+  'table.type' = 'MERGE_ON_READ',
+  'write.tasks' = '4'
+);
+```
+
+## 7. 现实检视 · Hudi 的当前定位（2026）
+
+### 仍有价值的场景
+
+- **Uber / 字节内部**主力湖表（历史投入大）
+- **Spark + 主键 upsert 重**的场景
+- **Incremental Query** 对下游 CDC 消费很友好
+
+### 被超越的场景
+
+- **Multi-engine 场景**：Iceberg 在 Trino / Flink / DuckDB / Snowflake 支持都更完整
+- **Flink 流处理**：Paimon 原生为 Flink 设计，体验更好
+- **新项目起步**：Iceberg 生态 + Paimon 流一体是更主流选择
+
+### 社区活跃度
+
+- Hudi 社区仍活跃，2024 发布 1.0
+- 但**Iceberg / Paimon 的 PR 增速更快**
+- Onehouse（商业化）是 Hudi 主推动方
+
+### 团队决策
+
+**选 Hudi 的典型理由**：
+- 已经在 Hudi 上有生产系统
+- Uber 等公司的实际参考案例
+- Spark + 主键场景的最成熟方案之一
+
+**不选 Hudi 的典型理由**：
+- 团队多引擎（需要 Trino / Presto 深度集成）
+- 新起步项目（Iceberg 生态更广）
+- 流场景为主（Paimon 更原生）
+
+## 8. 陷阱与反模式
+
+- **CoW 用于高频 upsert**：写放大爆炸 → 应该 MoR
+- **MoR 不跑 Compaction**：log 堆积 → 读极慢
+- **多 Writer 无锁**：数据损坏
+- **索引选型错**：大表用 Bloom Filter 主键集中 → 性能崩
+- **Timeline 不 Clean**：文件无限增长
+- **和 Iceberg 混用**：同一业务两套格式 → 运维灾难
+
+## 9. 横向对比 · 延伸阅读
+
+- [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 四表格式选型
+- [Paimon](paimon.md) —— 流场景竞争者
+- [Iceberg](iceberg.md) —— 多引擎竞争者
+
+### 权威阅读
+
+- **[Hudi 官方文档](https://hudi.apache.org/)**
+- **[*Hoodie: Incremental Processing on Hadoop*（Uber 原始博客, 2017）](https://www.uber.com/blog/hoodie/)**
+- **[Onehouse 技术博客](https://www.onehouse.ai/blog)** —— Hudi 商业化主要推动方
+- **[案例 · Uber 数据平台](../unified/case-uber.md)** —— Hudi 最大生产验证
+
+## 相关
+
+- [湖表](lake-table.md) · [Iceberg](iceberg.md) · [Paimon](paimon.md) · [Delta Lake](delta-lake.md)
+- [案例 · Uber](../unified/case-uber.md)
