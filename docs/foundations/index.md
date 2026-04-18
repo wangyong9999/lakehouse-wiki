@@ -27,6 +27,7 @@ description: 存储、文件格式、计算、分布式等前置知识
 - [对象存储](object-storage.md) —— S3/GCS/OSS 语义、原子性与一致性
 - [存算分离](compute-storage-separation.md) —— 现代湖仓的架构原语
 - [Parquet](parquet.md) · [ORC](orc.md) · [Lance Format](lance-format.md) —— 三种列式格式
+- [**压缩与编码**](compression-encoding.md) ⭐ —— Zstd / Snappy / LZ4 + RLE / Dictionary / Bit-packing 的取舍
 - [列式 vs 行式存储](columnar-vs-row.md)
 
 ## 技术底层 · 计算

@@ -126,6 +126,7 @@ nav:
       - Parquet: foundations/parquet.md
       - ORC: foundations/orc.md
       - Lance Format: foundations/lance-format.md
+      - 压缩与编码: foundations/compression-encoding.md
       - 列式 vs 行式: foundations/columnar-vs-row.md
       - 向量化执行: foundations/vectorized-execution.md
       - 谓词下推: foundations/predicate-pushdown.md
