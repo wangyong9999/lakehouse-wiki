@@ -226,7 +226,7 @@ BI 里最头疼的事：**同一个指标**（比如 GMV），不同报表定义
 
 | 工具 | 定位 | 特点 |
 |---|---|---|
-| **dbt** | 数据转换 + 语义 | SQL-first，业界事实标准 |
+| **dbt** | 数据转换 + 语义 | SQL-first · 在 Transformation 层采用最广的选项之一 |
 | **Cube** | 独立语义层 / API | 多前端消费、权限模型强 |
 | **Looker (LookML)** | BI 自带语义层 | 闭源、绑定 Looker |
 | **MetricFlow** | 开源语义层 | Transform 收购，与 dbt 融合中 |

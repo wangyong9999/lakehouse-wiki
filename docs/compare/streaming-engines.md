@@ -35,7 +35,7 @@ status: stable
 
 | 引擎 | 类型 | 语言 | 主要定位 |
 |---|---|---|---|
-| **Apache Flink** | 纯流 + 批 | Java/Scala + SQL + Python | 工业标准、大规模 |
+| **Apache Flink** | 纯流 + 批 | Java/Scala + SQL + Python | 大规模生产采用广 |
 | **Spark Structured Streaming** | Micro-batch | Scala + Python + SQL | Spark 栈延伸 |
 | **Kafka Streams** | 库 | Java | 嵌入式微服务 |
 | **RisingWave** | 流 SQL DB | SQL（Postgres compat）| 流物化视图 |
@@ -46,7 +46,7 @@ status: stable
 
 ### Flink
 
-**定位**：**有状态流处理的事实标准**。
+**定位**：**有状态流处理领域采用最广的 OSS 引擎之一**（阿里、字节、Uber、Stripe、Netflix 等大规模生产）。
 
 **优势**：
 - **真正逐条流处理**（非 micro-batch），ms 级延迟

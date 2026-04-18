@@ -14,7 +14,7 @@ status: stable
 
 | Benchmark | 测什么 | 主要规模 | 备注 |
 | --- | --- | --- | --- |
-| **TPC-DS** | 决策支持（多表 join） | 100GB / 1TB / 10TB | OLAP 事实标准 |
+| **TPC-DS** | 决策支持（多表 join） | 100GB / 1TB / 10TB | OLAP 长期主流 benchmark |
 | **TPC-H** | 仓库查询 | 1GB - 10TB | 较早的标准 |
 | **SSB**（Star Schema Benchmark） | 星型模式 | 灵活 | 小而美 |
 | **ClickBench** | 单表查询 | 100M 行 Hits 数据 | ClickHouse 倡导，单表密集 |

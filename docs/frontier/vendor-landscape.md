@@ -21,7 +21,7 @@ status: stable
     - **开源 + 商业中立**：Tabular（被 Databricks 收购）· Onehouse · Starburst
     - **Lakehouse 整合中**：2024 Databricks 收购 Tabular → **Delta + Iceberg 融合成趋势**
     - **国内**：阿里 / 字节 / 华为 / PingCap 都在做 Lakehouse 产品
-    - **关键变化**：**Iceberg 成为事实标准**，各厂都在兼容
+    - **关键变化**：**Iceberg 在多引擎场景被广泛采纳**（Snowflake / Databricks / AWS / GCP 均在兼容）
     - **对团队决策**：**别信厂商一面之词**，看开放协议 + 数据可移植
 
 ## 1. 市场格局概览

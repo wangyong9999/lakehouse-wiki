@@ -288,7 +288,7 @@ class TextToSQLAgent:
 
 ## 9. 可部署参考
 
-- **[Vanna](https://github.com/vanna-ai/vanna)** —— 开源 Text-to-SQL 事实标准
+- **[Vanna](https://github.com/vanna-ai/vanna)** —— 开源 Text-to-SQL 主流选项
 - **[DataHerald](https://github.com/Dataherald/dataherald)** —— 开源 + 商业
 - **[LlamaIndex SQL Query Engine](https://docs.llamaindex.ai/en/stable/module_guides/querying/structured_outputs/)**
 - **[Dify](https://github.com/langgenius/dify)** —— 内置 Text-to-SQL 应用

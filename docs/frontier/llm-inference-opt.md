@@ -118,7 +118,7 @@ output = model.generate(input_ids, max_new_tokens=500)
 
 ## 3. 架构对比 · 主流推理引擎
 
-### vLLM（OSS 事实标准）
+### vLLM（OSS 主流）
 
 - UC Berkeley 开源（2023.06）· PagedAttention 原创
 - Python + CUDA，易用性好
