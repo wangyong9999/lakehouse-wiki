@@ -1,118 +1,297 @@
 ---
-title: OLAP 建模（星型 / 雪花 / 宽表）
+title: OLAP 建模 · 星型 / 雪花 / 宽表 / Data Vault
 type: concept
-tags: [bi, modeling, olap]
-aliases: [数据建模, Dimensional Modeling]
-related: [materialized-view, query-acceleration, lake-table]
-systems: [iceberg, paimon, starrocks, trino]
+depth: 资深
+level: A
+applies_to: Kimball 维度建模（1996+）· Data Vault 2.0 · 湖仓宽表范式
+tags: [bi, modeling, olap, kimball]
+aliases: [数据建模, Dimensional Modeling, Data Warehouse Modeling]
+related: [materialized-view, query-acceleration, lake-table, semantic-layer]
+systems: [iceberg, paimon, starrocks, trino, dbt]
 status: stable
 ---
 
-# OLAP 建模（星型 / 雪花 / 宽表）
+# OLAP 建模
 
 !!! tip "一句话理解"
-    OLAP 有三种典型建模：**星型**（事实表 + 维度表）、**雪花**（维度表再拆层）、**宽表**（一张 flat 表把一切 join 进来）。湖仓时代**宽表压倒式胜出**，除非维度频繁变化。
+    数仓建模有**四个主流范式**：Kimball 星型 / 雪花 / 宽表 / Data Vault 2.0。**湖仓时代宽表压倒式胜出**（列存 + 存储便宜 + 工具友好），但仍需理解 Kimball 的**事实表 / 维度表思维**——它是一切良好建模的基础。**2025 后 SCD Type 2 + 湖表 Time Travel 融合成为新范式**。
 
-## 三种模型
+!!! abstract "TL;DR"
+    - **四种范式**：星型（Kimball）· 雪花（Kimball 规范化）· **宽表 / One Big Table**（湖仓默认）· Data Vault 2.0（企业级审计）
+    - **湖仓首选宽表**：列存 + 列剪裁 + 零 Join + BI 友好
+    - **事实表粒度**是建模的第一问题（一行代表什么？）
+    - **SCD Type 2** 记录维度演化 · Iceberg Time Travel 天然支持
+    - **Medallion 分层**：ODS → DWD → DWS → ADS
+    - **和语义层（dbt Semantic Layer / Cube）** 配合给业务一致的指标口径
+
+## 1. 业务痛点 · 为什么要建模
+
+### 不建模的代价
+
+直接把 OLTP 表丢给 BI：
+- **查询慢**：OLTP 行存 + 无聚合索引 → 分钟级
+- **复杂 Join**：业务分析往往跨 5-10 张表
+- **口径乱**：不同报表算不同的 GMV
+- **维度变化不留痕**：用户改名，历史报表全错
+
+建模的本质：**为"分析"而非"事务"组织数据**。
+
+### 建模历史的三段
+
+| 年代 | 范式 | 代表 |
+|---|---|---|
+| 1990s | Inmon 三范式 | 企业数仓 EDW |
+| 1996+ | **Kimball 维度建模** | 星型 / 雪花 |
+| 2010+ | Data Vault 2.0 | 审计级企业仓 |
+| 2020+ | **宽表 / One Big Table** | 湖仓默认 |
+| 2023+ | **OBT + Semantic Layer** | 现代数据栈 |
+
+## 2. Kimball 维度建模 · 仍然必须懂
+
+### 事实表 + 维度表
+
+**事实表**：记录**发生的事情**（可聚合）
+- 订单金额、点击次数、收入
+
+**维度表**：记录**描述性属性**（可筛选）
+- 谁下单（用户）、什么产品、什么地区、什么时间
 
 ### 星型（Star Schema）
 
 ```
-fact_orders
-  ├── dim_user
-  ├── dim_product
-  ├── dim_time
-  └── dim_region
+        dim_user
+           │
+           ↓
+dim_time → fact_orders ← dim_product
+           ↑
+           │
+        dim_region
 ```
 
-事实表存可聚合的"发生了什么"，维度表存"谁、什么、何时、何地"的描述属性。查询时 join。
-
-- **优点**：维度解耦、空间紧凑、维度变更简单
-- **缺点**：查询时每次 join 都花钱
+查询：
+```sql
+SELECT d_time.week, d_region.country, SUM(amount)
+FROM fact_orders f
+JOIN dim_time d_time ON f.time_key = d_time.time_key
+JOIN dim_region d_region ON f.region_key = d_region.region_key
+WHERE d_time.year = 2024
+GROUP BY d_time.week, d_region.country;
+```
 
 ### 雪花（Snowflake Schema）
 
-维度表再规范化（`dim_user → dim_city → dim_country`）。
-
-- **优点**：进一步去冗余
-- **缺点**：join 更多层，查询更慢
-- **实战**：湖仓场景几乎不用——空间省不了多少，查询代价增加
-
-### 宽表（Flat Wide Table）
-
-所有维度 **预 join** 进事实表成一张几十到几百列的大表。
-
-- **优点**：查询零 join，谓词下推 + 列剪裁直接起飞
-- **缺点**：维度变化会引发重写；存储空间大
-- **实战**：**湖仓场景的默认选择**
-
-## 为什么湖仓偏爱宽表
-
-- **列式 + 列剪裁**：宽但不读的列零成本
-- **压缩好**：维度属性低基数，字典压缩压到极致
-- **没有 join 成本**：一次扫描就出结果
-- **存储便宜**：对象存储 GB 成本远低于计算 CPU·h
-- **分析工具友好**：BI 工具直接查宽表，业务不用懂 join
-
-经验：**存储多 5–10 倍 ↔ 查询快 5–20 倍 ↔ 总成本更低**。
-
-## 构建宽表的两条路
-
-### 路径 A：批定期 rebuild
+维度再规范化：
 
 ```
-ods_orders + ods_users + ods_products ──Spark─→ dwd_orders_flat
-                                                 ↑ 每日全量或分区覆盖
+dim_user → dim_city → dim_country
 ```
 
-简单，适合维度变化慢的场景。
+**湖仓几乎不用雪花**——存储省不了多少，Join 多一层。
 
-### 路径 B：流式维度 join
+### 事实表三种粒度（关键）
+
+| 类型 | 含义 | 例 |
+|---|---|---|
+| **Transactional**（事务）| 每笔记录 | 订单行、点击、支付 |
+| **Periodic Snapshot** | 周期性快照 | 日结余额、月末库存 |
+| **Accumulating Snapshot** | 累积过程 | 订单全生命周期（下单→支付→发货→签收）|
+
+**最常见错误**：没想清粒度就建表。
+
+### 事实表数值类型
+
+| 类型 | 可聚合方式 |
+|---|---|
+| **加法**（amount, count）| SUM 任意维度 |
+| **半加法**（balance, inventory）| 不能跨时间 SUM |
+| **不加**（price, ratio）| 不能 SUM，只能 AVG / MIN / MAX |
+
+## 3. 宽表（One Big Table, OBT）· 湖仓首选
+
+### 湖仓为什么偏爱宽表
+
+| 因素 | 效果 |
+|---|---|
+| **列存 + 列剪裁** | 宽但不读的列零成本 |
+| **字典压缩** | 维度属性低基数 → 压缩比极高 |
+| **没有 Join** | 扫一次出结果 |
+| **存储便宜** | S3 GB 成本 ≪ CPU·h |
+| **BI 友好** | 业务不用懂 Join |
+
+经验：**存储多 5-10 倍 ↔ 查询快 5-20 倍 ↔ 总成本更低**。
+
+### 宽表构建的两条路
+
+**路径 A · 批 Rebuild**：
+```
+ods_orders + ods_users + ods_products
+        ↓ Spark 日批
+dwd_orders_flat (200 列)
+```
+适合维度变化慢。
+
+**路径 B · 流式 Lookup Join**：
+```
+fact_stream ─Flink lookup join─→ dwd_orders_flat
+       ↑ Redis / Cassandra / Paimon 维表
+```
+维度变了下一条就对齐；适合高频维度。
+
+### 宽表的代价
+
+- **重写开销**：维度变动要 rebuild
+- **列 NULL**：某些维度只对部分记录有意义
+- **Schema 演化复杂**：200 列加新列要 coordinate
+
+## 4. Data Vault 2.0 · 企业级审计建模
+
+### 什么场景需要
+
+- **金融 / 医疗 / 合规严格**
+- 需要**完整审计轨迹**
+- 多源数据集成、口径多变
+
+### 三个核心表类型
+
+| 类型 | 作用 | 例 |
+|---|---|---|
+| **Hub** | 业务主键 + meta | `hub_customer (customer_id, load_ts, source)` |
+| **Link** | 关联关系 + meta | `link_order_customer` |
+| **Satellite** | 描述属性 + 时序 | `sat_customer_profile`（随时间变化） |
+
+### 优势 / 劣势
+
+- ✅ **审计完整**：每条变更记录 source + load timestamp
+- ✅ **灵活加源**：新数据源加 Hub/Link 不破坏现有
+- ❌ **查询复杂**：Join 多、需要 **Presentation Layer** 翻译给 BI
+- ❌ **学习曲线陡**
+
+**实务**：Data Vault 做底层 EDW、上面建**宽表 Mart** 给 BI。**DV + OBT 混合**是大型企业主流。
+
+## 5. Medallion 分层（湖仓 de facto）
 
 ```
-fact_stream ──Flink 维表 Lookup Join──→ dwd_orders_flat
+ODS (Bronze)    ← 原始 CDC / 日志
+  ↓
+DWD (Silver)    ← 清洗 + 标准化 + 宽事实表
+  ↓
+DWS (Gold)      ← 主题域汇总宽表
+  ↓
+ADS (Platinum)  ← 面向业务的指标表
 ```
 
-维度变了下一批就对齐；适合高频维度。
+### 各层职责
 
-## 维度变化（SCD）
+| 层 | 存储 | 更新 | 消费者 |
+|---|---|---|---|
+| **ODS** | Paimon / Iceberg 原始 | 实时 CDC | 数据工程 |
+| **DWD** | Iceberg 宽事实表 | 小时 / 天 | 分析师 / 下游 |
+| **DWS** | Iceberg + 分区 + Clustering | 天 | BI / 集市 |
+| **ADS** | Iceberg + MV / 加速副本 | 小时 / 天 | BI 工具 / API |
 
-维度属性会变（用户改名、产品改价）。三种处理策略：
+## 6. SCD · Slowly Changing Dimension
 
-- **SCD Type 1**：覆盖（只留最新）—— 最简单
-- **SCD Type 2**：保留历史 + 有效区间（`effective_from` / `effective_to`）
-- **SCD Type 3**：只保留上一版本
+维度会变。如何处理：
 
-湖表 + Time Travel 某种意义上天然就是 SCD Type 2（每个 snapshot 都是历史）。
+| 类型 | 机制 | 适合 |
+|---|---|---|
+| **Type 1** | 覆盖，只留最新 | 人名改错、简单修正 |
+| **Type 2** | 保留历史 + `valid_from` / `valid_to` | **合规 / 报表审计** |
+| **Type 3** | 只保留上一版本 | 快速前后对比 |
+| **Type 4** | 历史放辅助表 | 大维度表 |
+| **Type 6** | 1+2+3 混合 | 复杂业务 |
 
-## 分层约定
+### Iceberg Time Travel 的新范式
 
-典型湖仓分 4 层：
+**Iceberg Snapshot 天然就是 SCD Type 2**：
+```sql
+SELECT * FROM dim_users TIMESTAMP AS OF '2024-06-15';
+```
+查到 2024-06-15 那一刻用户的所有属性——**不需要显式维护 valid_from/valid_to**。
 
-| 层 | 职责 | 表形态 |
-| --- | --- | --- |
-| **ODS** | 业务库 CDC 原样 | 按业务表 |
-| **DWD** | 清洗 + 宽表 | 主要宽事实表 |
-| **DWS** | 汇总层 | 不同粒度的聚合表 |
-| **ADS** | 应用层 / 集市 | 面向 BI 的最终表 |
+但生产仍**两者结合**：
+- 显式 SCD Type 2 列给 BI 工具看
+- Iceberg Snapshot 做审计回溯
 
-越往下游越宽、越汇总、越为查询优化。
+## 7. 建模陷阱
 
-## 建模陷阱
+- **粒度不清就建表**：后面全部歪
+- **事实表混 semi-additive 和 additive** 没标注
+- **维度过多列 NULL**：语义混乱，考虑拆表或用 Sparse 格式
+- **没有时间维度列**：无法做分区裁剪
+- **时区不一致**：跨时区业务最常见灾难
+- **手工维护 `valid_from` / `valid_to`**：容易错；**用 dbt snapshot 自动维护**
+- **宽表无限扩列**：500+ 列的"怪兽表"没人改得动
+- **Kimball + DV + OBT 混用无规范**：团队各按自己理解建，标签和口径乱
 
-- **维度过多列 NULL**：某些维度只对部分记录有意义 → 宽表里很多列 NULL → 压缩虽好但语义混乱。考虑拆宽表
-- **事实表粒度不清**：一行代表什么？"一个订单" vs "一个订单行"？这个问题不想清楚后面全部歪
-- **没有 `partition_date` / `dt`**：湖表没分区 = 查询全扫
-- **时间列时区不一致**：跨时区业务最常见灾难
+## 8. dbt + 现代建模
 
-## 相关
+### 主流做法
 
-- [物化视图](materialized-view.md)
-- [查询加速](query-acceleration.md)
-- [湖表](../lakehouse/lake-table.md)
-- 场景：[BI on Lake](../scenarios/bi-on-lake.md)
+```
+models/
+  staging/              # 1:1 源表清洗
+    stg_orders.sql
+  intermediate/         # 业务中间
+    int_orders_with_user.sql
+  marts/
+    core/
+      fct_orders.sql    # 事实表
+      dim_users.sql     # 维度表
+      dim_products.sql
+    finance/
+      fct_revenue.sql
+    marketing/
+      dim_campaigns.sql
+```
 
-## 延伸阅读
+### dbt Snapshot（SCD Type 2 自动）
 
-- *The Data Warehouse Toolkit* (Kimball & Ross) —— 维度建模圣经
-- *One Big Table vs. Many Small Tables*（业内多篇对比）
+```sql
+{% snapshot dim_users_snapshot %}
+{{
+  config(
+    target_schema='snapshots',
+    unique_key='user_id',
+    strategy='timestamp',
+    updated_at='updated_at',
+  )
+}}
+SELECT * FROM {{ ref('stg_users') }}
+{% endsnapshot %}
+```
+
+运行 `dbt snapshot` 自动维护 SCD Type 2 列。
+
+## 9. 性能数字
+
+### 宽表 vs 星型（典型）
+
+| 查询 | 星型 + Join | 宽表 |
+|---|---|---|
+| 简单聚合 | 5-15s | 1-3s |
+| 多维分析 | 10-30s | 2-5s |
+| 存储（10 亿行 × 200 列宽表）| 较少 | 多 2-3× |
+| 增量更新成本 | 低 | 高 |
+
+### 真实业务数据
+
+- Pinterest：**主力用宽表**，查询 p95 < 5s
+- Airbnb：**星型 + 宽表 Mart 双层**
+- Shopify：**dbt + 宽表为主**，搭配 Kimball 思维
+
+## 10. 延伸阅读 · 相关
+
+### 权威阅读
+
+- **[*The Data Warehouse Toolkit* (Kimball & Ross, 3rd ed., 2013)](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/)** —— 维度建模圣经
+- **[*Building a Scalable Data Warehouse with Data Vault 2.0* (Linstedt, 2015)](https://www.elsevier.com/books/building-a-scalable-data-warehouse-with-data-vault-2-0/linstedt/978-0-12-802510-9)**
+- **[dbt Best Practices](https://docs.getdbt.com/best-practices)**
+- **[*Analytics Engineering with SQL and dbt* (O'Reilly, 2024)](https://www.oreilly.com/library/view/analytics-engineering-with/9781098142377/)**
+
+### 横向相关
+
+- [**语义层 · Semantic Layer**](semantic-layer.md) —— 指标中台
+- [物化视图](materialized-view.md) · [查询加速](query-acceleration.md)
+- [湖表](../lakehouse/lake-table.md) · [Iceberg Time Travel](../lakehouse/time-travel.md)
+- [BI on Lake 场景](../scenarios/bi-on-lake.md)
