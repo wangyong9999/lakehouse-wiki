@@ -131,7 +131,7 @@ flowchart TB
 
 ### 机制 3 · 过滤与 hybrid
 
-- **过滤**见 [HNSW filter-aware 三流派](hnsw.md#4-filter-aware-的三种流派)
+- **过滤**见 [HNSW filter-aware 三流派](hnsw.md)（见其 Filter-Aware 的三种流派段落）
 - **Hybrid**：RRF / 加权融合 / LTR（详见 [Hybrid Search](hybrid-search.md)）
 
 ### 机制 4 · 副本与一致性

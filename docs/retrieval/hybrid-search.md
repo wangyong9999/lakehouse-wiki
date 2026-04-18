@@ -82,7 +82,7 @@ BM25 (1994)              SPLADE (2021)          ColBERT (2020)
 - **SPLADE**：BERT 把词映射到"学习型稀疏词表"——能扩展同义词，比 BM25 准
 - **ColBERT / ColBERTv2**：每个 token 保留向量，检索时 late interaction，精度高但成本高
 
-详见 [稀疏检索进化](../frontier/vector-trends.md)（TODO）。
+稀疏检索进化详见后续前沿页 `frontier/vector-trends.md`（TODO R2.3）。
 
 ## 3. 关键机制 · 三大融合方法
 
