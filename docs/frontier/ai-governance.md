@@ -218,7 +218,7 @@ status: stable
 
 ## 8. 横向对比 · 延伸阅读
 
-- [合规总论](../ops/compliance.md)（TODO R2.4）
+- [合规总论](../ops/compliance.md)
 - [Agentic Workflows 安全](../scenarios/agentic-workflows.md) —— Agent 的安全最佳实践
 
 ### 权威阅读

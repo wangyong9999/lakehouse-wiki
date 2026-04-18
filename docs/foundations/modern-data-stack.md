@@ -303,7 +303,7 @@ BI / RAG / Chat-to-Insight
 详见：
 - [Text-to-SQL 场景](../scenarios/business-scenarios.md#text-to-sql-semantic-sql)
 - [Agentic Workflows](../scenarios/agentic-workflows.md)
-- MCP 专页（TODO R2.1）
+- [MCP · Model Context Protocol](../ai-workloads/mcp.md)
 
 ## 7. 典型反模式
 

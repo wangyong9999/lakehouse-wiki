@@ -66,6 +66,7 @@ status: stable
 
 ## 进阶
 
-- 想做 AI 方向 → 一月 AI 路径（待补）
-- 想做 BI 方向 → 一月 BI 路径（待补）
+- 想做 AI 方向 → [一月 AI 方向](month-1-ai-track.md)
+- 想做 BI 方向 → [一月 BI 方向](month-1-bi-track.md)
+- 想做资深工程师 → [一季度资深路径](quarter-advanced.md)
 - 想做引擎 → 读 Iceberg / Paimon 源码，从 `core/io` 层看起

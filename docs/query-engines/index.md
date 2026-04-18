@@ -7,7 +7,7 @@ description: 直接读湖仓表的主流 SQL / 分析引擎
 
 在湖仓之上执行 SQL / 分析 / 流处理的引擎。每个引擎都在"向量化 × 分布式 × 湖表读写能力"三个轴上有取舍。
 
-## 已有
+## 引擎
 
 - [Trino](trino.md) —— 交互式查询，BI 前台
 - [Apache Spark](spark.md) —— 批 ETL + Structured Streaming + ML
@@ -16,10 +16,6 @@ description: 直接读湖仓表的主流 SQL / 分析引擎
 - [StarRocks](starrocks.md) —— MPP + 物化视图，BI 加速层首选
 - [ClickHouse](clickhouse.md) —— 单表大扫描 + 高并发聚合的极致
 - [Apache Doris](doris.md) —— MPP + 湖仓融合，StarRocks 的同源兄弟
-
-## 待补
-
-- Apache Hive（作为计算引擎，非 Catalog 维度）
 
 ## 相关
 

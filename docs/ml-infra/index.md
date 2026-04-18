@@ -32,8 +32,3 @@ description: Model Registry / Serving / Training / GPU 调度 / LLM Gateway
 - [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md) —— 闭环叙事
 - [Feature Store 横比](../compare/feature-store-comparison.md)
 
-## 待补
-
-- Fine-tuning 平台（Axolotl / LLaMA-Factory）
-- Experiment Tracking 深度（MLflow / W&B / ClearML 对比）
-- Ray 生态独立深入

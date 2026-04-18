@@ -35,8 +35,3 @@ description: 存储、文件格式、计算、分布式等前置知识
 
 - [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输的公共层
 
-## 待补
-
-- Avro
-- 共识协议（Raft / Paxos 简述）
-- SQL 优化器基础 / Codegen

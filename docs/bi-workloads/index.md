@@ -24,8 +24,3 @@ description: 在湖仓上支撑 OLAP / 报表 / 仪表盘的工程实践
 - 加速副本：[OLAP 加速副本横比](../compare/olap-accelerator-comparison.md)
 - 学习路径：[一月 BI 方向](../learning-paths/month-1-bi-track.md)
 
-## 待补
-
-- 缓存层（Alluxio / 查询结果缓存）独立页
-- Dashboard 模式与反模式
-- BI 工具横向对比（Superset / Metabase / Tableau / Looker）放 compare/

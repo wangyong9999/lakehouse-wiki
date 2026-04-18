@@ -372,7 +372,3 @@ response = client.chat.completions.create(
 - [LLM 推理优化](../frontier/llm-inference-opt.md) —— Gateway 后端是这个
 - [AI 治理](../frontier/ai-governance.md) —— Gateway 是 Guardrails 落地点
 
-## 待补
-
-- 多模态 LLM Gateway（图像 / 音频输入路由）
-- 向量 Embedding API 的 Gateway（原理类似）

@@ -57,7 +57,7 @@ Puffin 是一个**容器格式**，里面可以装若干 **Blob**。每个 Blob 
 - 读侧引擎（如 Trino、Spark、或专用向量库）发现 Puffin 里有 HNSW blob，可以直接跳过全量扫描
 - 未来"湖上跑 RAG"不再强依赖独立向量服务，Iceberg 本身就能承担"元数据 + 数据 + 索引"三件事
 
-详见一体化方向 [Lake + Vector](../unified/lake-plus-vector.md)（待补）。
+详见一体化方向 [Lake + Vector](../unified/lake-plus-vector.md)。
 
 ## 当下状态
 

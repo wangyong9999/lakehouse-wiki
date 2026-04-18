@@ -51,8 +51,3 @@ description: 在湖仓 / 多模检索之上跑的 AI 应用与基础设施
 
 - [Lake + Vector 融合架构](../unified/lake-plus-vector.md) · [Compute Pushdown](../unified/compute-pushdown.md)
 
-## 待补
-
-- LLM Gateway（LiteLLM / Portkey / Helicone）独立页
-- 安全对齐（guardrails / moderation）独立页（目前在 ai-governance）
-- Online / Offline 特征一致性深度案例

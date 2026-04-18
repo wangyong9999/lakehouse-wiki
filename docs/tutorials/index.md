@@ -30,11 +30,6 @@ hide:
 
 </div>
 
-## 待补
-
-- Flink CDC + Paimon 入湖 in 45 min
-- 用 DuckDB 在本地跑一遍 TPC-DS 10G
-
 ## Tutorial 约定
 
 - **必须能跑通**：给定 `pip install` 列表和 Python / shell 命令

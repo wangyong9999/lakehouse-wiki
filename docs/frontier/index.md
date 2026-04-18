@@ -25,13 +25,6 @@ description: 论文速读、趋势观察、Benchmark、AI 治理
 
 - [DiskANN 论文笔记](diskann-paper.md) —— NeurIPS 2019 · 单机 SSD 十亿级 ANN
 
-## 待补（下一轮）
-
-- 月更 Digest（向量 / 湖仓 / AI 方向）
-- Lakehouse 论文综述（CIDR 2021 原始 Lakehouse paper）
-- 更多论文笔记（Contextual Retrieval / ColBERT v2 / vLLM 等 S 级）
-- 季度趋势 report
-
 ## 贡献方式
 
 每篇论文一个独立页面，推荐结构：

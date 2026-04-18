@@ -37,8 +37,3 @@ description: 向量数据库、ANN 索引、Hybrid Search、多模 Embedding
 
 - [ADR-0003 多模向量存储选 LanceDB](../adr/0003-lancedb-for-multimodal-vectors.md)
 
-## 待补
-
-- ScaNN（Google）
-- 检索下沉到湖表（Iceberg Puffin vs Lance 深度对比）
-- 各家 rerank 模型横比

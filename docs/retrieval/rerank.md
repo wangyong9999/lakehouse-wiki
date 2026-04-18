@@ -305,7 +305,7 @@ def rag_answer(query: str) -> str:
 ## 8. 横向对比 · 延伸阅读
 
 - [Hybrid Search](hybrid-search.md) · [向量数据库](vector-database.md) · [HNSW](hnsw.md)
-- Rerank 模型对比（TODO R2.2 · `compare/rerank-models.md`）
+- [Rerank 模型对比](../compare/rerank-models.md)
 
 ### 权威阅读
 
