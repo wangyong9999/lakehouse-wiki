@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 范式（Vanilla RAG / Contextual / CRAG / Agentic RAG）
+applies_to: 2024-2026 范式（Vanilla RAG / Contextual / CRAG / Agentic RAG）
 tags: [ai, rag, retrieval, llm]
 aliases: [Retrieval-Augmented Generation, 检索增强生成]
 related: [vector-database, hybrid-search, rerank, hnsw, agents-on-lakehouse]

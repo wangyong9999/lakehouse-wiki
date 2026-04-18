@@ -4,7 +4,7 @@ type: reference
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 SRE + Data Engineering 实践
+applies_to: 2024-2026 SRE + Data Engineering 实践
 tags: [ops, sla, slo, reliability, data-product]
 aliases: [SLO/SLA/SLI, Data Reliability Engineering]
 related: [observability, data-governance, troubleshooting]

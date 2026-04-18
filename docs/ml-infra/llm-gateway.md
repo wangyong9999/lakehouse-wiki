@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: LiteLLM 1.x · Portkey · Helicone · OpenRouter · 2024-2025 生态
+applies_to: LiteLLM 1.x · Portkey · Helicone · OpenRouter · 2024-2026 生态
 tags: [ml-infra, llm, gateway, router]
 aliases: [LLM Proxy, LLM Router]
 related: [rag, mcp, llm-inference-opt]

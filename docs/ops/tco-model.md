@@ -4,7 +4,7 @@ type: concept
 depth: 进阶
 level: A
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 云 + 商业产品定价
+applies_to: 2024-2026 云 + 商业产品定价
 tags: [ops, cost, tco, economics]
 aliases: [TCO, Total Cost of Ownership]
 related: [cost-optimization, data-systems-evolution]

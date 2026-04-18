@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 主要进展
+applies_to: 2024-2026 主要进展
 tags: [frontier, rag, retrieval, llm]
 aliases: [Advanced RAG]
 related: [rag, hybrid-search, rerank, agentic-workflows]

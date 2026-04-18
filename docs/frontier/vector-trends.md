@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 最新进展
+applies_to: 2024-2026 主要进展
 tags: [frontier, vector, embedding, retrieval]
 aliases: [Vector Retrieval Frontier]
 related: [hnsw, embedding, hybrid-search, rerank]

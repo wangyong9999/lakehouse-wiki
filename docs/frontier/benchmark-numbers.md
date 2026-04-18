@@ -280,6 +280,42 @@ Total p95:        1.5-2s
 
 ---
 
+## 12. 版本参考 · Versions Reference
+
+!!! note "SSOT · 版本基线"
+    手册内各章节的 `applies_to` 写的是"最低支持版本"（长期兼容基线）。本节记录 **2026-04 截至的"当前参考版本"**（写示例 / 估算 benchmark 时用的版本）。升级主流版本时**只改这一处**，各页 applies_to 只在 API / 行为变化时再跟进。
+
+| 分类 | 组件 | 2026-04 参考版本 | 手册最低 applies_to |
+|---|---|---|---|
+| **表格式** | Apache Iceberg | 1.7.x · spec v2（v3 起草中） | 1.4+ / v2 |
+|  | Apache Paimon | 1.0 GA（1.1 开发中） | 0.9+ |
+|  | Apache Hudi | 1.0 | 0.14+ |
+|  | Delta Lake | 4.0 | 3.2+ |
+| **查询引擎** | Trino | 465+ | 450+ |
+|  | Spark | 4.0（3.5 仍广泛） | 3.5+ |
+|  | Flink | 1.20（2.0 开发中） | 1.18+ |
+|  | Flink CDC | 3.x | 3.0+ |
+|  | StarRocks | 3.4+ | 3.0+ |
+|  | Doris | 3.0+ | 2.1+ |
+| **向量库** | Milvus | 2.5 | 2.4+ |
+|  | LanceDB | 0.13+ | 0.8+ |
+|  | Qdrant | 1.12+ | 1.10+ |
+|  | Weaviate | 1.27+ | 1.25+ |
+|  | pgvector | 0.8+ | 0.7+ |
+| **AI / RAG** | Feast | 0.42+ | 0.40+ |
+|  | vLLM | 0.7+ | 0.6+ |
+|  | SGLang | 0.4+ | 0.3+ |
+|  | MCP (协议) | 1.x | 1.0 |
+| **Embedding** | BGE-M3 · gte-Qwen2 · jina-v3 · voyage-3 | — | — |
+
+**使用约定**：
+
+- 新写内容用"参考版本"做示例（保持新鲜）
+- 老页的 applies_to 保留"最低版本"（除非破坏性变化才抬高）
+- PR 中涉及版本号时，先改本表、再改各页
+
+---
+
 ## 相关
 
 - [Benchmark 参考](benchmarks.md) —— Benchmark 体系介绍

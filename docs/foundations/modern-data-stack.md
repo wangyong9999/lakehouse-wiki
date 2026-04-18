@@ -4,7 +4,7 @@ type: concept
 depth: 进阶
 level: S
 last_reviewed: 2026-04-18
-applies_to: 2024-2025 业界主流
+applies_to: 2024-2026 业界主流
 tags: [foundations, mds, ecosystem]
 aliases: [现代数据栈, MDS]
 related: [data-systems-evolution, lake-table, orchestrators]
