@@ -185,9 +185,24 @@ S 级必须 8 段全；A 级可以压缩 3/4/5 为一段；B 级可以省 5/6。
 
 - [x] R0 · 业务场景深化已完成（recommender / fraud / CDP / RAG / BI / FS / OLAP）
 - [x] R1.S1 · 模板骨架升级
-- [ ] R1A 15 页（执行中）
-- [ ] R1B 15 页
-- [ ] R2 16 页
-- [ ] R3 13 页 + 10 SVG
+- [x] **R1A · 核心 S 级资产 15 页深化** (lake-table / iceberg / paimon / snapshot / hnsw / vector-database / hybrid-search / rerank / trino / spark / flink / rag / feature-store / iceberg-rest-catalog / unity-catalog)
+- [ ] R1B · 15 页 A 级补强（**下一轮推进**）
+- [x] **R2.1 · 压轴总论 4 页** (data-systems-evolution / modern-data-stack / mlops-lifecycle / mcp)
+- [x] **R2.2 · 新增横向对比 3 页** (streaming-engines / rerank-models / orchestrators)
+- [x] **R2.3 · 前沿专题 4 页** (llm-inference-opt / rag-advances-2025 / vector-trends / ai-governance)
+- [x] **R2.4 · 合规 + TCO 2 页** (compliance / tco-model)
+- [x] **R2.5 · 场景补齐 3 页** (text-to-sql-platform / ad-hoc-exploration / classical-ml)
+- [x] **S2 · Benchmark 数字总汇页**
+- [x] **R3.1 · 深度案例 3 页** (case-netflix / case-linkedin / case-uber)
+- [x] **R3.4 + R3.5 · 反模式 / 容量 / 索引** (anti-patterns / capacity-planning / glossary 扩充 / index-by-technology)
+- [ ] R3.2 · 精工 SVG 10 张（**下一轮推进**）
+- [ ] R3.3 · 可运行教程 3 个（**下一轮推进**）
+
+**总计本轮交付**：
+- **核心深化 15 页**（S 级，约 4400 行）
+- **新增内容 22 页**（S/A 级，约 6500 行）
+- **总计 37 页 / 新增 ~11,000 行内容**
+
+已覆盖 ROADMAP 总量 ~70%；剩余 30%（R1B 补强 · SVG · 教程）留给下一轮。
 
 每批 PR 在这里更新勾选。

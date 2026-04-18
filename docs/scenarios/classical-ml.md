@@ -118,7 +118,7 @@ flowchart LR
 
 ### 环节 2 · PIT Join（防泄露）
 
-详见 [Feature Store](../ai-workloads/feature-store.md#point-in-time-join-的机制)。
+详见 [Feature Store](../ai-workloads/feature-store.md)（Point-in-Time Join 段落）。
 
 **经典错误**：训练 2024-06 样本用了 2024-06 之后的 `user_total_gmv`——未来信息泄露 → AUC 飙 → 线上崩。
 
