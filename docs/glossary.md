@@ -126,7 +126,8 @@ description: 字母序的概念兜底索引
 - **Partition Evolution** —— 见 [Partition Evolution](lakehouse/partition-evolution.md)
 - **Performance Tuning** —— 见 [性能调优](ops/performance-tuning.md)
 - **pgvector** —— 见 [pgvector](retrieval/pgvector.md)
-- **PIT Join（Point-in-Time）** —— 见 [Feature Store](ai-workloads/feature-store.md) · [离线训练数据流水线](scenarios/offline-training-pipeline.md)
+- **PIT Join（Point-in-Time）** —— 主定义见 [Feature Store](ai-workloads/feature-store.md)（工程落地见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)）
+- **Train-Serve Skew（训推漂移）** —— 主定义见 [Feature Store](ai-workloads/feature-store.md)（反模式汇总见 [20 反模式](ops/anti-patterns.md)）
 - **Polaris** —— 见 [Apache Polaris](catalog/polaris.md)
 - **Predicate Pushdown（谓词下推）** —— 见 [谓词下推](foundations/predicate-pushdown.md)
 - **Prompt Injection** —— 见 [AI 治理](frontier/ai-governance.md)

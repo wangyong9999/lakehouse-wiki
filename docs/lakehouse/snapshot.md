@@ -17,6 +17,9 @@ status: stable
 !!! tip "一句话理解"
     一个 Snapshot = **表在某一时刻的完整元数据视图**。湖仓的所有"ACID、时间旅行、回滚、增量读"能力，**都是 Snapshot 机制派生出来的**。本质上是**把数据库的 MVCC 搬到对象存储上**。
 
+!!! note "SSOT · 主定义页"
+    Snapshot · MVCC on Object Store · Time Travel 机制 等以本页为主定义。Iceberg / Paimon / Delta / Time Travel 等页引用时链回这里。
+
 !!! abstract "TL;DR"
     - Snapshot = 不可变元数据文件 + 指向一堆不可变数据文件
     - 读 = 锁定一个 Snapshot 读完；写 = 产生新 Snapshot

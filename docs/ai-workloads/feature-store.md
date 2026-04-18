@@ -17,6 +17,9 @@ status: stable
 !!! tip "一句话定位"
     **ML 特征的一等公民**。解决三大痛点：**训推一致、Point-in-Time 正确、特征复用**。它不是 Redis 的别名——是一个**定义 + 离线存储 + 在线存储 + 注册目录 + 监控**一体化平台。**推荐 / 风控 / 个性化场景的 MLOps 必备**。
 
+!!! note "SSOT · 主定义页"
+    本页是 **PIT Join · Train-Serve Skew** 等概念的手册内主定义页。其他场景 / 概念页在引用时会链回这里。
+
 !!! abstract "TL;DR"
     - **核心能力**：统一定义 + PIT Join + 双存储（离线 Parquet/Iceberg · 在线 Redis/KV）
     - **解决的三大痛**：训推 skew / PIT 泄露 / 特征复用

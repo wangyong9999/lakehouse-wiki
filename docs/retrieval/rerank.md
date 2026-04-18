@@ -15,7 +15,10 @@ status: stable
 # Rerank · 重排
 
 !!! tip "一句话理解"
-    两阶段检索的**第二阶段**——把召回阶段的 Top 50/100 候选交给一个**更贵更准**的 Cross-Encoder 模型精排成 Top 5/10。工业 RAG / 语义搜索的**差异化关键**——**加 Rerank 通常 Recall/NDCG 涨 5-10 点**。
+    两阶段检索的**第二阶段**——把召回阶段的 Top 50/100 候选交给一个**更贵更准**的 Cross-Encoder 模型精排成 Top 5/10。工业 RAG / 语义搜索的**差异化关键**——**加 Rerank 通常 Recall/NDCG 涨 5-10 点**（BEIR 子集平均，具体数字随业务而异）。
+
+!!! note "SSOT · 主定义页"
+    Rerank · Cross-Encoder 原理 · 召回与 Rerank 黄金比 等以本页为主定义。RAG / Hybrid 等页引用时链回这里。
 
 !!! abstract "TL;DR"
     - **架构差异**：召回用 Bi-Encoder（独立编码）、Rerank 用 Cross-Encoder（query+doc 联合编码）
