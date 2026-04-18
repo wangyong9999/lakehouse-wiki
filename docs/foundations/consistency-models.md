@@ -11,18 +11,29 @@ status: stable
 # 一致性模型
 
 !!! tip "一句话理解"
-    "一致性"不是一个开关，是**一把标尺**：从最严的 linearizable（像单机）到最松的 eventual（终究会到），中间有 sequential、causal、snapshot 等。湖仓和对象存储的能力都在这把尺子上某个位置。
+    "一致性"不是一个开关，也不是一把单线刻度——它有**两个维度**：
+    **单对象** (linearizable / sequential / causal / RYW / eventual) 管"读到什么"，
+    **事务** (serializable / snapshot isolation / RR / RC) 管"多操作怎么隔离"。
+    SI 和 linearizable **不在同一把尺上**，Jepsen 的分类里 SI 和 serializable 也是 incomparable——SI 允许 write skew、serializable 不允许。
 
-## 常见层级（由严到松）
+## 两条家族树（Jepsen 分类）
 
-| 级别 | 一句话 | 代表系统 |
-| --- | --- | --- |
-| **Linearizable** | 所有操作像排成一条线，顺序唯一 | Spanner、Raft/Paxos 后端 |
-| **Sequential** | 所有进程看到的顺序一致，但不必是实时线 | 早期某些分布式 DB |
-| **Snapshot Isolation** | 事务各自读一个固定快照，写冲突检测 | Postgres、MySQL InnoDB、Iceberg |
-| **Causal** | 有因果关系的操作顺序守住 | CouchDB、Cassandra 某些模式 |
-| **Read-your-writes** | 自己写的自己能读到 | S3 今天 |
-| **Eventual** | 最终一致，但何时到不保证 | S3 早期、DynamoDB 弱读 |
+**单对象一致性**（强 → 弱）：Linearizable → Sequential → Causal → Read-your-writes → Eventual
+
+**事务隔离级别**（强 → 弱）：Strict Serializable → Serializable → Snapshot Isolation / Repeatable Read → Read Committed → Read Uncommitted
+
+SI 与 Serializable 互不蕴含——SI 允许 [write skew](mvcc.md)，Serializable 不允许；RR 则禁止 write skew 但允许某些 SI 不允许的异常。
+
+| 级别 | 家族 | 一句话 | 代表系统 |
+| --- | --- | --- | --- |
+| **Linearizable** | 单对象 | 所有操作像排成一条线，顺序唯一 | Spanner、Raft/Paxos 后端、etcd |
+| **Sequential** | 单对象 | 所有进程看到的顺序一致，但不必是实时线 | 早期某些分布式 DB |
+| **Causal** | 单对象 | 有因果关系的操作顺序守住 | CouchDB、Cassandra 某些模式 |
+| **Read-your-writes** | 单对象 | 自己写的自己能读到 | S3 今天 |
+| **Eventual** | 单对象 | 最终一致，但何时到不保证 | S3 早期、DynamoDB 弱读 |
+| **Serializable** | 事务 | 结果等价于某个串行顺序 | Postgres SERIALIZABLE (SSI)、Spanner |
+| **Snapshot Isolation** | 事务 | 事务各自读固定快照，写冲突检测；**允许 write skew** | Postgres 默认（REPEATABLE READ 实为 SI）、Oracle、Iceberg / Delta |
+| **Repeatable Read** | 事务 | 同一行多次读一致；**允许 phantom**（ANSI 定义） | MySQL InnoDB 默认 |
 
 ## 湖仓关心的三条
 
@@ -32,7 +43,7 @@ status: stable
 
 - **Read-after-write**（S3 于 2020 强化为强一致）
 - **LIST 强一致**（也是 2020 之后才有）
-- **Conditional Write**（S3 2024 之后）
+- **Conditional Write**（S3 2024-08 起，仅 `If-None-Match`——即"只在对象不存在时写"；没有 `If-Match`）
 
 早年 S3 的最终一致让湖表 commit 路径必须绕弯：依赖外部 Catalog（HMS）做"当前指针"的 CAS。这是为什么老 Iceberg 文档总在讲"Catalog 里存 current metadata.json 指针"。
 
@@ -47,7 +58,7 @@ status: stable
 **精确说明**：
 - **单表内**：Iceberg / Delta 通过 Catalog CAS **全序化**所有 commit（严格单调递增的 snapshot ID）。这一维度可以算近似 Linearizable
 - **跨表 / 跨 Catalog**：**没有** Linearizable 保证。两张表同时 commit，外部观察者看到的顺序可能不同
-- **SI 的典型 gap**：见 [MVCC](mvcc.md) 里 "SI 不防 Lost Update" 段。并发 UPDATE 同一批行的两个事务可能互相覆盖——需要在应用层或通过 MERGE 语句的乐观检测解决
+- **SI 的典型 gap**：SI 能挡 Lost Update（同一行写-写冲突），但**允许 Write Skew**——两事务写不同行但读相同 predicate 时。详见 [MVCC](mvcc.md) 里 "SI 允许 Write Skew" 段
 
 ```
 SI vs Serializable 实际差异：

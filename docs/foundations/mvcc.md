@@ -40,20 +40,24 @@ status: stable
 
 事务开始时拿一个"全局快照"（读视图），整个事务都按这个快照读。大多数实现等价于 SI，严格 Serializable 要额外机制（SSI / 冲突检测）。
 
-!!! warning "SI 不防 Lost Update（经典陷阱）"
-    Snapshot Isolation **不等于** Serializable。经典反例：两个并发事务都"读-改-写"同一行余额。
-    ```
-    T1 read balance=100 ---- ... ---- write 90 (扣 10) commit
-    T2 read balance=100 ---- ... ---- write 80 (扣 20) commit  ← 丢失了 T1 的扣款！
-    ```
-    在 SI 下两事务读的是同一快照，各自看到 balance=100，按 SI 定义**不是写-写冲突**（两人写的是不同的逻辑意图），commit 都会成功——后者覆盖前者。
+!!! warning "SI 允许 Write Skew（经典陷阱）"
+    Snapshot Isolation **不等于** Serializable。SI 按 Berenson 1995 的定义**能防 Lost Update**（同一行的写-写冲突由 first-committer-wins 规则检测），但**允许 Write Skew**——两事务写的是**不同行**，但决策依据的是同一 predicate 读。
 
-    **防止 Lost Update 的三种做法**：
-    - **显式锁**：`SELECT ... FOR UPDATE`
-    - **SSI / Serializable**：Postgres 的 Serializable 级别会检测并 abort
-    - **Compare-And-Swap**：`UPDATE ... WHERE balance = 100`，冲突时重试
-    
-    湖表层面同样存在——这是为什么 Iceberg / Delta 的 UPDATE / DELETE 都是"读-改-写"批操作而非单行操作；并发 writer 必须通过 Catalog CAS 检测冲突。
+    ```
+    约束：两医生必须至少一人 on_call。初始 Alice, Bob 都 on_call。
+    T1 read count(on_call)=2 → Alice 请假，SET Alice off_call → commit
+    T2 read count(on_call)=2 → Bob 请假，SET Bob   off_call → commit
+    两事务写不同行、无写-写冲突 → SI 下都成功 → 违反了"至少一人"约束
+    ```
+
+    Serializable（例如 Postgres 的 SSI）会检测到 T1/T2 间的读写依赖环，abort 其一。
+
+    **在 SI 下防 Write Skew 的做法**：
+    - **显式锁**：`SELECT ... FOR UPDATE` 把读变成写锁
+    - **升级到 Serializable**：Postgres 的 SERIALIZABLE 用 SSI 检测
+    - **物化约束**：把 predicate 变成一行（例如用一个 `on_call_count` 汇总行），让写 skew 退化成写-写冲突
+
+    湖表 commit 路径也是 SI 级——并发 writer 通过 Catalog CAS 防写-写冲突，但跨表 / 跨 predicate 的 write skew 仍需业务层处理。
 
 ### 垃圾回收 / Vacuum
 

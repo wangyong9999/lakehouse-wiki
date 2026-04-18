@@ -18,7 +18,7 @@ status: stable
 
 !!! abstract "TL;DR"
     - **三层物理**：File → Row Group (~128-512MB) → Column Chunk → Page (~1MB)
-    - **Footer 是元数据中心**：schema + 每 Row Group 每列的 `min/max/null_count` + 可选 Bloom Filter + 可选 Page Index
+    - **Footer 是元数据中心**：schema + 每 Row Group 每列的 `min/max/null_count` + 可选 Page Index（Bloom Filter 按 column chunk 单独存，footer 只存偏移）
     - **读取路径**：先读 Footer → 决定哪些 Row Group / Page 需要读 → 只下载必要字节
     - **调优三刀**：Row Group 大小 · Page 大小 · 编码 / 压缩算法（见 [压缩与编码](compression-encoding.md)）
     - **Parquet v2**（2016+）加 Delta 编码 · Byte Stream Split · Page Index；主流引擎都已支持，但老生态仍跑 v1
@@ -93,11 +93,11 @@ print(pf.schema_arrow)              # Arrow schema
 
 ## 4. Bloom Filter
 
-**Row Group 级**可选 Bloom Filter，主要用于**高基数等值过滤**（`WHERE user_id = 'xxx'`）——min/max 对 uuid/hash 无用，Bloom 能排除"一定没有"的 RG。
+**按 column chunk 存**（每 Row Group × 每 Column 一份），不是按 Row Group 整体。footer 里只存偏移，bitset 单独一页放在 row group 之间或文件尾部。主要用于**高基数等值过滤**（`WHERE user_id = 'xxx'`）——min/max 对 uuid/hash 无用，Bloom 能排除"一定没有"的 column chunk。
 
 **取舍**：
 - 每列独立开关（Parquet writer 参数 `bloom_filter_columns`）
-- 空间成本几 KB 到几十 KB 每 RG · 查询时额外读一次
+- 空间成本几 KB 到几十 KB 每 column chunk · 查询时额外读一次
 - **只对高基数 + 频繁等值过滤的列开**（user_id / order_id / uuid）
 
 ## 5. 调优三刀

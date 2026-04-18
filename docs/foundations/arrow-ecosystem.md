@@ -86,7 +86,7 @@ Arrow（Apache Arrow）定义**列式内存表示**：
 
 - **Dremio** 作为默认查询协议
 - **DuckDB FlightSQL** 作为服务端 adapter
-- **Spark Connect** 底层基于 Arrow Flight
+- **Spark Connect** 自家 gRPC + Protobuf plan，结果用 Arrow batch 编码（不是 Flight 协议，但走 Arrow）
 - **Iceberg REST** 在考虑作为结果传输协议
 
 ## ADBC：统一的 "Arrow 友好"客户端
@@ -112,7 +112,7 @@ df = arrow_table.to_pandas()               # 零拷贝
 - **parquet-cpp / parquet-rs**：Parquet reader，输出 Arrow
 - **DataFusion**：Apache 项目，Rust 实现的 Arrow-native 查询引擎（Ballista 分布式版）
 - **Polars**：Rust 写的 DataFrame 库，Arrow-native
-- **DuckDB**：虽然不直接暴露 Arrow 内存布局，但 I/O 层全是 Arrow
+- **DuckDB**：内部用自家 Vector 布局（UnifiedVectorFormat），但与 Arrow 双向零拷贝流式——`con.execute().arrow()` 与 `duckdb.from_arrow()` 都不搬运数据
 
 ## 工程启示
 

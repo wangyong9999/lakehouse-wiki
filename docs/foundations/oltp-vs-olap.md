@@ -25,7 +25,7 @@ status: stable
 | 读/写比 | 相近或偏写 | 读 >> 写 |
 | 一致性 | 强（ACID） | 弱-中（最终或快照） |
 | 存储 | 行式（页 16KB） | 列式（文件百 MB） |
-| 索引 | B+Tree、LSM、Hash | Min/Max、Zone Maps、向量化扫描 |
+| 索引 / 跳过结构 | B+Tree、LSM、Hash | Min/Max、Zone Map、Bloom、Page Index |
 | 计算 | 单进程 / 主备 | 分布式 / MPP |
 
 ## 为什么它们在物理底层对立
