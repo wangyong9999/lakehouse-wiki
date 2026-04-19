@@ -12,7 +12,7 @@ status: stable
 # Iceberg Branching & Tagging
 
 !!! tip "一句话理解"
-    Iceberg 1.2+ 表级别支持 Git-like **分支** 和 **标签**。分支给你一条独立的写路径；标签给你一个不变的时点快照。和 Nessie 的跨表 Git-like 不同，这是**单表内**的分支机制。
+    Iceberg **spec v2 引入**（引擎侧 1.2+ 普遍可用）、表级别支持 Git-like **分支** 和 **标签**。分支给你一条独立的写路径；标签给你一个不变的时点快照。和 Nessie 的跨表 Git-like 不同，这是**单表内**的分支机制。
 
 !!! abstract "TL;DR"
     - **Branch**：一个命名的写入路径；每次 commit 只推进该分支
@@ -60,6 +60,44 @@ SELECT * FROM orders.tag_audit_2026_q1;
 ```
 
 **重要特性**：带 tag 的 snapshot **不会被 `expire_snapshots` 清理**。合规审计、训练集冻结都靠它。
+
+## WAP · Write-Audit-Publish 工作流
+
+**WAP** 是 Iceberg 分支最成熟的工作流——把"先写、再验证、最后公开"变成原子操作：
+
+```
+    Write              Audit              Publish
+ ┌─────────┐        ┌──────────┐       ┌──────────┐
+ │ branch  │  ───→  │ 数据质量 │ ───→  │ 合并到   │
+ │ etl-YYY │        │ 校验     │       │ main     │
+ └─────────┘        └──────────┘       └──────────┘
+                        ↓
+                    失败就丢弃 branch
+```
+
+典型模板（Iceberg Spark Procedure）：
+
+```sql
+-- 1. Write: 短 branch 写入
+ALTER TABLE db.orders CREATE BRANCH `etl-${run_id}` RETAIN 7 DAYS;
+INSERT INTO db.orders.branch_etl_20260418 SELECT ... ;
+
+-- 2. Audit: 在分支上跑 DQ 校验
+SELECT COUNT(*) FROM db.orders.branch_etl_20260418;
+-- 业务侧 assert: 行数、空值率、去重数等
+
+-- 3. Publish: 通过就快进合并
+CALL system.fast_forward('db.orders', 'main', 'etl-20260418');
+-- 不过关就丢
+ALTER TABLE db.orders DROP BRANCH `etl-20260418`;
+```
+
+**WAP 的价值**：
+- 失败作业**完全不污染**生产 main 分支（不是先写后回滚，而是"根本没写到 main"）
+- 同一批数据可以多作业并行验证（各自 branch）
+- 下游消费者永远看到"通过校验的 main"
+
+是湖上 ETL 严肃化的核心工具。
 
 ## 四个典型用法
 

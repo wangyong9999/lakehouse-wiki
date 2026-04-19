@@ -189,6 +189,53 @@ SELECT * FROM orders /*+ OPTIONS(
 ) */;
 ```
 
+### 机制 5 · Lookup-Wait · Changelog 一致性保障
+
+`changelog.producer.lookup-wait = true`（默认）的含义：**写入提交会等 Compaction 完成后才对外可见**。
+
+- 为什么要等：`lookup` changelog 需要 Compaction 时对比新老值才能产出。没跑完就 commit，下游流读会看到**新数据但没有对应 changelog**
+- 代价：端到端延迟多 10-60 秒
+- 关 `false` 的场景：不依赖 changelog 的纯批查场景，或可以接受 changelog 延迟到下次 commit
+
+### 机制 6 · Deletion Vector Mode（0.9+）
+
+Paimon 0.9 引入 **Deletion Vector 读模式**（和 Iceberg v3 / Delta 3+ 收敛）：
+
+```sql
+ALTER TABLE orders SET ('deletion-vectors.enabled' = 'true');
+```
+
+- 读时**直接用 DV 过滤**，不再走"合并 base + log"的 MoR 路径
+- **读性能接近 CoW**，写成本接近 MoR —— MoR 模式的重要演进
+- 需要配合 Compaction 定期把 log 合并成 DV
+
+### 机制 7 · Consumer-ID · 流读断点
+
+多个下游作业独立消费同一张 Paimon 表，各自维护"消费到哪了"的位点。详见 [Streaming Upsert / CDC · Paimon Consumer-ID](streaming-upsert-cdc.md)。关键机制：
+
+- 每个 `consumer-id` 关联一个 **最小 snapshot id**
+- 该位点之前的 snapshot 不会被 `expire_snapshots` 清理
+- `consumer.expiration-time` 防"僵尸 consumer 无限占用 snapshot"
+
+### 机制 8 · Secondary Index
+
+Paimon 1.0+ 支持**非主键列索引**：
+
+```sql
+CREATE TABLE orders (
+  order_id BIGINT,
+  user_id  BIGINT,
+  status   STRING,
+  PRIMARY KEY (order_id) NOT ENFORCED
+) WITH (
+  'file-index.bloom-filter.columns' = 'user_id,status'
+);
+```
+
+- Bloom Filter 存在 Parquet 文件的 footer 里（per file）
+- 按 `user_id = ?` 查询时先读 footer 剪文件
+- 补齐了主键湖表"只有 PK 能点查"的短板
+
 ## 4. 工程细节
 
 ### 关键配置

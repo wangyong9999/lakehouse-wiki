@@ -123,13 +123,50 @@ SELECT * FROM table_changes('db.orders', 1000, 1100);
 
 实际效果接近 Iceberg 的 **Sort Order + Clustering**。
 
-### 机制 5 · Uniform（2024）
+### 机制 5 · Uniform（2024）· 单向互操作
 
-**一张 Delta 表同时被 Iceberg / Hudi 读取器识别**。
+**一张 Delta 表可被 Iceberg 读取器识别**（注意：**单向**，Delta → Iceberg）。
 
-做法：commit Delta 时**自动写一份 Iceberg metadata.json**，Iceberg 引擎可以直接读。
+做法：commit Delta 时**自动写一份 Iceberg metadata.json** + manifest list，Iceberg 引擎直接读。
 
-**意义**：多引擎场景下，选 Delta 不再是"锁定"。但**写**仍推荐用 Delta API。
+**重要边界**：
+
+- ✅ **读**：Iceberg 引擎（Trino / Flink / Snowflake）可以读 Delta Uniform 表
+- ❌ **写**：Iceberg 引擎**不能写**回 Delta Uniform 表。只能通过 Delta API / Spark 写
+- ❌ **Iceberg → Delta**：反向不成立。要让 Delta 读 Iceberg 表，走 Delta 的 **UniForm for Iceberg** reader 路径（更新中）
+
+**意义**：多引擎场景下，选 Delta 不再是"完全锁定"——但写路径仍在 Delta 侧。这符合 Databricks "写保持差异化、读开放生态" 的策略。
+
+### 机制 6 · CRC Checksum 文件
+
+Delta 每次 commit 除了 JSON 日志外还写一份 **`.crc` 文件**：
+
+```
+_delta_log/
+  00000000000000000042.json         ← commit 42 事务日志
+  00000000000000000042.crc          ← 对应的 checksum + 统计摘要
+```
+
+CRC 文件包含：
+- 整张表的 **tableSizeBytes / numFiles / numRecords**
+- JSON 事务日志的校验和
+- 使查询 planner **跳过扫日志回放**就能拿到表级统计
+
+是 Delta 的性能优化点——读表大小 / 行数时不用扫完整日志。
+
+### 机制 7 · Row Tracking（v3）
+
+和 Iceberg v3 Row Lineage 一致的思路。Delta 3+ 引入：
+
+- **`_metadata.row_id`**：每行的稳定 ID（跨 merge / update 保持不变）
+- **`_metadata.row_commit_version`**：该行最近一次被修改的 commit 版本
+
+```sql
+SELECT order_id, _metadata.row_id, _metadata.row_commit_version
+FROM db.orders;
+```
+
+用途：**增量物化视图刷新** + **精确 CDC 消费**。必须建表时 `delta.enableRowTracking = true`。
 
 ## 4. 工程细节
 

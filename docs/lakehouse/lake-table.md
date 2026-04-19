@@ -109,6 +109,23 @@ flowchart TD
 
 **关键：**没有任何"湖仓进程"在中间。**原子性全压在指针切换的那一瞬间**。写入方准备好新 Snapshot 所有文件后，尝试 CAS 指针——成功则提交，失败则重试（或放弃）。
 
+### Catalog · CAS 的承载者
+
+"当前指针"必须存放在一个**能做 CAS** 的地方。主流选项：
+
+| Catalog | CAS 载体 | 特点 |
+|---|---|---|
+| **Iceberg REST Catalog** | 协议层 CAS（后端可换） | 2024+ 事实标准；协议化、跨实现 |
+| **Hive Metastore (HMS)** | MySQL/PostgreSQL 事务 | 老但稳；Hive 生态兼容 |
+| **AWS Glue** | Glue API 内部 CAS | AWS 栈默认 |
+| **Nessie** | 基于 RocksDB + Git-like commit | 跨表事务 + 分支 |
+| **Unity Catalog / Polaris** | 厂商实现 | Databricks / Snowflake 生态 |
+| **Hadoop / File-based** | 依赖对象存储 Conditional PUT | 2024-08 后 S3 可用；测试 / POC |
+
+**Catalog ≠ 存储**：数据文件都在对象存储上；Catalog 只负责"当前指针是哪个 metadata.json"这一条信息的强一致。Catalog 出问题时**读不受影响**（所有 reader 已经有一个 snapshot ID 就够读）；写阻塞等 Catalog 恢复。
+
+详见 [Catalog 模块](../catalog/index.md) 和 [Catalog 全景对比](../compare/catalog-landscape.md)。
+
 ### Schema Evolution · 列用 ID 不用名字
 
 ```

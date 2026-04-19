@@ -111,7 +111,7 @@ sequenceDiagram
 
 关键字段：
 - `parent-snapshot-id` → **形成 DAG**，支持分支 / 回滚 / 审计
-- `sequence-number` → 全局顺序（v2 spec 引入）
+- `sequence-number` → **v2 spec 引入的全局单调序号**，解决 MoR 并发正确性——**equality delete 只应用于 sequence-number ≤ 自己的 data file**。防止"老 delete 误删新 insert"。详见 [Delete Files · sequence number 段](delete-files.md)
 - `summary` → 快速回答"这次 commit 改了多少" 而无需扫 manifest。`summary.operation` 合法枚举：`append` · `replace` · `overwrite` · `delete`（spec v2 定义）
 
 ### Snapshot Ancestry（DAG 而非链表）

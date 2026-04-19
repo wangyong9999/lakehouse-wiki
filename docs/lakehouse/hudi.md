@@ -90,6 +90,32 @@ Hudi 把所有表状态变化记录在 `.hoodie/` 下：
 
 **Incremental Query 是 Hudi 早期差异化的杀手锏**——下游作业只消费增量不用全扫。
 
+### Metadata Table · Hudi 1.0 的主元数据载体
+
+Hudi 1.0 把几乎所有**元数据 + 索引**都收敛到 **Metadata Table**（`.hoodie/metadata/`）——这是 Hudi 在"Manifest/Metadata"这条演进路线上的终局：
+
+```
+.hoodie/metadata/
+  files/              ← 分区 → 文件清单（消除 S3 LIST）
+  column_stats/       ← 每列 min/max/null_count
+  bloom_filters/      ← per-file Bloom
+  partition_stats/    ← 分区聚合统计
+  record_index/       ← 主键 → file group 直查（1.0 GA）
+  secondary_index/    ← 非主键列索引（1.0+）
+  expr_index/         ← 表达式索引（1.0+）
+```
+
+**和 Iceberg Manifest 的本质差异**：
+
+| 维度 | Iceberg Manifest | Hudi Metadata Table |
+|---|---|---|
+| 存储形式 | Avro 文件（Manifest List → Manifest → Data） | **Hudi 自表**（MoR 模式） |
+| 更新方式 | 每次 commit 写新 Manifest | 作为 Hudi 表**随主表一起提交** |
+| 查询代价 | 读 Avro + min/max 剪枝 | 读子表，走 HFile 索引 |
+| 事务性 | 和主表一致（同一 metadata.json 指针）| 和主表 1:1 绑定（instant 同步）|
+
+换句话说：**Hudi 把元数据本身做成了一张 Hudi 表**——元数据的管理直接复用表格式能力。这比 Iceberg 的纯 Avro 文件更灵活（可 MoR / 有索引），但也更重。
+
 ### 索引机制
 
 Hudi 1.0 的索引都承载在 **Metadata Table** 上（`.hoodie/metadata/`），共有七类：

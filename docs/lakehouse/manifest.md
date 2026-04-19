@@ -94,6 +94,15 @@ data_file: {
 
 **核心**：`lower_bounds` / `upper_bounds` 让读者**不打开 data file 即可按谓词剪枝**。
 
+### Iceberg v3 的 Manifest 扩展
+
+v3 spec 在 Manifest entry 里加了 **Row Lineage** 支持：
+
+- `first-row-id`：该 data file 里第一行的全局行 ID（单调递增）
+- `last-updated-sequence-number`：该行最近一次被修改时的 sequence number
+
+**Row Lineage 的用途**：让下游流消费者 / CDC 消费者能精确追踪"某一行在多个 snapshot 间的演变"，而不只是"这个 snapshot 里增删了哪些 file"。这是 v3 对"流式读"能力的关键补强，也是 Materialized View 增量刷新的基础。
+
 ## 3. 查询剪枝流程
 
 假设 `SELECT * FROM sales WHERE ts >= '2024-12-01' AND region = 'NA'`：

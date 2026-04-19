@@ -38,6 +38,16 @@ flowchart LR
 
 引擎在同一查询里按两种 spec 分别做分区剪枝，然后结果合并。
 
+### Spec 版本 + Manifest 的关联
+
+每个 **Manifest** 文件的 `partition_spec_id` 字段指向它写入时用的 spec 版本。查询 planner 读 Manifest List 时：
+
+1. 按 Manifest 的 `partition_spec_id` 反查对应 spec
+2. 用该 spec 解释 `partitions` 字段（分区值范围）
+3. 剪枝——匹配不上的 Manifest 整个跳过
+
+这让"一张表同时存在多个 spec 版本"成为正常状态。详见 [Manifest](manifest.md) 的 "Partition Spec 演化" 段。
+
 ## 常见演化操作
 
 ```sql
