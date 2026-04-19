@@ -39,8 +39,10 @@ applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
 - [Branching & Tagging](branching-tagging.md) —— Iceberg 原生分支 / 标签
 - [Puffin](puffin.md) —— Iceberg 的辅助索引侧车文件
 - [Streaming Upsert / CDC](streaming-upsert-cdc.md) —— 流式变更持续入湖
-- [Compaction](compaction.md) —— 小文件治理，运维必修
 - [Delete Files](delete-files.md) —— 行级删除背后的机制
+- [Compaction](compaction.md) —— 小文件治理，运维必修
+- [Materialized View](materialized-view.md) —— 湖上 MV · 增量刷新 · Feature Store 雏形
+- [多模湖仓](multi-modal-lake.md) —— 向量 / 地理 / Variant / 图 在湖表上的承载
 
 ## 主流实现
 

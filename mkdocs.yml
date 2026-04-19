@@ -148,6 +148,8 @@ nav:
       - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
       - Delete Files: lakehouse/delete-files.md
       - Compaction: lakehouse/compaction.md
+      - Materialized View: lakehouse/materialized-view.md
+      - 多模湖仓: lakehouse/multi-modal-lake.md
       - Apache Iceberg: lakehouse/iceberg.md
       - Apache Paimon: lakehouse/paimon.md
       - Apache Hudi: lakehouse/hudi.md
