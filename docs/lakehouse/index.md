@@ -20,14 +20,20 @@ applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
 
 ## 建议阅读顺序
 
-!!! tip "从"第一次接触湖表"到"能做选型"的 6 步"
+!!! tip "从"第一次接触湖表"到"能做选型"的分层路径"
+    **必读主线（前 6 步顺序做）——读完能做湖表选型**：
+
     1. **[湖表](lake-table.md)** —— 先理解"建在对象存储上的表"到底是什么
     2. **[Snapshot](snapshot.md)** —— 最核心的机制；其他能力都是它的派生
     3. **[Manifest](manifest.md)** —— Snapshot 下一层的索引结构 · 湖表性能基石
     4. 按需读演化能力：[Schema](schema-evolution.md) / [Partition](partition-evolution.md) / [Time Travel](time-travel.md) / [Branching](branching-tagging.md)
     5. 上生产必读运维三件套：[Delete Files](delete-files.md) → [Compaction · 维护生命周期](compaction.md) → [Streaming Upsert / CDC](streaming-upsert-cdc.md)
     6. 对照实现选型：[Iceberg](iceberg.md) / [Paimon](paimon.md) / [Hudi](hudi.md) / [Delta](delta-lake.md)
-    7. 想看前沿方向再读：[Materialized View](materialized-view.md) / [多模湖仓](multi-modal-lake.md)
+
+    **可选扩展（做特定场景再翻）**：
+
+    - 要做 BI 聚合加速 / AI Feature Store → [Materialized View](materialized-view.md)
+    - 多模湖仓（向量 / 地理 / Variant / 图） → [多模湖仓](multi-modal-lake.md)
 
 ## 核心协议 · 表格式标准化能力（稳定）
 

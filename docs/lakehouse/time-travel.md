@@ -22,7 +22,7 @@ status: stable
     - Rollback / Restore **把当前指针切到过去 snapshot**——是一次新的 commit
     - 能读多久 = **snapshot 未 expire + 数据文件未 vacuum**（两个条件都得满足）
     - 精度 = commit 频率；一天 commit 一次就没有"早上 10 点"
-    - **各家默认窗口差异大**：Iceberg 5 天 / Delta 实际 7 天（受 vacuum 约束）/ Paimon 1h；合规场景必须显式拉长或用 tag 锁定
+    - **各家默认窗口差异大**：Iceberg 5 天 / Delta 实际 7 天（受 vacuum 约束）/ Paimon 1h / Hudi 按 `cleaner.commits.retained` 自定义；合规场景必须显式拉长或用 tag 锁定
     - **合规审计**：用 tag 固定关键 snapshot，避免被 expire 清走
 
 ## 1. 两种写法
@@ -107,6 +107,8 @@ Snapshot 过期是一个**危险操作**——会让 time travel 永久失效。
 | **Hudi** | `hoodie.cleaner.commits.retained` | 同 commit | 自定义策略 |
 
 **重要**：Delta 的 log 保留 30 天**不等于**能 time travel 30 天。`VACUUM` 按 `deletedFileRetentionDuration` 默认 7 天清理数据文件——**默认实际 time travel 窗口 ≈ 7 天**。要拉长必须同时调这两个。
+
+**还有一个关键点**：Delta 的 `VACUUM` **默认不自动执行**——要靠外部调度器（Airflow / Databricks Jobs）周期运行。如果从没跑过 VACUUM，数据文件会一直累积，time travel 窗口反而被"意外延长"（但对象存储成本爆炸）。Databricks Runtime 的托管表会自动跑 VACUUM，开源栈需自建。
 
 **合规 / 审计场景**：用 **tag 或 branch 固定关键 snapshot**，让它不受 expire 影响。例如年末账、季度末报表、ML 训练数据版本。
 

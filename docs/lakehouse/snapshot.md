@@ -178,14 +178,23 @@ SELECT * FROM orders.changes(
 
 **为什么 "多写同表" 不是 Serializable**：按 Berenson 1995（SIGMOD） 的定义，**Snapshot Isolation 防 Lost Update（first-committer-wins）** 但允许 **Write Skew**——这个语义湖表原封不动继承。
 
-**举例**（Write Skew）：
+**举例**（Write Skew · 经典医生值班场景）：
+
+业务不变量：**任何时刻必须至少有 1 名医生值班**。初始：Alice、Bob 都在值班。
 
 ```
-Txn A 读 snapshot N，写"把余额 1 转到 2"
-Txn B 读 snapshot N，写"把余额 2 转到 1"
-两者都基于 N 的初始值，互相独立 → 都能 CAS 提交 →
-结果：账户数量对，但"某个不变量"（"两个账户余额差值"）被破坏
+     snapshot N            Txn A（读 N）             Txn B（读 N）
+  ┌──────────────┐
+  │ Alice: 在岗  │ ──→  看到 Alice+Bob        看到 Alice+Bob
+  │ Bob:   在岗  │      判断 Bob 在 → 允许下班  判断 Alice 在 → 允许下班
+  └──────────────┘      写: Alice=离岗         写: Bob=离岗
+                             ↓ CAS 成功 (N+1)       ↓ CAS 成功 (N+2)
+                                                      ↓
+                                              结果: 两人都离岗
+                                              不变量"至少 1 人在岗"被破坏
 ```
+
+两笔写都**只改各自不同的行**，没触发 first-committer-wins；但**它们各自基于的"另一人仍在岗"的前提**在提交时已失效——SI 不检查读集合的一致性，所以 Write Skew 得逞。
 
 **湖表没办法直接防 Write Skew**——需要应用层加"冲突检测"或走**Nessie / Unity Catalog 的跨表事务**。
 

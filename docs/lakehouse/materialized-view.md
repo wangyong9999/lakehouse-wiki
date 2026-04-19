@@ -14,11 +14,17 @@ status: stable
 
 # Materialized View · 湖上物化视图
 
-!!! warning "重要说明 · 湖上 MV 当前成熟度"
-    **到 2026-Q2，"湖上 MV" 尚未形成跨格式统一的协议标准**。本页讨论的主要是：**引擎层实现**（Trino / Spark 的 connector）和**表格式层的等价物**（Paimon aggregation table、Databricks Managed MV）。这意味着：
-    - 不同引擎间的 MV 定义、刷新语义、stale 处理**不互通**
-    - 本页的 SQL 示例都**绑定特定引擎**，跨引擎共享要靠 Iceberg View Spec + storage table 的组合
-    - 若追求"一次定义跨所有引擎用" → **该能力仍在演进中**，生产选型要谨慎
+!!! warning "重要说明 · 本页混合了"未来方向"和"当下实现""
+    **到 2026-Q2，"湖上 MV" 尚未形成跨格式统一的协议标准**。本页讨论的是两类内容的混合：
+
+    1. **当下已有的引擎层实现** · Trino Iceberg connector 的 MV 管理、Databricks Managed MV
+    2. **表格式层的 MV 等价物** · Paimon aggregation table、Hudi Incremental Query 手写
+    3. **未来可能的协议层标准化** · Iceberg MV spec 社区讨论中
+
+    **读者提示**：
+    - 本页 SQL 示例都**绑定特定引擎**（Trino 的不等于 Spark 的；Paimon 的不是 Iceberg 的）
+    - 跨引擎共享 MV 目前**做不到开箱即用**；要靠 Iceberg View Spec + 手动协调刷新
+    - 若追求"一次定义跨所有引擎用" → 生产选型要谨慎，等 spec 成熟
 
 !!! tip "一句话理解"
     把一条查询**物化成一张表**——定期（或触发）增量刷新。传统 DB 里 MV 已成熟 30 年；**湖上 MV 仍在形成中**（2024-2026），但已是 **"BI 聚合加速器" + "AI Feature Store 基础设施"** 的关键拼图。
@@ -95,6 +101,7 @@ CREATE MATERIALIZED VIEW iceberg.default.sales_by_region_daily
   GROUP BY region, date_trunc('day', ts);
 
 -- 手动刷新（Trino 没有内置自动刷新调度，要靠外部 cron / Airflow）
+-- 注：Iceberg spec 本身不定义"刷新调度"语义，是不是自动由引擎决定
 REFRESH MATERIALIZED VIEW iceberg.default.sales_by_region_daily;
 
 -- 新版本可加 GRACE PERIOD · 超过 stale 窗口就 fallback 到源表

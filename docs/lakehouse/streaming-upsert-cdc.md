@@ -139,7 +139,7 @@ SELECT * FROM orders /*+ OPTIONS(
 | **Changelog 原生** | v2 有限（`table.changes()`）· v3 Row Lineage 增强 | **一等公民**（4 种 producer）| 有（`cdc` action 启用）|
 | **断点续读 server-side** | ❌（client 自管 snapshot id）| ✅ Paimon consumer 保留 snapshot | ❌（client 自管 instant）|
 | **流 API** | Flink Iceberg Source · 基于 snapshot 切片、非原生 changelog | **Flink Paimon Source（changelog 一等公民）** | Flink Hudi Source |
-| **延迟** | commit 频率决定（分钟）| 可到 30s-2min | commit 频率决定（分钟）|
+| **延迟** | commit 频率决定（通常分钟级；秒级可行但元数据爆炸风险）| 可到 30s-2min | commit 频率决定（通常分钟级）|
 | **读到"中间状态"** | 读 snapshot 是完整 | 可能读到 compaction 前半成品（需 `lookup-wait`）| 同 Paimon |
 | **主用场景** | 批为主 + 轻度增量 | 流原生、主键 upsert | Spark 栈、主键 upsert |
 
@@ -173,7 +173,7 @@ SELECT * FROM orders /*+ OPTIONS(
 
 - **大部分团队用 `input` changelog producer**——因为上游 CDC 已经是 changelog 格式。但如果上游去重不够干净，会传播错误
 - **`lookup` 策略成本高**：每次 compaction 都要查老值对比；千万级主键规模才会考虑
-- **复合主键 + 多字段更新** 场景在 Paimon 里还有边缘 case 需要 test
+- **复合主键 + 多字段更新** 场景在 Paimon 里还有边缘 case 需要 test——典型如 PK=(region, user_id)，上游 CDC 只携带部分字段的局部更新时，partial-update merge engine 对于"非 PK 的 null 字段是保留还是覆盖"的处理需要显式配置（`fields.*.sequence-group` 等），否则 null 会覆盖已有值
 - **Schema evolution** 跨工具（Debezium → Flink CDC → Paimon）传播仍然不是零配置
 
 ### 选型简化建议

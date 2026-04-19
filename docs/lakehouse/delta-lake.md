@@ -89,7 +89,11 @@ _delta_log/
 
 提交原子性：**PUT 新 JSON 文件到 `_delta_log/`** 的**命名空间是否已存在**的判定。云存储支持 `PutIfAbsent`（S3 Conditional PUT、Azure Blob IfMatch）→ 原生原子 CAS。
 
-**时间线**：早期（2024-08 前）S3 没有原生 Conditional PUT，Delta OSS 依赖 **DynamoDB** 做 `LogStore` 层 CAS（`spark.databricks.delta.logStore.class = io.delta.storage.S3DynamoDBLogStore`）。2024-08 S3 推出 `If-None-Match` 后，Delta 3.2+ 可直接在 S3 上原子提交，无需 DynamoDB 外挂。
+**版本线**：
+
+- **Delta < 3.2（2024-08 前 S3 无 Conditional PUT 时代）** · Delta OSS 在 S3 上必须挂 **DynamoDB LogStore** 做 CAS（`spark.databricks.delta.logStore.class = io.delta.storage.S3DynamoDBLogStore`）。Azure Blob / GCS 早有原生 conditional 原语，这问题仅 S3 独有
+- **Delta 3.2+（2024-08 后 S3 If-None-Match GA）** · 可直接在 S3 上原子提交，不再需要 DynamoDB 外挂
+- 老栈 **升级 Delta 到 3.2+** 后可考虑拆掉 DynamoDB 依赖（但要评估 migration 窗口的并发写兼容性）
 
 ### 机制 2 · Deletion Vectors（v3+）
 

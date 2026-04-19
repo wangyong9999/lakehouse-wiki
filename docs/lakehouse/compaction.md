@@ -101,7 +101,7 @@ CALL system.rewrite_manifests('db.events');
 |---|---|---|---|
 | **Bin-pack** | 把小文件**按大小凑到目标** | ❌ | 默认：快速消除小文件 |
 | **Sort** | 合并时按指定列**重新排序** | ✅ | 查询常按某列过滤（如 `ts`、`user_id`）|
-| **Z-order** | 合并时按**多维 Z-order 聚集** | ✅（Z 曲线）| 多列过滤（如 `region + ts`），靠聚集改善 pruning |
+| **Z-order** | 合并时按 **Z 序曲线**（space-filling curve · 把多维点交织成一维）聚集 | ✅（Z 曲线）| 多列过滤（如 `region + ts`），让靠近的多维点物理相邻 → 改善 file pruning |
 | **Clustering / Liquid Clustering** | Delta 特有 · 自适应多维聚簇 | ✅ | 替代传统分区 + Z-order |
 
 ```sql

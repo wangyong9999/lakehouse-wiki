@@ -156,21 +156,29 @@ flowchart TD
 
 **为什么重要**：业务上"下单扣库存 + 插 order 表"是原子的；湖上如果没有跨表事务，这种语义要靠 saga 补偿或两阶段提交自己实现。**Nessie 的 Git-like commit 是湖上少数优雅的跨表事务方案**。
 
-### 术语对照 · CAS / Conditional PUT / OCC / version / snapshot / instant
+### 术语对照 · 常被混用但职责不同
 
-读 spec 时这几个词常被混用为同义词，在规范里其实**职责不同**：
+读 spec 时有两组概念常被混用，其实**每组内部职责不同 · 跨组是命名差异**：
 
-| 术语 | 含义 | 出处 / 用法 |
+**组 A · 并发控制的"策略 → 原语 → 存储实现"三层**：
+
+| 术语 | 层级 | 含义 |
 |---|---|---|
-| **CAS** (Compare-And-Swap) | 底层原子原语——"只在当前值等于预期时更新" | 硬件 / RDBMS / 分布式协议通用抽象 |
-| **Conditional PUT** | 对象存储层的 CAS 实现（`If-None-Match` / `If-Match`） | S3 2024-08 GA · Azure Blob · GCS |
-| **OCC** (Optimistic Concurrency Control) | 并发策略——先本地算、提交时验证、冲突重试 | 湖表写入通用模型 |
-| **version** | Delta 的 commit 序号（0, 1, 2, ...）；全局单调整数 | Delta 协议 |
-| **snapshot** | Iceberg / Paimon 的不可变元数据视图；由 snapshot id 标识 | Iceberg / Paimon spec |
-| **instant** | Hudi Timeline 上的事件条目（commit / clean / compaction / rollback） | Hudi spec |
-| **sequence-number** | Iceberg v2+ 的全局单调序号，决定 MoR 合并顺序 | Iceberg spec |
+| **OCC** (Optimistic Concurrency Control) | 策略层 | 先本地算、提交时验证、冲突重试——湖表写入通用模型 |
+| **CAS** (Compare-And-Swap) | 原语层 | "只在当前值等于预期时更新"——来自硬件，被 RDBMS / 分布式协议通用采用 |
+| **Conditional PUT** | 存储实现层 | 对象存储的 CAS 实现（`If-None-Match` / `If-Match`）· S3 2024-08 GA · Azure Blob · GCS |
 
-**关系**：`OCC` 是策略 → 实现可以是 `CAS`（指针层）或 `Conditional PUT`（对象存储层）。`version` / `snapshot` / `instant` 分别是 **Delta / Iceberg+Paimon / Hudi** 的同一抽象的不同命名。
+**关系**：OCC 是顶层策略 → 可以用 CAS 在 Catalog 指针层实现，也可以直接用 Conditional PUT 在对象存储层实现。
+
+**组 B · 各家"一次提交"的命名差异**（其实指同一抽象：**不可变的表版本快照**）：
+
+| 术语 | 所属 | 备注 |
+|---|---|---|
+| **snapshot** | Iceberg / Paimon | 由 snapshot id 标识；元数据视图 |
+| **version** | Delta | commit 序号 0,1,2...；全局单调整数 |
+| **instant** | Hudi | Timeline 上的事件条目（commit / clean / compaction / rollback 四种类型）|
+
+**附**：**sequence-number** 是 Iceberg v2+ 的全局单调序号（不同于 snapshot id），决定 MoR 的 delete 应用顺序——见 [Delete Files](delete-files.md)。
 
 ### Schema Evolution · 列用 ID 不用名字
 

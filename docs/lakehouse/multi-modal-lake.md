@@ -81,7 +81,15 @@ dataset.create_index("embedding", index_type="IVF_PQ")
 - ❌ 生态还在追赶（Trino / Flink 连接器成熟度不如 Parquet）
 - ❌ 作为"湖表层"还年轻，Catalog 集成待完善
 
-**现实选择**：**数据量和查询量都大、向量主导** → Lance；**向量只是附属列、查询为主结构化过滤** → Iceberg + Parquet。
+**决策矩阵**（按"向量角色 × 规模"选）：
+
+| 向量定位 ↓ / 规模 → | 万-百万行 | 千万+ |
+|---|---|---|
+| **向量是主查询维度**（ANN 为主路径）| Iceberg + 外挂 Milvus / 或直接 Lance | **Lance**（或 Iceberg + Milvus 分层）|
+| **向量是辅助列**（结构化过滤为主，ANN 偶用） | Iceberg + Parquet（内存排序可接受）| Iceberg + Parquet（ANN 上 Milvus 加速）|
+| **向量 + 其他多模共存** | Lance（一等公民）| Lance 或等待 Iceberg v3 + Puffin HNSW 落地 |
+
+核心权衡：**生态成熟度（Iceberg/Parquet）** vs **向量性能（Lance）** vs **运维简单性（外挂 Milvus）**。
 
 ### 索引载体
 

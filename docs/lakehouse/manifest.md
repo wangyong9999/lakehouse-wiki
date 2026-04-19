@@ -94,14 +94,20 @@ data_file: {
 
 **核心**：`lower_bounds` / `upper_bounds` 让读者**不打开 data file 即可按谓词剪枝**。
 
-### Iceberg v3 的 Manifest 扩展
+### Iceberg v3 的 Manifest 扩展 · Row Lineage
 
-v3 spec 在 Manifest entry 里加了 **Row Lineage** 支持：
+**v3 之前的缺口**：Manifest 只记"文件级"变化（增/删/修改了哪些 data file），**下游消费者要自己推导"具体哪一行变了"**——update 本质上是 delete 老行+insert 新行，跨 snapshot 对同一业务实体的追踪要额外工程。
 
-- `first-row-id`：该 data file 里第一行的全局行 ID（单调递增）
+**v3 的补强**：Manifest entry 加了两个字段，让行级身份在 snapshot 间保持：
+
+- `first-row-id`：该 data file 里第一行的全局行 ID（单调递增，跨 snapshot 稳定）
 - `last-updated-sequence-number`：该行最近一次被修改时的 sequence number
 
-**Row Lineage 的用途**：让下游流消费者 / CDC 消费者能精确追踪"某一行在多个 snapshot 间的演变"，而不只是"这个 snapshot 里增删了哪些 file"。这是 v3 对"流式读"能力的关键补强，也是 Materialized View 增量刷新的基础。
+**落地价值**：
+
+- **精确 CDC** · 流消费者能追踪"这一行在 snapshot N 是值 V1、在 N+5 被更新为 V2"——而不是"N+5 里有行被更新"
+- **Materialized View 增量刷新** · 基于 row-level diff 刷 MV 比 file-level diff 少大量全刷情况
+- **行级审计** · 合规场景"这一条记录 5 年内被谁改过"可直接查
 
 ## 3. 查询剪枝流程
 

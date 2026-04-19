@@ -109,9 +109,27 @@ warehouse/
         changelog-0.parquet
 ```
 
-### Bucket 分布
+### Bucket 分布 · 和 Partition 的关系
 
-Paimon 把数据**按主键 hash 分桶**。Bucket 决定写并行度 + 合并粒度。
+Paimon 有**两层组织维度**：
+
+```
+Table
+  ├── Partition A (eg. dt=2026-04-19)
+  │     ├── bucket-0/   ← 主键 hash 到 0
+  │     │     ├── data-0.parquet (L0)
+  │     │     ├── data-1.parquet (L1)
+  │     │     └── ...
+  │     ├── bucket-1/
+  │     └── bucket-N/
+  └── Partition B (eg. dt=2026-04-20)
+        └── ...
+```
+
+- **Partition**（可选）—— 按业务维度分目录，实现批删 / 冷热分层（和 Iceberg 同）
+- **Bucket** —— 分区内再按**主键 hash** 分桶，决定写并行度 + LSM 合并粒度
+
+换言之：**partition 是粗粒度业务切片，bucket 是细粒度 LSM 单位**；主键表常是 "`PARTITIONED BY (dt) WITH (bucket=16)`" 这种搭配。
 
 - **固定 Bucket 数**（默认）：简单，扩容时要 rescale
 - **Dynamic Bucket**（新）：热点自动扩
