@@ -1,6 +1,7 @@
 ---
 title: 湖仓表格式
 description: Lakehouse 表格式的核心概念与主流实现
+applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
 ---
 
 # 湖仓表格式
@@ -16,6 +17,16 @@ description: Lakehouse 表格式的核心概念与主流实现
     - [压缩与编码](../foundations/compression-encoding.md) · [列式 vs 行式](../foundations/columnar-vs-row.md) —— 文件内部的组织方式
 
     如果还没读过上面这些物理层，建议先过一遍 [基础模块的主线](../foundations/index.md)。
+
+## 建议阅读顺序
+
+!!! tip "从"第一次接触湖表"到"能做选型"的 6 步"
+    1. **[湖表](lake-table.md)** —— 先理解"建在对象存储上的表"到底是什么
+    2. **[Snapshot](snapshot.md)** —— 最核心的机制；其他能力都是它的派生
+    3. **[Manifest](manifest.md)** —— Snapshot 下一层的索引结构 · 湖表性能基石
+    4. 按需读演化能力：[Schema](schema-evolution.md) / [Partition](partition-evolution.md) / [Time Travel](time-travel.md) / [Branching](branching-tagging.md)
+    5. 上生产必读运维三件套：[Delete Files](delete-files.md) → [Compaction](compaction.md) → [Streaming Upsert / CDC](streaming-upsert-cdc.md)
+    6. 最后对照实现选型：[Iceberg](iceberg.md) / [Paimon](paimon.md) / [Hudi](hudi.md) / [Delta](delta-lake.md)
 
 ## 核心概念
 

@@ -107,7 +107,7 @@ Puffin 是一个**容器格式**。整体布局：
 - **消费者**：所有支持 v3 的 reader
 - **状态**：v3 spec 新增，生态正在实现
 
-**Iceberg v3 的 DV 和 Delta DV 的差异**：Iceberg DV 存在 Puffin 里（blob type `deletion-vector-v1`）；Delta DV 存在 `_delta_log/` 的 sidecar 文件里。结构相似（都是 Roaring bitmap），载体不同。
+**Iceberg v3 的 DV 和 Delta DV 的差异**：Iceberg DV 存在 Puffin 里（blob type `deletion-vector-v1`）；Delta DV 存在 `_delta_log/` 的 sidecar 文件里。结构相似（都是 Roaring bitmap），载体不同。完整的 DV 语义 / 读路径见 [Delete Files](delete-files.md)。
 
 ## 4. 社区 proposal（未接纳 spec）
 

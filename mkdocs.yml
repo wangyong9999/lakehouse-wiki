@@ -146,8 +146,8 @@ nav:
       - Branching & Tagging: lakehouse/branching-tagging.md
       - Puffin: lakehouse/puffin.md
       - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
-      - Compaction: lakehouse/compaction.md
       - Delete Files: lakehouse/delete-files.md
+      - Compaction: lakehouse/compaction.md
       - Apache Iceberg: lakehouse/iceberg.md
       - Apache Paimon: lakehouse/paimon.md
       - Apache Hudi: lakehouse/hudi.md

@@ -101,7 +101,7 @@ data_file_a.parquet → DV = Roaring bitmap(42, 87)
 | 小文件问题 | delete 文件数量易爆 | DV 文件数量等于被删 data file 数 |
 | 消费生态 | v2 reader | v3 reader |
 
-**过渡期**：v2 表 + v2 reader 继续用 position delete；新表用 v3 + DV；跨版本读写要版本协商。
+**过渡期**：v2 表 + v2 reader 继续用 position delete；新表用 v3 + DV；跨版本读写要版本协商。v3 DV 是 [Iceberg v3 整体能力演进](iceberg.md) 的一部分——配套还有 Row Lineage / Variant / Geometry 等新特性（见 Iceberg 页"v3 spec 演进"段）。
 
 ### Iceberg DV vs Delta DV 的存放差异
 

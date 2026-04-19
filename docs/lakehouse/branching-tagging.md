@@ -2,6 +2,7 @@
 title: Iceberg Branching & Tagging
 type: concept
 depth: 进阶
+applies_to: Iceberg spec v2+ · 引擎 1.2+（Spark/Flink/Trino）
 prerequisites: [snapshot, time-travel]
 tags: [lakehouse, iceberg, branch]
 related: [snapshot, time-travel, nessie]

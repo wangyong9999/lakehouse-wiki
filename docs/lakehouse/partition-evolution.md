@@ -1,6 +1,7 @@
 ---
 title: Partition Evolution（分区演化）
 type: concept
+applies_to: Iceberg v1+（Paimon / Hudi / Delta 有限支持）
 tags: [lakehouse, partition, iceberg]
 aliases: [分区演化, Partition Spec Evolution]
 related: [lake-table, schema-evolution, manifest]

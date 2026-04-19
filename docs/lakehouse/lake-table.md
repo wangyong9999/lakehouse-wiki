@@ -126,6 +126,22 @@ flowchart TD
 
 详见 [Catalog 模块](../catalog/index.md) 和 [Catalog 全景对比](../compare/catalog-landscape.md)。
 
+### 术语对照 · CAS / Conditional PUT / OCC / version / snapshot / instant
+
+读 spec 时这几个词常被混用为同义词，在规范里其实**职责不同**：
+
+| 术语 | 含义 | 出处 / 用法 |
+|---|---|---|
+| **CAS** (Compare-And-Swap) | 底层原子原语——"只在当前值等于预期时更新" | 硬件 / RDBMS / 分布式协议通用抽象 |
+| **Conditional PUT** | 对象存储层的 CAS 实现（`If-None-Match` / `If-Match`） | S3 2024-08 GA · Azure Blob · GCS |
+| **OCC** (Optimistic Concurrency Control) | 并发策略——先本地算、提交时验证、冲突重试 | 湖表写入通用模型 |
+| **version** | Delta 的 commit 序号（0, 1, 2, ...）；全局单调整数 | Delta 协议 |
+| **snapshot** | Iceberg / Paimon 的不可变元数据视图；由 snapshot id 标识 | Iceberg / Paimon spec |
+| **instant** | Hudi Timeline 上的事件条目（commit / clean / compaction / rollback） | Hudi spec |
+| **sequence-number** | Iceberg v2+ 的全局单调序号，决定 MoR 合并顺序 | Iceberg spec |
+
+**关系**：`OCC` 是策略 → 实现可以是 `CAS`（指针层）或 `Conditional PUT`（对象存储层）。`version` / `snapshot` / `instant` 分别是 **Delta / Iceberg+Paimon / Hudi** 的同一抽象的不同命名。
+
 ### Schema Evolution · 列用 ID 不用名字
 
 ```
