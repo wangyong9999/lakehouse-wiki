@@ -137,23 +137,27 @@ nav:
       - Arrow · FlightSQL · ADBC: foundations/arrow-ecosystem.md
   - 湖仓表格式:
       - lakehouse/index.md
-      - 湖表: lakehouse/lake-table.md
-      - Snapshot: lakehouse/snapshot.md
-      - Manifest: lakehouse/manifest.md
-      - Schema Evolution: lakehouse/schema-evolution.md
-      - Partition Evolution: lakehouse/partition-evolution.md
-      - Time Travel: lakehouse/time-travel.md
-      - Branching & Tagging: lakehouse/branching-tagging.md
-      - Puffin: lakehouse/puffin.md
-      - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
-      - Delete Files: lakehouse/delete-files.md
-      - Compaction: lakehouse/compaction.md
-      - Materialized View: lakehouse/materialized-view.md
-      - 多模湖仓: lakehouse/multi-modal-lake.md
-      - Apache Iceberg: lakehouse/iceberg.md
-      - Apache Paimon: lakehouse/paimon.md
-      - Apache Hudi: lakehouse/hudi.md
-      - Delta Lake: lakehouse/delta-lake.md
+      - 核心协议:
+          - 湖表: lakehouse/lake-table.md
+          - Snapshot: lakehouse/snapshot.md
+          - Manifest: lakehouse/manifest.md
+          - Schema Evolution: lakehouse/schema-evolution.md
+          - Partition Evolution: lakehouse/partition-evolution.md
+          - Time Travel: lakehouse/time-travel.md
+          - Branching & Tagging: lakehouse/branching-tagging.md
+          - Puffin: lakehouse/puffin.md
+      - 运维机制:
+          - Streaming Upsert / CDC: lakehouse/streaming-upsert-cdc.md
+          - Delete Files: lakehouse/delete-files.md
+          - Compaction · 维护生命周期: lakehouse/compaction.md
+      - 扩展 / 前沿:
+          - Materialized View: lakehouse/materialized-view.md
+          - 多模湖仓: lakehouse/multi-modal-lake.md
+      - 系统实现:
+          - Apache Iceberg: lakehouse/iceberg.md
+          - Apache Paimon: lakehouse/paimon.md
+          - Apache Hudi: lakehouse/hudi.md
+          - Delta Lake: lakehouse/delta-lake.md
   - 元数据与 Catalog:
       - catalog/index.md
       - Hive Metastore: catalog/hive-metastore.md

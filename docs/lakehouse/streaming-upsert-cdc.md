@@ -138,7 +138,7 @@ SELECT * FROM orders /*+ OPTIONS(
 | **位点表示** | snapshot id（client 管）| **consumer-id**（server 记）| instant timestamp（client 管）|
 | **Changelog 原生** | v2 有限（`table.changes()`）· v3 Row Lineage 增强 | **一等公民**（4 种 producer）| 有（`cdc` action 启用）|
 | **断点续读 server-side** | ❌（client 自管 snapshot id）| ✅ Paimon consumer 保留 snapshot | ❌（client 自管 instant）|
-| **流 API** | Flink Iceberg Source（有 limit）| **Flink Paimon Source（原生）** | Flink Hudi Source |
+| **流 API** | Flink Iceberg Source · 基于 snapshot 切片、非原生 changelog | **Flink Paimon Source（changelog 一等公民）** | Flink Hudi Source |
 | **延迟** | commit 频率决定（分钟）| 可到 30s-2min | commit 频率决定（分钟）|
 | **读到"中间状态"** | 读 snapshot 是完整 | 可能读到 compaction 前半成品（需 `lookup-wait`）| 同 Paimon |
 | **主用场景** | 批为主 + 轻度增量 | 流原生、主键 upsert | Spark 栈、主键 upsert |

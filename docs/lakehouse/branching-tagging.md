@@ -2,6 +2,8 @@
 title: Iceberg Branching & Tagging
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-19
 applies_to: Iceberg spec v2+ · 引擎 1.2+（Spark/Flink/Trino）
 prerequisites: [snapshot, time-travel]
 tags: [lakehouse, iceberg, branch]
@@ -31,8 +33,8 @@ status: stable
 -- 默认写 main 分支
 INSERT INTO orders VALUES (...);
 
--- 创建新分支
-ALTER TABLE orders CREATE BRANCH dev SNAPSHOT 12345;
+-- 创建新分支（官方 Spark DDL）
+ALTER TABLE orders CREATE BRANCH dev AS OF VERSION 12345 RETAIN 7 DAYS;
 
 -- 在 dev 分支上写
 INSERT INTO orders.branch_dev VALUES (...);
@@ -40,7 +42,7 @@ INSERT INTO orders.branch_dev VALUES (...);
 -- 读 dev 分支
 SELECT * FROM orders.branch_dev;
 
--- fast-forward main 到 dev
+-- fast-forward main 到 dev（Iceberg 1.3+ procedure）
 CALL system.fast_forward('orders', 'main', 'dev');
 ```
 
@@ -51,10 +53,13 @@ CALL system.fast_forward('orders', 'main', 'dev');
 命名的 snapshot 引用，只读：
 
 ```sql
--- 给当前 snapshot 打 tag
-ALTER TABLE orders CREATE TAG audit_2026_q1 
-  SNAPSHOT 98765
+-- 给指定 snapshot 打 tag（官方 Spark DDL）
+ALTER TABLE orders CREATE TAG audit_2026_q1
+  AS OF VERSION 98765
   RETAIN 365 DAYS;
+
+-- 打在当前 snapshot（省略 AS OF VERSION）
+ALTER TABLE orders CREATE TAG release_v1 RETAIN 365 DAYS;
 
 -- 读 tag
 SELECT * FROM orders.tag_audit_2026_q1;
@@ -106,17 +111,18 @@ ALTER TABLE db.orders DROP BRANCH `etl-20260418`;
 
 ```sql
 -- 每日作业开一个短 branch
-CALL system.create_branch('orders', 'etl_20260417');
+ALTER TABLE orders CREATE BRANCH etl_20260417 RETAIN 7 DAYS;
 
 -- 作业在该分支上写、验证
 INSERT INTO orders.branch_etl_20260417 SELECT ...;
-CALL system.validate_data_quality('orders.branch_etl_20260417');
+-- 业务侧自定义 DQ 检查（Iceberg 不提供 validate_data_quality）
+SELECT COUNT(*), COUNT(DISTINCT order_id) FROM orders.branch_etl_20260417;
 
 -- 通过后合并到 main
 CALL system.fast_forward('orders', 'main', 'etl_20260417');
 
 -- 不通过就丢弃
-CALL system.drop_branch('orders', 'etl_20260417');
+ALTER TABLE orders DROP BRANCH etl_20260417;
 ```
 
 **价值**：失败作业不污染生产。
@@ -126,7 +132,8 @@ CALL system.drop_branch('orders', 'etl_20260417');
 季报、合规报告、外部审计要"以某时刻为准"：
 
 ```sql
-ALTER TABLE orders CREATE TAG q1_2026_audit SNAPSHOT 98765 RETAIN 5 YEARS;
+ALTER TABLE orders CREATE TAG q1_2026_audit AS OF VERSION 98765 RETAIN 365 DAYS;
+-- 要永久保留就省略 RETAIN
 ```
 
 5 年内 `expire_snapshots` 不碰这个 snapshot，审计可以随时回看。
@@ -144,14 +151,15 @@ ALTER TABLE features CREATE TAG recsys_v3_train RETAIN 365 DAYS;
 ### 用法 4：AB 测试 / 热修复
 
 ```sql
--- 发现 main 分支某批数据有问题
-CALL system.create_branch('events', 'hotfix', SNAPSHOT => 12300);
+-- 发现 main 分支某批数据有问题 · 从历史 snapshot 开分支修
+ALTER TABLE events CREATE BRANCH hotfix AS OF VERSION 12300 RETAIN 30 DAYS;
 
 -- 在 hotfix 上重写
 DELETE FROM events.branch_hotfix WHERE ...;
 INSERT INTO events.branch_hotfix SELECT fixed_data ...;
 
 -- 验证后 fast-forward main
+CALL system.fast_forward('events', 'main', 'hotfix');
 ```
 
 ## 分支模型 vs Nessie

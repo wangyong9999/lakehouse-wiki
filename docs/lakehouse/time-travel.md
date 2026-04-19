@@ -2,7 +2,8 @@
 title: Time Travel（时间旅行）
 type: concept
 depth: 进阶
-last_reviewed: 2026-04-18
+level: A
+last_reviewed: 2026-04-19
 applies_to: Iceberg v2+, Delta 3+, Hudi 0.14+, Paimon 0.9+
 tags: [lakehouse, table-format, time-travel]
 aliases: [时间旅行, Table Versioning]

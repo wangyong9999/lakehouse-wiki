@@ -1,6 +1,9 @@
 ---
 title: Partition Evolution（分区演化）
 type: concept
+depth: 进阶
+level: A
+last_reviewed: 2026-04-19
 applies_to: Iceberg v1+（Paimon / Hudi / Delta 有限支持）
 tags: [lakehouse, partition, iceberg]
 aliases: [分区演化, Partition Spec Evolution]

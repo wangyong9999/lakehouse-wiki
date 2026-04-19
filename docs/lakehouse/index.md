@@ -25,10 +25,11 @@ applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
     2. **[Snapshot](snapshot.md)** —— 最核心的机制；其他能力都是它的派生
     3. **[Manifest](manifest.md)** —— Snapshot 下一层的索引结构 · 湖表性能基石
     4. 按需读演化能力：[Schema](schema-evolution.md) / [Partition](partition-evolution.md) / [Time Travel](time-travel.md) / [Branching](branching-tagging.md)
-    5. 上生产必读运维三件套：[Delete Files](delete-files.md) → [Compaction](compaction.md) → [Streaming Upsert / CDC](streaming-upsert-cdc.md)
-    6. 最后对照实现选型：[Iceberg](iceberg.md) / [Paimon](paimon.md) / [Hudi](hudi.md) / [Delta](delta-lake.md)
+    5. 上生产必读运维三件套：[Delete Files](delete-files.md) → [Compaction · 维护生命周期](compaction.md) → [Streaming Upsert / CDC](streaming-upsert-cdc.md)
+    6. 对照实现选型：[Iceberg](iceberg.md) / [Paimon](paimon.md) / [Hudi](hudi.md) / [Delta](delta-lake.md)
+    7. 想看前沿方向再读：[Materialized View](materialized-view.md) / [多模湖仓](multi-modal-lake.md)
 
-## 核心概念
+## 核心协议 · 表格式标准化能力（稳定）
 
 - [湖表](lake-table.md) —— 为什么它和传统 DB 存储引擎不是一回事
 - [Snapshot](snapshot.md) —— 快照如何让"时间旅行"成为可能
@@ -38,11 +39,22 @@ applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
 - [Time Travel](time-travel.md) —— 查过去某一时刻 / 版本的样子
 - [Branching & Tagging](branching-tagging.md) —— Iceberg 原生分支 / 标签
 - [Puffin](puffin.md) —— Iceberg 的辅助索引侧车文件
+
+## 运维机制 · 写后要管的事（稳定）
+
 - [Streaming Upsert / CDC](streaming-upsert-cdc.md) —— 流式变更持续入湖
 - [Delete Files](delete-files.md) —— 行级删除背后的机制
-- [Compaction](compaction.md) —— 小文件治理，运维必修
-- [Materialized View](materialized-view.md) —— 湖上 MV · 增量刷新 · Feature Store 雏形
-- [多模湖仓](multi-modal-lake.md) —— 向量 / 地理 / Variant / 图 在湖表上的承载
+- [Compaction](compaction.md) —— 小文件治理 · 含"生产维护生命周期"全景
+
+## 扩展能力 / 前沿延伸 · 非协议核心（成熟度不一）
+
+!!! info "成熟度声明"
+    以下两页**不是**表格式协议的稳定核心能力：
+    - **Materialized View** 主要是**引擎层实现**（Trino connector / Databricks 商业能力），spec 尚未标准化
+    - **多模湖仓** 是**前沿方向**——向量 / 地理 / Variant / 图在湖表上的承载仍在演进
+
+- [Materialized View](materialized-view.md) —— 湖上 MV · 引擎层实现为主 · Feature Store 雏形
+- [多模湖仓](multi-modal-lake.md) —— 前沿 · 向量 / 地理 / Variant / 图 的湖表承载
 
 ## 主流实现
 

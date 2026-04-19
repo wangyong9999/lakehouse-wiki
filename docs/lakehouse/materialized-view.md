@@ -14,14 +14,20 @@ status: stable
 
 # Materialized View · 湖上物化视图
 
+!!! warning "重要说明 · 湖上 MV 当前成熟度"
+    **到 2026-Q2，"湖上 MV" 尚未形成跨格式统一的协议标准**。本页讨论的主要是：**引擎层实现**（Trino / Spark 的 connector）和**表格式层的等价物**（Paimon aggregation table、Databricks Managed MV）。这意味着：
+    - 不同引擎间的 MV 定义、刷新语义、stale 处理**不互通**
+    - 本页的 SQL 示例都**绑定特定引擎**，跨引擎共享要靠 Iceberg View Spec + storage table 的组合
+    - 若追求"一次定义跨所有引擎用" → **该能力仍在演进中**，生产选型要谨慎
+
 !!! tip "一句话理解"
-    把一条查询**物化成一张表**——定期（或触发）增量刷新。传统 DB 里 MV 已成熟 30 年；**湖上 MV 是 2024-2025 刚成型**的新基础设施，**它同时是"BI 聚合加速器"和"AI Feature Store 的基础设施"**——这是把它放在资深阅读的根本原因。
+    把一条查询**物化成一张表**——定期（或触发）增量刷新。传统 DB 里 MV 已成熟 30 年；**湖上 MV 仍在形成中**（2024-2026），但已是 **"BI 聚合加速器" + "AI Feature Store 基础设施"** 的关键拼图。
 
 !!! abstract "TL;DR"
-    - **湖上 MV = 一张真实湖表 + 源表 snapshot 位点 + 刷新策略**
-    - **增量刷新**核心：读源表两个 snapshot 的差集 → 应用到 MV → 推进位点
-    - **四家状态**：Iceberg（spec proposal）· Paimon（aggregation 表原生）· Delta（Databricks 托管）· Hudi（无独立 MV，用 Incremental Query 自建）
-    - **对 AI 关键**：Embedding 表、特征表自然契合 MV 语义——CDC 触发增量重算
+    - **湖上 MV 本质 = 一张真实湖表 + 源表位点记录 + 刷新策略**（各家实现不同）
+    - **增量刷新原理**：读源表两个 snapshot 的差集 → 应用到 MV → 推进位点
+    - **四家状态**：Iceberg（View Spec + storage table，无 MV spec）· Paimon（aggregation 表等价）· Delta（Databricks 托管）· Hudi（Incremental Query 手写）
+    - **引擎层驱动 vs 协议层**：Trino / Spark 的 Iceberg connector 给出了 MV 管理能力，但**这是 connector 功能不是 Iceberg spec 标准化**
     - **边界**：MV 不是流计算；它是"离散刷新的物化"，和 Flink 持续查询互补
 
 ## 为什么值得专门一页
@@ -29,7 +35,7 @@ status: stable
 三条动机被市场长期忽略：
 
 1. **BI 加速**：大宽表聚合 MV 是 OLAP 的古老配方，搬到湖上能**让 Trino / StarRocks 秒级返回大数据量报表**而不走 OLAP 副本
-2. **AI Feature Store 的协议化**：多数 Feature Store（Feast / Tecton）是 MV 的"重包装"——如果湖表原生支持 MV，Feature Store 就简化为**命名约定 + 刷新调度**
+2. **AI Feature Store 的协议化**：多数 Feature Store（Feast / Tecton）底层都要落到"物化+增量+版本化"的表上；如果湖表原生支持 MV，Feature Store 的核心功能（去重 / 版本 / RBAC / 血缘）可以部分下沉到平台层
 3. **CDC 流与批的融合**：MV 订阅源表 snapshot，天然地用"批的形态"消费"流的变化"——比自己写 Flink 作业维护一张聚合表**成本低一个量级**
 
 ## 和 RDBMS MV 的根本差异
@@ -70,24 +76,34 @@ flowchart LR
 
 ## 四家状态 · 2026 横向对比
 
-### Iceberg MV · spec proposal (2024+)
+### Iceberg · Connector 层 MV（Trino / Spark）· 协议层尚无 MV spec
 
-- **spec 进展**：2024 进入 community proposal，Trino 1.8+ 先行预览实现，Spark 和 Flink 迭代中
-- **架构**：MV 是一张真实 Iceberg 表 + metadata 里记 `refresh_state`（源表 snapshot id 位点）
-- **跨引擎共享**：定义 + 刷新状态都是 Iceberg 对象 → 任何支持 Iceberg 的引擎可读 MV 数据
-- **Stale 检测**：查询时可以声明"容忍到 N 分钟过期" → 超过则 fallback 到源表
+**辨清三件事**：
+
+1. **Iceberg View Spec v1**（2023 ratified）—— **只定义 view**（跨引擎共享 SQL 定义），**不是 MV**
+2. **Iceberg MV spec** —— 社区有讨论但**尚未形成正式 spec**（截至 2026-Q2）
+3. **Trino Iceberg connector 的 MV 能力** —— **connector 层提供了 MV 管理**：view definition + Iceberg storage table + freshness 判定。这是引擎层功能，不是 spec 标准化
+
+**Trino 的做法**（版本号：Trino MV 能力在 **397（2022-09）** 之后逐步完善，近期如 **479（2025-12）** 加了 `GRACE PERIOD` 扩展）：
 
 ```sql
--- Trino 1.8+ 示例
-CREATE MATERIALIZED VIEW sales_by_region_daily
-WITH (
-  format = 'ICEBERG',
-  refresh_schedule = 'EVERY 10 MINUTES'
-) AS
-SELECT region, date_trunc('day', ts) AS dt, SUM(amount) AS total
-FROM iceberg.sales
-GROUP BY region, date_trunc('day', ts);
+-- Trino Iceberg connector · MV 创建
+CREATE MATERIALIZED VIEW iceberg.default.sales_by_region_daily
+  WITH (format = 'PARQUET')
+  AS SELECT region, date_trunc('day', ts) AS dt, SUM(amount) AS total
+  FROM iceberg.default.sales
+  GROUP BY region, date_trunc('day', ts);
+
+-- 手动刷新（Trino 没有内置自动刷新调度，要靠外部 cron / Airflow）
+REFRESH MATERIALIZED VIEW iceberg.default.sales_by_region_daily;
+
+-- 新版本可加 GRACE PERIOD · 超过 stale 窗口就 fallback 到源表
+CREATE MATERIALIZED VIEW ... GRACE PERIOD INTERVAL '1' HOUR ...;
 ```
+
+**关键认知**：**不要把 connector 能力当 Iceberg spec 能力**。换到 Spark 或 Flink 读 Trino 建的 MV，表数据能读（就是一张 Iceberg 表），但 **freshness 判定和刷新语义不自动共享**。
+
+**Spark / Flink 的 Iceberg MV 能力**：目前主要通过**手写作业 + Iceberg View Spec** 模拟，还没有像 Trino connector 那种一等管理。
 
 ### Paimon · Aggregation Table + Partial-Update（原生）
 
@@ -112,13 +128,14 @@ CREATE TABLE user_stats (
 
 **Paimon 的优势**：**流式 CDC 天然增量刷 MV**——比 Iceberg MV 的 "定期 diff" 模式实时性更好。**这是 Paimon 在 "实时数仓 + Feature Store" 场景的杀手锏**。
 
-### Delta · Databricks Materialized Views
+### Delta · Databricks Materialized Views（商业 · 非 spec）
 
-- **商业能力**：Databricks Runtime 15+ 提供 Managed MV（自动刷新、查询优化器感知）
-- **开源 Delta 协议**：Materialized View 目前是 Databricks 私有能力，**未进开源 Delta protocol**
-- **2026 状态**：Delta 开源版无 MV；走 Databricks 就能用
+- **商业能力**：较新的 Databricks Runtime（配 Unity Catalog）提供 Managed MV · 自动刷新 + Photon 查询优化器感知
+- **开源 Delta 协议**：Materialized View **未进开源 Delta Protocol**——截至 2026-Q2，它是 Databricks Runtime 层能力
+- **Delta Live Tables (DLT)** 是 Databricks 的声明式 pipeline 产品，能自动生成 MV 风格的增量表，但同样是商业能力
+- **开源栈的替代**：Delta 开源版没有原生 MV；要做类似功能走 Spark Structured Streaming + MERGE 手写
 
-这是 Delta 最明显的**开源 vs 商业版差异点**之一。
+这是 Delta 最明显的**开源 vs 商业版差异点**之一——同样提示 "不要把商业 Runtime 能力当 Delta protocol 能力"。
 
 ### Hudi · 无独立 MV · Incremental Query 自建
 
@@ -176,11 +193,11 @@ WHERE ts >= current_timestamp - INTERVAL '7' DAY
 GROUP BY user_id;
 ```
 
-- 用 Feast / Tecton 写这张表要 200 行 YAML 配置 + 自建 pipeline
-- 用 **Paimon Aggregation + 订阅 CDC** 写就是 10 行 SQL
-- 用 **Iceberg MV（Trino）** 写也是 10 行 SQL
+- Feast / Tecton 传统写法：特征定义 + 物化 pipeline + 版本化 + 在线同步，都要自建
+- Paimon Aggregation + CDC：10 行 SQL 解决**物化 + 增量**
+- Trino Iceberg MV：10 行 SQL 解决**定义 + 刷新**
 
-**Feature Store 商业产品的价值正在被压缩**——湖上 MV 替代了 80% 的需求。剩下的 20%（在线特征点查、毫秒级）还需要专用系统。
+**Feature Store 商业产品的价值被部分压缩**——**离线物化 / 版本化** 这 2 个能力湖上 MV 开始覆盖；剩下的**在线点查（毫秒级）、特征管理（RBAC、血缘、监控）**仍然需要专用系统（Feast / Tecton / Tecton-on-Delta 等）。
 
 ### Embedding MV · AI 场景的新范式
 

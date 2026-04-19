@@ -208,7 +208,70 @@ def lake_maintenance():
     rewrite_data >> rewrite_deletes >> rewrite_manifests >> expire >> orphan
 ```
 
-## 9. 相关
+## 9. 生产维护生命周期 · 表从写入到回收的闭环
+
+表格式"跑得动"和"跑得稳"是两回事。湖表上生产后，**运维语义分散在多个机制里**——这里统一成一条主轴方便建 runbook：
+
+### 全链路视图
+
+```mermaid
+flowchart LR
+  W[写入: append / upsert] --> SS[产生新 snapshot]
+  SS --> DV[行级删除: DV / delete file]
+  SS --> SF[产生小文件]
+  DV --> CP1[Compaction · 合并 DV+data]
+  SF --> CP2[Compaction · 合并小文件]
+  CP1 --> CP3[Manifest rewrite]
+  CP2 --> CP3
+  CP3 --> EXP[Expire Snapshots · 回收老 snapshot]
+  EXP --> ORP[Remove Orphan Files · 清无主文件]
+  ORP --> DONE[对象存储实际释放空间]
+```
+
+### 六个动作 · 各自负责什么
+
+| 动作 | 频率 | 负责消除 | 命令（Iceberg） | 对应阅读 |
+|---|---|---|---|---|
+| **Compaction · data** | 小时-天 | 小文件 | `rewrite_data_files` | 本页 §3-7 |
+| **Compaction · deletes/DV** | 小时-天 | MoR 读放大 | `rewrite_position_deletes` | [Delete Files](delete-files.md) |
+| **Manifest Rewrite** | 天 | manifest 膨胀 | `rewrite_manifests` | [Manifest](manifest.md) |
+| **Expire Snapshots** | 天 | 老 snapshot 元数据 | `expire_snapshots` | [Snapshot](snapshot.md) · [Time Travel](time-travel.md) |
+| **Remove Orphan Files** | 周 | 写失败留下的孤儿 | `remove_orphan_files` | [Snapshot](snapshot.md) |
+| **Tag Retention 审计** | 季度 | 过期 tag | `ALTER TABLE ... DROP TAG` | [Branching & Tagging](branching-tagging.md) |
+
+**关键依赖关系**：`rewrite_data_files` → 产生新 snapshot，**老 snapshot 还在**；必须 `expire_snapshots` 才释放指向老数据的元数据；然后 `remove_orphan_files` 才真正删文件。**顺序错了会泄漏存储**。
+
+### 流式表 vs 批式表 · 节奏差异
+
+| 节奏维度 | 批式表（日终写）| 流式表（持续 CDC 入湖）|
+|---|---|---|
+| snapshot 频率 | 低（天级）| 高（分钟级）· 必须配 retention 上限 |
+| compaction 触发 | 手动 / 每日 | **自动 + 持续**（Paimon dedicated compaction job；Iceberg 1.10 支持自动）|
+| DV 堆积 | 缓慢 | 快 · 必须高频 compact |
+| expire 频率 | 低（周）| 高（小时-天级）· 配合流消费者的 consumer-id 最小位点 |
+| 孤儿清理 | 月 | 周（失败重试留下的孤儿多）|
+
+**流式表的额外陷阱**：
+- `expire_snapshots` 不能比最老的流消费者 consumer-id 还激进（见 [Streaming Upsert / CDC](streaming-upsert-cdc.md)）
+- 压缩和写入作业抢资源 → 用**独立 compaction job**
+- Watermark 未推进的 snapshot 不能 expire（否则流式重启丢数）
+
+### 成本账单分解（典型 10-50TB 湖表）
+
+- Compaction 计算：占 5-15% 总 IO → 放 Spot 实例省钱
+- Manifest rewrite：GB 级操作，成本小
+- Expire：扫元数据，分钟级
+- Remove orphan：扫对象存储 LIST，**最贵**——配 `older-than` 避免全扫
+
+### 监控指标（建 dashboard 必选）
+
+- `SELECT file_size_in_bytes FROM db.tbl.files` 分布直方图 · 识别小文件分布
+- Manifest 数量 + 平均大小
+- 最老 snapshot 年龄 · delete 文件占比 · DV 覆盖率
+- Compaction 作业成功率 + 耗时趋势
+- 孤儿文件比例（定期 `remove_orphan_files --dry-run` 采样）
+
+## 10. 相关
 
 - [Streaming Upsert / CDC](streaming-upsert-cdc.md) —— 小文件的主要来源
 - [Delete Files](delete-files.md) —— MoR compaction 的第二个主题
@@ -216,7 +279,7 @@ def lake_maintenance():
 - [Snapshot](snapshot.md) —— expire / vacuum 是 compaction 的配套
 - [性能调优](../ops/performance-tuning.md) · [成本优化](../ops/cost-optimization.md)
 
-## 10. 延伸阅读
+## 11. 延伸阅读
 
 - **[Iceberg Maintenance](https://iceberg.apache.org/docs/latest/maintenance/)**
 - **[Delta OPTIMIZE · Liquid Clustering](https://docs.delta.io/latest/optimizations-oss.html)**
