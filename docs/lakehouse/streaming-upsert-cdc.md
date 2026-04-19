@@ -128,6 +128,27 @@ SELECT * FROM orders /*+ OPTIONS(
 
 注意 `consumer.expiration-time`——如果一个 consumer 挂了太久没读，它的位点会过期以释放 snapshot 保留。流消费者的健康度监控关键指标。
 
+## 三家流读协议差异矩阵
+
+下游"持续消费湖表变更"的协议不一样——同一份业务需求在 Iceberg / Paimon / Hudi 里表达差异很大：
+
+| 维度 | Iceberg Incremental Read | Paimon Streaming Read | Hudi Incremental Query |
+|---|---|---|---|
+| **基础语义** | 读两个 snapshot 的差集 | 流式订阅 changelog | 读两个 instant 之间变更 |
+| **位点表示** | snapshot id（client 管）| **consumer-id**（server 记）| instant timestamp（client 管）|
+| **Changelog 原生** | v2 有限（`table.changes()`）· v3 Row Lineage 增强 | **一等公民**（4 种 producer）| 有（`cdc` action 启用）|
+| **断点续读 server-side** | ❌（client 自管 snapshot id）| ✅ Paimon consumer 保留 snapshot | ❌（client 自管 instant）|
+| **流 API** | Flink Iceberg Source（有 limit）| **Flink Paimon Source（原生）** | Flink Hudi Source |
+| **延迟** | commit 频率决定（分钟）| 可到 30s-2min | commit 频率决定（分钟）|
+| **读到"中间状态"** | 读 snapshot 是完整 | 可能读到 compaction 前半成品（需 `lookup-wait`）| 同 Paimon |
+| **主用场景** | 批为主 + 轻度增量 | 流原生、主键 upsert | Spark 栈、主键 upsert |
+
+**选型启发**：
+
+- 想**下游作业自己不管位点**，让平台帮管 → **Paimon consumer-id** 唯一做到
+- 想**多引擎共享** changelog（Spark / Trino / Flink 都能消费） → **Iceberg**（协议更统一）
+- **Hudi Incremental Query** 是历史路径，灵活但需要自己写作业
+
 ## 性能数字 · 规模基线
 
 | 指标 | 典型值 |

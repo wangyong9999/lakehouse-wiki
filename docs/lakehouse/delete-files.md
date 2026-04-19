@@ -103,15 +103,27 @@ data_file_a.parquet → DV = Roaring bitmap(42, 87)
 
 **过渡期**：v2 表 + v2 reader 继续用 position delete；新表用 v3 + DV；跨版本读写要版本协商。v3 DV 是 [Iceberg v3 整体能力演进](iceberg.md) 的一部分——配套还有 Row Lineage / Variant / Geometry 等新特性（见 Iceberg 页"v3 spec 演进"段）。
 
-### Iceberg DV vs Delta DV 的存放差异
+### 跨格式 DV 实现矩阵 · Iceberg v3 / Delta 3+ / Paimon 0.9+
 
-| | Iceberg v3 DV | Delta 3+ DV |
-|---|---|---|
-| 载体 | Puffin 文件里的 `deletion-vector-v1` blob | `_delta_log/` sidecar 文件（`.deletion-vector-<uuid>.bin`）|
-| 被什么引用 | Manifest entry → Puffin | `remove` action 的 `deletionVector` 字段 |
-| 压缩 | Puffin blob 支持 per-blob 压缩 | 原始字节 |
+三家 DV 的位图本体都是 **Roaring bitmap**；但载体、开启方式、读侧融合机制都不同：
 
-结构相似（都是 Roaring bitmap），**载体不同**。读取路径差异在 reader 实现层。
+| 维度 | Iceberg v3 DV | Delta 3+ DV | Paimon 0.9+ DV |
+|---|---|---|---|
+| **载体** | Puffin 文件的 `deletion-vector-v1` blob | `_delta_log/` 下的 sidecar（`.deletion-vector-<uuid>.bin`）| 独立 DV 文件（`dv-*.bin`）+ manifest 引用 |
+| **开启** | `format-version = 3` 后默认 | `delta.enableDeletionVectors = true` | `deletion-vectors.enabled = true`（建表/ALTER）|
+| **被什么引用** | Manifest entry + Puffin blob | commit JSON 里 `add/remove` action 的 `deletionVector` 字段 | Paimon manifest 里 DV 条目（类似 data file 条目） |
+| **压缩** | Puffin blob 支持 per-blob 压缩 | 原始字节 | 原始字节 |
+| **对 MoR 的替代** | 替代 v2 position-delete file | 替代"重写文件" | 替代 log 文件合并（DV mode） |
+| **读路径融合** | reader 按 Manifest 找 DV Puffin blob → 过滤 | reader 按 `_delta_log` 找 sidecar → 过滤 | reader 按 manifest 找 DV → 过滤 |
+| **跨引擎兼容** | v3-aware reader 都支持（Spark 4.0 最完整）| Delta reader 3.0+ | Paimon 0.9+ 所有 reader |
+
+**共同原理**：**避免 "重写大数据文件" 或 "堆积 delete 文件" 两个极端**，用 per-file 紧凑位图做行级 skip。
+
+**对读者的选择启示**：
+
+- 三家都在 DV 路径上了 → **这是 2026 行级删除的既定方向**
+- 载体差异决定**跨格式互操作时 delete 语义需要翻译**（Apache XTable 的关键工作之一）
+- 和 [Puffin](puffin.md) + [Iceberg](iceberg.md) 的"v3 spec 演进"段对照阅读，能看清 Iceberg 把 DV 标准化成 blob 的架构意图
 
 ## 5. Iceberg Delete File 的使用姿势
 

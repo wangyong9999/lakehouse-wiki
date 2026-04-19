@@ -165,11 +165,31 @@ SELECT * FROM orders.changes(
 
 这是**湖上 CDC 的根基**。下游只读两次 snapshot 的差集，而非全量扫。
 
-### 机制 4 · Snapshot Isolation
+### 机制 4 · Snapshot Isolation · 严谨讨论
 
-- 读 `Snapshot N` 的查询**看不到**并发写入产生的 `N+1`
-- 即使 `N+1` 已提交，长查询仍读 `N`（RC ≈ Repeatable Read）
-- **隔离级别 ≈ 可串行化**（单写多读）
+**湖表的隔离语义不是笼统的"可串行化"**，而是要分读/写细看：
+
+| 并发形态 | 隔离级别 | 机制 |
+|---|---|---|
+| **多读** | Serializable（每个 reader 固定到一个 snapshot id）| 读 immutable snapshot |
+| **单写 + 多读** | Serializable（写入对读者不可见）| snapshot 切换原子 |
+| **多写（不同表）** | 无表间隔离保证 | 见"Multi-table Atomic Commit"限制 |
+| **多写（同表）** | **SI + first-committer-wins + CAS 重试** | 非并发 Serializable |
+
+**为什么 "多写同表" 不是 Serializable**：按 Berenson 1995（SIGMOD） 的定义，**Snapshot Isolation 防 Lost Update（first-committer-wins）** 但允许 **Write Skew**——这个语义湖表原封不动继承。
+
+**举例**（Write Skew）：
+
+```
+Txn A 读 snapshot N，写"把余额 1 转到 2"
+Txn B 读 snapshot N，写"把余额 2 转到 1"
+两者都基于 N 的初始值，互相独立 → 都能 CAS 提交 →
+结果：账户数量对，但"某个不变量"（"两个账户余额差值"）被破坏
+```
+
+**湖表没办法直接防 Write Skew**——需要应用层加"冲突检测"或走**Nessie / Unity Catalog 的跨表事务**。
+
+详见 [foundations/mvcc](../foundations/mvcc.md) 和 [foundations/consistency-models](../foundations/consistency-models.md)。
 
 ### 机制 5 · 过期（Expire）
 

@@ -127,6 +127,35 @@ flowchart TD
 
 详见 [Catalog 模块](../catalog/index.md) 和 [Catalog 全景对比](../compare/catalog-landscape.md)。
 
+### 跨引擎并发读写的一致性边界
+
+**同一张表**，多个引擎（Spark 写 + Trino 读 + Flink CDC）并发怎么样？
+
+| 场景 | 保证 | 前提 |
+|---|---|---|
+| **任意数量 reader 同时读** | ✅ 完整一致 | 每个 reader 读各自固定的 snapshot |
+| **1 writer + N reader** | ✅ 完整一致 | reader 读的 snapshot 不受 writer 影响 |
+| **N writer 并发（同一 table）** | ⚠️ first-committer-wins | 后到的 writer CAS 失败 → 重试或放弃 |
+| **writer 写到一半崩** | ✅ 原子 | 已写数据文件成孤儿（可 `remove_orphan_files`），指针未切换 → reader 看不到 |
+| **Catalog 宕机时读** | ✅ 不影响 | reader 已持有 snapshot ID；数据文件不动 |
+| **Catalog 宕机时写** | ❌ 写阻塞 | CAS 依赖 Catalog 可用 |
+
+**严格说**：湖表的一致性=**读 snapshot 线性化**（reader 维度）+ **写 OCC with CAS**（writer 维度）。这**不等同于** RDBMS 的 Serializable——只在单 writer 时才接近 Serializable。
+
+### Multi-table Atomic Commit · 跨表事务的湖上实现
+
+**单表 ACID** 湖表都做得到；**跨表原子**（A 表和 B 表同时提交成功或同时失败）是少数 catalog 的独家能力：
+
+| Catalog | 跨表事务 | 实现机制 |
+|---|---|---|
+| **Nessie** | ✅ 支持 | Git-like commit：一次 commit 可以改多张表的指针，原子 |
+| **Unity Catalog** | ✅ 部分（Databricks 内）| UC 内部事务语义 |
+| **Apache Polaris** | ⚠️ 2025 proposal 阶段 | 多表事务是 roadmap 项 |
+| **Iceberg REST Catalog** | ⚠️ 单表原子；多表走客户端协调 | spec 2024 有多表 commit proposal |
+| **HMS / Glue** | ❌ 不支持 | 各表各自 |
+
+**为什么重要**：业务上"下单扣库存 + 插 order 表"是原子的；湖上如果没有跨表事务，这种语义要靠 saga 补偿或两阶段提交自己实现。**Nessie 的 Git-like commit 是湖上少数优雅的跨表事务方案**。
+
 ### 术语对照 · CAS / Conditional PUT / OCC / version / snapshot / instant
 
 读 spec 时这几个词常被混用为同义词，在规范里其实**职责不同**：
