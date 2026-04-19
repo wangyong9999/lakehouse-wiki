@@ -123,19 +123,19 @@ SELECT * FROM table_changes('db.orders', 1000, 1100);
 
 实际效果接近 Iceberg 的 **Sort Order + Clustering**。
 
-### 机制 5 · Uniform（2024）· 单向互操作
+### 机制 5 · UniForm（2024+）· 单向 read-only 互操作
 
-**一张 Delta 表可被 Iceberg 读取器识别**（注意：**单向**，Delta → Iceberg）。
+**一张 Delta 表可被 Iceberg / Hudi 读取器识别**——这是 **Delta 3.0（2023-06）引入 Iceberg 方向 + Delta 3.2（2024）加 Hudi 方向** 的 UniForm 能力。关键性质：**单向 · Delta 写、他家读**。
 
-做法：commit Delta 时**自动写一份 Iceberg metadata.json** + manifest list，Iceberg 引擎直接读。
+做法：commit Delta 时**自动异步生成** Iceberg metadata.json + manifest list（或 Hudi metadata），但 Parquet 数据只存一份。他家 reader 直接读这份共享数据 + UniForm 派生元数据。
 
-**重要边界**：
+**严格边界**：
 
-- ✅ **读**：Iceberg 引擎（Trino / Flink / Snowflake）可以读 Delta Uniform 表
-- ❌ **写**：Iceberg 引擎**不能写**回 Delta Uniform 表。只能通过 Delta API / Spark 写
-- ❌ **Iceberg → Delta**：反向不成立。要让 Delta 读 Iceberg 表，走 Delta 的 **UniForm for Iceberg** reader 路径（更新中）
+- ✅ **Iceberg / Hudi 引擎读** Delta UniForm 表：Trino / Flink / Snowflake / Iceberg reader 都可以
+- ❌ **Iceberg / Hudi 引擎不能写**回 UniForm 表。所有写必须通过 Delta API
+- ❌ **不是真双向**。真双向（任何格式写 / 任何格式读）走 **[Apache XTable](https://github.com/apache/incubator-xtable)**（2024-03 进入 Apache 孵化，原 OneTable）路径——它做**元数据翻译层**，不绑定某个格式做"主写者"
 
-**意义**：多引擎场景下，选 Delta 不再是"完全锁定"——但写路径仍在 Delta 侧。这符合 Databricks "写保持差异化、读开放生态" 的策略。
+**意义**：多引擎消费端场景下，选 Delta 不再是"完全锁定读者"；但**写侧仍锁 Delta 生态**。这符合 Databricks "写保持差异化、读开放生态" 的策略。需要真双向时考虑 Apache XTable。
 
 ### 机制 6 · CRC Checksum 文件
 

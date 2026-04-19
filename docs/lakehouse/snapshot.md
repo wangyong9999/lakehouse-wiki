@@ -15,7 +15,7 @@ status: stable
 # Snapshot · MVCC on Object Store
 
 !!! tip "一句话理解"
-    一个 Snapshot = **表在某一时刻的完整元数据视图**。湖仓的所有"ACID、时间旅行、回滚、增量读"能力，**都是 Snapshot 机制派生出来的**。本质上是**把数据库的 [MVCC](../foundations/mvcc.md) 搬到对象存储上**——但 SI 级别、不提供写写隔离（只防同 snapshot 冲突，靠 CAS 重试解决）。
+    一个 Snapshot = **表在某一时刻的完整元数据视图**。湖仓的所有"ACID、时间旅行、回滚、增量读"能力，**都是 Snapshot 机制派生出来的**。本质上是**把数据库的 [MVCC](../foundations/mvcc.md) 搬到对象存储上**——隔离级别是 **Snapshot Isolation + CAS 重试**（不是并发 Serializable）。
 
 !!! note "SSOT · 主定义页"
     Snapshot · MVCC on Object Store · Time Travel 机制 等以本页为主定义。Iceberg / Paimon / Delta / Time Travel 等页引用时链回这里。

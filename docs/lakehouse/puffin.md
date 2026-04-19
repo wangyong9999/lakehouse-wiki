@@ -105,7 +105,7 @@ Puffin 是一个**容器格式**。整体布局：
 - **内容**：per-data-file 的 **Roaring bitmap**（标记被删除的 row position）
 - **用途**：取代 v2 的 position-delete file，读时直接位图过滤
 - **消费者**：所有支持 v3 的 reader
-- **状态**：v3 spec 新增，生态正在实现
+- **状态**：v3 spec 2025-06 ratified · Iceberg 1.8 开始实现 · 1.10（2025-09）"ready for prime time"；Spark 4.0 读写完整支持
 
 **Iceberg v3 的 DV 和 Delta DV 的差异**：Iceberg DV 存在 Puffin 里（blob type `deletion-vector-v1`）；Delta DV 存在 `_delta_log/` 的 sidecar 文件里。结构相似（都是 Roaring bitmap），载体不同。完整的 DV 语义 / 读路径见 [Delete Files](delete-files.md)。
 

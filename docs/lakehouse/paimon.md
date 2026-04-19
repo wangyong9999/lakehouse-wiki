@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: Paimon 0.9+ / 1.0 GA
+applies_to: Paimon 1.0+（2025-01 GA）
 tags: [lakehouse, table-format, streaming]
 category: table-format
 repo: https://github.com/apache/paimon
@@ -166,7 +166,7 @@ TBLPROPERTIES (
 
 ### 机制 3 · Compaction 策略
 
-- **Universal-style**（默认，实际只此一种）：类似 RocksDB Universal，合并代价均衡。Paimon 不像 RocksDB 那样暴露 "leveled" 切换选项
+- **Universal-style**（默认）：类似 RocksDB Universal，合并代价均衡。Paimon 不提供 RocksDB 风格的 "leveled" 切换；版本演进里还加了 `full-compaction` / 专用 rewrite 等辅助策略
 - **触发**：L0 文件数阈值（`num-sorted-run.compaction-trigger`）、时间、手动（`CALL compact`）；或走 **full-compaction** 触发全量合并（配合 `full-compaction` changelog producer）
 
 **专用 Compaction Job**（生产推荐）：

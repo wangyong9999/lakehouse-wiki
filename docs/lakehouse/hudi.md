@@ -92,17 +92,17 @@ Hudi 把所有表状态变化记录在 `.hoodie/` 下：
 
 ### Metadata Table · Hudi 1.0 的主元数据载体
 
-Hudi 1.0 把几乎所有**元数据 + 索引**都收敛到 **Metadata Table**（`.hoodie/metadata/`）——这是 Hudi 在"Manifest/Metadata"这条演进路线上的终局：
+Hudi 1.0 把几乎所有**元数据 + 索引**都收敛到 **Metadata Table**（`.hoodie/metadata/`）——这是 Hudi 在"Manifest/Metadata"这条演进路线上的终局。Metadata Table 本身是一张 **Hudi MoR 内部表**，不同索引作为**不同 partition**存在：
 
 ```
-.hoodie/metadata/
-  files/              ← 分区 → 文件清单（消除 S3 LIST）
-  column_stats/       ← 每列 min/max/null_count
-  bloom_filters/      ← per-file Bloom
-  partition_stats/    ← 分区聚合统计
-  record_index/       ← 主键 → file group 直查（1.0 GA）
-  secondary_index/    ← 非主键列索引（1.0+）
-  expr_index/         ← 表达式索引（1.0+）
+.hoodie/metadata/  （Hudi MoR 子表）
+  partition=files              ← 分区 → 文件清单（消除 S3 LIST）
+  partition=column_stats       ← 每列 min/max/null_count
+  partition=bloom_filters      ← per-file Bloom
+  partition=partition_stats    ← 分区聚合统计
+  partition=record_index       ← 主键 → file group 直查（1.0 GA）
+  partition=secondary_index    ← 非主键列索引（1.0+）
+  partition=expr_index         ← 表达式索引（1.0+）
 ```
 
 **和 Iceberg Manifest 的本质差异**：
@@ -156,7 +156,7 @@ Hudi 支持多 writer 并发（加锁）：
 - **Zookeeper** 或 **HiveMetastore** 或 **DynamoDB** 做 lock provider
 - 乐观锁策略
 
-相比 **Iceberg 的 CAS 语义**，Hudi 的锁**需要外部依赖**——这是运维负担。
+相比 **Iceberg 的 CAS 语义**，Hudi 的锁**需要外部依赖**——这是运维负担。Hudi 1.0 起提供 **Non-Blocking Concurrency Control (NBCC)** + 基于文件系统的 lock provider，**降低外部依赖**（仍推荐在高并发场景用 ZK / DynamoDB）。
 
 ### 机制 4 · Clustering
 

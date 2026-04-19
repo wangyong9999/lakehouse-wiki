@@ -18,7 +18,7 @@ status: stable
 
 !!! abstract "TL;DR"
     - **三个对象要管**：data files（小文件合并）、delete files / DV（MoR 合并）、manifest（manifest 合并）
-    - **四种策略**：bin-pack / sort / z-order / clustering（Liquid Clustering 是 Delta 专属）
+    - **四种策略**：bin-pack / sort / z-order / clustering（**Liquid Clustering 是 Delta 专属命名**；Iceberg 1.5+ 提供等价能力为 Sort Order + clustering rewrite）
     - **触发器**：小文件数阈值 / delta 比例 / 时间窗 —— 生产通常组合
     - **成本**：没做 compaction 查询成本 3-10× · 做 compaction 自身成本 5-15% 总 IO
     - **各家命令不同**但理念一致：Iceberg `rewrite_data_files` · Delta `OPTIMIZE` · Paimon `full-compaction` · Hudi `run_compaction`
@@ -193,7 +193,7 @@ OPTIMIZE db.events;
 
 ## 8. 和运维的关系
 
-大规模湖表的 **Compaction 其实就是"运维的主要开销"**。Databricks / Tabular / Onehouse 等商业平台把它做成"自动托管"是有原因的——自己搞要持续维护若干 Spark/Flink 作业、监控、告警、失败重试。
+大规模湖表的 **Compaction 其实就是"运维的主要开销"**。Databricks / Tabular（已于 2024-06 并入 Databricks）/ Onehouse 等商业平台把它做成"自动托管"是有原因的——自己搞要持续维护若干 Spark/Flink 作业、监控、告警、失败重试。
 
 **最小可用运维闭环**（Airflow / Dagster）：
 

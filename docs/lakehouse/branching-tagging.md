@@ -13,7 +13,7 @@ status: stable
 # Iceberg Branching & Tagging
 
 !!! tip "一句话理解"
-    Iceberg **spec v2 引入**（引擎侧 1.2+ 普遍可用）、表级别支持 Git-like **分支** 和 **标签**。分支给你一条独立的写路径；标签给你一个不变的时点快照。和 Nessie 的跨表 Git-like 不同，这是**单表内**的分支机制。
+    Iceberg **spec v2 后期修订（2022-12）引入**（引擎侧 1.2+ 普遍可用）、表级别支持 Git-like **分支** 和 **标签**。分支给你一条独立的写路径；标签给你一个不变的时点快照。和 Nessie 的跨表 Git-like 不同，这是**单表内**的分支机制。
 
 !!! abstract "TL;DR"
     - **Branch**：一个命名的写入路径；每次 commit 只推进该分支

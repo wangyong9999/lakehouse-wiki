@@ -144,7 +144,7 @@ SELECT * FROM orders /*+ OPTIONS(
 ### 这个领域的成熟度
 
 - **Paimon** 是当前流式 upsert 最原生的选择——Flink 社区持续投入
-- **Iceberg v3 (2025+)** 正在补齐流式能力，但**和 Paimon 仍有差距**
+- **Iceberg v3**（2025-06 ratified）已补齐大半流式能力（Row Lineage · DV · Variant 都 GA），**但 Paimon 在 Flink 流场景的端到端体验仍领先**——Iceberg 偏向"批 + 轻量流"、Paimon 才是"流原生"
 - **Hudi** 老而稳，在 Uber 等生产环境规模最大，但新项目不太选
 - **Delta** 虽然有 Change Data Feed，但**不是为 CDC 高频 upsert 优化**
 
