@@ -133,9 +133,11 @@ POST /v1/namespaces/db/tables/orders
 ### 协议支持的高级能力
 
 - **Branches / Tags**（Iceberg v2+）
-- **View（视图）**（v2+）
-- **Multi-table Transaction**（一个原子提交跨多张表）
+- **View（视图）**（Iceberg View Spec 1.0 · 2023 ratified）
+- **Multi-table Transaction**（一个原子提交跨多张表 · spec 2024-2025 演进中）
 - **Vended Credentials**（服务端签发临时 S3 token，客户端不持长期 credential）
+- **Scan Planning**（spec 1.5+ · 服务端完成剪枝返回 split 计划；详见下"机制 4"）
+- **OAuth2**（认证层 · 和 Vended Credentials 的授权分工见"机制 5"）
 
 ## 3. 关键机制
 
@@ -172,6 +174,76 @@ Warehouse B  → Namespace B1, B2 ...
 - Signal capabilities in `/v1/config`
 
 例：新能力"向量索引"可以作为一类表资产，Catalog 实现支持就行，协议端不改。
+
+### 机制 4 · Scan Planning · 从"客户端规划"到"服务端规划"
+
+**传统 Iceberg 读**：客户端下载 metadata.json → manifest list → 所有相关 manifest，自己做分区剪枝和 split 生成。大表下 **client 要下载 MB 级 Avro 元数据**。
+
+**Scan Planning endpoint**（REST Catalog spec 1.5+）：
+
+```
+POST /v1/{prefix}/namespaces/{ns}/tables/{table}/plan
+  body: { snapshot-id, filter, case-sensitive, select-fields }
+  response: { plan-status, plan-tasks: [...], file-scan-tasks: [...] }
+```
+
+服务端完成：
+- Manifest 读取和剪枝
+- Predicate pushdown 到 file-level stats
+- 生成 split 计划（或返回 inline data 用于小表）
+
+**收益**：
+- Client 不必下载元数据 → **mobile / edge 场景可行**
+- 服务端可用 **Bloom / 额外 index** 做更准剪枝（客户端没有这些）
+- 多租户下元数据**本就不该全暴露** → 安全收益
+- 为 **SaaS 形态湖仓**（Snowflake / Databricks Managed / S3 Tables）铺路
+
+**风险**：
+- 服务端成本上移 · 需要规划能力 scale-out
+- Client 和 Server 升级不同步时功能降级路径要设计好
+
+### 机制 5 · OAuth2 + Vended Credentials · 认证 / 授权分工
+
+两个机制**互补但解决不同问题**：
+
+| 机制 | 作用 | 颗粒 |
+|---|---|---|
+| **OAuth2** | **认证**（"你是谁"）| 客户端身份 · 每个 API 调用 |
+| **Vended Credentials** | **授权到存储**（"你能访问哪些 S3 object"）| 每表 / 每次读 · STS 临时 token |
+
+**端到端流程**：
+
+```
+1. Client → IdP (OIDC) → access_token (JWT)
+2. Client → REST Catalog: Authorization: Bearer <access_token>
+3. REST Catalog 校验 token + 决定授权范围（OAuth2 scope）
+4. REST Catalog → AWS STS: AssumeRole + Session policy (限定到本表 prefix)
+5. REST Catalog → Client: { data-files: [...], credentials: { access_key, secret, session_token, expiry } }
+6. Client 用临时 token → S3 直读
+```
+
+**关键性质**：
+
+- **Client 从不持长期 credential** · 只有短期 OAuth token 和分钟级 STS token
+- **Catalog 能看到每次"谁读了哪张表"** · 审计链完整
+- **Scope 缩小**：STS 只给本表 prefix 的 `s3:GetObject` · 越权被阻断
+
+**Trino / Spark 客户端** 对这套流程已有内置支持（`iceberg.rest-auth.type = oauth2` 等配置）。Polaris 的 Credential Vending 2026-01 加了 SigV4 / KMS per-catalog / 位置限制等增强。
+
+### 机制 6 · 各实现的 Iceberg REST 兼容矩阵（2026-Q2）
+
+| 能力 \ 实现 | Apache Polaris | Unity Catalog OSS | Nessie | Gravitino |
+|---|---|---|---|---|
+| Tables CRUD | ✅ | ✅ | ✅ | ✅ |
+| Namespaces | ✅ | ✅ | ✅ | ✅ |
+| Views | ✅ | 部分 | ✅ | 部分 |
+| Branches / Tags | ✅ | 部分 | ✅（+ Nessie 跨表分支）| 依底层 |
+| Multi-table Transaction | 部分 | ❌ | ✅（原生 Git-like）| ❌ |
+| Vended Credentials | ✅（SigV4 · 1.3）| 部分 | 部分 | 依底层 |
+| Scan Planning | 2026 roadmap | ❌ | ❌ | ❌ |
+| OAuth2 Auth | ✅ | ✅ | ✅ | ✅ |
+
+**解读**：Polaris 是 **Iceberg 原生特性最全的 OSS 实现**；Nessie 专长在分支/多表事务；Unity OSS 的 REST 兼容覆盖核心 CRUD 但高级特性偏弱；Gravitino 作为联邦层 · 能力上限 ≈ 底层 Catalog 能力。
 
 ## 4. 工程细节
 

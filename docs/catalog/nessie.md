@@ -124,7 +124,7 @@ CALL nessie_merge('main', 'etl-2024-12-01');
 CALL nessie_branch_delete('etl-2024-12-01');
 ```
 
-### 机制 2 · 跨表原子 Commit
+### 机制 2 · 跨表原子 Commit · 边界和限制
 
 Nessie 核心优势：**一个 commit 可以同时改多张表**。
 
@@ -140,6 +140,28 @@ COMMIT;
 
 读方看到**要么全看到、要么一个都看不到**。
 
+**严格的原子性边界**（重要）：
+
+- ✅ **通过 Nessie Catalog 的写**（Spark / Flink 用 Nessie catalog、Nessie CLI、Iceberg Nessie 客户端）是事务的一部分
+- ❌ **绕过 Nessie 直写对象存储**（Spark 直接 `save("s3://...")` 或用非 Nessie catalog）**不参与** Nessie commit
+- ❌ **多引擎混合不协同**：Trino（Nessie catalog）和 Spark（Hive catalog）同时写同一张表时，Nessie 只能看到 Trino 那半
+
+**结论**：跨表原子**只对"经过 Nessie 的操作集合"成立**——不是"所有写这张表的操作"。生产中要**锁定单一写入路径走 Nessie**。
+
+### Nessie 跨表 vs Iceberg spec multi-table commit 的差异
+
+Iceberg spec 2024-2025 也在推 **multi-table transaction**（REST Catalog 层的原子多表），和 Nessie 的 Git-like commit **不完全等价**：
+
+| 维度 | Nessie 跨 commit | Iceberg REST multi-table |
+|---|---|---|
+| 粒度 | Catalog 层 commit graph | 单个 REST API 调用 |
+| 典型用例 | 长期 ETL 分支 · 跨表 WAP | 单次应用里协调 2-3 表的原子写 |
+| 分支能力 | 一等公民（多 commit 跨表）| 无 · 单次调用粒度 |
+| 实现复杂度 | 高（需要 Nessie server）| 中（REST Catalog 实现） |
+| 读侧语义 | 通过分支 / commit id 选视图 | 按 snapshot id 读一致视图（要协调多表）|
+
+**适用选择**：要**长期分支 + 多 commit 累积跨表一致**选 Nessie；要**单次应用层原子多表**（如"下单扣库存+写 order"）· Iceberg multi-table commit 更轻量。
+
 ### 机制 3 · Tag
 
 ```sql
@@ -149,15 +171,29 @@ CALL nessie_tag_create('release-2024-12');
 
 Tag 是只读 ref，审计时直接 checkout。
 
-### 机制 4 · GC
+### 机制 4 · GC · 与 Iceberg expire_snapshots 的协调
 
 清理被丢弃分支 / 过期 commit 的数据文件：
 
 ```
-nessie-cli gc --after '2024-12-01'
+nessie-cli gc --after '2026-01-01'
 ```
 
-和 Iceberg 自己的 `expire_snapshots` 要协调。
+**和 Iceberg `expire_snapshots` 的协调逻辑**（运维关键）：
+
+```
+Iceberg 视角：表有 N 个 snapshot，根据保留策略决定哪些要清
+  → Iceberg expire_snapshots 想清 snapshot X
+  → 但 snapshot X 可能还被 Nessie 的某个分支 / commit 引用
+  → 如果盲目 expire，Nessie 分支查询会失败（"snapshot not found"）
+
+正确流程：
+  1. Nessie GC 先跑 · 扫描"被任何分支/tag 引用的 Iceberg snapshot 集合"
+  2. 把这个集合传给 Iceberg expire_snapshots 作为保护名单
+  3. expire_snapshots 只清不在保护名单里的 snapshot
+```
+
+**推荐做法**：用 **Nessie 的 `identify-unreferenced-assets` + `sweep` 两步走**，自动协调——而不是分别跑 Nessie GC 和 Iceberg expire。两边独立跑是**最常见的 Nessie 生产事故来源**。
 
 ### 机制 5 · 冲突解决
 
