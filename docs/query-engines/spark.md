@@ -122,7 +122,7 @@ Spark 的流处理 API（建在 DataFrame 上）：
 - **Continuous Mode**（实验性，更低延迟）
 - 比起 Flink：**简单 SQL 友好**但**延迟与 stateful 弱**
 
-流场景现在**更多选 Flink + Paimon**，Spark Streaming 在湖上定位让位。
+**湖仓准实时新建项目更多选 Flink + Paimon**；但 Spark Structured Streaming 在**大量已有 Spark 栈的团队里仍是生产主力**——特别是 Databricks 生态 + DLT（Delta Live Tables）+ Structured Streaming 组合，以及那些"流不是主场景，但需要分钟级 upsert"的场景。"让位"更准确说是**新项目偏向 Flink、存量 Spark 继续稳定跑**。
 
 ## 3. 关键机制
 

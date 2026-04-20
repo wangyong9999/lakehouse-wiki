@@ -49,13 +49,34 @@ last_reviewed: 2026-04-20
 ### 通用数据处理框架（SQL + 批 + 流 + ML）
 
 - [Apache Spark](spark.md) —— 大数据时代最主流计算引擎 · 湖仓里主要跑批 ETL + 集市层
-- [Apache Flink](flink.md) —— 有状态流处理事实标准 · Paimon 亲兄弟 · 准实时湖仓黄金组合
+- [Apache Flink](flink.md) —— 有状态流处理事实标准 · 和 Paimon 组合是**准实时湖仓典型路线之一**（Spark Structured Streaming / Kafka + OLAP DB 仍是生产常见路径）
 
 ### MPP OLAP 数据库（自己存储 + 读湖）
 
 - [StarRocks](starrocks.md) —— 现代 MPP 分析型数据库 · BI 加速首选（也可独立栈）
 - [ClickHouse](clickhouse.md) —— 单表大扫描 + 高并发聚合极致 · 和 Trino/Spark 是不同物种
 - [Apache Doris](doris.md) —— StarRocks 同源 · 湖仓融合方向 2024-2026 持续投入
+
+## 多引擎组合打法 · 单引擎思维是陷阱
+
+现代湖仓**很少单引擎打天下**。真实生产栈更常是"**一类用法对应一个引擎**"的组合：
+
+| 组合 | 典型场景 | 分工 |
+|---|---|---|
+| **Spark + Trino** | 批 ETL + 交互查询分层 | Spark 跑 ETL 构建集市层 → Trino 对外提供 BI 查询 |
+| **Flink + Paimon + Trino** | 准实时湖仓 | Flink 流入湖 → Paimon 表持续刷新 → Trino 做交互 BI |
+| **Trino + StarRocks** | 交互式 BI 加速分层 | Trino 联邦多源 · StarRocks 对最热核心表做低延迟加速 |
+| **DuckDB + Iceberg** | 本地 / 开发态 | 单机 DuckDB 直读 Iceberg · 不拉起集群 |
+| **Spark + Databricks Photon + UC** | 托管一体栈 | Spark 处理 + Photon 加速 + UC 治理 · Databricks 生态闭环 |
+| **Kafka + ClickHouse / Pinot / Druid** | 流式 OLAP（非湖仓路径）| 跳过湖表 · 直接 Kafka → OLAP DB · 毫秒级仪表盘 |
+
+**核心取舍**：
+
+- **Spark / Flink（处理框架）** 负责"**数据进 + 流水线**"——ETL 复杂 / 状态有状态 / ML 管道
+- **Trino / DuckDB（纯查询引擎）** 负责"**联邦 + 交互**"——跨源查 / 秒级 ad-hoc
+- **StarRocks / ClickHouse / Doris（MPP OLAP DB）** 负责"**加速 + 高并发**"——仪表盘 p95 / 数千 QPS
+
+**不要一个引擎打通所有场景**——每类都在自己甜区才高效。
 
 ## 选型速览 · 4 步决策
 
