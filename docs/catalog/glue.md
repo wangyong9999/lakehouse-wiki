@@ -23,7 +23,7 @@ status: stable
     - **Iceberg 支持路径**：Glue 作为 Iceberg Catalog 原生支持自 2022；2024-2025 随 S3 Tables 推进进一步深化
     - **权限**：走 AWS IAM + Lake Formation（行列级权限 / LF-tag）
     - **2024-12 S3 Tables 发布后**：AWS 同时拥有"Glue + S3 Tables"两条 Iceberg 路径，定位有分化
-    - **vs Polaris / REST Catalog**：Glue 不是 Iceberg REST 实现，协议是自家 API（Iceberg 客户端走 GlueCatalog 实现）
+    - **协议层注记**：Glue 不走 Iceberg REST 协议 · Iceberg 客户端用 `GlueCatalog`（走 AWS SDK 直接调 Glue API）· **和 Polaris/Nessie 的 REST 客户端集成路径不同**
 
 ## 1. 为什么它在 AWS 栈是"不选也得用"
 
@@ -70,7 +70,7 @@ status: stable
 - **Glue**：通用 Catalog，支持多表格式，深度集成 AWS 治理
 - **S3 Tables**：S3 原生 Iceberg 托管（内置 compaction / snapshot expiry / 维护）· 独立 namespace
 
-2024-2026 AWS 策略是**双轨并行**：新 Iceberg 工作负载可直接用 S3 Tables；有 Athena / Lake Formation 治理需求的仍走 Glue。两者可组合（S3 Tables 注册到 Glue 作为治理入口）。
+2024-2026 AWS 策略是**双轨并行**：新 Iceberg 工作负载可直接用 S3 Tables；有 Athena / Lake Formation 治理需求的仍走 Glue。**两者的整合方式**：AWS 2025 引入 **federated catalog `s3tablescatalog`**——启用后 Glue Data Catalog 自动发现 account + region 内的所有 S3 table bucket，并作为 federated 目录出现在 Glue 命名空间下；Lake Formation 可以对其授权、Athena / EMR 可以 `SELECT`。S3 Tables 本身仍是独立的元数据存储，Glue 只是**治理入口**和**跨分析服务的一致命名**。
 
 ## 3. 和其他 Catalog 的边界
 
@@ -121,10 +121,10 @@ ASSOCIATE LF-TAG ('pii', 'true') WITH TABLE db.users COLUMN email;
 
 ## 5. 陷阱与反模式
 
-- **小文件 / 高频 commit 场景 Glue API 账单爆炸**：每次 commit 要调 GetTable/UpdateTable，高频小 commit 月底看账单肉疼
-- **跨账号访问配置复杂**：Resource policy + IAM + LF cross-account 三层配合，出错点多
+- **小文件 / 高频 commit 场景 Glue API 账单爆炸**：每次 Iceberg commit 要调 GetTable + UpdateTable · 秒级 commit 的流式 CDC 场景下 Glue API 调用数激增（可能比 Catalog 对象数月费还高出几倍）· 定期看账单的 API calls line item
+- **跨账号访问配置复杂**：Glue Catalog resource policy + 跨账号 IAM + LF cross-account role 三层叠加 · 权限校验顺序中**任一层配错就 Access Denied** · 生产前做端到端烟测不可少
 - **Athena 查询和 EMR 查询权限不一致**：Athena 走 Lake Formation 默认，EMR 可能走 IAM-only——同一张表权限表现不同
-- **Iceberg 新特性跟进延迟**：Iceberg 1.x 新能力要等 Glue 端支持 · 部分 v3 能力 2026 仍在追赶
+- **Iceberg 新特性跟进延迟**：Glue 对 Iceberg 新特性的支持通常**滞后上游 1-2 个版本周期** · 部分 v3 能力（如 row lineage / 部分 transform）2026-Q2 仍在逐步启用 · **追 Iceberg 最新能力的团队应该上游社区 REST Catalog 更合适**
 - **迁出成本高**：Glue 没有原生 dump/restore，迁 Polaris / Nessie 要自己写迁移脚本（或用 Iceberg `register_table`）
 - **HMS 兼容 API 的能力上限**：老 Hive 工具走兼容层时看不到 Iceberg 新特性
 

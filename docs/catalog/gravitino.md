@@ -21,7 +21,7 @@ status: stable
     - 多云 / 多 BU · 各自已建 Catalog · 合并有组织阻力
     - 数据网格（Data Mesh）架构决定了多 Catalog 本身是目标
 
-    **核心判断**：如果你**新起步**，Gravitino 通常**不是首选**——单 Catalog（Polaris / Nessie / UC / Glue）更简单、语义更干净。Gravitino 的价值在于**现实约束下的治理统一**，不是"多 Catalog 是理想架构"。
+    **核心判断**：如果你**新起步**，从**功能覆盖和运维复杂度**看，单一 Catalog（Polaris / Nessie / UC / Glue）是首选 · 更简单、语义更干净。Gravitino 在**多 Catalog 已经共存**的现实约束下才作为联邦层引入——**它的价值不是"多 Catalog 是理想架构"，而是"迁不动的时候如何统一治理"**。
 
     AI / Fileset / Model 方向的差异化是**加分项**，不是主购买理由——对大多数团队，买 Gravitino 买的是**多 Catalog 联邦治理**。
 
@@ -115,7 +115,7 @@ Gravitino 本身是 **stateful cache + proxy**，不是透明代理：
 | 行级过滤 | ❌ | ❌ | ❌ | ✅ | ❌ | DB-specific |
 | OAuth scope | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
 
-**结论**：Gravitino 能表达**交集**的权限（所有后端都支持的部分）；想用 Unity 的"行级过滤"就只能在 Unity 管辖的资源内用——跨到 HMS 就丢。**"统一权限 only works within 同类 Catalog"**。
+**结论**：Gravitino 的权限表达力受限于 **"最小公分母"**——所有后端都支持的权限能力（如表级 RBAC）能跨源统一；更细粒度的能力（列级 mask / 行级过滤）**只在支持的后端内生效**，跨源到不支持的 Catalog（如 HMS）就降级为表级或丢失。**"统一权限 only works within 能力兼容的 Catalog 子集"**。
 
 ### 限制 2 · 元数据一致性有同步延迟
 

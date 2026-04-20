@@ -99,10 +99,10 @@ HMS 设计年代太早，短板很硬：
 | 瓶颈类型 | 症状 |
 |---|---|
 | **权限瓶颈** | Ranger / Sentry 建在 HMS 上，迁 REST Catalog 时权限系统要一起改 |
-| **可用性瓶颈** | HMS JDBC 挂了，所有 Iceberg 表写入都会 CAS 失败——**不是低频事件** |
-| **兼容性瓶颈** | 老 HMS 版本不认新 Iceberg TBLPROPERTIES → v3 特性读不到 |
+| **可用性瓶颈** | HMS 作为指针存储时，JDBC / Thrift 不可用时 · Iceberg commit 所需的 UpdateTable 调用失败 → 写入中断（**即使底层数据文件可访问**，因为 CAS 找不到指针）|
+| **兼容性瓶颈** | 老 HMS 版本的 Thrift 序列化可能不认识新 Iceberg 引擎写入的部分 property → 老 Hive 工具走 HMS API 看表时看不到 Iceberg 新特性（Iceberg 原生 reader 通过 metadata.json 路径直接读不受影响）|
 | **升级冻结点** | HMS 不敢升（怕老作业挂），间接锁死其他依赖 HMS 的组件版本 |
-| **高 commit 频率热点** | Iceberg commit 要 UpdateTable，高频流式场景 HMS RDBMS 锁成热点 |
+| **高 commit 频率热点** | Iceberg 每次 commit 调用 HMS UpdateTable · 背后的 RDBMS 行级锁在并发 / 高频 commit 时成争用热点（具体表现取决于 RDBMS 隔离级别和连接池配置）|
 
 **"只存指针"不等于"轻负载"**——大量团队从 HMS 迁出的真正原因是发现指针角色下 HMS 仍然是单点 / 瓶颈 / 升级冻结源。
 
