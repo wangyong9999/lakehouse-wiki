@@ -130,7 +130,7 @@ Quantization 降低精度 · 叠加严格 filter 可能放大精度损失：
 
 ## 7. 相关
 
-- [Filter-aware ANN](filter-aware-search.md) · **Qdrant 是领跑实现** · 详细算法
+- [Filter-aware ANN](filter-aware-search.md) · **Qdrant 较早商业化实现** · 详细算法
 - [Quantization](quantization.md) · SQ/PQ/BQ 三种都支持
 - [Hybrid Search](hybrid-search.md) · dense+sparse 融合
 - [向量数据库](vector-database.md) · 通用定位

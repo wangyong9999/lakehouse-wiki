@@ -140,7 +140,7 @@ flowchart LR
 | **湖原生** | ✅ 最强 | ❌ 独立栈 | ❌ 独立栈 | ⚠️ 需搭配 |
 | **多模** | ✅ 原生 | ⚠️ 需自拼 | ⚠️ 需自拼 | ❌ 局限 |
 | **运维** | 轻（OSS 无服务）| 重 | 中 | 零（在 PG 栈内）|
-| **过滤语义** | filter-aware | Filtered Search | filter-aware HNSW 领跑 | 谓词推索引 |
+| **过滤语义** | filter-aware | Filtered Search | filter-aware HNSW 较早商业化 | 谓词推索引 |
 | **ML 训练直读** | ✅ 原生 Lance | ❌ | ❌ | ⚠️ 通过 PG 读 |
 
 横向详见 [向量数据库对比](../compare/vector-db-comparison.md)。

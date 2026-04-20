@@ -171,7 +171,7 @@ Stage 2: Rerank 模型 · Top 10
 - [HNSW](hnsw.md) · Filterable HNSW 的算法底座
 - [Quantization](quantization.md) · 量化和 filter 的组合影响
 - [Hybrid Search](hybrid-search.md) · Sparse+Dense 融合（**不同**概念别混）
-- [Qdrant](qdrant.md) · Filterable HNSW 的领跑者
+- [Qdrant](qdrant.md) · Filterable HNSW 较早商业化
 - [pgvector](pgvector.md) · PG 场景 filter-aware 0.7+
 - [Milvus](milvus.md) · Filtered Search 支持
 
