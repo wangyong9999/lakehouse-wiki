@@ -232,6 +232,9 @@ nav:
           - 向量数据库: retrieval/vector-database.md
           - Embedding: retrieval/embedding.md
           - 多模 Embedding: retrieval/multimodal-embedding.md
+      - 多模专题:
+          - 多模检索架构模式: retrieval/multimodal-retrieval-patterns.md
+          - 检索单元粒度: retrieval/retrieval-granularity.md
       - ANN 索引:
           - HNSW: retrieval/hnsw.md
           - IVF-PQ: retrieval/ivf-pq.md

@@ -6,7 +6,17 @@ last_reviewed: 2026-04-20
 
 # 多模检索
 
-本章聚焦 **"向量检索（ANN）+ 稀疏检索 + 多模 embedding"** 这条数据检索主线——**把 embedding 变成可查询的一等资产**，让 AI 应用（RAG / 推荐 / 搜索 / 多模）能够高效召回相关内容。
+本章聚焦 **"向量检索（ANN）+ 稀疏检索 + 多模 embedding + 多模专题"** · 覆盖：基础概念 · 多模架构模式 · 检索粒度 · ANN 索引 · 检索流水线 · 产品实现。
+
+!!! warning "本章真正聚焦"
+    本章大多数页面（ANN 索引 / Hybrid Search / Rerank 等）的**基础骨架是通用文本向量检索**——这些方法**不能无条件平移到多模场景**。多模检索的**独有问题**集中在：
+
+    - [多模检索架构模式](multimodal-retrieval-patterns.md) · 文本检索主线 vs 跨模态检索主线的区分 · 6 种典型架构
+    - [检索单元粒度](retrieval-granularity.md) · retrieval unit / chunking 是多模独有的一等问题
+    - [多模 Embedding](multimodal-embedding.md) · 跨模态对齐的原理 + **失败模式**（不是"一空间统万物"那么乐观）
+    - [检索评估](evaluation.md) 的 "多模评估" 段 · 文本 MTEB/BEIR 结论**不能直接外推**到多模
+
+    **读者提示**：学会 Hybrid Search + Rerank 不等于会做多模检索——跨模态场景下很多文本方法要重新评估。
 
 !!! info "和其他章节的边界"
     检索领域在湖仓手册里跨多个章节 · 本章职责明确：
@@ -34,7 +44,11 @@ last_reviewed: 2026-04-20
 ### 基础
 - [向量数据库](vector-database.md) —— 把相似度检索作为一等公民的系统
 - [Embedding](embedding.md) —— AI 检索的通用货币 · 2026 模型矩阵 + Matryoshka + 选型
-- [多模 Embedding](multimodal-embedding.md) —— 把图 / 文 / 音 / 视对齐到同一空间
+- [多模 Embedding](multimodal-embedding.md) —— 跨模态对齐原理 + **失败模式**（不是乐观版本）
+
+### 多模专题 · 跨模态检索的核心设计
+- [多模检索架构模式](multimodal-retrieval-patterns.md) —— 6 种端到端架构 · 文本检索主线和跨模态检索主线的区分 · 多模融合策略
+- [检索单元粒度](retrieval-granularity.md) —— retrieval unit / chunking granularity · 多模独有的一等问题
 
 ### ANN 索引
 - [HNSW](hnsw.md) —— 最常见的图索引
