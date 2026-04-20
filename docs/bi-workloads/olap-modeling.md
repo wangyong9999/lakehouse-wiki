@@ -89,6 +89,20 @@ dim_user → dim_city → dim_country
 
 **湖仓几乎不用雪花**——存储省不了多少，Join 多一层。
 
+### 星座（Galaxy / Fact Constellation）· 多事实共享维度
+
+```
+                dim_user
+              ↗        ↘
+     fact_orders     fact_page_view
+              ↘        ↗
+                dim_time
+```
+
+- 多个事实表**共享维度**（`dim_user`, `dim_time`, `dim_product`）· 这才是企业现实
+- **一致性维度（Conformed Dimensions）** · Kimball 的核心治理概念——同一个 `dim_user` 在 orders/clicks/支付多个事实表里**必须是同一个定义**
+- 湖仓落地：维度表物理只存一份 · 多事实表 join 时指向同一张——**避免每个事实表自己复制维度**（这是 OBT 宽表的反模式之一）
+
 ### 事实表三种粒度（关键）
 
 | 类型 | 含义 | 例 |
@@ -144,6 +158,39 @@ fact_stream ─Flink lookup join─→ dwd_orders_flat
 - **列 NULL**：某些维度只对部分记录有意义
 - **Schema 演化复杂**：200 列加新列要 coordinate
 
+### 宽表的反方观点 · 别盲信
+
+宽表被吹过了。**以下场景宽表是反模式**：
+
+- **高基数维度** · `dim_product` 有百万 SKU · 每行事实都拍平 = 存储膨胀
+- **多事实共享维度** · 10 个 fact 表都拍一份 `dim_user` · 维护成本爆炸 · 违反一致性维度原则
+- **维度频繁变更** · 宽表要全表 rebuild · 星型只改一个维度表
+- **语义漂移** · 200 列宽表没人敢动 · 业务口径悄悄飘
+- **多团队协作** · 不同团队建不同事实表但指向同一 `dim_user`——宽表让每个团队自建一份 · 口径必然分化
+
+**务实建议**：
+- **ADS 层**（面向 BI 的末层）· 宽表 + 星型混合 · 看业务 pattern
+- **DWD/DWS 中间层** · 星型 + 一致性维度为主 · 宽表作为特定场景的短路
+- **避免 300+ 列怪兽表** · 200 列内是健康上限 · 超过要拆分主题
+
+### Iceberg 分区 × Kimball 建模的结合
+
+湖仓特有：**Iceberg 的 bucket partition** 自然等价 Kimball 的**桶维度**。
+
+```sql
+CREATE TABLE fact_orders (
+  order_id BIGINT, user_id BIGINT, product_id BIGINT,
+  amount DECIMAL, order_ts TIMESTAMP
+) USING iceberg
+PARTITIONED BY (days(order_ts), bucket(64, user_id));
+```
+
+- `days(order_ts)` · 时间维度 · 查询剪枝
+- `bucket(64, user_id)` · 按 user_id 哈希打散 · **等价于 Kimball 的 bucket dimension** · 防热点 + 利于 join
+- Iceberg 的**Hidden Partitioning** 让 SQL 不用感知这些 partition transforms · 建模层面写自然 SQL 即可
+
+**要点**：分区**不是建模** · 是物理布局 · 但和建模必须一致——事实表的主要 filter/join 列应该在分区键里。
+
 ## 4. Data Vault 2.0 · 企业级审计建模
 
 ### 什么场景需要
@@ -196,11 +243,20 @@ ADS (Platinum)  ← 面向业务的指标表
 
 | 类型 | 机制 | 适合 |
 |---|---|---|
+| **Type 0** | 不变 · 历史值不更新 | 生日、出生地等事实属性 |
 | **Type 1** | 覆盖，只留最新 | 人名改错、简单修正 |
-| **Type 2** | 保留历史 + `valid_from` / `valid_to` | **合规 / 报表审计** |
-| **Type 3** | 只保留上一版本 | 快速前后对比 |
-| **Type 4** | 历史放辅助表 | 大维度表 |
-| **Type 6** | 1+2+3 混合 | 复杂业务 |
+| **Type 2** | 保留历史 + `valid_from` / `valid_to` + `is_current` | **合规 / 报表审计** |
+| **Type 3** | 只保留上一版本（加 `prev_xxx` 列）| 快速前后对比 |
+| **Type 4** | 历史放辅助表 · 主表只最新 | 大维度 · 历史访问少 |
+| **Type 5** | 1+4 混合（mini-dimension + outrigger）| 快速变化的子属性 |
+| **Type 6** | 1+2+3 混合（current + history + previous 都有）| 复杂业务 · 同时要当前 + 历史 + 一步回溯 |
+| **Type 7** | 双键（surrogate for point-in-time + natural for current）| 最灵活 · 实现复杂 |
+
+**实务选择**：
+- **90% 场景用 Type 2** · 加 `valid_from/valid_to/is_current` 三列
+- Type 4 用在大维度（百万行 · 多数历史冷数据）
+- Type 6/7 只在业务明确要求"同时看当前和历史"时用
+- Type 3 基本弃用——想要多历史用 Type 2 更通用
 
 ### Iceberg Time Travel 的新范式
 
@@ -214,7 +270,44 @@ SELECT * FROM dim_users TIMESTAMP AS OF '2024-06-15';
 - 显式 SCD Type 2 列给 BI 工具看
 - Iceberg Snapshot 做审计回溯
 
-## 7. 建模陷阱
+### Kimball 进阶概念 · 宽表时代仍然管用
+
+**Bridge Tables（桥接表）** · 多对多关系的维度（如用户-标签）：
+- 不能拍进 fact 或单维度
+- 独立桥表 + weight 列 · 避免重复计数
+
+**Junk Dimensions（杂项维度）** · 低基数 flag 聚合：
+- `is_vip`, `is_promotion`, `channel_type` 等
+- 打进一张 `dim_junk` 避免 fact 表一堆小维度键
+
+**Degenerate Dimensions（退化维度）** · 无属性的维度键（如 order_id）：
+- 直接放 fact 表里 · 不建单独 dim 表
+- 湖仓场景很多
+
+**Role-playing Dimensions（角色扮演维度）** · 同一维度多角色（如 `dim_date` 同时做 `order_date` / `ship_date`）：
+- 不复制维度 · 用 view 或 alias
+- 湖仓用 view 更自然
+
+## 7. 半结构化列 · VARIANT / STRUCT / JSON
+
+湖仓 2024-2026 一个重要变化：**半结构化类型成为一等公民**。
+
+- **Iceberg V3** · 新 `VARIANT` 类型（Databricks/Snowflake 共同推动）· 原生支持结构化 JSON
+- **Delta** · 2024+ 支持 VARIANT
+- **Parquet** · logical type 支持 STRUCT / MAP / LIST
+
+**建模策略**：
+- **高基数稀疏属性** · 如用户行为属性 · 200 个维度但每用户只有 20 个 · 用 VARIANT / JSON 列存 · 不打平
+- **EAV 反模式** · 别把 (entity, attribute, value) 三列建表 · VARIANT 原生支持更好
+- **访问性能** · VARIANT 列的点访问通过 shredded encoding（Iceberg V3 / Parquet 新 spec）接近列存性能
+- **schema-on-read** · 新属性不需要改表结构 · 写入时放进 VARIANT
+
+**限制**：
+- BI 工具对 VARIANT 的支持参差——检查你的 Tableau/Superset 版本
+- 聚合/过滤里的 JSON 路径 `variant_col.field1.sub2` 比列访问略慢
+- 权限控制在 JSON 字段粒度目前仍弱——关键字段还是拍平建列
+
+## 8. 建模陷阱
 
 - **粒度不清就建表**：后面全部歪
 - **事实表混 semi-additive 和 additive** 没标注
@@ -225,7 +318,7 @@ SELECT * FROM dim_users TIMESTAMP AS OF '2024-06-15';
 - **宽表无限扩列**：500+ 列的"怪兽表"没人改得动
 - **Kimball + DV + OBT 混用无规范**：团队各按自己理解建，标签和口径乱
 
-## 8. dbt + 现代建模
+## 9. dbt + 现代建模
 
 ### 主流做法
 
@@ -264,7 +357,7 @@ SELECT * FROM {{ ref('stg_users') }}
 
 运行 `dbt snapshot` 自动维护 SCD Type 2 列。
 
-## 9. 性能数字
+## 10. 性能数字
 
 ### 宽表 vs 星型（典型）
 
@@ -281,7 +374,7 @@ SELECT * FROM {{ ref('stg_users') }}
 - Airbnb：**星型 + 宽表 Mart 双层**
 - Shopify：**dbt + 宽表为主**，搭配 Kimball 思维
 
-## 10. 延伸阅读 · 相关
+## 11. 延伸阅读 · 相关
 
 ### 权威阅读
 
