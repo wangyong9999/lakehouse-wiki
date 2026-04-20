@@ -236,8 +236,11 @@ nav:
           - HNSW: retrieval/hnsw.md
           - IVF-PQ: retrieval/ivf-pq.md
           - DiskANN: retrieval/diskann.md
+          - Quantization: retrieval/quantization.md
       - 检索流水线:
           - Hybrid Search: retrieval/hybrid-search.md
+          - Sparse Retrieval: retrieval/sparse-retrieval.md
+          - Filter-aware ANN: retrieval/filter-aware-search.md
           - Rerank: retrieval/rerank.md
           - 检索评估: retrieval/evaluation.md
       - 产品实现:
