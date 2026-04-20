@@ -28,7 +28,7 @@ status: preview
     | Delta Sharing | 协议定义 | 托管服务 + UI |
     | 生产 SLA | 社区 · 无 | Databricks 商业 SLA |
 
-    **读者最危险的误读**：把商业版的 AI 治理、列级血缘、多模资产能力挪到 OSS 头上——**目前 OSS 主要交付的是核心 Catalog API 和基础 RBAC**；大量"多模 / AI-native" 叙事仍是 Databricks 平台能力。
+    **读者最危险的误读**：把商业版的 AI 治理、列级血缘、多模资产能力挪到 OSS 头上——**目前 OSS 主要交付的是核心 Catalog API 和基础 RBAC**；大量"多模 / AI-native" 叙事是 **Databricks 平台里其他组件**（MLflow / Photon / Databricks AI Gateway / Lineage 服务 等）**配合 UC 作为治理入口**一起实现的——不是 UC OSS 单独可运行的能力。
 
 !!! tip "一句话定位（商业版视角）"
     Databricks 主推的**多模态数据与 AI 资产统一目录**。不只是"表注册中心"——还管 **ML 模型**、**向量索引**、**Function**、**Volume**（非结构化文件）。把"数据治理 + 血缘 + 权限"作为一等公民，兼容 **Iceberg REST** 让非 Databricks 引擎也能消费。**OSS 版 2024-06 Data+AI Summit 发布 · LF AI & Data 沙箱 · 仍 0.x 系列**。
@@ -366,7 +366,7 @@ WHERE source_table_full_name = 'prod_ai.sales.orders';
 
 - **OSS 版被当商业版用**：高级治理功能不全 → 先确认需求匹配
 - **迁移 HMS 时不做权限审计**：GRANT 陈年逻辑没对齐新权限模型
-- **Lineage 延迟**：血缘异步，大规模 query 时有秒级延迟
+- **Lineage 延迟**：血缘是异步捕获的（query plan 解析后上报 UC），**不适合依赖"刚刚那条 query 的血缘就能在 dashboard 上看到"的实时场景**——更适合小时级 / 天级的治理审计用途
 - **审计日志不归档**：高频访问 UC server，audit log 会膨胀
 - **单 Metastore 租户过多**：元数据 DB 压力大 → 按业务线拆 Metastore
 - **Delta Sharing 权限弄错**：`SHARE` 对象的访问粒度容易疏忽

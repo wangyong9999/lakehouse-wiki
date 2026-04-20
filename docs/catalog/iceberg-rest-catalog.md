@@ -70,7 +70,9 @@ status: stable
 - **Nessie** 既有自有 API 也暴露 Iceberg REST（Git-like 能力是差异化）
 - **Apache Polaris / Unity / Nessie / Gravitino** 的 Iceberg REST 兼容度参差——见下"兼容度矩阵"段
 
-REST Catalog 已成**Iceberg 生态的新默认**；**Iceberg 协议本身仍在 Apache 主导下中立演进**，但 Databricks/Snowflake 的商业推动加速了 spec 能力（OAuth2 · Vended Credentials · Scan Planning · Multi-table Commit）。
+REST Catalog 已成**Iceberg 生态的新默认**；**Apache 维持协议治理的中立性**（spec 变更走社区投票），但**商业实现方（Databricks 通过收购的 Tabular 团队 / Snowflake 通过 Polaris）的实际需求正在驱动 spec 演进方向**——OAuth2 / Vended Credentials / Scan Planning / Multi-table Commit 的优先级都受商业场景推动。
+
+**Tabular 2024-06 被 Databricks 收购**：原 Tabular REST 实现团队并入 Databricks，Iceberg 社区里**原独立的 Tabular 技术方向与 Databricks 产品路线汇合**——对读者的含义是：**Iceberg REST spec 的实际演进重心向 Databricks 倾斜**，但 Apache 层面协议治理仍独立。
 
 ## 2. 协议深挖
 
@@ -186,7 +188,7 @@ Warehouse B  → Namespace B1, B2 ...
 
 ### 机制 4 · Scan Planning · 从"客户端规划"到"服务端规划"
 
-**传统 Iceberg 读**：客户端下载 metadata.json → manifest list → 所有相关 manifest，自己做分区剪枝和 split 生成。大表下 **client 要下载 MB 级 Avro 元数据**。
+**传统 Iceberg 读**：客户端下载 metadata.json → manifest list → 所有相关 manifest，自己做分区剪枝和 split 生成。**数量级**：小表几百 KB · 百万分区大表单次读元数据可达**几十 MB** · 对 mobile / edge / 高并发 Trino worker 都是延迟与带宽负担。
 
 **Scan Planning endpoint**（REST Catalog spec 1.5+）：
 
@@ -226,7 +228,7 @@ POST /v1/{prefix}/namespaces/{ns}/tables/{table}/plan
 1. Client → IdP (OIDC) → access_token (JWT)
 2. Client → REST Catalog: Authorization: Bearer <access_token>
 3. REST Catalog 校验 token + 决定授权范围（OAuth2 scope）
-4. REST Catalog → AWS STS: AssumeRole + Session policy (限定到本表 prefix)
+4. REST Catalog → AWS STS: AssumeRole + Session policy（限定到该表所属 S3 prefix；跨多表读时各自独立签发）
 5. REST Catalog → Client: { data-files: [...], credentials: { access_key, secret, session_token, expiry } }
 6. Client 用临时 token → S3 直读
 ```
@@ -257,6 +259,11 @@ POST /v1/{prefix}/namespaces/{ns}/tables/{table}/plan
 | Vended Credentials | ✅（SigV4 · 1.3）| 部分 | 部分 | 依底层 |
 | Scan Planning | 2026 roadmap | ❌ | ❌ | ❌ |
 | OAuth2 Auth | ✅ | ✅ | ✅ | ✅ |
+
+**表格说明**：
+- "部分"= 该实现有对应能力但覆盖不完整（如只支持子集语义 / 只对特定资源类型生效）
+- "roadmap"= 计划中 / 预览 · **非 GA** · 选型时不应当成可用能力
+- "SigV4" = AWS Signature V4 签名协议；Polaris 1.3+ 支持，更老版本的 Vended Credentials 覆盖面较窄
 
 **解读（概念层，不挂具体版本）**：
 - **Polaris** · Iceberg 原生特性覆盖最全 · Snowflake 主力投入

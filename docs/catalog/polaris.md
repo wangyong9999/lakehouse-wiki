@@ -32,7 +32,7 @@ status: preview
     **Snowflake 开源的 Iceberg REST Catalog 参考实现**。范围聚焦：**协议纯净 + 权限模型 + 多云凭证代签发**。不做向量、不做模型、不做多模资产——那些交给上层。**2024-08-09 进入 Apache 孵化 · 截至 2026-Q2 仍在孵化**（1.3.0-incubating 2026-01 发布）。与 Unity Catalog OSS 构成 2024-2026 Catalog 生态两大开源选项。
 
 !!! abstract "TL;DR"
-    - **定位**：纯净的 Iceberg REST Catalog + RBAC 权限
+    - **定位**：Iceberg-native 纯净实现（不扩展协议、不做多模资产）+ RBAC 权限
     - **出身时间线**：Snowflake 2024-06 宣布 Open Catalog → 2024-08-09 捐献 Apache 孵化 → 2026-01 发布 1.3.0-incubating（仍孵化中）
     - **核心能力**：Iceberg REST v1 协议 + Credential Vending（含 2026 新增 SigV4 / KMS per-catalog / 位置限制） + 多云后端 + Generic Table（1.3 GA · 支持非 Iceberg 表元数据）
     - **不做**：向量表 / 模型注册 / 血缘 / Volume（留给上层）
@@ -307,7 +307,7 @@ Polaris 的"纯净 · 最小实现"是**双刃剑**：
 | 数据质量 | 走 Great Expectations / Soda 等独立栈 |
 | 自动 compaction / 表维护 | 走托管服务（Snowflake Open Catalog 内置 / S3 Tables）或自建 Airflow 作业 |
 | 企业级审计 / 合规报表 | 自己从访问日志聚合 |
-| 高级权限（行级过滤 / 列 mask）| Polaris 1.3 只做到表/Namespace · 细粒度要商业版或外层 |
+| 高级权限（行级过滤 / 列 mask）| Polaris 1.3 只做到表/Namespace 粒度 · 细粒度要走 Databricks UC 商业版或上层服务（Gravitino / DataHub 等）补充 |
 
 **结论**：Polaris 适合**已经有完整治理栈**的团队——它是一块干净的"表协议底座"，上面的一切都要自己拼。纯治理型团队直接上 **Polaris + 其他栈** 的集成成本常常被低估。
 
