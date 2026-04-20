@@ -14,8 +14,8 @@ status: stable
 
 # Trino · 交互式 SQL 联邦引擎
 
-!!! tip "一句话定位"
-    **面向交互式分析**的 MPP SQL 引擎。擅长**跨数据源联邦查询**（Iceberg / Hive / Kafka / MySQL / 甚至 Elasticsearch），在 Lakehouse 世界是**BI 仪表盘 / 分析师自助**的事实标准引擎。
+!!! tip "一句话定位 · 纯查询引擎（无自己存储）"
+    **面向交互式分析的 MPP SQL 引擎 · 纯查询引擎类别**——**无自己的存储**，所有数据都通过 Catalog connector 从外部数据源读。擅长**跨数据源联邦查询**（Iceberg / Hive / Kafka / MySQL / 甚至 Elasticsearch），在 Lakehouse 世界是**BI 仪表盘 / 分析师自助**的事实标准引擎。
 
 !!! abstract "TL;DR"
     - **Coordinator + Worker** 的 MPP 架构；每查询独立执行树

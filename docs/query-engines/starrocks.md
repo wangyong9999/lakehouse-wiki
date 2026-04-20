@@ -1,7 +1,11 @@
 ---
-title: StarRocks
+title: StarRocks · MPP OLAP 数据库
 type: system
-tags: [query-engine, olap, mpp]
+depth: 资深
+level: A
+last_reviewed: 2026-04-20
+applies_to: StarRocks 3.3+ (2024+) · 存算分离模式 3.0+
+tags: [query-engine, olap, mpp, mpp-database]
 category: query-engine
 repo: https://github.com/StarRocks/starrocks
 license: Apache-2.0 / Elastic
@@ -10,8 +14,16 @@ status: stable
 
 # StarRocks
 
-!!! tip "一句话定位"
-    现代 **MPP 分析型数据库**，向量化执行 + 物化视图 + 直接读湖表。在湖仓上扮演"**BI 加速层 / 仪表盘专用引擎**"——比 Trino 延迟更低，比 ClickHouse join 更强。
+!!! tip "一句话定位 · 独立 MPP OLAP 数据库 · 湖仓可当加速层"
+    现代 **MPP 分析型数据库**——**完整数据库**（有自己的存储 + 执行 + Catalog），**可独立部署**作 OLAP 栈；在湖仓环境下也常扮演"**BI 加速层 / 仪表盘专用引擎**"。向量化执行 + 物化视图 + 湖表直读。比 Trino 延迟更低，比 ClickHouse join 更强。
+
+!!! info "向量化 ≠ 向量检索 · 和 retrieval/ 章节的边界"
+    StarRocks **3.3+（2024）** 加了**向量索引 + 向量检索函数**（cosine/L2/inner product + HNSW）。注意区分：
+
+    - **"向量化执行"** = SIMD · 是 StarRocks 性能基础（本页正文主要讲这个）
+    - **"向量检索"** = ANN 相似度搜索 · 2024+ 向检索侧延伸——详见 [多模检索](../retrieval/index.md)
+
+    **StarRocks 的向量检索定位**：BI 数据表里**附带向量列**做混合查询（SQL 过滤 + ANN 排序）场景合适；纯向量工作负载仍建议 [Milvus / LanceDB](../retrieval/vector-database.md)。
 
 ## 它解决什么
 

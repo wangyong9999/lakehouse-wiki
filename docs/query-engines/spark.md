@@ -14,8 +14,8 @@ status: stable
 
 # Apache Spark
 
-!!! tip "一句话定位"
-    **大数据时代最主流的分布式计算引擎**。批 ETL / SQL 分析 / 流处理 / ML 训练"一套 API 四处用"。在 Lakehouse 里的角色：**批入湖 + 集市层构建 + ML 训练数据准备** 的主力。
+!!! tip "一句话定位 · 通用数据处理框架（不只是查询引擎）"
+    **大数据时代最主流的分布式计算引擎**——本质是**通用处理框架**，SQL 只是诸多 API 之一。批 ETL / SQL 分析 / 流处理 / ML 训练"一套 API 四处用"。**被放在"查询引擎"章节**是因为湖仓场景常用它跑 SQL 和 DataFrame；但它的**首要职责是"处理"不是"查询"**。在 Lakehouse 里的主要角色：**批 ETL + 集市层构建 + ML 训练数据准备**。
 
 !!! abstract "TL;DR"
     - **统一 API**：RDD / DataFrame / SQL / Structured Streaming / MLlib 同宗

@@ -14,8 +14,8 @@ status: stable
 
 # Apache Flink · 流处理 + CDC + 流批一体
 
-!!! tip "一句话定位"
-    **有状态流处理的事实标准**。Lakehouse 里的核心角色：**CDC 入湖 + 流式聚合 + 实时特征 + 窗口告警**。Paimon 的亲兄弟——Flink + Paimon 是**准实时湖仓**的黄金组合。
+!!! tip "一句话定位 · 流处理引擎（SQL 是 API 之一，不是主业）"
+    **有状态流处理的事实标准**——首要定位是**流处理引擎**，DataStream API 是主流 API；Flink SQL 只是面向分析场景的 API 之一。**被放在"查询引擎"章节**是因为湖仓场景常用 Flink SQL；但 Flink 的核心价值在于**有状态流计算**，不是交互式查询。Lakehouse 里的核心角色：**CDC 入湖 + 流式聚合 + 实时特征 + 窗口告警**。Paimon 的亲兄弟——Flink + Paimon 是**准实时湖仓**的黄金组合。
 
 !!! abstract "TL;DR"
     - **原生流处理**（不像 Spark 的 micro-batch）：**毫秒级延迟**

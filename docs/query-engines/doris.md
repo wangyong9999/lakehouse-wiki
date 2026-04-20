@@ -1,7 +1,11 @@
 ---
-title: Apache Doris
+title: Apache Doris · MPP OLAP 数据库
 type: system
-tags: [query-engine, olap, mpp]
+depth: 资深
+level: A
+last_reviewed: 2026-04-20
+applies_to: Apache Doris 2.1+ (2024+) · 存算分离模式 2.0+
+tags: [query-engine, olap, mpp, mpp-database]
 category: query-engine
 repo: https://github.com/apache/doris
 license: Apache-2.0
@@ -10,8 +14,16 @@ status: stable
 
 # Apache Doris
 
-!!! tip "一句话定位"
-    MPP 分析型数据库，和 [StarRocks](starrocks.md) 同源（都源自百度 Palo）。定位、架构、能力高度重合；近年在**湖仓融合**方向（直读 Iceberg / Hudi / Paimon）投入很大。中国社区活跃。
+!!! tip "一句话定位 · 独立 MPP OLAP 数据库 · 湖仓融合方向强"
+    **MPP 分析型数据库**——和 ClickHouse / StarRocks 同属"自带存储的 OLAP DB"层 · 不是纯查询引擎。向量化执行 + Pipeline 执行模型 + Iceberg/Hudi/Paimon 直读。和 [StarRocks](starrocks.md) **同源**（都源自百度 Palo），定位、架构、能力高度重合；**2024-2026 在湖仓融合方向投入大**，中国社区活跃。
+
+!!! info "向量化 ≠ 向量检索 · 和 retrieval/ 章节的边界"
+    Doris **2.1+（2024）** 加了**向量索引 + 相似度检索**能力。区分同前：
+
+    - **"向量化执行"** = SIMD + Pipeline 执行引擎 · 本页性能基础
+    - **"向量检索"** = ANN 相似度 · 2024+ 延伸能力 · 详见 [多模检索](../retrieval/index.md)
+
+    定位同 StarRocks · BI 数据表附带向量做混合查询合适；纯向量走专业向量库。
 
 ## 它解决什么
 

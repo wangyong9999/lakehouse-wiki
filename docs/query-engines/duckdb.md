@@ -1,6 +1,10 @@
 ---
-title: DuckDB
+title: DuckDB · 嵌入式 OLAP 引擎
 type: system
+depth: 进阶
+level: A
+last_reviewed: 2026-04-20
+applies_to: DuckDB 1.0+ (2024-06 GA) · 1.1/1.2/1.3 (2024-2025)
 tags: [query-engine, olap, embedded]
 category: query-engine
 repo: https://github.com/duckdb/duckdb
@@ -10,8 +14,16 @@ status: stable
 
 # DuckDB
 
-!!! tip "一句话定位"
-    **嵌入式 OLAP 引擎**——SQLite 之于 OLTP，DuckDB 之于 OLAP。单文件二进制、进程内运行、直接读 Parquet / Iceberg / Delta。在湖仓场景里扮演"开发 / 调试 / 轻量 BI"的主力工具。
+!!! tip "一句话定位 · 嵌入式纯查询引擎"
+    **嵌入式 OLAP 查询引擎**——SQLite 之于 OLTP，DuckDB 之于 OLAP。单文件二进制、进程内运行、直接读 Parquet / Iceberg / Delta。在湖仓场景里扮演"**开发 / 调试 / 轻量 BI / notebook**"的主力工具。**不是生产集群级引擎**——GB 到 TB 级单机可用；大规模走 Trino / Spark。
+
+!!! info "向量化 ≠ 向量检索 · 和 retrieval/ 章节的边界"
+    DuckDB 通过 **`vss` extension**（2024）提供向量索引 + 相似度查询；与 Lance 生态也有集成。区分同前：
+
+    - **"向量化执行"** = DuckDB 本身的列式 SIMD 执行 · 所有查询都走
+    - **"向量检索"** = vss extension 的 ANN 能力 · 详见 [多模检索](../retrieval/index.md)
+
+    DuckDB 的向量能力**定位**在"本地分析里附带做向量查询"——和 LanceDB 形态接近但 LanceDB 是湖原生向量格式。纯向量工作负载走 [Milvus / LanceDB](../retrieval/vector-database.md)。
 
 ## 它解决什么
 

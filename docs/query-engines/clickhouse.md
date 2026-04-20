@@ -1,7 +1,11 @@
 ---
-title: ClickHouse
+title: ClickHouse · MPP OLAP 数据库
 type: system
-tags: [query-engine, olap, columnar]
+depth: 资深
+level: A
+last_reviewed: 2026-04-20
+applies_to: ClickHouse 25.x+（2025 末主流）· 湖读走 24.10+ iceberg()/s3() 表函数
+tags: [query-engine, olap, columnar, mpp-database]
 category: query-engine
 repo: https://github.com/ClickHouse/ClickHouse
 license: Apache-2.0
@@ -10,8 +14,16 @@ status: stable
 
 # ClickHouse
 
-!!! tip "一句话定位"
-    **明细事实表 OLAP 的极致**。单表大扫描 + 高并发聚合场景里几乎没有对手。在湖仓里通常作为"BI 热数据加速层"或"事件分析专用引擎"。
+!!! tip "一句话定位 · 不是查询引擎，是 MPP OLAP 数据库"
+    **MPP OLAP 数据库**——**有自己的存储**（MergeTree 家族），不是 Trino/DuckDB 那种"纯查询引擎"。**单表大扫描 + 高并发聚合**场景几乎无对手。在湖仓里通常作为"BI 热数据加速层"或"事件分析专用引擎"——但**也完全可以独立部署**（有大量不碰湖仓的 ClickHouse 栈）。
+
+!!! info "向量化 ≠ 向量检索 · 和 retrieval/ 章节的边界"
+    ClickHouse 2024+ 加了**向量相似度函数**（`cosineDistance` / `L2Distance` 等）和**向量索引**（Annoy / HNSW）。这两件事不要混：
+
+    - **"向量化执行"** = SIMD · 列式批处理 · 是 ClickHouse 本身的**性能基础**
+    - **"向量检索"** = ANN 相似度搜索 · 是 ClickHouse **向检索侧的延伸**——详见 [多模检索](../retrieval/index.md)
+
+    **但 ClickHouse 不是专业向量数据库**：百万到千万级向量可以用；亿级向量 + 高并发 ANN 走 [Milvus / LanceDB](../retrieval/vector-database.md)。
 
 ## 它解决什么
 
@@ -43,7 +55,7 @@ ClickHouse 作为湖仓的**镜像**：
 
 ### 模式 B：直读 Parquet / Iceberg
 
-ClickHouse 24.x+ 的 `iceberg()` / `s3()` 表函数能直接读湖上 Parquet 和 Iceberg 表：
+ClickHouse 24.10+ 的 `iceberg()` / `s3()` 表函数能直接读湖上 Parquet 和 Iceberg 表：
 
 - 不搬数据
 - 延迟比模式 A 高（秒级）
