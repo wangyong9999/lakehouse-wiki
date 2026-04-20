@@ -146,7 +146,12 @@ image_vec = F.normalize(image_vec, p=2, dim=-1)
 
 如果有 caption / OCR 文本，**额外**用 BGE / Jina 做纯文本 embedding，存另一列。纯文本 embedding 在 caption 语义丰富时召回更精细。
 
-**两种 embedding 共存**：
+**两种 embedding 共存** · 生产中两种常见做法：
+
+- **单一 transform 产出两列** · 一个 Flink / Spark 作业同时调用 CLIP + BGE · 一次 commit 两列齐全
+- **两阶段独立 stage** · CLIP pipeline 和 BGE pipeline 独立调度 · 各自 commit · 好处是一个失败不影响另一个 · 成本是表里某资产可能暂时只有一种 embedding
+
+推荐**两阶段独立**——embedding 模型升级 / 失败重跑的粒度更细。
 
 ```
 clip_vec  VECTOR<FLOAT, 512>   -- 跨模态

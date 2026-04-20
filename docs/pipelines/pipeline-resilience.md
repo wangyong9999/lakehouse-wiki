@@ -99,7 +99,7 @@ flowchart LR
 | 变更类型 | 自动? | 备注 |
 |---|---|---|
 | **Add column (nullable)** | ✅ | 湖表协议原生支持 |
-| **Add column (NOT NULL with default)** | ✅ | Iceberg v3（2025-06 ratified）+ / Paimon 1.0（2025-01 GA）+ |
+| **Add column (NOT NULL with default)** | ✅ | Iceberg v3（spec 已于 2025-06 正式 ratified）+ / Paimon 1.0（2025-01 GA）+ |
 | **Drop column** | ✅ | 协议层支持 · 但下游读侧要处理 null |
 | **Rename column** | ⚠️ | Iceberg 用 field_id 自动；Delta 需启用 column mapping |
 | **类型升级**（`int → long`）| ✅ 部分 | Iceberg 允许兼容扩位 |
@@ -371,7 +371,7 @@ source DB → Debezium → Schema Registry → Kafka → Flink → Iceberg sink
 
 两层都要盯 · 互为补充。
 
-## 9. 陷阱
+## 8. 陷阱
 
 - **以为 Exactly-once 自动得到** · 三方都要配置 · 漏一环就降级 at-least-once
 - **`schema.change.behavior` 设成 `exception`** · 一改字段 pipeline 就崩 · 生产用 `try_evolve`

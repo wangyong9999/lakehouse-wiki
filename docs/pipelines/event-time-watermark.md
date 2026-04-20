@@ -145,8 +145,8 @@ DataStream<Event> stream = env.fromSource(...,
 ## 常见坑
 
 - **`env.setStreamTimeCharacteristic(EventTime)`**：旧 API，新版本默认 event-time
-- **Kafka 分区间 Watermark 不对齐**：某个分区慢 → 整体 watermark 被它拖着不推进
-  - 解决：`withIdleness(Duration.ofMinutes(5))` 让空分区不阻塞
+- **Kafka 多分区消费速率不均 · Watermark 不对齐**：单个 Flink task 从多个 Kafka 分区消费时，**某个分区数据少或空闲**（idle）· watermark 会被它卡住不推进（取最小值语义）
+  - 解决：`withIdleness(Duration.ofMinutes(5))` 让空分区/慢分区不阻塞整体 watermark
 - **批处理模式忘了关 Watermark**：Flink Batch mode 不产生 Watermark
 - **时区混乱**：UTC vs 本地时间 → 窗口错位 1 天
 - **Spark Structured Streaming 的等价物**：`withWatermark("event_time", "30 seconds")`

@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-20
-applies_to: Debezium 2.x · Flink CDC 3.1-3.5 · Paimon CDC · Iceberg Sink 跨引擎
+applies_to: Debezium 2.x · Flink CDC 3.1-3.5（截至 2025-09 · 生产跟最新稳定版）· Paimon CDC · Iceberg Sink 跨引擎
 tags: [pipelines, cdc, debezium, flink-cdc, paimon-cdc]
 aliases: [CDC, 变更数据捕获]
 related: [streaming-upsert-cdc, kafka-ingestion, managed-ingestion, pipeline-resilience]
@@ -93,7 +93,7 @@ DB 侧 `ALTER TABLE` 在 binlog 产生 schema change event · Debezium 翻译为
 - Schema Registry 注册新版本
 - 下游 sink **尝试**演化表（演化成功 / fail / skip · 取决于配置）
 
-**关键**：**不是每种 ALTER 都能自动传播**（如类型收窄 · NOT NULL 约束变化 · 嵌套 STRUCT 变更）——见 [pipeline-resilience.md · Schema Evolution 传播](pipeline-resilience.md) 的能/不能自动分类表。
+**关键**：**不是每种 ALTER 都能自动传播**（如类型收窄 · NOT NULL 约束变化 · 嵌套 STRUCT 变更）——见 [pipeline-resilience.md §2 Schema Evolution 传播](pipeline-resilience.md) 的"能/不能自动"分类表。
 
 ## 3. Flink CDC 3.x · 2024-2025 最大进展
 

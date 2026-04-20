@@ -164,8 +164,8 @@ status: stable
 
 ## 5. 陷阱
 
-- **把 Auto Loader 当 CDC 用** · Auto Loader 是**文件级增量**不是 DB log-based CDC · 源 DB 的删除事件**不会被捕获**
-- **Fivetran 账单失控** · MAR 模型下高频大规模源表账单指数增长 · 月底看账单踩坑
+- **把 Auto Loader 当 DB CDC 用** · 见上 §2 "四类产品分层" · Auto Loader 是文件级增量 · 删除事件不捕获
+- **Fivetran 账单失控** · MAR 是**线性计费**（按变更行数）· 但**高变更频率 + 大源表**场景下月度账单可能快速超自建成本 · 月底看账单再调整为时已晚
 - **Airbyte 自部署严重低估运维** · OSS 版本没有 K8s Operator · Helm chart 维护自己担 · 实际和自建 Flink 栈成本接近
 - **SeaTunnel 期望流式工作负载** · SeaTunnel Engine 偏批 · 真流要走 Flink 后端
 - **DMS 跨账号 / 跨 VPC 配置复杂** · Security group + subnet + IAM + KMS 多层配合容易踩

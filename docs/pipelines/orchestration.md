@@ -151,12 +151,16 @@ def dwd_orders(orders):
 - 数据量异常 —— 必告
 - "成功"不要告
 
-### 4. 回填策略
+### 4. 回填策略 · 批 vs 流 的编排职责矩阵
 
-- **批业务表** · 按 `partition_date` 回填 · 编排系统是正确工具
-- **流式入湖作业** · **不要用编排系统回填**——Flink 作业本身持有 state · 正确做法是 **Flink savepoint 回退 + Kafka offset 重置**（详见 [管线韧性 · Backfill](pipeline-resilience.md)）
-- 编排系统回填流作业会导致**双写**（原流作业 + 回填作业并行跑）· 数据重复事故常见源
-- 回填一批分区要**限并发**（`max_active_runs`）· 避免下游压垮
+**核心原则**：**批作业编排系统管 · 流作业流引擎管**——两类回填手段不同 · 不能混用。
+
+| 维度 | 批作业（DWD/DWS 每日构建） | 流作业（Flink CDC / Kafka 入湖） |
+|---|---|---|
+| **谁管生命周期** | 编排系统（Airflow / Dagster）| 流引擎（Flink · Spark Streaming）|
+| **回填机制** | 编排系统按 `partition_date` / `run_id` 重跑 | **流引擎 savepoint 回退 + source offset 重置**（见 [pipeline-resilience · Backfill](pipeline-resilience.md)）|
+| **错误做法** | 把批作业拆成 cron | 用编排系统"重跑"流作业——**产生双写**（原作业 + 回填作业并行）· 常见事故源 |
+| **限并发** | Airflow `max_active_runs`（其他系统有等价参数）| 流作业本身单实例 · 无需额外限流 |
 
 ### 5. 和 Catalog 集成
 
@@ -186,4 +190,4 @@ def dwd_orders(orders):
 - Airflow docs: <https://airflow.apache.org/docs/>
 - Dagster: <https://dagster.io/>
 - *Fundamentals of Data Engineering*（第 2-3 章编排部分）
-- *Workflow Orchestration for ML Pipelines* 对比系列
+- Prefect: <https://www.prefect.io/> · Flyte: <https://flyte.org/> · Argo Workflows: <https://argoproj.github.io/workflows/> · Temporal: <https://temporal.io/>

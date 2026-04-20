@@ -75,9 +75,10 @@ ffmpeg -i video.mp4 -vf "fps=1/2" frame_%04d.jpg   # 每 2 秒一帧
 
 ### 方案 B：镜头变化检测（Shot Detection）
 
-检测画面剧变点切分。每个镜头取**代表帧**（通常中间帧）。
+检测**相邻帧的显著视觉变化**（通常用帧间差异 / histogram / SIFT 特征综合判定）· 在变化点切分镜头 · 每个镜头取**代表帧**（通常中间帧）。
 
 ```bash
+# ffmpeg 的 scene 过滤器基于帧间差异打分 · 0.3 是常见阈值（0.2-0.4 视内容类型调）
 ffmpeg -i video.mp4 -vf "select='gt(scene,0.3)',showinfo" -vsync vfr frame_%04d.jpg
 ```
 
