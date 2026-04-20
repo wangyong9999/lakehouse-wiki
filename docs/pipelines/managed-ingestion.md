@@ -28,7 +28,7 @@ status: stable
     - **为什么托管** · 自建 Kafka + Flink 的**隐性成本**（团队 / 运维 / SLA）在小团队远超托管账单
     - **五类托管路径**：
         - **Airbyte** · OSS + Cloud · 300+ 连接器 · 社区路径
-        - **Fivetran** · 商业 SaaS · 企业级稳定 · MAR 计费贵
+        - **Fivetran** · 商业 SaaS · 企业级稳定 · MAR 计费（大规模源表账单可能快速增长）
         - **Apache SeaTunnel** · Apache TLP（2023-05）· 160+ 连接器 · 国内社区活跃
         - **Databricks Auto Loader** · Databricks 生态 · 文件级增量（不是 DB CDC）
         - **AWS DMS + Glue** · AWS 生态 · log-based DB CDC
@@ -84,17 +84,17 @@ status: stable
 
 ### Fivetran · 商业 SaaS
 
-- **定位** · 纯商业 SaaS · 企业级稳定性 · 最贵
+- **定位** · 纯商业 SaaS · 企业级稳定性
 - **连接器** · 400+ · 多 SaaS 深度集成
 - **湖仓 sink** · Databricks · Snowflake · Iceberg · Delta · BigQuery
 - **特点** · 零维护 · 自动 schema 处理 · 完备 SLA
-- **计费** · **Monthly Active Rows (MAR)** 模型——规模大时账单可观
+- **计费** · **Monthly Active Rows (MAR)** 模型——**对"少量源表 + 高频变更"很贵** · 大规模源表时月度账单可能超自建成本；实际评估需结合自家源表变更频率
 - **适合** · 预算充足 + 团队**不想运维** + 合规要求严
 
 ### Apache SeaTunnel · Apache TLP（2023-05 毕业）
 
-- **定位** · Apache 顶级项目 · 分布式数据集成 · 国内社区活跃
-- **连接器** · **160+**（2025-09 数据）· 覆盖 JDBC / 大数据 / NoSQL / SaaS
+- **定位** · Apache 顶级项目（2023-05 毕业）· 分布式数据集成 · 国内社区活跃
+- **连接器** · **160+**（截至 2025-09 · 按官方 release note · 持续增长）· 覆盖 JDBC / 大数据 / NoSQL / SaaS
 - **引擎** · 自家 SeaTunnel Engine + 可选 Flink / Spark 执行后端
 - **湖仓 sink** · Iceberg · Paimon · Hudi · Delta · StarRocks · Doris
 - **特点** · 批 ETL 强（替代 Kettle / DataX）· 配置式 DAG

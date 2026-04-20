@@ -39,12 +39,18 @@ status: stable
 ```
 Source (Kafka)    Engine (Flink)           Sink (Iceberg / Paimon)
 ─────────────     ─────────────            ──────────────────────
-offset 可重放   → checkpoint barrier   →   pre-commit (写文件，不切指针)
+offset 可重放   → checkpoint barrier   →   pre-commit (写数据文件 · 但不切指针)
 offset commit     ↓                        ↓
-                  2PC coordinator         commit (CAS 指针切换)
+                  2PC coordinator         commit (CAS 切 current snapshot)
                   ↓
-                  若 commit 失败 → abort pre-commit (孤儿文件由 GC 清)
+                  若 commit 失败:
+                    Flink 从上一个 checkpoint 恢复重试
+                    pre-commit 已写的数据文件成"孤儿"(对象存储里确实还在)
+                    reader 看不到(未被 metadata 指针引用)
+                    后续由 `remove_orphan_files` 清理
 ```
+
+**注**：这里的"孤儿文件对象存储上仍存在 · reader 看不到"靠的是**湖表的 metadata 指针语义**（见 [lakehouse/Snapshot](../lakehouse/snapshot.md)）· 不是对象存储级别的隐藏。对象存储本身一旦 PUT 成功文件就是可见的。
 
 三方都要**满足条件**才是真 exactly-once：
 
@@ -91,7 +97,7 @@ flowchart LR
 | 变更类型 | 自动? | 备注 |
 |---|---|---|
 | **Add column (nullable)** | ✅ | 湖表协议原生支持 |
-| **Add column (NOT NULL with default)** | ✅ | Iceberg v3+ / Paimon 1.0+ |
+| **Add column (NOT NULL with default)** | ✅ | Iceberg v3（2025-06 ratified）+ / Paimon 1.0（2025-01 GA）+ |
 | **Drop column** | ✅ | 协议层支持 · 但下游读侧要处理 null |
 | **Rename column** | ⚠️ | Iceberg 用 field_id 自动；Delta 需启用 column mapping |
 | **类型升级**（`int → long`）| ✅ 部分 | Iceberg 允许兼容扩位 |
@@ -107,15 +113,30 @@ flowchart LR
 
 ### Flink CDC 3.x 的 Schema Evolution Behavior
 
-3.0+ Pipeline 声明式控制：
+3.0+ Pipeline 声明式控制（放在 pipeline 块里）：
 
 ```yaml
+source:
+  type: mysql
+  # ...
+
+sink:
+  type: paimon
+  # ...
+
 pipeline:
-  schema.change.behavior: try_evolve
-  # 取值: evolve / try_evolve / lenient / ignore / exception
+  name: app-to-paimon
+  parallelism: 4
+  schema.change.behavior: try_evolve    # 取值: evolve / try_evolve / lenient / ignore / exception
 ```
 
-**生产推荐**：`try_evolve` —— 支持就自动演化 · 不支持就告警 + 降级 · **不直接崩作业**。
+**各取值含义**：
+
+- `evolve` · 遇到所有变更都尝试演化 · 不支持就 fail
+- `try_evolve` · 尝试演化 · 不支持**告警 + 降级**（日志上报 · 作业不崩）— **生产推荐**
+- `lenient` · 宽松兼容模式 · 尽量演化 · 不 fail
+- `ignore` · 忽略 schema change · 继续跑（新字段会被丢弃）
+- `exception` · 遇到 schema change 直接 fail · 早期开发 / 严苛场景
 
 ## 3. DLQ · 脏数据对策
 
@@ -156,7 +177,7 @@ mainStream.getSideOutput(dlqTag)
     .addSink(dlqKafkaSink);  // 独立 topic · 供离线修复
 ```
 
-**关键**：**DLQ 建了要有消费者**——否则百万脏消息堆积没人看，等同没建。
+**关键**：**DLQ 建了要配审查机制**——定期人工 / 自动报警脚本扫 DLQ topic 行数告警——否则脏消息积累到百万级没人看，等同没建。
 
 ## 4. Backfill · 回填与重放
 

@@ -78,12 +78,12 @@ flowchart LR
 
 从"第 0 条数据"开始 · 需要先做一次**全量 snapshot**：
 
-1. 取**一致性快照**（DB-specific：MySQL 全局读锁 / PG `pg_export_snapshot`）锁定起点 offset
+1. 取**一致性快照**（DB-specific：MySQL 全局读锁 / PG `pg_export_snapshot`）· 在此时刻**记下 binlog offset 作为起点**
 2. 全表扫 → 写 Kafka topic
-3. 切换到 binlog 消费 · 从起点 offset 开始
-4. 初始数据 + 增量合流（依赖 watermark 去重重叠段）
+3. snapshot 完成后从步骤 1 记的 offset 开始消费 binlog（**不是当前最新 offset**——否则会丢 snapshot 期间的变更）
+4. **重叠区去重**：snapshot 和 binlog 会有覆盖区（snapshot 读到的行可能 binlog 里又有 update）· Flink CDC / Debezium 在此段做 watermark 对齐去重
 
-**陷阱**：大表 snapshot 时间长——期间 binlog 积压——详见 [streaming-upsert-cdc.md](../lakehouse/streaming-upsert-cdc.md) 的 "全量+增量切换 · watermark 桥接" 段。
+**陷阱**：大表 snapshot 时间长——期间 binlog 积压——详见 [streaming-upsert-cdc.md · 全量+增量切换 · watermark 桥接](../lakehouse/streaming-upsert-cdc.md) 段。
 
 ### Schema Change Event
 
@@ -91,9 +91,9 @@ DB 侧 `ALTER TABLE` 在 binlog 产生 schema change event · Debezium 翻译为
 
 - 特殊 event 到 Kafka（含新 schema 定义）
 - Schema Registry 注册新版本
-- 下游 sink 演化表（或 fail / skip）
+- 下游 sink **尝试**演化表（演化成功 / fail / skip · 取决于配置）
 
-**关键**：不是每种 ALTER 都能自动传播到下游——见 [pipeline-resilience.md · Schema Evolution 传播](pipeline-resilience.md)。
+**关键**：**不是每种 ALTER 都能自动传播**（如类型收窄 · NOT NULL 约束变化 · 嵌套 STRUCT 变更）——见 [pipeline-resilience.md · Schema Evolution 传播](pipeline-resilience.md) 的能/不能自动分类表。
 
 ## 3. Flink CDC 3.x · 2024-2025 最大进展
 
@@ -153,15 +153,19 @@ pipeline:
 Paimon 提供**专用 CDC action**，不走通用 Flink CDC pipeline：
 
 ```bash
-# MySQL 全库同步到 Paimon
-flink run paimon-flink-action.jar mysql-sync-database \
+# MySQL 全库同步到 Paimon · 注意参数用下划线(Paimon 官方语法)
+$FLINK_HOME/bin/flink run \
+  /path/to/paimon-flink-action-<version>.jar \
+  mysql_sync_database \
   --warehouse s3://lake/warehouse \
   --database app \
-  --mysql-conf hostname=mysql.internal \
-  --mysql-conf username=app \
-  --mysql-conf password=xxx \
-  --table-conf bucket=16 \
-  --including-tables "orders|users|payments"
+  --mysql_conf hostname=mysql.internal \
+  --mysql_conf username=app \
+  --mysql_conf password=xxx \
+  --mysql_conf database-name=source_db \
+  --table_conf bucket=16 \
+  --table_conf changelog-producer=input \
+  --including_tables "orders|users|payments"
 ```
 
 **和 Flink CDC Pipeline 的共生关系**（不互斥）：
@@ -187,14 +191,17 @@ Iceberg 作为 sink 有**三条路径**，语义不完全一致：
 - **Exactly-once 实现** · 三家都支持但路径不同——Flink 2PC · Spark checkpointLocation + 幂等写 · Kafka Connect 靠 connector 事务支持（详见 [pipeline-resilience.md](pipeline-resilience.md)）
 - **Commit 频率** · 决定新鲜度 vs 小文件权衡——配合 [Compaction](../lakehouse/compaction.md) 必修
 
+**三选一的快速判断**：**栈里已有 Flink** → Flink Iceberg Sink（最成熟 · upsert 完整）；**Spark/Databricks 栈** → Spark Structured Streaming；**已有 Kafka 生态 · 不想引 Flink** → Kafka Connect Iceberg Sink。
+
 ## 6. 选型决策 · 4 步
 
 **Step 1 · 栈已经有什么？**
 
 - 已有 Flink → **Flink CDC Pipeline (3.x)** 或 **Paimon CDC action**
-- 已有 Kafka → **Debezium + Flink/Kafka Connect**
+- 已有 Kafka → **Debezium + Flink / Kafka Connect Iceberg Sink**
 - 已有 Spark 栈 → **Spark Structured Streaming + Iceberg**
-- 已在 AWS → **AWS DMS** 或 **Auto Loader**（见 [managed-ingestion.md](managed-ingestion.md)）
+- **已在 Databricks** → **Auto Loader**（文件级增量 · **注意：不是 DB log-based CDC** · 源库删除事件不捕获 · 详见 [managed-ingestion.md](managed-ingestion.md)）或用 Flink CDC 走 Delta Sink
+- 已在 AWS · 不想引 Flink → **AWS DMS**（见 [managed-ingestion.md](managed-ingestion.md)）
 
 **Step 2 · 目标是 Paimon 还是 Iceberg？**
 
