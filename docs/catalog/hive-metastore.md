@@ -62,12 +62,49 @@ HMS 设计年代太早，短板很硬：
 - **Polaris** / **Unity Catalog** / **Nessie** / **Gravitino** → 根据生态栈和治理需求选
 - 详见 [Iceberg REST Catalog](iceberg-rest-catalog.md) · [Catalog 全景](../compare/catalog-landscape.md)
 
+### 存量 HMS · 什么时候该迁 · 硬判断框架
+
+**"HMS 老了"不够作为迁移理由——真正该动它的生产信号**：
+
+| 症状 | 含义 | 建议 |
+|---|---|---|
+| HMS JDBC 连接池频繁打满 / slow query 报警 | 分区规模 / 并发超了 HMS 架构天花板 | **迁**（到 REST Catalog）|
+| 分区数 > 百万级 / 表数 > 10 万 | HMS RDBMS 瓶颈显性化 | **迁** |
+| 想上 Iceberg v2/v3 新特性（branch / tag / view spec / DV）| HMS API 表达力不足 | **迁** |
+| 跨云 / 多租户 / 凭证代签发需求 | HMS 不做 Vended Credentials | **迁** |
+| 需要 Git-like 分支 | HMS 无此能力 | **迁到 Nessie** |
+| HMS schema 升级被卡（Hive 版本 < 3.x）| 升级生态成本高，不如一次性迁 | **评估迁** |
+
+**可以不迁的场景**：
+
+- 表数 / 分区数规模适中（表数 < 万、分区数 < 十万）· JDBC 池不饱和
+- Iceberg 能力需求停在 v1 级别
+- 无跨云 / 无分支需求
+- 团队 Spark + Hadoop 栈稳定多年 · 没有运维痛点
+- **迁移预算无法覆盖全量验证工作**（UDF / 分区函数 / 权限映射的回归）
+
+**结论**：**是否该迁 HMS 是"看症状不看年代"的问题**。没有瓶颈就先不动；有瓶颈再动；中间状态可以走下面的平滑过渡。
+
 ### 历史 HMS 栈的长期兼容策略
 
 两种主流模式：
 
-1. **HMS 作为 Iceberg 的指针存储**：HMS 只保留 "table → current metadata.json 路径" 这一条记录 · 实际元数据走 Iceberg manifest。可以**平滑过渡**：老 Hive 作业读 HMS 元数据，新 Spark/Trino 作业读 Iceberg
+1. **HMS 作为 Iceberg 的指针存储**（平滑过渡）：HMS 只保留 "table → current metadata.json 路径" · 实际元数据走 Iceberg manifest。老 Hive 作业读 HMS 元数据，新 Spark/Trino 作业读 Iceberg
 2. **迁移到 REST Catalog**：用 Iceberg `register_table` 或 Polaris 的迁移工具做批量导入；HMS 退役成只读副本（审计用）
+
+### 指针载体 HMS 的"看似没事但其实还在的瓶颈"
+
+**"HMS 只剩指针角色，应该就没问题了吧"** —— 这是一个**常见误读**。即使作为指针载体，HMS 仍可能成为：
+
+| 瓶颈类型 | 症状 |
+|---|---|
+| **权限瓶颈** | Ranger / Sentry 建在 HMS 上，迁 REST Catalog 时权限系统要一起改 |
+| **可用性瓶颈** | HMS JDBC 挂了，所有 Iceberg 表写入都会 CAS 失败——**不是低频事件** |
+| **兼容性瓶颈** | 老 HMS 版本不认新 Iceberg TBLPROPERTIES → v3 特性读不到 |
+| **升级冻结点** | HMS 不敢升（怕老作业挂），间接锁死其他依赖 HMS 的组件版本 |
+| **高 commit 频率热点** | Iceberg commit 要 UpdateTable，高频流式场景 HMS RDBMS 锁成热点 |
+
+**"只存指针"不等于"轻负载"**——大量团队从 HMS 迁出的真正原因是发现指针角色下 HMS 仍然是单点 / 瓶颈 / 升级冻结源。
 
 ## 和 Iceberg Catalog / Nessie / Unity 的关系
 

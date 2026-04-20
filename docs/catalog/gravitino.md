@@ -14,6 +14,17 @@ status: stable
 
 # Apache Gravitino · 多源元数据联邦
 
+!!! warning "认知前置 · 联邦是"折中架构"不是"现代优选""
+    Gravitino 市场定位容易被误读为"下一代多模 AI Catalog"——实际上**绝大多数上 Gravitino 的团队不是因为联邦是最佳答案，而是因为他们没法迁**：
+
+    - 存量 HMS + 新建 Polaris / UC 并存 → 业务线迁移预算不够
+    - 多云 / 多 BU · 各自已建 Catalog · 合并有组织阻力
+    - 数据网格（Data Mesh）架构决定了多 Catalog 本身是目标
+
+    **核心判断**：如果你**新起步**，Gravitino 通常**不是首选**——单 Catalog（Polaris / Nessie / UC / Glue）更简单、语义更干净。Gravitino 的价值在于**现实约束下的治理统一**，不是"多 Catalog 是理想架构"。
+
+    AI / Fileset / Model 方向的差异化是**加分项**，不是主购买理由——对大多数团队，买 Gravitino 买的是**多 Catalog 联邦治理**。
+
 !!! tip "一句话定位"
     **多源元数据联邦层**。不想重写已有 HMS / Unity / Glue / Polaris / Kafka / JDBC 等目录，又想对上层引擎暴露统一接口——Gravitino 当"元数据的元数据层"，把多个异构 Catalog 拼成一张视图。**2025-06-03 从 Apache 孵化毕业为 Top-Level Project**——2026 是少数"已毕业"的 Catalog 项目。
 

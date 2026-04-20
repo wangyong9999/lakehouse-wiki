@@ -295,6 +295,22 @@ polaris grant TABLE_READ_DATA on table prod.sales.orders to catalog-role read_on
 - **和 Snowflake 绑定感**：虽然开源，但 Snowflake 影响大
 - **生态跟进速度**：Unity 加资产类型、Polaris 保守
 
+### "纯净" = 能力外包 · 叙事背面
+
+Polaris 的"纯净 · 最小实现"是**双刃剑**：
+
+| 它不做 | 代价（你或上层系统要补） |
+|---|---|
+| 多模资产（向量 / 模型 / Volume） | 走 Unity / Gravitino / 自建治理层 |
+| 血缘追踪 | 走 OpenLineage / DataHub / 商业治理产品 |
+| 业务字典 / 文档 | 走 DataHub / Collibra / Alation |
+| 数据质量 | 走 Great Expectations / Soda 等独立栈 |
+| 自动 compaction / 表维护 | 走托管服务（Snowflake Open Catalog 内置 / S3 Tables）或自建 Airflow 作业 |
+| 企业级审计 / 合规报表 | 自己从访问日志聚合 |
+| 高级权限（行级过滤 / 列 mask）| Polaris 1.3 只做到表/Namespace · 细粒度要商业版或外层 |
+
+**结论**：Polaris 适合**已经有完整治理栈**的团队——它是一块干净的"表协议底座"，上面的一切都要自己拼。纯治理型团队直接上 **Polaris + 其他栈** 的集成成本常常被低估。
+
 ## 7. 陷阱
 
 - **Credential Vending 没配 IAM**：Polaris 调 STS 权限不够

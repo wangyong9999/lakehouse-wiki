@@ -14,20 +14,50 @@ status: preview
 
 # Unity Catalog
 
-!!! tip "一句话定位"
-    Databricks 开源的**多模态数据与 AI 资产统一目录**。不只是"表注册中心"——还管 **ML 模型**、**向量索引**、**Function**、**Volume**（非结构化文件）。把"数据治理 + 血缘 + 权限"作为一等公民，兼容 **Iceberg REST** 让非 Databricks 引擎也能消费。**OSS 版 2024-06 Data+AI Summit 发布 · 提交给 LF AI & Data（沙箱项目）· 仍是 0.x 系列**。
+!!! warning "先分清两个产品 · 本页注意 OSS vs 商业版边界"
+    **Unity Catalog OSS** 和 **Databricks Unity Catalog (商业版)** 是**同名但能力差距大**的两个产品：
 
-!!! abstract "TL;DR"
-    - **三层命名**：`catalog.schema.resource`（资源可以是 table/model/function/volume/index）
-    - **六种资产类型**：Table · Volume · ML Model · Function · Vector Index · Delta Share
-    - **细粒度权限**：行列级、tag-based、动态视图
-    - **列级血缘**（Lineage）：跨引擎追溯
-    - **开放协议**：Iceberg REST / Delta Sharing 双向兼容
-    - **开源 vs 商业 · 重要区分**：
-        - **UC OSS**（2024-06 开源）· LF AI & Data 沙箱项目 · 仍 0.x · 核心 Catalog API + 基础 RBAC
-        - **Databricks UC**（商业托管）· 完整功能 · 列级血缘 + 行级过滤 + Delta Sharing 托管 + AI 治理
-    - **战略定位**：从"Catalog"升级到"**AI-native 数据治理平面**"
-    - **2024-06 Tabular 被 Databricks 收购对 Iceberg/UC 生态的影响**：Iceberg REST spec 话语权向 Databricks 集中；UC 对 Iceberg 的支持进一步深化
+    | 能力 | UC OSS (LF AI 沙箱 · 0.x) | Databricks UC 商业版 |
+    |---|---|---|
+    | 三层命名 + 基础 RBAC | ✅ | ✅ |
+    | Table CRUD + Iceberg REST 兼容 | ✅ | ✅ |
+    | Volume · Function · Model | 部分（定义层）| ✅ 完整运行时 |
+    | 向量索引 / AI 资产 | ❌（未完整开源）| ✅ |
+    | 列级血缘（Lineage） | ⚠️ 实验 | ✅ 生产级 |
+    | 行级过滤 / 列级 mask | ❌ | ✅ |
+    | Delta Sharing | 协议定义 | 托管服务 + UI |
+    | 生产 SLA | 社区 · 无 | Databricks 商业 SLA |
+
+    **读者最危险的误读**：把商业版的 AI 治理、列级血缘、多模资产能力挪到 OSS 头上——**目前 OSS 主要交付的是核心 Catalog API 和基础 RBAC**；大量"多模 / AI-native" 叙事仍是 Databricks 平台能力。
+
+!!! tip "一句话定位（商业版视角）"
+    Databricks 主推的**多模态数据与 AI 资产统一目录**。不只是"表注册中心"——还管 **ML 模型**、**向量索引**、**Function**、**Volume**（非结构化文件）。把"数据治理 + 血缘 + 权限"作为一等公民，兼容 **Iceberg REST** 让非 Databricks 引擎也能消费。**OSS 版 2024-06 Data+AI Summit 发布 · LF AI & Data 沙箱 · 仍 0.x 系列**。
+
+!!! abstract "TL;DR（注意区分 OSS 和商业版）"
+    - **三层命名**：`catalog.schema.resource`（OSS 基础支持 · 商业版完整支持 6 种资源）
+    - **六种资产类型**（主要是**商业版**）：Table · Volume · ML Model · Function · Vector Index · Delta Share
+    - **细粒度权限**：行列级 / tag-based / 动态视图——**这些是商业版能力**
+    - **列级血缘**：**商业版**生产级；OSS 实验性
+    - **开放协议**：Iceberg REST / Delta Sharing 双向兼容（OSS 覆盖 REST 核心 CRUD）
+    - **战略定位**：从"Catalog"升级到"AI-native 数据治理平面"——**路线图**，非 OSS 当下能力
+
+## 0. Adoption Friction · 即便看好也未必该直接采用 OSS
+
+**读 UC 叙事前先做 3 个现实判断**：
+
+1. **你是不是本来就在 Databricks 栈？**
+    - 是 → 商业 UC 是最无缝选择（含 AI 治理完整功能）
+    - 否 → UC OSS 能给你的**仅仅是基础 Catalog** · 和 Polaris / 自建 REST Catalog 等价甚至弱一些
+
+2. **你是否真的需要"多模资产统一治理"？**
+    - 是（大团队 + ML + 结构化数据混治理）→ UC 方向是对的，但 OSS 今天交付不了完整功能 → **等 OSS 成熟 or 直接上商业版**
+    - 否（只要表 Catalog）→ Polaris 更纯净 · Nessie 更灵活
+
+3. **你能接受 OSS 和商业版的巨大能力差吗？**
+    - 关键 AI / 血缘 / 行级权限 目前仍在商业版独占
+    - 预期"OSS 追上来"要以**年**为单位等
+
+**结论**：UC 的理念很强但 **OSS adoption friction 很高**——它不是"Polaris 的多模升级版"那么简单，更接近"Databricks 平台的一个治理入口的开源碎片"。中立团队谨慎。
 
 ## 1. 它解决什么 · 从 HMS 到治理平面
 

@@ -108,20 +108,28 @@ Commit A  (root)
 
 ### 机制 1 · 分支与提交
 
+!!! note "示例语法标注 · 不是跨引擎通用 SQL"
+    下面示例使用的 `CALL nessie_branch_create` / `USE REFERENCE` 等写法**依赖具体引擎和 Nessie 扩展**：
+    - Spark：`nessie-spark-extensions` 插件提供这些 SQL
+    - Trino：通过 Iceberg connector + Nessie catalog 配置 · 语法不完全一致
+    - **直接 HTTP / CLI**：`nessie-cli` 用不同的命令风格
+    
+    不同客户端的精确语法请查各自文档；**概念是通用的，SQL 字面不是**。
+
 ```sql
--- 创建分支
-CALL nessie_branch_create('etl-2024-12-01');
+-- Spark + nessie-spark-extensions 示例
+CALL nessie_branch_create('etl-2026-04-20');
 
 -- 在分支上写入（Iceberg SQL + Nessie 扩展）
-USE REFERENCE 'etl-2024-12-01';
+USE REFERENCE 'etl-2026-04-20';
 INSERT INTO db.orders ...
 UPDATE db.inventory ...
 
 -- 验证后合并
-CALL nessie_merge('main', 'etl-2024-12-01');
+CALL nessie_merge('main', 'etl-2026-04-20');
 
 -- 失败丢弃
-CALL nessie_branch_delete('etl-2024-12-01');
+CALL nessie_branch_delete('etl-2026-04-20');
 ```
 
 ### 机制 2 · 跨表原子 Commit · 边界和限制
@@ -273,6 +281,21 @@ nessie-cli --url http://nessie:19120
 - 没有跨表 commit 需求
 - 已经深度绑 Glue / Unity
 - 中小规模（几十张表）
+
+### 真正的门槛不是技术 · 是工作流纪律
+
+Nessie 的失败案例中，**不是装 server 有多难**，而是团队**低估了"Git for data"背后的组织成本**：
+
+| 纪律要求 | 不遵守的后果 |
+|---|---|
+| **统一写入路径都走 Nessie** | 旁路直写 S3 的作业绕过 Nessie → 跨表原子消失 · 版本 graph 错乱 |
+| **分支管理规范** | ETL 分支没人管 → 几百个悬挂分支 → metadata 膨胀、GC 无法推进 |
+| **合并策略决策** | 冲突时是 reject / force / cherry-pick？**业务侧要定义规则**（谁有 merge 权限、什么时候可以 force）|
+| **GC 和 Iceberg expire 协调** | 两边独立跑 → snapshot not found 运行时错（见机制 4）|
+| **Tag 保留策略** | Tag 永不过期则 snapshot 永不回收 → 存储成本爆 |
+| **跨团队分支可见性** | 多团队各用各分支 · 缺命名约定 → 治理视图混乱 |
+
+**结论**：上 Nessie 约等于**把"版本化" 作为团队的一级工程实践**——不是一次技术选型，是一套工作流纪律。没有这个准备，装了 Nessie 也发挥不出它的真正价值。
 
 ### 2024-2026 格局
 
