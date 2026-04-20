@@ -14,6 +14,20 @@ status: preview
 
 # Apache Polaris
 
+!!! warning "先分清两个东西 · 本页讲的是 OSS"
+    **Apache Polaris (OSS, 本页主体)** ≠ **Snowflake Open Catalog (商业托管)**——两者**共享代码基但不是同一个产品**：
+
+    | | Apache Polaris OSS | Snowflake Open Catalog |
+    |---|---|---|
+    | 形态 | Apache 孵化项目 · 社区代码 | Snowflake 托管服务 |
+    | 成熟度 | 1.3.0-incubating（2026-01）· **仍孵化** | 商业 GA · 生产可用 |
+    | 运维 | **自部署自担** | Snowflake 托管 + SLA |
+    | 升级节奏 | 实时跟上游 | 通常滞后 1-2 个版本 |
+    | 计费 | 免费（基础设施自担） | Snowflake 商业计费 |
+    | 适用 | 自主可控 + 愿意跟上游 | Snowflake 客户 + 生产重负载 |
+
+    **不要用 OSS 的孵化成熟度替代商业版的 SLA；也不要把 Snowflake Open Catalog 的托管稳定性挪到 OSS 头上**。
+
 !!! tip "一句话定位"
     **Snowflake 开源的 Iceberg REST Catalog 参考实现**。范围聚焦：**协议纯净 + 权限模型 + 多云凭证代签发**。不做向量、不做模型、不做多模资产——那些交给上层。**2024-08-09 进入 Apache 孵化 · 截至 2026-Q2 仍在孵化**（1.3.0-incubating 2026-01 发布）。与 Unity Catalog OSS 构成 2024-2026 Catalog 生态两大开源选项。
 

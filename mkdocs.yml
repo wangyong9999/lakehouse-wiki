@@ -160,12 +160,17 @@ nav:
           - Delta Lake: lakehouse/delta-lake.md
   - 元数据与 Catalog:
       - catalog/index.md
-      - Hive Metastore: catalog/hive-metastore.md
-      - Iceberg REST Catalog: catalog/iceberg-rest-catalog.md
-      - Nessie: catalog/nessie.md
-      - Unity Catalog: catalog/unity-catalog.md
-      - Apache Polaris: catalog/polaris.md
-      - Apache Gravitino: catalog/gravitino.md
+      - 协议层:
+          - Iceberg REST Catalog: catalog/iceberg-rest-catalog.md
+      - OSS 实现层:
+          - Apache Polaris: catalog/polaris.md
+          - Nessie: catalog/nessie.md
+          - Unity Catalog: catalog/unity-catalog.md
+          - Apache Gravitino: catalog/gravitino.md
+      - 商业托管层:
+          - AWS Glue Data Catalog: catalog/glue.md
+      - 存量 / 历史:
+          - Hive Metastore: catalog/hive-metastore.md
   - 查询引擎:
       - query-engines/index.md
       - Trino: query-engines/trino.md
