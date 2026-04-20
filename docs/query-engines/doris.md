@@ -25,9 +25,31 @@ status: stable
 
     定位同 StarRocks · BI 数据表附带向量做混合查询合适；纯向量走专业向量库。
 
-## 它解决什么
+## 它解决什么 · Doris 的独立判断框架
 
-和 StarRocks 基本一致：高并发 OLAP + 多表 join + 物化视图 + 直读湖表。在国内社区选型时常常和 StarRocks 放一起比较。
+**不只是"StarRocks 同源"** · Doris 作为独立产品的判断要点：
+
+- **Apache 顶级项目治理**（StarRocks 是 Linux Foundation + 商业公司 StarRocks Inc.）· 更符合"纯社区"偏好
+- **湖仓融合 2024-2026 重点投入**：Iceberg / Hudi / Paimon 三家表格式读支持持续完善 · 存算分离模式（Compute Node 直读对象存储）2024+ 实用化
+- **国内社区深耕**：飞轮 / 百度等商业参与方让中文生态 / 文档 / 案例积累厚；中国场景选型**常见默认选项**
+- **MPP + OLAP DB 能力矩阵**和 StarRocks 高度重合：高并发 OLAP + 多表 join + MV + 向量化
+
+**真正的独立亮点**：
+
+- **存算分离** 2.0+ 成熟度追赶（对公有云部署友好）
+- **Unique Key 表模型** 的 upsert 场景优化
+- **异步 MV 跨内外部表** · 支持把 Iceberg 外表 + 内表 join 后物化
+
+### 湖仓直读 vs 加速副本 · 和 StarRocks 同构
+
+| 维度 | 直读外表（Catalog） | 加速副本（Internal + 异步 MV）|
+|---|---|---|
+| **延迟** | 秒级 | 毫秒到亚秒 |
+| **MV 刷新** | 无刷新概念（直读）| 异步 MV 跨 Catalog 刷新 |
+| **成熟度** | Iceberg 2024-2025 补齐 · Paimon 和 Hudi 仍在演进 | 内部表 + MV 成熟 |
+| **推荐用途** | 低频探索 · 冷数据 | 仪表盘 · BI 热路径 |
+
+定位判断**同 StarRocks**：**热路径走内表 + MV 加速 · 冷路径走外表直读**；直读外表当仪表盘主路径会失望。
 
 ## 架构
 

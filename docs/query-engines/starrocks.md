@@ -25,14 +25,22 @@ status: stable
 
     **StarRocks 的向量检索定位**：BI 数据表里**附带向量列**做混合查询（SQL 过滤 + ANN 排序）场景合适；纯向量工作负载仍建议 [Milvus / LanceDB](../retrieval/vector-database.md)。
 
-## 它解决什么
+## 它解决什么 · "比 Trino 延迟更低 / 比 ClickHouse join 更强" 的前提
 
-Trino 交互式够用但在"仪表盘 p95 < 1s + 高并发"场景下吃力；ClickHouse 单表查询极快但多表 join 差。StarRocks 的甜区正好在这两者中间：
+上面 tip 里那句高价值判断**有严格前提**，不补充容易变成口号：
 
-- 复杂多表 join
-- 高并发（数百–数千 QPS）
-- 毫秒到秒级延迟
-- 直接读 Iceberg / Hudi / Paimon / Delta（湖表 connector 成熟）
+| 判断 | 成立前提 |
+|---|---|
+| **"比 Trino 延迟更低"** | 仅限 **已在 StarRocks 内表**（本地存储）的数据 · 直读 Iceberg 外表时延迟**和 Trino 同量级甚至更慢** |
+| **"比 ClickHouse join 更强"** | 多表 join / shuffle join 场景；但**单表大扫描仍是 ClickHouse 更快**（ClickHouse MergeTree 的甜区不输 StarRocks 内表） |
+| **"高并发 BI p95 < 1s"** | 数据已预聚合为 MV / 表设计合理（bucket / colocate join）· 不是所有 query 开箱即达 |
+
+StarRocks 的甜区：
+
+- 复杂多表 join（shuffle + colocate + bucket join 混合优化）
+- 高并发（数百–数千 QPS）· **数据在内表 + 有合适 MV / 索引 **
+- 毫秒到秒级延迟 · 前提同上
+- 直接读 Iceberg / Hudi / Paimon / Delta 外表 · **秒级延迟，用于低频 / 探索场景**（不是仪表盘主路径）
 
 ## 架构
 
@@ -81,6 +89,20 @@ StarRocks 以 External Catalog 挂 Iceberg / Paimon，**查询直接读对象存
 - 延迟比模式 A 高（秒级），但架构更简单
 
 两种模式可并存：热查询走 A，冷/探索走 B。
+
+### 湖仓直读 vs 加速副本 · 生产决策关键维度
+
+| 维度 | 直读外表（模式 B）| 加速副本（模式 A · 内表 + MV）|
+|---|---|---|
+| **延迟** | 秒级（对象存储 I/O + 外部元数据）| 毫秒级（本地 + 预聚合）|
+| **新鲜度** | 实时跟源表 snapshot | MV 刷新周期决定（通常分钟级）|
+| **数据一致性** | 和源表强一致（读同一 snapshot）| **MV 和源表有 lag** · 上游 commit 后要等刷新 |
+| **权限** | 依赖源 Catalog（Polaris / Glue 等）| 走 StarRocks 自己的 RBAC |
+| **schema 演化** | 读时感知源表 schema 变更 | **MV 要手动 ALTER 或重建**才跟上 |
+| **成本** | 一份数据 · 对象存储 + 计算 | 两份数据 · 内表存储 + MV 刷新计算 |
+| **适合** | 低频 / 探索 / 冷数据 | 仪表盘 / 热数据 / 高并发 |
+
+**最危险的误用**：把**直读外表**当仪表盘主路径 · 延迟 / 并发上不去后以为是 StarRocks 不行；实际应该**热路径走 MV 加速副本 · 冷路径走外表**。
 
 ## 什么时候选
 

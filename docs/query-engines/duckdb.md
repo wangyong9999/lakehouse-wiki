@@ -48,6 +48,36 @@ status: stable
 - **写** —— 直接写 Parquet / Iceberg（extension 支持度不如读）
 - **角色**：主力不是生产查询引擎，而是"开发态的湖上 SQL 瑞士刀"
 
+### Iceberg / Delta 扩展的现实边界
+
+"读湖表" 概念简单，生产落地要认清 **extension 的边界**：
+
+| 维度 | Iceberg extension | Delta extension |
+|---|---|---|
+| **读** | v2 表基础 CRUD OK · partition pruning 逐步完善 | 成熟度不错 |
+| **写** | 仍在演进（append 先行 · upsert / merge 滞后）| 同 |
+| **Catalog 对接** | 原生支持 REST Catalog / Glue · HMS 需额外配置 · Nessie / Polaris 依赖最新扩展版本 | Unity Catalog 兼容度持续完善 |
+| **Branch / Tag / V3 Deletion Vector** | 跟进有滞后 · 追最新特性不建议 DuckDB | 同 |
+| **大规模 metadata** | 超大 manifest（百万分区级）会在客户端处理 · 内存压力大 | 同 |
+
+**实务建议**：**DuckDB 在湖表上的甜区是"读中小表 + 本地分析 + 快速验证"**——成长到百 GB-TB 单机够；PB 级或需要复杂 upsert / merge 的生产路径仍走 Spark / Trino。
+
+### 对象存储鉴权 / 远程元数据的现实约束
+
+- **S3 凭证**：需要配置 `httpfs` + 设置 access key / session token · 跨账号场景要处理 `AWS_PROFILE`
+- **Vended Credentials**：REST Catalog 签发的临时凭证在最新扩展里支持 · 老版本手动管 credential
+- **远程 metadata.json 读取**：每次 open table 要走对象存储 API · 大表可能数秒延迟
+- **没有 metadata cache**（相对 Trino / Spark 的 Catalog client）· 高频 open/close 要自己层面做 cache
+
+### 适合开发态的上限
+
+**DuckDB 在湖仓里能推到哪里就不建议再走了**：
+
+- **数据规模**：单机 GB - TB（内存越大越远）· **不超过 5-10 TB**（磁盘 spill 开始显性）
+- **并发**：单用户 / 少并发 · **不是多租户生产引擎**
+- **持续运行**：适合短任务 · 长驻 serving 场景建议换成 Trino 或 MotherDuck（云托管 DuckDB）
+- **复杂湖表写**：MERGE / UPDATE / DELETE 在 extension 里仍在演进 · 生产写不推荐
+
 ## 和 Trino / Spark 的差异
 
 - **单机**：DuckDB 不分布式（生产场景分布式诉求仍然选 Trino / Spark）
