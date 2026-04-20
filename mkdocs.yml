@@ -190,6 +190,7 @@ nav:
       - Catalog 全景对比: compare/catalog-landscape.md
   - 数据管线:
       - pipelines/index.md
+      - 架构模式总览: pipelines/pipeline-patterns.md
       - 事件时间 · Watermark: pipelines/event-time-watermark.md
       - 入湖模式:
           - CDC 内核: pipelines/cdc-internals.md

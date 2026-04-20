@@ -24,6 +24,8 @@ last_reviewed: 2026-04-20
 | 多模内容（图 / 视 / 音 / 文档）预处理入湖 | **[模态管线](image-pipeline.md)** |
 | 持续消费 Kafka 流入湖 | **[Kafka 到湖](kafka-ingestion.md)** |
 
+**端到端架构总览** · 看 **[架构模式总览](pipeline-patterns.md)**——6 种端到端模式 · 每种的拓扑 / 工具栈 / 延迟 / 陷阱 / 选型决策树。
+
 ## 入湖与 CDC
 
 - [CDC 内核](cdc-internals.md) —— 三种范式 · Debezium · Flink CDC 3.x · Paimon CDC · Iceberg Sink 跨引擎
