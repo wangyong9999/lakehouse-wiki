@@ -355,9 +355,9 @@ spark.read.table("iceberg.features.user_stats") \
 
 ## 13. 相关 · 延伸阅读
 
-- [Feature Store](../ai-workloads/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md)
+- [Feature Store](../ml-infra/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md)
 - [离线训练数据流水线](offline-training-pipeline.md)
-- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md)
+- [MLOps 生命周期](../ml-infra/mlops-lifecycle.md)
 - [推荐系统](recommender-systems.md) · [欺诈检测](fraud-detection.md)
 
 ### 权威阅读

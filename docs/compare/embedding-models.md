@@ -92,14 +92,14 @@ flowchart TD
 - **benchmark 别信官方**：用自家数据跑 golden set
 - **先跑"精排（rerank）+ 中档 embedding"**：比"顶级 embedding 不 rerank"质量更高、成本更低
 - **中英混排业务强烈推荐 BGE-v2-m3**
-- **模型切换有成本**：见 [Embedding 流水线](../ai-workloads/embedding-pipelines.md) 的模型版本治理
+- **模型切换有成本**：见 [Embedding 流水线](../ml-infra/embedding-pipelines.md) 的模型版本治理
 
 ## 相关
 
 - [Embedding](../retrieval/embedding.md)
 - [多模 Embedding](../retrieval/multimodal-embedding.md)
 - [Rerank](../retrieval/rerank.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
 
 ## 延伸阅读
 

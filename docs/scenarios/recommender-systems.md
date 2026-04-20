@@ -88,7 +88,7 @@ flowchart LR
 - **Transformer-based rerank** — 最新
 
 **关键工程点**：
-- **Feature Store 必备**：训练和在线特征必须一致（详见 [Feature Store](../ai-workloads/feature-store.md)）
+- **Feature Store 必备**：训练和在线特征必须一致（详见 [Feature Store](../ml-infra/feature-store.md)）
 - **Point-in-Time Join**：训练时特征取事件发生时刻的值（详见 [离线训练数据流水线](offline-training-pipeline.md)）
 - **特征多样性**：user / item / context（设备 / 时段 / 位置） / 交叉
 
@@ -293,7 +293,7 @@ flowchart LR
 
 ## 相关
 
-- [Feature Store](../ai-workloads/feature-store.md) · [Feature Serving](feature-serving.md) · [离线训练数据流水线](offline-training-pipeline.md)
+- [Feature Store](../ml-infra/feature-store.md) · [Feature Serving](feature-serving.md) · [离线训练数据流水线](offline-training-pipeline.md)
 - [Embedding](../retrieval/embedding.md) · [HNSW](../retrieval/hnsw.md) · [Hybrid Search](../retrieval/hybrid-search.md)
 - [Real-time Lakehouse](real-time-lakehouse.md)（近实时个性化的底座）
 - [业务场景全景](business-scenarios.md)

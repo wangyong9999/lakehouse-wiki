@@ -172,7 +172,7 @@ PARTITIONED BY (days(ts), bucket(16, user_id))
 
 **症状**：离线训练用了"未来"的特征值 → 离线 AUC 飙 → 上线崩。
 
-**正确做法**：**Point-in-Time Join**，特征取事件发生时刻的值。详见 [Feature Store](../ai-workloads/feature-store.md)。
+**正确做法**：**Point-in-Time Join**，特征取事件发生时刻的值。详见 [Feature Store](../ml-infra/feature-store.md)。
 
 ### 反模式 18 · 无 Drift 监控
 

@@ -54,7 +54,7 @@ status: stable
 - [视频管线](../pipelines/video-pipeline.md)
 - [音频管线](../pipelines/audio-pipeline.md)
 - [文档管线](../pipelines/document-pipeline.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
 - 做：挑一种模态（如图像），端到端搭一条"原始 → embedding → 入湖 → 跨模态查询"
 
 ## Month 3 · ML 基础设施 + 生产化
@@ -65,7 +65,7 @@ status: stable
 - [Model Serving](../ml-infra/model-serving.md)
 - [训练编排](../ml-infra/training-orchestration.md)
 - [GPU 调度](../ml-infra/gpu-scheduling.md)
-- [Feature Store](../ai-workloads/feature-store.md)
+- [Feature Store](../ml-infra/feature-store.md)
 - 做：把 Week 7-8 的 embedding 模型注册到 MLflow + 用 Ray Serve 部署
 
 ### Week 11-12 · 生产化

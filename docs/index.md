@@ -173,7 +173,7 @@ flowchart BT
 !!! tip "或者，直接按你手头的具体事"
     - **选表格式** → [四大表格式对比](compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) · [ADR-0002](adr/0002-iceberg-as-primary-table-format.md)
     - **查询慢定位** → [性能调优](ops/performance-tuning.md) · [20 反模式](ops/anti-patterns.md) · [量级数字](frontier/benchmark-numbers.md)
-    - **已有数仓做 RAG** → [RAG](ai-workloads/rag.md) · [RAG on Lake 场景](scenarios/rag-on-lake.md) · [Embedding 流水线](ai-workloads/embedding-pipelines.md)
+    - **已有数仓做 RAG** → [RAG](ai-workloads/rag.md) · [RAG on Lake 场景](scenarios/rag-on-lake.md) · [Embedding 流水线](ml-infra/embedding-pipelines.md)
     - **平台权限 / 多租户** → [安全与权限](ops/security-permissions.md) · [统一 Catalog 策略](unified/unified-catalog-strategy.md) · [多租户隔离](ops/multi-tenancy.md)
     - **小文件治理** → [Compaction](lakehouse/compaction.md) · [FAQ](faq.md)
     - **选向量库** → [向量数据库对比](compare/vector-db-comparison.md) · [ADR-0003](adr/0003-lancedb-for-multimodal-vectors.md)
@@ -237,9 +237,9 @@ flowchart BT
 
 ### 工程底座深化
 - [**MCP · Model Context Protocol**](ai-workloads/mcp.md) — Anthropic 2024 开放协议
-- [**MLOps 生命周期**](ai-workloads/mlops-lifecycle.md) — 数据 → 训练 → 评估 → 上线 → 监控闭环
+- [**MLOps 生命周期**](ml-infra/mlops-lifecycle.md) — 数据 → 训练 → 评估 → 上线 → 监控闭环
 - [**语义层 · Semantic Layer**](bi-workloads/semantic-layer.md) — dbt / Cube 指标中台
-- [**LLM Gateway**](ml-infra/llm-gateway.md) — LiteLLM / Portkey / Helicone 统一代理
+- [**LLM Gateway**](ai-workloads/llm-gateway.md) — LiteLLM / Portkey / Helicone 统一代理
 - [**SLA · SLO · DRE**](ops/sla-slo.md) — 数据产品可靠性工程
 - [**TCO 模型**](ops/tco-model.md) — 自建 vs 云 vs SaaS 真实成本
 

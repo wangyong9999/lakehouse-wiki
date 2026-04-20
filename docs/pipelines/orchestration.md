@@ -174,7 +174,7 @@ def dwd_orders(orders):
 
 - [Kafka 到湖](kafka-ingestion.md)
 - [Bulk Loading](bulk-loading.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
 - [可观测性](../ops/observability.md)
 - [数据治理](../ops/data-governance.md)
 

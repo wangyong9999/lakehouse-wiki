@@ -32,7 +32,7 @@ last_reviewed: 2026-04-18
 
 | 概念 | 主页 |
 |---|---|
-| PIT Join · Train-Serve Skew | [Feature Store](ai-workloads/feature-store.md) |
+| PIT Join · Train-Serve Skew | [Feature Store](ml-infra/feature-store.md) |
 | Hybrid Search | [Hybrid Search](retrieval/hybrid-search.md) |
 | Rerank | [Rerank](retrieval/rerank.md) |
 | Snapshot · MVCC on Object Store | [Snapshot](lakehouse/snapshot.md) |

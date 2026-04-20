@@ -23,7 +23,7 @@ description: 入湖、ETL、多模预处理、编排 —— 湖仓的"血管"
 
 ## Embedding 与特征
 
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md) _（概念页，批+流）_
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md) _（概念页，批+流）_
 - [离线训练数据流水线](../scenarios/offline-training-pipeline.md) _（场景页）_
 - [Feature Serving](../scenarios/feature-serving.md) _（场景页）_
 

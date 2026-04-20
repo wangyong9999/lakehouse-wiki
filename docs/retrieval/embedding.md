@@ -50,7 +50,7 @@ status: stable
 Embedding 模型一旦换了，**库侧所有历史向量都要重新算**，且查询侧必须同源。这是最大的运维成本来源。因此：
 
 - 模型上线前要做离线评估
-- 切换时必须准备增量再 embedding 流水线（见 [Embedding Pipelines](../ai-workloads/embedding-pipelines.md)）
+- 切换时必须准备增量再 embedding 流水线（见 [Embedding Pipelines](../ml-infra/embedding-pipelines.md)）
 - 库里最好记 `embedding_model_version` 字段
 
 ### 4. 存储在哪儿

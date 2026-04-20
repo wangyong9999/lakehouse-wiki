@@ -48,7 +48,7 @@ hide:
 
 - **底座**：[Delta Lake](lakehouse/delta-lake.md) · [Unity Catalog](catalog/unity-catalog.md)
 - **计算**：Databricks Runtime (Spark + Photon) · [SQL Warehouse](query-engines/spark.md)
-- **ML**：[MLflow](ai-workloads/mlops-lifecycle.md) · [Databricks Feature Store](compare/feature-store-comparison.md) · Vector Search
+- **ML**：[MLflow](ml-infra/mlops-lifecycle.md) · [Databricks Feature Store](compare/feature-store-comparison.md) · Vector Search
 - **协作**：Notebook / Workflows / DLT
 - **优势**：一站式；**劣势**：锁定
 - 对比：[湖仓演进史](frontier/data-systems-evolution.md)
@@ -132,7 +132,7 @@ hide:
 - **Registry**：MLflow / [Unity Catalog](catalog/unity-catalog.md)
 - **Serving**：[vLLM / TGI](frontier/llm-inference-opt.md) / Triton / Ray Serve
 - **监控**：Prometheus + 自建 drift
-- **闭环**：[MLOps Lifecycle](ai-workloads/mlops-lifecycle.md)
+- **闭环**：[MLOps Lifecycle](ml-infra/mlops-lifecycle.md)
 
 ---
 
@@ -153,7 +153,7 @@ hide:
 - **商业**：Tecton / Hopsworks
 - **云厂商**：SageMaker FS / Vertex AI FS / Databricks FS
 - **自建**：Iceberg + Redis + dbt
-- **概念**：[Feature Store](ai-workloads/feature-store.md)
+- **概念**：[Feature Store](ml-infra/feature-store.md)
 
 ---
 

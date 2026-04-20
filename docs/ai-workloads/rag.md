@@ -355,4 +355,4 @@ print(result)
 
 - [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Rerank](../retrieval/rerank.md) · [Embedding](../retrieval/embedding.md)
 - [RAG on Lake 场景](../scenarios/rag-on-lake.md) · [Agentic Workflows](../scenarios/agentic-workflows.md)
-- [Feature Store](feature-store.md) —— RAG 的姊妹基础设施
+- [Feature Store](../ml-infra/feature-store.md) —— RAG 的姊妹基础设施

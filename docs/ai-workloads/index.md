@@ -10,8 +10,8 @@ description: 在湖仓 / 多模检索之上跑的 AI 应用与基础设施
 ## 核心概念
 
 - [**RAG · 检索增强生成**](rag.md) ⭐ —— 原理 + 管线 + 2025 高级范式
-- [**Feature Store**](feature-store.md) ⭐ —— ML 特征的一等公民
-- [**MLOps 生命周期**](mlops-lifecycle.md) ⭐ —— 数据 → 训练 → 评估 → 上线 → 监控闭环
+- [**Feature Store**](../ml-infra/feature-store.md) ⭐ —— ML 特征的一等公民
+- [**MLOps 生命周期**](../ml-infra/mlops-lifecycle.md) ⭐ —— 数据 → 训练 → 评估 → 上线 → 监控闭环
 - [**MCP · Model Context Protocol**](mcp.md) ⭐ —— Anthropic 2024 开放协议
 
 ## 应用能力
@@ -20,8 +20,8 @@ description: 在湖仓 / 多模检索之上跑的 AI 应用与基础设施
 - [Prompt 管理](prompt-management.md) —— Prompt 作为代码资产
 - [Agents on Lakehouse](agents-on-lakehouse.md) —— LLM + 工具 + 湖
 - [Semantic Cache](semantic-cache.md) —— 降低 LLM 调用成本
-- [Embedding 流水线](embedding-pipelines.md) —— 持续把语料转成向量并回落到湖
-- [微调数据准备](fine-tuning-data.md) —— SFT / DPO 数据工程
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md) —— 持续把语料转成向量并回落到湖
+- [微调数据准备](../ml-infra/fine-tuning-data.md) —— SFT / DPO 数据工程
 
 ## 前沿专题（跳转 frontier）
 

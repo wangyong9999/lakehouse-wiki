@@ -118,7 +118,7 @@ flowchart LR
 
 ### 环节 2 · PIT Join（防泄露）
 
-详见 [Feature Store](../ai-workloads/feature-store.md)（Point-in-Time Join 段落）。
+详见 [Feature Store](../ml-infra/feature-store.md)（Point-in-Time Join 段落）。
 
 **经典错误**：训练 2024-06 样本用了 2024-06 之后的 `user_total_gmv`——未来信息泄露 → AUC 飙 → 线上崩。
 
@@ -164,7 +164,7 @@ shap.summary_plot(shap_values, X_test)
 - **Feature Drift 监控**（PSI）
 - **预测分布漂移监控**
 
-详见 [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md)。
+详见 [MLOps 生命周期](../ml-infra/mlops-lifecycle.md)。
 
 ## 5. 性能数字
 
@@ -325,6 +325,6 @@ def predict(user_id: int):
 
 ## 相关
 
-- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md) · [Feature Store](../ai-workloads/feature-store.md)
+- [MLOps 生命周期](../ml-infra/mlops-lifecycle.md) · [Feature Store](../ml-infra/feature-store.md)
 - [离线训练数据流水线](offline-training-pipeline.md) · [Feature Serving](feature-serving.md)
 - [推荐系统](recommender-systems.md) · [欺诈检测](fraud-detection.md) · [业务场景全景](business-scenarios.md)

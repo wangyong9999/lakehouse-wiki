@@ -9,7 +9,7 @@ description: 字母序的概念兜底索引
 
 ## A – C
 
-- **A/B Testing（AB 测试）** —— 见 [MLOps 生命周期](ai-workloads/mlops-lifecycle.md)
+- **A/B Testing（AB 测试）** —— 见 [MLOps 生命周期](ml-infra/mlops-lifecycle.md)
 - **ACID on Object Store** —— 见 [湖表](lakehouse/lake-table.md)
 - **Ad-hoc Exploration（即席探索）** —— 见 [即席探索](scenarios/ad-hoc-exploration.md)
 - **Agentic RAG** —— 见 [RAG 前沿](frontier/rag-advances-2025.md)
@@ -59,12 +59,12 @@ description: 字母序的概念兜底索引
 - **Doris** —— 见 [Apache Doris](query-engines/doris.md)
 - **DuckDB** —— 见 [DuckDB](query-engines/duckdb.md)
 - **Embedding** —— 见 [Embedding](retrieval/embedding.md)
-- **Embedding Pipeline** —— 见 [Embedding 流水线](ai-workloads/embedding-pipelines.md)
+- **Embedding Pipeline** —— 见 [Embedding 流水线](ml-infra/embedding-pipelines.md)
 - **Event Time / Watermark** —— 见 [事件时间 Watermark](pipelines/event-time-watermark.md)
-- **Feature Store** —— 见 [Feature Store](ai-workloads/feature-store.md) · [横比](compare/feature-store-comparison.md)
+- **Feature Store** —— 见 [Feature Store](ml-infra/feature-store.md) · [横比](compare/feature-store-comparison.md)
 - **Feature Serving** —— 见 [Feature Serving](scenarios/feature-serving.md)
 - **Feast** —— 见 [Feature Store 横比](compare/feature-store-comparison.md)
-- **Fine-tuning Data** —— 见 [微调数据准备](ai-workloads/fine-tuning-data.md)
+- **Fine-tuning Data** —— 见 [微调数据准备](ml-infra/fine-tuning-data.md)
 - **Flink** —— 见 [Apache Flink](query-engines/flink.md)
 - **Flash Attention** —— 见 [LLM 推理优化](frontier/llm-inference-opt.md)
 - **Fraud Detection（欺诈检测）** —— 见 [欺诈检测 · 风险控制](scenarios/fraud-detection.md)
@@ -99,7 +99,7 @@ description: 字母序的概念兜底索引
 - **MCP（Model Context Protocol）** —— 见 [MCP](ai-workloads/mcp.md)
 - **Migration Playbook** —— 见 [迁移手册](ops/migration-playbook.md)
 - **Milvus** —— 见 [Milvus](retrieval/milvus.md)
-- **MLOps Lifecycle** —— 见 [MLOps 生命周期](ai-workloads/mlops-lifecycle.md)
+- **MLOps Lifecycle** —— 见 [MLOps 生命周期](ml-infra/mlops-lifecycle.md)
 - **Model Registry** —— 见 [Model Registry](ml-infra/model-registry.md)
 - **Model Serving** —— 见 [Model Serving](ml-infra/model-serving.md)
 - **Modern Data Stack（现代数据栈）** —— 见 [Modern Data Stack](frontier/modern-data-stack.md)
@@ -126,13 +126,13 @@ description: 字母序的概念兜底索引
 - **Partition Evolution** —— 见 [Partition Evolution](lakehouse/partition-evolution.md)
 - **Performance Tuning** —— 见 [性能调优](ops/performance-tuning.md)
 - **pgvector** —— 见 [pgvector](retrieval/pgvector.md)
-- **PIT Join（Point-in-Time）** —— 主定义见 [Feature Store](ai-workloads/feature-store.md)（工程落地见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)）
-- **Train-Serve Skew（训推漂移）** —— 主定义见 [Feature Store](ai-workloads/feature-store.md)（反模式汇总见 [20 反模式](ops/anti-patterns.md)）
+- **PIT Join（Point-in-Time）** —— 主定义见 [Feature Store](ml-infra/feature-store.md)（工程落地见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)）
+- **Train-Serve Skew（训推漂移）** —— 主定义见 [Feature Store](ml-infra/feature-store.md)（反模式汇总见 [20 反模式](ops/anti-patterns.md)）
 - **Polaris** —— 见 [Apache Polaris](catalog/polaris.md)
 - **Predicate Pushdown（谓词下推）** —— 见 [谓词下推](query-engines/predicate-pushdown.md)
 - **Prompt Injection** —— 见 [AI 治理](frontier/ai-governance.md)
 - **Prompt Management** —— 见 [Prompt 管理](ai-workloads/prompt-management.md)
-- **PSI（Population Stability Index）** —— 见 [MLOps 生命周期](ai-workloads/mlops-lifecycle.md)
+- **PSI（Population Stability Index）** —— 见 [MLOps 生命周期](ml-infra/mlops-lifecycle.md)
 - **Puffin** —— 见 [Puffin](lakehouse/puffin.md)
 - **Qdrant** —— 见 [Qdrant](retrieval/qdrant.md)
 - **Query Acceleration** —— 见 [查询加速](bi-workloads/query-acceleration.md)

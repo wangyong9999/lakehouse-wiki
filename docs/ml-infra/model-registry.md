@@ -139,7 +139,7 @@ flowchart LR
 
 ## 相关
 
-- [Feature Store](../ai-workloads/feature-store.md)
+- [Feature Store](../ml-infra/feature-store.md)
 - [Model Serving](model-serving.md)
 - [Unity Catalog](../catalog/unity-catalog.md)
 - [离线训练数据流水线](../scenarios/offline-training-pipeline.md)

@@ -206,7 +206,7 @@ PARTITIONED BY (partition_date, bucket(16, asset_id));
 
 - [多模 Embedding](../retrieval/multimodal-embedding.md)
 - [多模数据建模](../unified/multimodal-data-modeling.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
 - 姊妹管线：[视频](video-pipeline.md) · [音频](audio-pipeline.md) · [文档](document-pipeline.md)
 
 ## 延伸阅读

@@ -117,7 +117,7 @@ TBLPROPERTIES (
 ### 用户画像 / 设备画像
 
 - 静态属性（注册信息）+ 动态聚合（近 1h / 24h / 7d 交易数、金额、商家多样性）
-- **慢特征天级更新，快特征流式更新**（详见 [Feature Store](../ai-workloads/feature-store.md)）
+- **慢特征天级更新，快特征流式更新**（详见 [Feature Store](../ml-infra/feature-store.md)）
 
 ### 图数据（关系）
 
@@ -336,7 +336,7 @@ flowchart LR
 
 ## 相关
 
-- [Feature Store](../ai-workloads/feature-store.md) · [Feature Serving](feature-serving.md) · [离线训练数据流水线](offline-training-pipeline.md)
+- [Feature Store](../ml-infra/feature-store.md) · [Feature Serving](feature-serving.md) · [离线训练数据流水线](offline-training-pipeline.md)
 - [Watermark / 事件时间](../pipelines/event-time-watermark.md)（实时特征正确性的基石）
 - [Real-time Lakehouse](real-time-lakehouse.md)（底座）
 - [业务场景全景](business-scenarios.md)

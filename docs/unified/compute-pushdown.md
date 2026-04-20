@@ -101,8 +101,8 @@ WHERE caption IS NULL;
 
 - [谓词下推](../query-engines/predicate-pushdown.md)
 - [Lake + Vector 融合架构](lake-plus-vector.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
-- [Feature Store](../ai-workloads/feature-store.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
+- [Feature Store](../ml-infra/feature-store.md)
 
 ## 延伸阅读
 

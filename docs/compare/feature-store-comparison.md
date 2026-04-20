@@ -283,7 +283,7 @@ Iceberg (离线宽表)
 
 ## 相关
 
-- [Feature Store 概念](../ai-workloads/feature-store.md) · [Feature Serving](../scenarios/feature-serving.md)
+- [Feature Store 概念](../ml-infra/feature-store.md) · [Feature Serving](../scenarios/feature-serving.md)
 - [离线训练数据流水线](../scenarios/offline-training-pipeline.md) · [推荐系统](../scenarios/recommender-systems.md) · [欺诈检测](../scenarios/fraud-detection.md)
 - [业务场景全景](../scenarios/business-scenarios.md)
 

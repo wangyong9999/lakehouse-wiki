@@ -130,4 +130,4 @@ vecs = [d.embedding for d in response.data]
 - [Embedding](../retrieval/embedding.md)
 - [多模 Embedding](../retrieval/multimodal-embedding.md)
 - [Embedding 模型横比](../compare/embedding-models.md)
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)

@@ -17,18 +17,18 @@ description: Model Registry / Serving / Training / GPU 调度 / LLM Gateway
 ## 资源与平台
 
 - [GPU 调度](gpu-scheduling.md) —— 多租户、抢占、碎片整理
-- [**LLM Gateway**](llm-gateway.md) ⭐ —— LiteLLM / Portkey / Helicone / OpenRouter 统一代理层
+- [**LLM Gateway**](../ai-workloads/llm-gateway.md) ⭐ —— LiteLLM / Portkey / Helicone / OpenRouter 统一代理层
 
 ## 和其他节的关系
 
-- **上游**：[Embedding 流水线](../ai-workloads/embedding-pipelines.md) / [RAG](../ai-workloads/rag.md) / [Agents](../ai-workloads/agents-on-lakehouse.md) 都依赖这层
+- **上游**：[Embedding 流水线](../ml-infra/embedding-pipelines.md) / [RAG](../ai-workloads/rag.md) / [Agents](../ai-workloads/agents-on-lakehouse.md) 都依赖这层
 - **下游**：[湖表](../lakehouse/lake-table.md) 是训练数据和产出模型引用数据的来源
-- **姊妹**：[Feature Store](../ai-workloads/feature-store.md)
+- **姊妹**：[Feature Store](../ml-infra/feature-store.md)
 - **治理**：[Catalog](../catalog/index.md) 现代形态（Unity / Polaris）把**模型也当一类资产**管
 
 ## 前沿 / 对比跳转
 
 - [LLM 推理优化](../frontier/llm-inference-opt.md) —— Model Serving 的性能优化
-- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md) —— 闭环叙事
+- [MLOps 生命周期](../ml-infra/mlops-lifecycle.md) —— 闭环叙事
 - [Feature Store 横比](../compare/feature-store-comparison.md)
 

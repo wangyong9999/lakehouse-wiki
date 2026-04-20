@@ -28,7 +28,7 @@ hide:
     - **选向量库** → [向量数据库对比](../compare/vector-db-comparison.md) · [ADR-0003 选 LanceDB](../adr/0003-lancedb-for-multimodal-vectors.md)
     - **检索质量评估** → [检索评估](../retrieval/evaluation.md) · [RAG 评估](../ai-workloads/rag-evaluation.md)
     - **多模流水线** → [多模检索流水线](../scenarios/multimodal-search-pipeline.md) · [文档管线](../pipelines/document-pipeline.md) · [图像管线](../pipelines/image-pipeline.md)
-    - **Feature Store / 离线训练** 📊 → [Feature Store](../ai-workloads/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md) · [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
+    - **Feature Store / 离线训练** 📊 → [Feature Store](../ml-infra/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md) · [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
 
 ## 入门 · 先理解"湖 + 向量"
 
@@ -54,21 +54,21 @@ hide:
 - [Prompt 管理](../ai-workloads/prompt-management.md)
 - [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md)
 - [Semantic Cache](../ai-workloads/semantic-cache.md)
-- [**Feature Store**](../ai-workloads/feature-store.md) 📊 **Classical ML 重点** —— 离线 / 在线一致的特征中台
-- [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
-- [微调数据准备](../ai-workloads/fine-tuning-data.md) 📊 Classical ML 也可借鉴（数据质量）
+- [**Feature Store**](../ml-infra/feature-store.md) 📊 **Classical ML 重点** —— 离线 / 在线一致的特征中台
+- [Embedding 流水线](../ml-infra/embedding-pipelines.md)
+- [微调数据准备](../ml-infra/fine-tuning-data.md) 📊 Classical ML 也可借鉴（数据质量）
 
 ### Classical ML · 数据科学方向补充 📊
 
 如果你做 GBDT / 深度学习 / 推荐 / 风控，下面这条线更关键：
 
-- [**Feature Store**](../ai-workloads/feature-store.md) —— PIT Join · Train-Serve Skew · Online-Offline 一致
+- [**Feature Store**](../ml-infra/feature-store.md) —— PIT Join · Train-Serve Skew · Online-Offline 一致
 - [**离线训练数据流水线**](../scenarios/offline-training-pipeline.md) —— 可复现 · 点时间正确的训练集生成
 - [**Feature Serving**](../scenarios/feature-serving.md) —— 毫秒级特征在线拉取
 - [**推荐系统 · 搜索 · 发现**](../scenarios/recommender-systems.md) —— 四阶段流水线（召回 → 粗排 → 精排 → 重排）
 - [**欺诈检测**](../scenarios/fraud-detection.md) —— 四层拦截 · 样本不平衡 · 标签延迟
 - [**Classical ML 场景**](../scenarios/classical-ml.md) —— 综述
-- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md) —— 数据 → 训练 → 评估 → 上线 → 监控
+- [MLOps 生命周期](../ml-infra/mlops-lifecycle.md) —— 数据 → 训练 → 评估 → 上线 → 监控
 
 ## ML 基础设施
 

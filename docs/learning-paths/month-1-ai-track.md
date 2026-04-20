@@ -51,7 +51,7 @@ status: stable
 - [ ] 读 [多模数据建模](../unified/multimodal-data-modeling.md)
 - [ ] 读 [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
 - [ ] 读 [多模检索流水线](../scenarios/multimodal-search-pipeline.md) 场景
-- [ ] 读 [Feature Store](../ai-workloads/feature-store.md)
+- [ ] 读 [Feature Store](../ml-infra/feature-store.md)
 - [ ] 做：设计一张 `multimodal_assets` 表，含三种模态和两种向量列；在 Iceberg / Lance 二选一落地
 - [ ] 做：画出一条端到端流水线（入湖 → enrichment → embedding → 索引 → 检索 → rerank → LLM），标注每一步的选型和监控指标
 - [ ] 自测：能向团队讲 20 分钟 "我们为什么要把 BI 和 AI 跑在同一个湖上"

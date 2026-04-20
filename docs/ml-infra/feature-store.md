@@ -387,7 +387,7 @@ value = redis_client.get(f"u:{user_id}:avg_7d_gmv")
 
 ## 相关
 
-- [RAG](rag.md) —— 姊妹基础设施（一个是"给 LLM 上下文"，一个是"给 ML 特征"）
+- [RAG](../ai-workloads/rag.md) —— 姊妹基础设施（一个是"给 LLM 上下文"，一个是"给 ML 特征"）
 - [Embedding 流水线](embedding-pipelines.md)
 - [Feature Serving](../scenarios/feature-serving.md) · [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
 - [推荐系统](../scenarios/recommender-systems.md) · [欺诈检测](../scenarios/fraud-detection.md)

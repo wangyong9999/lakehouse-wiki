@@ -447,8 +447,8 @@ for epoch in range(10):
 
 ### 相关页面
 
-- [Feature Store](../ai-workloads/feature-store.md) · [Feature Serving](feature-serving.md)
-- [MLOps 生命周期](../ai-workloads/mlops-lifecycle.md)
+- [Feature Store](../ml-infra/feature-store.md) · [Feature Serving](feature-serving.md)
+- [MLOps 生命周期](../ml-infra/mlops-lifecycle.md)
 - [经典 ML 预测](classical-ml.md) · [推荐系统](recommender-systems.md)
 - [Lance Format](../foundations/lance-format.md) · [Iceberg Time Travel](../lakehouse/time-travel.md)
 
