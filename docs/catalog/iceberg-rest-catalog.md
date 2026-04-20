@@ -14,16 +14,25 @@ status: stable
 
 # Iceberg REST Catalog
 
+!!! warning "先分清 · 本页讲协议，不讲实现"
+    Iceberg REST Catalog 有**两层**极易被揉在一起：
+
+    1. **协议层**（本页主体）· Apache Iceberg 维护的 **spec** · 定义 HTTP API · 不是可运行的产品
+    2. **实现层**（本页附表引用）· Polaris / Nessie / UC / Gravitino / Glue 等**各自的服务端实现** · 能力、成熟度、兼容度参差
+
+    **读者最容易的误读**：把某实现的能力当成协议已稳定提供的能力（"Polaris 支持 X 所以 REST 协议支持 X"）。本页的兼容矩阵段（§机制 6）专门拆这种混淆。
+
 !!! tip "一句话定位"
-    Iceberg 官方定义的 **HTTP/REST 层 Catalog 协议**。把"表在哪里、哪个 snapshot 是当前的、怎么 commit"标准化为一套 API——任何实现遵守协议即可互通。**正在取代 HMS 成为 Lakehouse 的 Catalog 事实标准**。
+    Iceberg 官方定义的 **HTTP/REST 层 Catalog 协议**。把"表在哪里、哪个 snapshot 是当前的、怎么 commit"标准化为一套 API——任何实现遵守协议即可互通。**在新建 Iceberg 项目里正在成为默认协议**（但不等于整个 Lakehouse 世界的"事实标准"——Glue / Unity 商业版 / HMS 在各自语境下仍是主流）。
 
 !!! abstract "TL;DR"
-    - **HTTP/REST 协议** + JSON body，引擎端用同一个 `RESTCatalog` 客户端
+    - **协议层事实**：HTTP/REST + JSON · 引擎端用同一个 `RESTCatalog` 客户端
     - 解决**引擎 × Catalog 矩阵爆炸**（以前每个引擎 × 每个 Catalog 各自实现）
     - **CAS 提交**规范化——所有实现都做同一套并发冲突检测
     - 协议层支持：**namespaces / tables / views / snapshot commit / config**
     - **权限 / 多租户**协议留给实现方（OAuth + Bearer token 是常规选择）
-    - **实现方**：Apache Polaris · Nessie · Gravitino · Tabular · Snowflake Open Catalog · Databricks Unity OSS 版
+    - **实现方（各自产品，各自成熟度）**：Apache Polaris · Nessie · Gravitino · Snowflake Open Catalog · Databricks UC · AWS Glue（走自家 API 而非 REST）
+    - **语境声明**：新建 Iceberg 项目里是默认；Databricks / AWS 栈里常共存其他 Catalog；Hadoop 时代栈很多仍跑 HMS
 
 ## 1. 它解决什么 · Catalog 混战时代
 
@@ -230,7 +239,13 @@ POST /v1/{prefix}/namespaces/{ns}/tables/{table}/plan
 
 **Trino / Spark 客户端** 对这套流程已有内置支持（`iceberg.rest-auth.type = oauth2` 等配置）。Polaris 的 Credential Vending 2026-01 加了 SigV4 / KMS per-catalog / 位置限制等增强。
 
-### 机制 6 · 各实现的 Iceberg REST 兼容矩阵（2026-Q2）
+### 机制 6 · 各实现的 Iceberg REST 兼容矩阵
+
+!!! warning "时效声明 · 快照时点 2026-Q2"
+    **本矩阵是 2026-Q2 快照**——这类信息**季度级变化**。Polaris / UC / Nessie / Gravitino 各自 2026 都有 roadmap 推进；建议：
+    - **选型时**以各实现**最新一次 release note** 为准
+    - 本手册会尽量季度更新，但**不要把表格当长期稳定事实**
+    - 能力边界看**概念类别**（是否支持 View / Multi-table / Vended）而不是"√/×"瞬时截图
 
 | 能力 \ 实现 | Apache Polaris | Unity Catalog OSS | Nessie | Gravitino |
 |---|---|---|---|---|
@@ -243,7 +258,12 @@ POST /v1/{prefix}/namespaces/{ns}/tables/{table}/plan
 | Scan Planning | 2026 roadmap | ❌ | ❌ | ❌ |
 | OAuth2 Auth | ✅ | ✅ | ✅ | ✅ |
 
-**解读**：Polaris 是 **Iceberg 原生特性最全的 OSS 实现**；Nessie 专长在分支/多表事务；Unity OSS 的 REST 兼容覆盖核心 CRUD 但高级特性偏弱；Gravitino 作为联邦层 · 能力上限 ≈ 底层 Catalog 能力。
+**解读（概念层，不挂具体版本）**：
+- **Polaris** · Iceberg 原生特性覆盖最全 · Snowflake 主力投入
+- **Nessie** · 分支 / 多表事务是它的 differentiator · 其他能力和 Polaris 平级
+- **UC OSS** · 核心 CRUD 够用 · 高级特性（View / Multi-table）靠 Databricks 商业版
+- **Gravitino** · 联邦层 · 自己不是 REST 实现 · 能力上限 = 被联邦的底层 Catalog 能力
+- **AWS Glue** · **不是 Iceberg REST 实现** · 走自家 API（GlueCatalog），能力谱系独立（详见 [glue.md](glue.md)）
 
 ## 4. 工程细节
 
