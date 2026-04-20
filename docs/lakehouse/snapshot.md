@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2, Paimon 0.9+, Hudi 0.14+, Delta 3.0+
+applies_to: Iceberg v2, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3.2+
 tags: [lakehouse, table-format, mvcc]
 aliases: [快照, Table Snapshot, Table Version]
 related: [lake-table, iceberg, paimon, time-travel, mvcc]

@@ -246,7 +246,7 @@ flowchart LR
 | 节奏维度 | 批式表（日终写）| 流式表（持续 CDC 入湖）|
 |---|---|---|
 | snapshot 频率 | 低（天级）| 高（分钟级）· 必须配 retention 上限 |
-| compaction 触发 | 手动 / 每日 | **自动 + 持续**（Paimon dedicated compaction job；Iceberg 1.10 支持自动）|
+| compaction 触发 | 手动 / 每日 | **自动 + 持续**（Paimon dedicated compaction job 原生；Iceberg 自身仍靠 `rewrite_data_files` procedure + 外部调度，托管服务如 S3 Tables / Snowflake Managed 才"自动托管"）|
 | DV 堆积 | 缓慢 | 快 · 必须高频 compact |
 | expire 频率 | 低（周）| 高（小时-天级）· 配合流消费者的 consumer-id 最小位点 |
 | 孤儿清理 | 月 | 周（失败重试留下的孤儿多）|

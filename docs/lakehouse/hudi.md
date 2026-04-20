@@ -116,9 +116,7 @@ Hudi 1.0 把几乎所有**元数据 + 索引**都收敛到 **Metadata Table**（
 
 换句话说：**Hudi 把元数据本身做成了一张 Hudi 表**——元数据的管理直接复用表格式能力。这比 Iceberg 的纯 Avro 文件更灵活（可 MoR / 有索引），但也更重。
 
-### 索引机制
-
-Hudi 1.0 的索引都承载在 **Metadata Table** 上（`.hoodie/metadata/`），共有七类：
+### 七类索引 · 承载在 Metadata Table 上
 
 | Metadata Table 索引 | 机制 | 用途 |
 |---|---|---|

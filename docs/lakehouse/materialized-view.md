@@ -14,7 +14,7 @@ status: stable
 
 # Materialized View · 湖上物化视图
 
-!!! warning "重要说明 · 本页混合了"未来方向"和"当下实现""
+!!! warning "重要说明 · 本页混合了"未来方向"与"当下实现""
     **到 2026-Q2，"湖上 MV" 尚未形成跨格式统一的协议标准**。本页讨论的是两类内容的混合：
 
     1. **当下已有的引擎层实现** · Trino Iceberg connector 的 MV 管理、Databricks Managed MV
