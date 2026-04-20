@@ -188,6 +188,21 @@ PARTITIONED BY (partition_date, bucket(16, asset_id));
 - OCR 模型升级同理
 - 每次阶段成功都**立即 commit**，失败不影响已完成的行
 
+## 七、生产级 Pipeline 设计要点
+
+以上是**处理 recipe**——生产跑这套需要额外解决这些横切问题：
+
+| 问题 | 做法 |
+|---|---|
+| **同资产幂等重跑** | 以**内容 hash（SHA256）或 asset_id** 作为主键 · Iceberg `MERGE INTO` / Paimon PK 表保证重跑幂等 |
+| **坏资产隔离（quarantine）** | 损坏 / 不支持格式 / 元数据缺失的图片 · 写入 DLQ 表（独立 Iceberg append 表 · 含错误原因）· **不阻塞主流** |
+| **异步 GPU worker 批处理** | embedding 推理走**独立 batch 队列**（GPU 资源池）· batch size 8-32 · 失败重试单图不重 batch |
+| **局部失败** | 多阶段 pipeline 每阶段独立 commit · 失败只回滚该阶段 · 不需要整张图重跑 |
+| **中间产物存储** | 归一化后图 / OCR 文本 · 写**对象存储**（不进湖表）· 湖表只存 URL 引用 · 避免湖表膨胀 |
+| **模型版本化** | `embedding_version_clip` + `caption_model` 字段 · 换代时数据可共存追溯 |
+
+**和 [管线韧性](pipeline-resilience.md) 的横切主题呼应** · 多模管线的 Exactly-once / Schema Evolution / DLQ 同样适用。
+
 ## 陷阱
 
 - **不处理 EXIF 旋转** —— 模型看到的图和人看的图不同

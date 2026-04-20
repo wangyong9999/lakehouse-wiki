@@ -175,6 +175,22 @@ PARTITIONED BY (days(ts), bucket(16, audio_id));
 
 Hybrid Search 让这四种组合自然。
 
+## 生产级 Pipeline 设计要点
+
+音频管线的特点：**ASR 推理慢 + speaker diarization 敏感 + 模型可换性强**——生产级关注：
+
+| 问题 | 做法 |
+|---|---|
+| **同音频幂等** | audio_id（或文件 SHA256）作主键 · ASR + diarization + embedding 结果可重新产出 |
+| **ASR / 音频 embedding 异步 worker** | Whisper GPU 推理慢 · 独立队列 · batch size 根据 GPU 内存调（1-8）|
+| **分段失败隔离** | 长音频按 10-30 分钟切段处理 · 某段失败不重跑全文 · 段级 checkpoint |
+| **坏音频隔离** | 采样率异常 / 编码坏 / 静音文件 → DLQ 表 + 原因 · 不阻塞主流 |
+| **语言检测先行** | 优先**自动检测语言** · 错选 ASR 模型浪费算力 · 不确定的路由到多模型 |
+| **中间产物** | 切段后的 WAV / 转录文本 · 对象存储 · 湖表存 URL |
+| **模型版本化** | `asr_model_version` + `embedding_version_clap` + `diarization_model` 字段分离 · 换代可共存 |
+
+**和 [管线韧性](pipeline-resilience.md) 横切主题呼应**。
+
 ## 陷阱
 
 - **采样率不匹配**：模型要 16kHz，你喂 44.1kHz 输出乱码

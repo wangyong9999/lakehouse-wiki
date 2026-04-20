@@ -187,6 +187,21 @@ CREATE TABLE video_assets (
 PARTITIONED BY (days(ts), bucket(16, video_id));
 ```
 
+## 生产级 Pipeline 设计要点
+
+视频比图像更重——**单条视频可达 GB 级 · 单次处理 10 分钟+**。生产级注意：
+
+| 问题 | 做法 |
+|---|---|
+| **同资产幂等** | video_id（或视频文件 SHA256）作主键 · 重跑产出一致 |
+| **大文件失败局部重试** | 抽帧阶段失败不重整条视频 · **按帧段 checkpointing**（成功的帧段入库 · 失败段重抽）|
+| **毒文件隔离** | 损坏编码 / 不支持格式 / 音视频同步错 · DLQ 表记录 + 失败原因 · 不阻塞主流 |
+| **异步 GPU worker** | embedding 推理和视频解码**分离不同 worker**（解码 CPU 多 · embedding GPU 多）· 通过对象存储中间层解耦 |
+| **中间产物存储** | 抽出的帧图 / 关键帧 / 音轨 · 写对象存储 · 湖表只存 URL · 避免表爆 |
+| **回填成本巨大** | 模型升级要**全量 re-embedding** 很贵 · 提前估算 · 优先升级热门视频 · 冷视频延迟升级 |
+
+**和 [管线韧性](pipeline-resilience.md) 横切主题呼应** · 视频管线对 Backpressure / Schema Evolution / DLQ 需求更高。
+
 ## 陷阱
 
 - **抽帧过密** —— 1 小时视频抽 1 帧/秒 = 3600 帧，存储和 embedding 成本爆

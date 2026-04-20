@@ -254,6 +254,23 @@ RAG 回答时要指明"这条答案来自 `doc_uri` 的 `page_range` 的 `sectio
 - 只标 `doc_version_current = true` 给最新版
 - Iceberg Time Travel 让过去版本可查
 
+## 生产级 Pipeline 设计要点
+
+文档管线的特点：**工具链变化快 + VLM 直解成本敏感 + 保守路径 vs 前沿路径差异大**——生产级关注：
+
+| 问题 | 做法 |
+|---|---|
+| **保守生产默认路径** | **PyMuPDF + Unstructured + Tesseract OCR** 组合——久经考验 · 工具栈稳定 · 成本可预测 |
+| **高质量前沿路径** | **VLM 直解**（GPT-4o / Claude / Qwen2-VL 等）· 质量高但**成本高 + 稳定性弱** · 推荐用于关键业务 / 低频重解析场景 |
+| **同资产幂等** | doc_id（SHA256）+ doc_version 作主键 · 重跑同版本产出一致 |
+| **解析失败隔离** | 扫描版识别失败 / 格式不支持 / 损坏 PDF → DLQ 表 + 原因 · 不阻塞主流 |
+| **异步 worker 分层** | 解析（CPU 多）/ OCR（CPU 或 GPU）/ embedding（GPU）三类 worker 分离 · 各自 batch 队列 |
+| **VLM 成本控制** | 先走保守路径 · 置信度低的页面（如扫描版 + OCR 文本稀疏）路由到 VLM · 不要全量走 VLM |
+| **中间产物** | 解析后的 markdown / 纯文本 / OCR 结果 · 对象存储 · 湖表只存 URL + chunk metadata |
+| **不要把所有处理都塞湖管线** | 中间 preview / 缩略图 / PDF 渲染 **不入湖表**——在线生成 + 对象存储 cache 更合适 |
+
+**和 [管线韧性](pipeline-resilience.md) 横切主题呼应** · 文档管线对 Schema Evolution（新字段如 `vlm_confidence`）特别敏感。
+
 ## 陷阱
 
 - **扫描版 PDF 当原生 PDF 处理** → 文本全空；要有"是扫描版"检测（`PyMuPDF` 判空 + 采样分辨率）
