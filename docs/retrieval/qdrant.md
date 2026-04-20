@@ -15,7 +15,7 @@ status: stable
 # Qdrant · Rust filter-aware 向量库
 
 !!! tip "一句话定位"
-    Rust 实现的向量数据库。**Filter-aware HNSW** 是 Qdrant 的差异化卖点——"向量相似 + 复杂 WHERE"组合查询在中等规模下延迟/精度双优。**2023+ 起领跑 filter-aware 实现**——Milvus / pgvector 随后跟进。
+    Rust 实现的向量数据库。**Filter-aware HNSW** 是 Qdrant 的差异化卖点——"向量相似 + 复杂 WHERE"组合查询在中等规模下延迟/精度双优。**2023+ 较早商业化 filter-aware 实现**——Milvus / pgvector 之后陆续跟进。
 
 !!! abstract "TL;DR"
     - **甜区**：中规模（千万-亿级）+ **复杂结构化过滤**场景 + 多租户 SaaS

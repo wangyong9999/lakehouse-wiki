@@ -29,7 +29,7 @@ status: stable
 !!! abstract "TL;DR"
     - **三种实现策略**：**Pre-filter** · **Post-filter** · **In-filter (Filterable HNSW)**
     - 选哪种取决于**过滤选择性**：过滤后剩 < 5% 用 pre · > 50% 用 post · 中间用 in-filter
-    - **Filterable HNSW**（2023+ · Qdrant 领跑）是 2024-2026 的事实选择
+    - **Filterable HNSW**（2023+ · Qdrant 最早商业化 · Milvus / pgvector 0.7+ 跟进）是 2024-2026 中等选择性场景的常见方案
     - **pgvector 2024 hnsw.ef_search + parallel seq scan** 是 PG 场景新突破
     - **量化和 filter-aware 互相影响** · 组合设计要一起考虑
 
@@ -101,7 +101,7 @@ HNSW 图遍历:
 
 **工程落地**：
 
-- **Qdrant 的 Filterable HNSW (2023+)** · 领跑 · 通过在图构建时考虑过滤场景 · 或动态调整图遍历
+- **Qdrant 的 Filterable HNSW (2023+)** · 较早商业化 · 通过在图构建时考虑过滤场景 · 或动态调整图遍历
 - **Milvus 2.3+ 的 Filtered Search** · 支持 bitmap / expression-based
 - **pgvector 0.6-0.7+** · `hnsw.ef_search` + parallel seq scan 组合 · PostgreSQL 场景新突破
 - **LanceDB** · filter 推到 Lance 文件层做 pruning

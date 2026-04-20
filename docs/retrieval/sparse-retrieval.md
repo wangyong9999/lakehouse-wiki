@@ -28,7 +28,7 @@ status: stable
     - **SPLADE** (2021+) · Learned Sparse Retrieval · 用 MLM 生成稀疏向量 · BEIR 上超 BM25
     - **BM42** (2024) · Qdrant 提出 · 轻量级神经稀疏 · 训练代价低 · 2024-2026 实战渐起
     - **神经稀疏关键点**：不是抛弃倒排索引 · 是**让倒排索引的权重更聪明**
-    - **Hybrid 主路径**：BM25 (快 · 可解释) + Dense (语义) 通过 RRF 融合——是 2024-2026 生产 RAG 的事实默认
+    - **Hybrid 主路径**：BM25 (快 · 可解释) + Dense (语义) 通过 RRF 融合——**是 2024-2026 生产 RAG 里最常见的 1-2 种路径之一**（另一常见路径是 SPLADE + Dense）
 
 ## 1. 为什么稀疏检索仍然重要
 
@@ -138,7 +138,7 @@ for each token t in vocabulary:
 
 - **10 亿 doc × 英文** · BM25 索引大小 ~数百 GB（文本本体 + 倒排 posting lists）
 - **SPLADE** 因扩展词多 · 索引大 5-10× · 需要确认磁盘预算
-- **Lucene / Elasticsearch** 是**事实默认引擎**· 规模大的用 OpenSearch 多分片
+- **Lucene / Elasticsearch** 是**最主流的倒排索引引擎**（生态最广 · 非唯一）· 规模大的用 OpenSearch 多分片
 
 ### 分词器选型（中文尤其关键）
 

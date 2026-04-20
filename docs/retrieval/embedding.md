@@ -63,7 +63,7 @@ status: stable
 
 | 维度 | 开源自部署 | 闭源 API |
 |---|---|---|
-| **质量** | Top 开源（BGE-M3 / Jina v3 / gte-Qwen2）+- Voyage / OpenAI 中等 | Voyage 3 Large / OpenAI-3-large 仍是**MTEB 事实 top** |
+| **质量** | Top 开源（BGE-M3 / Jina v3 / gte-Qwen2）+- Voyage / OpenAI 中等 | **截至 2026-Q2** Voyage 3 Large / OpenAI-3-large 在 MTEB Retrieval 子榜常处前列；**但各子任务排名差异大** · 选型仍要看自家任务 |
 | **成本** | GPU 自担 + 运维 · 大规模便宜 | 按 token 付费 · 小规模便宜 · 亿级贵 |
 | **数据隐私** | 数据不出境 · 合规友好 | 数据发 API（部分 API 承诺不训练）|
 | **延迟** | 本地部署 · 可控 | 网络 + API 延迟 ~50-200ms |
