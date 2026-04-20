@@ -21,7 +21,7 @@ status: stable
     - **Coordinator + Worker** 的 MPP 架构；每查询独立执行树
     - 最大强项：**跨湖 / 跨 DB 联邦 SQL**，真正"一条 SQL 查多源"
     - 为**秒级交互**优化；不适合长跑 ETL（那是 Spark 的事）
-    - **Pipeline 执行 + 向量化**（新版 Trino）：吞吐接近 StarRocks
+    - **Pipeline 执行 + 列式批量处理**（page/block 导向）：近几版持续优化；但不是 DuckDB / ClickHouse / StarRocks 那种 SIMD/codegen 级别的向量化引擎——**不要按那类直觉估性能**
     - **资源组（Resource Groups）**是多租户生产必备
     - 常见生产配置：**Trino + Iceberg + Hive Metastore / REST Catalog + Superset / Tableau**
 
@@ -128,16 +128,25 @@ Coordinator 先扫小表 `date_dim`，得到 `year = 2024` 对应的 `date_key` 
 - **Aggregate push-down**（部分 Connector）：`COUNT / SUM` 可以下推到 PostgreSQL / Iceberg
 - **Projection push-down**：只读需要的列
 
-### 机制 4 · Reuse Exchange
+### 机制 4 · Exchange 与子计划复用 · 边界要分清
 
-两个相同 subquery **并发**时，只跑一次、共享结果：
+**常见误读**："Trino 会把两个并发查询里的相同子查询合并只跑一次" —— **错**。Trino 默认**不做跨独立查询**的扫描 / 结果共享。
+
+**实际情况**：
+
+- **Trino Exchange** = 单个查询内 stage 之间的数据交换（shuffle / gather）· 不是"跨查询复用"
+- **CTE 默认 inline**：同一个查询里多次引用的 CTE，Trino **会重复执行**（CTE caching 是 roadmap 项，不是当前默认能力）
+- **Common Subplan Reuse**：某些 optimizer 规则能在**同一查询内**识别相似子计划并合并（如 TPC-H Q21 的多个 NOT EXISTS 子查询）· 但**粒度有限** · 不是通用"共享子查询"
+- **FTE（Fault-Tolerant Execution）的 exchange spill**：是 task 失败重试时复用 spilled exchange 数据 · 也是**单查询内**语义
 
 ```sql
--- 仪表盘常见：几个图都 WHERE dt = '2024-12-01'
-SELECT metric1, ... WHERE dt = '2024-12-01';  -- 查询 A
-SELECT metric2, ... WHERE dt = '2024-12-01';  -- 查询 B（并发）
--- Trino 共享 dt 分区扫描
+-- 仪表盘并发时，Trino 默认行为：
+SELECT metric1, ... WHERE dt = '2026-04-20';  -- 查询 A · 独立扫 dt='2026-04-20'
+SELECT metric2, ... WHERE dt = '2026-04-20';  -- 查询 B · 独立扫 dt='2026-04-20'
+-- ❌ 不会自动共享扫描结果
 ```
+
+**做仪表盘共享扫描的正确做法**：走 **CTE 物化到 Iceberg 中间表 / Trino Materialized View**，或走上游 BI 层（StarRocks / Presto SQL Cache 等）的 query cache——**不要期望 Trino 默认会共享**。
 
 ### 机制 5 · FTE (Fault-Tolerant Execution)
 

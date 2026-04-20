@@ -157,7 +157,8 @@ Window 在 Watermark 超过 window end 时触发。
 ### 机制 3 · 双流 Join（Stateful）
 
 ```python
-# 订单流 × 支付流 · 1 小时内配对
+# 伪代码示意 · 非可直接运行的 Flink DataStream Python API
+# 实际生产建议走 Java/Scala DataStream API 或 Flink SQL
 orders.connect(payments) \
       .keyBy("order_id", "order_id") \
       .flatMap(JoinFunction(ttl_ms=3600000))

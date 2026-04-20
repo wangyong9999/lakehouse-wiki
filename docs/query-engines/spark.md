@@ -147,15 +147,28 @@ spark.conf.set("spark.sql.autoBroadcastJoinThreshold", 10485760)
 df_large.join(df_small.hint("broadcast"), "key")
 ```
 
-### 机制 3 · Bucketing
+### 机制 3 · Bucketing + Storage Partition Join（SPJ）· 条件严格
 
-按列预分桶 → 后续 Join 免 shuffle：
+**常见误读**："Iceberg 表建了 bucket 分区，Spark JOIN 就自动免 shuffle" —— **不对**。真实情况：
 
 ```sql
 CREATE TABLE orders (...) USING iceberg
 PARTITIONED BY (bucket(32, user_id));
--- JOIN 另一个按 user_id bucket 的表时免 shuffle
+
+-- 建表只是"可以参与 SPJ 的前提"，真正免 shuffle 需满足：
 ```
+
+**Spark Storage Partition Join（SPJ · Spark 3.3+ / 3.4+ 成熟）的硬条件**：
+
+| 条件 | 说明 |
+|---|---|
+| **两表都是 Iceberg（或其他支持 V2 partitioning reporting 的源）** | Iceberg DSv2 能把 `bucket(N, col)` 报告给 Spark planner |
+| **同一列上的同一 transform** | 两表都 `bucket(N, user_id)` |
+| **同 bucket 数**（Spark 3.x） | orders `bucket(32)` + customers `bucket(16)` 不行；**Spark 4.0+ 放宽**（支持 coalesce/split）|
+| **配置开启** | `spark.sql.sources.v2.bucketing.enabled=true` + `spark.sql.iceberg.planning.preserve-data-grouping=true` |
+| **JOIN key 包含 bucket col** | 否则 planner 无法识别复用 |
+
+**任何一条不满足就退化为普通 shuffle hash join**——所以 SPJ 在生产里**实际触发率不高**，必须用 `EXPLAIN` 确认计划里有 "Storage Partitioned Join"，**不要假设建表就生效**。
 
 ### 机制 4 · Iceberg / Delta / Paimon 集成
 
