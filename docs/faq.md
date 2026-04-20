@@ -24,7 +24,7 @@ description: 跨目录的具体问题与速答
 ### 我的查询明明 `WHERE` 了一个分区值，为什么还扫了 TB？
 
 谓词没下推。99% 是以下原因之一：UDF 包住了过滤列 / 类型不匹配 / 数据本身没按该列聚集。
-→ [谓词下推](foundations/predicate-pushdown.md) · [性能调优](ops/performance-tuning.md)
+→ [谓词下推](query-engines/predicate-pushdown.md) · [性能调优](ops/performance-tuning.md)
 
 ### 小文件问题怎么治？
 

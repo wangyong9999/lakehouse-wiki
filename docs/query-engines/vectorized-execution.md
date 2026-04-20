@@ -62,7 +62,7 @@ filter.next()   ← 一行              filter.next()   ← 一批 1024 行
 
 **现代向量化的杀手锏**：尽量"不解码"地处理数据。
 
-经 [Dictionary 编码](compression-encoding.md) 后，`country` 列从字符串变成 int index（如 `0=CN, 1=US, 2=JP`）。执行 `WHERE country = 'CN'` 时：
+经 [Dictionary 编码](../foundations/compression-encoding.md) 后，`country` 列从字符串变成 int index（如 `0=CN, 1=US, 2=JP`）。执行 `WHERE country = 'CN'` 时：
 
 ```
 1. 查字典：'CN' → 0  （一次）
@@ -70,7 +70,7 @@ filter.next()   ← 一行              filter.next()   ← 一批 1024 行
 3. 延迟解码：只对命中的行去解字典（或压根不解）
 ```
 
-这比"先全表解成字符串再比较"**快几十倍**。DuckDB · Velox · ClickHouse · Polars 都大量使用这条路径。[压缩与编码](compression-encoding.md) 有更完整的讨论（见"和向量化执行的协同"段）。
+这比"先全表解成字符串再比较"**快几十倍**。DuckDB · Velox · ClickHouse · Polars 都大量使用这条路径。[压缩与编码](../foundations/compression-encoding.md) 有更完整的讨论（见"和向量化执行的协同"段）。
 
 ## 延展：Compile-time 代码生成（Codegen）
 
@@ -94,9 +94,9 @@ filter.next()   ← 一行              filter.next()   ← 一批 1024 行
 
 ## 相关概念
 
-- [列式 vs 行式](columnar-vs-row.md) —— 存储侧的前提
-- [压缩与编码](compression-encoding.md) —— "在压缩数据上 SIMD" 的另一半
-- [Parquet](parquet.md) / [Lance Format](lance-format.md) —— 典型列式源
+- [列式 vs 行式](../foundations/columnar-vs-row.md) —— 存储侧的前提
+- [压缩与编码](../foundations/compression-encoding.md) —— "在压缩数据上 SIMD" 的另一半
+- [Parquet](../foundations/parquet.md) / [Lance Format](../foundations/lance-format.md) —— 典型列式源
 - [谓词下推](predicate-pushdown.md) —— 减少进入向量化引擎的数据量
 
 ## 延伸阅读

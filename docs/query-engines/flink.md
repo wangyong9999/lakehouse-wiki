@@ -127,7 +127,7 @@ Source  ---barrier-t1-->  map  -->  window  -->  sink
 | 延迟处理 | 支持迟到事件 | 不考虑 |
 | 工业默认 | **首选** | 仅调试用 |
 
-详见 [Watermark / 事件时间](../foundations/event-time-watermark.md)。
+详见 [Watermark / 事件时间](../pipelines/event-time-watermark.md)。
 
 ## 3. 关键机制
 
@@ -406,4 +406,4 @@ ps.select(alert -> new FraudAlert(...));
 
 - [Paimon](../lakehouse/paimon.md) · [Iceberg](../lakehouse/iceberg.md)
 - [Trino](trino.md) · [Spark](spark.md) · [DuckDB](duckdb.md)
-- [Watermark](../foundations/event-time-watermark.md) · [Real-time Lakehouse](../scenarios/real-time-lakehouse.md) · [流式入湖](../scenarios/streaming-ingestion.md)
+- [Watermark](../pipelines/event-time-watermark.md) · [Real-time Lakehouse](../scenarios/real-time-lakehouse.md) · [流式入湖](../scenarios/streaming-ingestion.md)

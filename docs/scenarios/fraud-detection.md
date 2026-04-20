@@ -337,7 +337,7 @@ flowchart LR
 ## 相关
 
 - [Feature Store](../ai-workloads/feature-store.md) · [Feature Serving](feature-serving.md) · [离线训练数据流水线](offline-training-pipeline.md)
-- [Watermark / 事件时间](../foundations/event-time-watermark.md)（实时特征正确性的基石）
+- [Watermark / 事件时间](../pipelines/event-time-watermark.md)（实时特征正确性的基石）
 - [Real-time Lakehouse](real-time-lakehouse.md)（底座）
 - [业务场景全景](business-scenarios.md)
 

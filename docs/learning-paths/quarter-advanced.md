@@ -23,8 +23,8 @@ status: stable
 
 - [存算分离](../foundations/compute-storage-separation.md)
 - [一致性模型](../foundations/consistency-models.md)
-- [谓词下推](../foundations/predicate-pushdown.md)
-- [向量化执行](../foundations/vectorized-execution.md)
+- [谓词下推](../query-engines/predicate-pushdown.md)
+- [向量化执行](../query-engines/vectorized-execution.md)
 - [Lance Format](../foundations/lance-format.md) —— 深度读
 - 做：用 DuckDB 直连 S3 + Iceberg 跑 TPC-DS 10GB，看下推生效情况
 

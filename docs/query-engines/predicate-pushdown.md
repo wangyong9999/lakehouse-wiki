@@ -44,9 +44,9 @@ flowchart TB
 
 ### 级 3：Page / Column 层
 
-- **[Parquet Page Index](parquet.md)**（v2，参见该页 "Page Index" 段）：在命中的 Row Group 内按 Page 过滤，把粒度从 128MB 细到 1MB。**点查 / 小范围扫描 10-100× 加速**
+- **[Parquet Page Index](../foundations/parquet.md)**（v2，参见该页 "Page Index" 段）：在命中的 Row Group 内按 Page 过滤，把粒度从 128MB 细到 1MB。**点查 / 小范围扫描 10-100× 加速**
 - **Dictionary 层过滤**：Dict 编码的列，先查字典确认"值在不在"，再决定是否要读 Data Page
-- **Bloom Filter**（可选）：高基数等值查询直接跳过 column chunk（粒度在 column chunk，不是 page；见 [Parquet](parquet.md) 的 Bloom Filter 段）
+- **Bloom Filter**（可选）：高基数等值查询直接跳过 column chunk（粒度在 column chunk，不是 page；见 [Parquet](../foundations/parquet.md) 的 Bloom Filter 段）
 
 ### 级 4：行级 filter
 
@@ -95,7 +95,7 @@ flowchart TB
 
 ## 相关
 
-- [Parquet](parquet.md)
+- [Parquet](../foundations/parquet.md)
 - [Manifest](../lakehouse/manifest.md)
 - [查询加速](../bi-workloads/query-acceleration.md)
 - [性能调优](../ops/performance-tuning.md)
@@ -106,4 +106,4 @@ flowchart TB
 - **[Parquet Page Index](https://github.com/apache/parquet-format/blob/master/PageIndex.md)** —— 规范一手
 - **[Iceberg Scan Planning](https://iceberg.apache.org/spec/#scan-planning)** —— Manifest 级过滤的语义
 - **[ClickHouse · Data Skipping Indexes](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-data_skipping-indexes)**
-- [本手册 · Parquet](parquet.md) · [压缩与编码](compression-encoding.md)
+- [本手册 · Parquet](../foundations/parquet.md) · [压缩与编码](../foundations/compression-encoding.md)

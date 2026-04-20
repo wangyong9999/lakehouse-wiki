@@ -130,11 +130,11 @@ df = arrow_table.to_pandas()               # 零拷贝
 
 ## 相关
 
-- [Parquet](parquet.md) —— 磁盘侧的孪生
-- [列式 vs 行式](columnar-vs-row.md) —— 基础
+- [Parquet](../foundations/parquet.md) —— 磁盘侧的孪生
+- [列式 vs 行式](../foundations/columnar-vs-row.md) —— 基础
 - [向量化执行](vectorized-execution.md) —— Arrow 内存布局的直接受益
 - [DuckDB](../query-engines/duckdb.md) —— 典型 Arrow-native 引擎
-- [Lance Format](lance-format.md) —— Arrow-native，但加了随机访问
+- [Lance Format](../foundations/lance-format.md) —— Arrow-native，但加了随机访问
 
 ## 延伸阅读
 

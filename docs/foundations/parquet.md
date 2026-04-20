@@ -144,7 +144,7 @@ print(pf.schema_arrow)              # Arrow schema
 
 - **[ORC](orc.md)** —— Hive 生态更偏爱，语义与 Parquet 高度重合但细节不同（Stripe ≈ Row Group）
 - **[Lance Format](lance-format.md)** —— 专为向量 / 机器学习加入行级随机读与向量索引原生支持
-- **[Arrow](arrow-ecosystem.md)** —— 内存格式而非文件格式，但和 Parquet 是"同一个社区两个镜像"
+- **[Arrow](../query-engines/arrow-ecosystem.md)** —— 内存格式而非文件格式，但和 Parquet 是"同一个社区两个镜像"
 - **Vortex · Nimble**（2024+ 新）—— 更激进的编码 · 延迟解码 · 向量化友好
 
 ## 10. 延伸阅读
@@ -159,4 +159,4 @@ print(pf.schema_arrow)              # Arrow schema
 
 - [对象存储](object-storage.md) —— Parquet 文件的物理载体
 - [湖表](../lakehouse/lake-table.md) —— 怎么把一堆 Parquet 文件组织成"一张表"
-- [压缩与编码](compression-encoding.md) · [谓词下推](predicate-pushdown.md) · [列式 vs 行式](columnar-vs-row.md)
+- [压缩与编码](compression-encoding.md) · [谓词下推](../query-engines/predicate-pushdown.md) · [列式 vs 行式](columnar-vs-row.md)

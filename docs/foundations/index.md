@@ -46,8 +46,8 @@ flowchart TB
 2. [存算分离](compute-storage-separation.md) —— 这个架构为什么能成立
 3. [Parquet](parquet.md) · [压缩与编码](compression-encoding.md) —— 文件内部怎么组织
 4. [列式 vs 行式](columnar-vs-row.md) —— 为什么 OLAP 选列式
-5. [谓词下推](predicate-pushdown.md) —— footer / 统计怎么变成"扫少"
-6. [向量化执行](vectorized-execution.md) —— 扫进来的 batch 怎么算快
+5. [谓词下推](../query-engines/predicate-pushdown.md) —— footer / 统计怎么变成"扫少"
+6. [向量化执行](../query-engines/vectorized-execution.md) —— 扫进来的 batch 怎么算快
 7. [MVCC](mvcc.md) · [一致性模型](consistency-models.md) —— 湖表 commit 的思想源头
 
 赶时间只读前三条（约 2 小时）也能建立最小可用心智模型；做架构评审 / 深度选型时再回来补完整 7 条。
@@ -57,9 +57,9 @@ flowchart TB
 ## 主线之外 · 特定场景的前置
 
 - [OLTP vs OLAP](oltp-vs-olap.md) —— 两种负载的物理底层为什么相反
-- [事件时间 · Watermark · 乱序](event-time-watermark.md) —— 流处理时间维度（做流式入湖 / 实时湖仓时读）
+- [事件时间 · Watermark · 乱序](../pipelines/event-time-watermark.md) —— 流处理时间维度（做流式入湖 / 实时湖仓时读）
 - [ORC](orc.md) —— Parquet 之外的传统列式格式（选型对比时读）
 - [Lance Format](lance-format.md) —— AI 时代"文件 + 轻表一体化"的另一条路径（见上文主线收尾的路径对照）
-- [Arrow · FlightSQL · ADBC](arrow-ecosystem.md) —— 内存交换与传输公共层
+- [Arrow · FlightSQL · ADBC](../query-engines/arrow-ecosystem.md) —— 内存交换与传输公共层
 
 > 想看"湖仓怎么来的"或"现代数据栈十大环节"这类**历史与生态视角**？移到了 [研究前沿 · 演进史](../frontier/data-systems-evolution.md) 与 [Modern Data Stack 全景](../frontier/modern-data-stack.md)。

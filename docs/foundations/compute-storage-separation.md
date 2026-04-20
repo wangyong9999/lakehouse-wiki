@@ -89,7 +89,7 @@ flowchart TB
 **应对**：
 
 1. **缓存层**：本地 SSD / Alluxio / Apache Gluten 缓存热数据
-2. **列剪裁 + 谓词下推**：只拉真正需要的字节（见 [谓词下推](predicate-pushdown.md)）
+2. **列剪裁 + 谓词下推**：只拉真正需要的字节（见 [谓词下推](../query-engines/predicate-pushdown.md)）
 3. **并行度**：大量小请求并发拉，聚合带宽
 4. **同区部署**：计算和存储在同一个 region / AZ
 5. **智能预读**：查询一开始就异步预取 footer / manifest

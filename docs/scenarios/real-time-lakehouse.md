@@ -221,7 +221,7 @@ INSERT INTO paimon_orders SELECT * FROM source_orders;
 ## 相关
 
 - [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md) · [Compaction](../lakehouse/compaction.md)
-- [事件时间 / Watermark](../foundations/event-time-watermark.md)
+- [事件时间 / Watermark](../pipelines/event-time-watermark.md)
 - [Apache Paimon](../lakehouse/paimon.md) · [Apache Flink](../query-engines/flink.md)
 - [流式入湖场景](streaming-ingestion.md) · [BI on Lake](bi-on-lake.md)
 

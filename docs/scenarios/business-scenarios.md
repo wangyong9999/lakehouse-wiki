@@ -136,7 +136,7 @@ Iceberg / Paimon → DuckDB / Polars / pyiceberg + PyArrow → Jupyter
 **计算诉求**：
 - Flink / Spark Streaming 聚合
 - StarRocks / ClickHouse 加速副本供仪表盘
-- 流式聚合 + 窗口（见 [Watermark](../foundations/event-time-watermark.md)）
+- 流式聚合 + 窗口（见 [Watermark](../pipelines/event-time-watermark.md)）
 
 **组件链路**：
 ```

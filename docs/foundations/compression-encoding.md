@@ -215,4 +215,4 @@ WHERE country = 'CN'
 ## 相关
 
 - [Parquet](parquet.md) · [ORC](orc.md) · [Lance Format](lance-format.md)
-- [列式 vs 行式](columnar-vs-row.md) · [向量化执行](vectorized-execution.md) · [谓词下推](predicate-pushdown.md)
+- [列式 vs 行式](columnar-vs-row.md) · [向量化执行](../query-engines/vectorized-execution.md) · [谓词下推](../query-engines/predicate-pushdown.md)

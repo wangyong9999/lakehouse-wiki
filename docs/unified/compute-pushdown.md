@@ -34,7 +34,7 @@ flowchart TB
 - **谓词下推**（predicate pushdown）：`WHERE ts > '2026-04-01'` 推到 Parquet footer 的 min/max 检查
 - **投影下推**（projection pushdown）：`SELECT a, b` 只读 a、b 列的 chunk
 
-见 [谓词下推](../foundations/predicate-pushdown.md) 专页。
+见 [谓词下推](../query-engines/predicate-pushdown.md) 专页。
 
 ### 层 2：存储端执行（S3 Select / 分布式存储层）
 
@@ -99,7 +99,7 @@ WHERE caption IS NULL;
 
 ## 相关
 
-- [谓词下推](../foundations/predicate-pushdown.md)
+- [谓词下推](../query-engines/predicate-pushdown.md)
 - [Lake + Vector 融合架构](lake-plus-vector.md)
 - [Embedding 流水线](../ai-workloads/embedding-pipelines.md)
 - [Feature Store](../ai-workloads/feature-store.md)

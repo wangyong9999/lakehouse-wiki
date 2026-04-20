@@ -73,7 +73,7 @@ city : [NYC, SF, LA]
 ## 相关概念
 
 - [Parquet](parquet.md)、[Lance Format](lance-format.md) —— 主流列式实现
-- [向量化执行](vectorized-execution.md) —— 列式的直接受益者
+- [向量化执行](../query-engines/vectorized-execution.md) —— 列式的直接受益者
 
 ## 延伸阅读
 
