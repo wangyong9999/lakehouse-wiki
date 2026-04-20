@@ -113,12 +113,24 @@ markdown_extensions:
 
 nav:
   - 首页: index.md
-  - 按角色:
-      - roles/index.md
-      - 数据工程师: roles/data-engineer.md
-      - ML / AI 工程师: roles/ml-engineer.md
-      - 平台工程师: roles/platform-engineer.md
-      - BI 分析师: roles/bi-analyst.md
+  - 入门与教程:
+      - 按角色:
+          - roles/index.md
+          - 数据工程师: roles/data-engineer.md
+          - ML / AI 工程师: roles/ml-engineer.md
+          - 平台工程师: roles/platform-engineer.md
+          - BI 分析师: roles/bi-analyst.md
+      - 学习路径:
+          - learning-paths/index.md
+          - 一周新人路径: learning-paths/week-1-newcomer.md
+          - 一月 AI 方向: learning-paths/month-1-ai-track.md
+          - 一月 BI 方向: learning-paths/month-1-bi-track.md
+          - 一季度资深路径: learning-paths/quarter-advanced.md
+      - 上手教程:
+          - tutorials/index.md
+          - 你的第一张 Iceberg 表: tutorials/first-iceberg-table.md
+          - 30 分钟湖上多模检索 Demo: tutorials/multimodal-search-demo.md
+          - 60 分钟 RAG on Iceberg: tutorials/rag-on-iceberg.md
   - 基础:
       - foundations/index.md
       - 物理存储层:
@@ -176,6 +188,19 @@ nav:
       - 存量 / 历史:
           - Hive Metastore: catalog/hive-metastore.md
       - Catalog 全景对比: compare/catalog-landscape.md
+  - 数据管线:
+      - pipelines/index.md
+      - 事件时间 · Watermark: pipelines/event-time-watermark.md
+      - 入湖模式:
+          - Kafka 到湖: pipelines/kafka-ingestion.md
+          - Bulk Loading: pipelines/bulk-loading.md
+      - 模态管线:
+          - 图像管线: pipelines/image-pipeline.md
+          - 视频管线: pipelines/video-pipeline.md
+          - 音频管线: pipelines/audio-pipeline.md
+          - 文档管线: pipelines/document-pipeline.md
+      - 编排系统: pipelines/orchestration.md
+      - 调度系统横比: compare/orchestrators.md
   - 查询引擎:
       - query-engines/index.md
       - 引擎通用原理:
@@ -197,20 +222,6 @@ nav:
           - 计算引擎对比: compare/compute-engines.md
           - 流处理引擎横比: compare/streaming-engines.md
           - OLAP 加速副本横比: compare/olap-accelerator-comparison.md
-  - 数据管线:
-      - pipelines/index.md
-      - 流处理基础:
-          - 事件时间 · Watermark: pipelines/event-time-watermark.md
-      - 入湖模式:
-          - Kafka 到湖: pipelines/kafka-ingestion.md
-          - Bulk Loading: pipelines/bulk-loading.md
-      - 模态管线:
-          - 图像管线: pipelines/image-pipeline.md
-          - 视频管线: pipelines/video-pipeline.md
-          - 音频管线: pipelines/audio-pipeline.md
-          - 文档管线: pipelines/document-pipeline.md
-      - 编排系统: pipelines/orchestration.md
-      - 调度系统横比: compare/orchestrators.md
   - 多模检索:
       - retrieval/index.md
       - 基础概念:
@@ -237,35 +248,37 @@ nav:
           - Embedding 模型横比: compare/embedding-models.md
           - Rerank 模型横比: compare/rerank-models.md
           - 稀疏检索对比: compare/sparse-retrieval.md
-  - AI 负载:
-      - ai-workloads/index.md
-      - LLM 应用:
-          - RAG: ai-workloads/rag.md
-          - RAG 评估: ai-workloads/rag-evaluation.md
-          - Prompt 管理: ai-workloads/prompt-management.md
-          - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
-          - Semantic Cache: ai-workloads/semantic-cache.md
-          - MCP · Model Context Protocol: ai-workloads/mcp.md
-      - 特征与数据:
-          - Feature Store: ai-workloads/feature-store.md
-          - Embedding 流水线: ai-workloads/embedding-pipelines.md
-          - Feature Store 横比: compare/feature-store-comparison.md
-      - 训练 · MLOps:
-          - 微调数据准备: ai-workloads/fine-tuning-data.md
-          - MLOps 生命周期: ai-workloads/mlops-lifecycle.md
-  - ML 基础设施:
-      - ml-infra/index.md
-      - Model Registry: ml-infra/model-registry.md
-      - Model Serving: ml-infra/model-serving.md
-      - 训练编排: ml-infra/training-orchestration.md
-      - GPU 调度: ml-infra/gpu-scheduling.md
-      - LLM Gateway: ml-infra/llm-gateway.md
   - BI 负载:
       - bi-workloads/index.md
       - OLAP 建模: bi-workloads/olap-modeling.md
       - 语义层 · Metrics Layer: bi-workloads/semantic-layer.md
       - 物化视图: bi-workloads/materialized-view.md
       - 查询加速: bi-workloads/query-acceleration.md
+  - AI 应用:
+      - ai-workloads/index.md
+      - LLM 应用模式:
+          - RAG: ai-workloads/rag.md
+          - RAG 评估: ai-workloads/rag-evaluation.md
+          - Prompt 管理: ai-workloads/prompt-management.md
+          - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
+          - MCP · Model Context Protocol: ai-workloads/mcp.md
+      - 应用侧基础设施:
+          - Semantic Cache: ai-workloads/semantic-cache.md
+          - LLM Gateway: ai-workloads/llm-gateway.md
+  - ML 平台:
+      - ml-infra/index.md
+      - 特征与数据:
+          - Feature Store: ml-infra/feature-store.md
+          - Embedding 流水线: ml-infra/embedding-pipelines.md
+          - Feature Store 横比: compare/feature-store-comparison.md
+      - 模型生命周期:
+          - Model Registry: ml-infra/model-registry.md
+          - Model Serving: ml-infra/model-serving.md
+          - MLOps 生命周期: ml-infra/mlops-lifecycle.md
+      - 训练基础设施:
+          - 训练编排: ml-infra/training-orchestration.md
+          - GPU 调度: ml-infra/gpu-scheduling.md
+          - 微调数据准备: ml-infra/fine-tuning-data.md
   - 一体化架构:
       - unified/index.md
       - 架构模式:
@@ -279,6 +292,27 @@ nav:
           - 案例 · Netflix: unified/case-netflix.md
           - 案例 · LinkedIn: unified/case-linkedin.md
           - 案例 · Uber: unified/case-uber.md
+  - 场景指南:
+      - scenarios/index.md
+      - E2E 业务场景全景: scenarios/business-scenarios.md
+      - BI · 分析:
+          - BI on Lake: scenarios/bi-on-lake.md
+          - 即席探索 · Notebook: scenarios/ad-hoc-exploration.md
+      - RAG · AI:
+          - RAG on Lake: scenarios/rag-on-lake.md
+          - Agentic 工作流: scenarios/agentic-workflows.md
+          - Text-to-SQL 平台: scenarios/text-to-sql-platform.md
+          - 多模检索流水线: scenarios/multimodal-search-pipeline.md
+      - 流 · 实时:
+          - 流式入湖: scenarios/streaming-ingestion.md
+          - Real-time Lakehouse: scenarios/real-time-lakehouse.md
+          - CDP · 用户分群: scenarios/cdp-segmentation.md
+          - 欺诈检测 · 风险控制: scenarios/fraud-detection.md
+      - ML · 推荐:
+          - 离线训练数据流水线: scenarios/offline-training-pipeline.md
+          - Feature Serving: scenarios/feature-serving.md
+          - 经典 ML 预测: scenarios/classical-ml.md
+          - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
   - 运维与生产:
       - ops/index.md
       - 日常运维 · 效率:
@@ -301,49 +335,20 @@ nav:
           - 20 反模式: ops/anti-patterns.md
   - 研究前沿:
       - frontier/index.md
-      - DiskANN 论文笔记: frontier/diskann-paper.md
-      - Benchmark 参考: frontier/benchmarks.md
-      - 量级数字总汇: frontier/benchmark-numbers.md
-      - LLM 推理优化: frontier/llm-inference-opt.md
-      - RAG 前沿 2025: frontier/rag-advances-2025.md
-      - 向量检索前沿: frontier/vector-trends.md
-      - AI 治理: frontier/ai-governance.md
-      - Lakehouse 厂商与开源生态格局: frontier/vendor-landscape.md
-      - Iceberg v3 预览: frontier/iceberg-v3-preview.md
-      - 三代数据系统演进史: frontier/data-systems-evolution.md
-      - Modern Data Stack 全景: frontier/modern-data-stack.md
-  - 场景指南:
-      - scenarios/index.md
-      - E2E 业务场景全景: scenarios/business-scenarios.md
-      - BI · 分析:
-          - BI on Lake: scenarios/bi-on-lake.md
-          - 即席探索 · Notebook: scenarios/ad-hoc-exploration.md
-      - RAG · AI:
-          - RAG on Lake: scenarios/rag-on-lake.md
-          - Agentic 工作流: scenarios/agentic-workflows.md
-          - Text-to-SQL 平台: scenarios/text-to-sql-platform.md
-          - 多模检索流水线: scenarios/multimodal-search-pipeline.md
-      - 流 · 实时:
-          - 流式入湖: scenarios/streaming-ingestion.md
-          - Real-time Lakehouse: scenarios/real-time-lakehouse.md
-          - CDP · 用户分群: scenarios/cdp-segmentation.md
-          - 欺诈检测 · 风险控制: scenarios/fraud-detection.md
-      - ML · 推荐:
-          - 离线训练数据流水线: scenarios/offline-training-pipeline.md
-          - Feature Serving: scenarios/feature-serving.md
-          - 经典 ML 预测: scenarios/classical-ml.md
-          - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
-  - 学习路径:
-      - learning-paths/index.md
-      - 一周新人路径: learning-paths/week-1-newcomer.md
-      - 一月 AI 方向: learning-paths/month-1-ai-track.md
-      - 一月 BI 方向: learning-paths/month-1-bi-track.md
-      - 一季度资深路径: learning-paths/quarter-advanced.md
-  - Tutorials:
-      - tutorials/index.md
-      - 你的第一张 Iceberg 表: tutorials/first-iceberg-table.md
-      - 30 分钟湖上多模检索 Demo: tutorials/multimodal-search-demo.md
-      - 60 分钟 RAG on Iceberg: tutorials/rag-on-iceberg.md
+      - AI · 检索前沿:
+          - LLM 推理优化: frontier/llm-inference-opt.md
+          - RAG 前沿 2025: frontier/rag-advances-2025.md
+          - 向量检索前沿: frontier/vector-trends.md
+          - AI 治理: frontier/ai-governance.md
+          - DiskANN 论文笔记: frontier/diskann-paper.md
+      - Benchmark:
+          - Benchmark 参考: frontier/benchmarks.md
+          - 量级数字总汇: frontier/benchmark-numbers.md
+      - 生态 · 演进:
+          - Lakehouse 厂商与开源生态格局: frontier/vendor-landscape.md
+          - Iceberg v3 预览: frontier/iceberg-v3-preview.md
+          - 三代数据系统演进史: frontier/data-systems-evolution.md
+          - Modern Data Stack 全景: frontier/modern-data-stack.md
   - 速查单:
       - cheatsheets/index.md
       - Iceberg 速查: cheatsheets/iceberg.md
@@ -357,13 +362,14 @@ nav:
       - 0003 多模向量选 LanceDB: adr/0003-lancedb-for-multimodal-vectors.md
       - 0004 Catalog 选型: adr/0004-catalog-choice.md
       - 0005 引擎组合: adr/0005-engine-combination.md
-  - FAQ: faq.md
-  - 术语表: glossary.md
-  - 数据来源声明: about-sources.md
-  - 按技术栈索引: index-by-technology.md
-  - 按 Tag 浏览: tags/index.md
-  - Changelog: changelog.md
-  - 贡献指南: contributing.md
+  - 附录:
+      - FAQ: faq.md
+      - 术语表: glossary.md
+      - 数据来源声明: about-sources.md
+      - 按技术栈索引: index-by-technology.md
+      - 按 Tag 浏览: tags/index.md
+      - Changelog: changelog.md
+      - 贡献指南: contributing.md
 
 extra_css:
   - assets/stylesheets/extra.css
