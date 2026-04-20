@@ -121,20 +121,20 @@ nav:
       - BI 分析师: roles/bi-analyst.md
   - 基础:
       - foundations/index.md
-      - 对象存储: foundations/object-storage.md
-      - 存算分离: foundations/compute-storage-separation.md
-      - Parquet: foundations/parquet.md
-      - ORC: foundations/orc.md
-      - Lance Format: foundations/lance-format.md
-      - 压缩与编码: foundations/compression-encoding.md
-      - 列式 vs 行式: foundations/columnar-vs-row.md
-      - 向量化执行: foundations/vectorized-execution.md
-      - 谓词下推: foundations/predicate-pushdown.md
-      - MVCC: foundations/mvcc.md
-      - OLTP vs OLAP: foundations/oltp-vs-olap.md
-      - 一致性模型: foundations/consistency-models.md
-      - 事件时间 · Watermark: foundations/event-time-watermark.md
-      - Arrow · FlightSQL · ADBC: foundations/arrow-ecosystem.md
+      - 物理存储层:
+          - 对象存储: foundations/object-storage.md
+          - 存算分离: foundations/compute-storage-separation.md
+      - 列式数据文件:
+          - 列式 vs 行式: foundations/columnar-vs-row.md
+          - Parquet: foundations/parquet.md
+          - ORC: foundations/orc.md
+          - Lance Format: foundations/lance-format.md
+          - 压缩与编码: foundations/compression-encoding.md
+          - Parquet vs ORC vs Lance: compare/parquet-vs-orc-vs-lance.md
+      - 系统与并发理论:
+          - MVCC: foundations/mvcc.md
+          - OLTP vs OLAP: foundations/oltp-vs-olap.md
+          - 一致性模型: foundations/consistency-models.md
   - 湖仓表格式:
       - lakehouse/index.md
       - 核心协议:
@@ -158,6 +158,10 @@ nav:
           - Apache Paimon: lakehouse/paimon.md
           - Apache Hudi: lakehouse/hudi.md
           - Delta Lake: lakehouse/delta-lake.md
+      - 横向对比:
+          - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
+          - 四大表格式对比: compare/iceberg-vs-paimon-vs-hudi-vs-delta.md
+          - Puffin vs Lance: compare/puffin-vs-lance.md
   - 元数据与 Catalog:
       - catalog/index.md
       - 协议层:
@@ -171,8 +175,12 @@ nav:
           - AWS Glue Data Catalog: catalog/glue.md
       - 存量 / 历史:
           - Hive Metastore: catalog/hive-metastore.md
+      - Catalog 全景对比: compare/catalog-landscape.md
   - 查询引擎:
       - query-engines/index.md
+      - 引擎通用原理:
+          - 向量化执行: query-engines/vectorized-execution.md
+          - 谓词下推: query-engines/predicate-pushdown.md
       - 纯查询引擎:
           - Trino: query-engines/trino.md
           - DuckDB: query-engines/duckdb.md
@@ -183,43 +191,68 @@ nav:
           - StarRocks: query-engines/starrocks.md
           - ClickHouse: query-engines/clickhouse.md
           - Apache Doris: query-engines/doris.md
+      - 数据接入协议:
+          - Arrow · FlightSQL · ADBC: query-engines/arrow-ecosystem.md
+      - 横向对比:
+          - 计算引擎对比: compare/compute-engines.md
+          - 流处理引擎横比: compare/streaming-engines.md
+          - OLAP 加速副本横比: compare/olap-accelerator-comparison.md
   - 数据管线:
       - pipelines/index.md
-      - Kafka 到湖: pipelines/kafka-ingestion.md
-      - Bulk Loading: pipelines/bulk-loading.md
-      - 图像管线: pipelines/image-pipeline.md
-      - 视频管线: pipelines/video-pipeline.md
-      - 音频管线: pipelines/audio-pipeline.md
-      - 文档管线: pipelines/document-pipeline.md
+      - 流处理基础:
+          - 事件时间 · Watermark: pipelines/event-time-watermark.md
+      - 入湖模式:
+          - Kafka 到湖: pipelines/kafka-ingestion.md
+          - Bulk Loading: pipelines/bulk-loading.md
+      - 模态管线:
+          - 图像管线: pipelines/image-pipeline.md
+          - 视频管线: pipelines/video-pipeline.md
+          - 音频管线: pipelines/audio-pipeline.md
+          - 文档管线: pipelines/document-pipeline.md
       - 编排系统: pipelines/orchestration.md
+      - 调度系统横比: compare/orchestrators.md
   - 多模检索:
       - retrieval/index.md
-      - 向量数据库: retrieval/vector-database.md
-      - Embedding: retrieval/embedding.md
-      - 多模 Embedding: retrieval/multimodal-embedding.md
-      - HNSW: retrieval/hnsw.md
-      - IVF-PQ: retrieval/ivf-pq.md
-      - DiskANN: retrieval/diskann.md
-      - Hybrid Search: retrieval/hybrid-search.md
-      - Rerank: retrieval/rerank.md
-      - 检索评估: retrieval/evaluation.md
-      - Milvus: retrieval/milvus.md
-      - LanceDB: retrieval/lancedb.md
-      - Qdrant: retrieval/qdrant.md
-      - Weaviate: retrieval/weaviate.md
-      - pgvector: retrieval/pgvector.md
+      - 基础概念:
+          - 向量数据库: retrieval/vector-database.md
+          - Embedding: retrieval/embedding.md
+          - 多模 Embedding: retrieval/multimodal-embedding.md
+      - ANN 索引:
+          - HNSW: retrieval/hnsw.md
+          - IVF-PQ: retrieval/ivf-pq.md
+          - DiskANN: retrieval/diskann.md
+      - 检索流水线:
+          - Hybrid Search: retrieval/hybrid-search.md
+          - Rerank: retrieval/rerank.md
+          - 检索评估: retrieval/evaluation.md
+      - 产品实现:
+          - Milvus: retrieval/milvus.md
+          - LanceDB: retrieval/lancedb.md
+          - Qdrant: retrieval/qdrant.md
+          - Weaviate: retrieval/weaviate.md
+          - pgvector: retrieval/pgvector.md
+      - 横向对比:
+          - ANN 索引对比: compare/ann-index-comparison.md
+          - 向量数据库对比: compare/vector-db-comparison.md
+          - Embedding 模型横比: compare/embedding-models.md
+          - Rerank 模型横比: compare/rerank-models.md
+          - 稀疏检索对比: compare/sparse-retrieval.md
   - AI 负载:
       - ai-workloads/index.md
-      - RAG: ai-workloads/rag.md
-      - RAG 评估: ai-workloads/rag-evaluation.md
-      - Prompt 管理: ai-workloads/prompt-management.md
-      - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
-      - Semantic Cache: ai-workloads/semantic-cache.md
-      - Feature Store: ai-workloads/feature-store.md
-      - Embedding 流水线: ai-workloads/embedding-pipelines.md
-      - 微调数据准备: ai-workloads/fine-tuning-data.md
-      - MLOps 生命周期: ai-workloads/mlops-lifecycle.md
-      - MCP · Model Context Protocol: ai-workloads/mcp.md
+      - LLM 应用:
+          - RAG: ai-workloads/rag.md
+          - RAG 评估: ai-workloads/rag-evaluation.md
+          - Prompt 管理: ai-workloads/prompt-management.md
+          - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
+          - Semantic Cache: ai-workloads/semantic-cache.md
+          - MCP · Model Context Protocol: ai-workloads/mcp.md
+      - 特征与数据:
+          - Feature Store: ai-workloads/feature-store.md
+          - Embedding 流水线: ai-workloads/embedding-pipelines.md
+          - Feature Store 横比: compare/feature-store-comparison.md
+      - 训练 · MLOps:
+          - 微调数据准备: ai-workloads/fine-tuning-data.md
+          - MLOps 生命周期: ai-workloads/mlops-lifecycle.md
   - ML 基础设施:
       - ml-infra/index.md
       - Model Registry: ml-infra/model-registry.md
@@ -235,31 +268,37 @@ nav:
       - 查询加速: bi-workloads/query-acceleration.md
   - 一体化架构:
       - unified/index.md
-      - Lake + Vector 融合架构: unified/lake-plus-vector.md
-      - 多模数据建模: unified/multimodal-data-modeling.md
-      - 统一 Catalog 策略: unified/unified-catalog-strategy.md
-      - 跨模态查询: unified/cross-modal-queries.md
-      - Compute Pushdown: unified/compute-pushdown.md
-      - 案例拆解（汇总）: unified/case-studies.md
-      - 案例 · Netflix: unified/case-netflix.md
-      - 案例 · LinkedIn: unified/case-linkedin.md
-      - 案例 · Uber: unified/case-uber.md
+      - 架构模式:
+          - Lake + Vector 融合架构: unified/lake-plus-vector.md
+          - 多模数据建模: unified/multimodal-data-modeling.md
+          - 统一 Catalog 策略: unified/unified-catalog-strategy.md
+          - 跨模态查询: unified/cross-modal-queries.md
+          - Compute Pushdown: unified/compute-pushdown.md
+      - 案例拆解:
+          - 案例拆解（汇总）: unified/case-studies.md
+          - 案例 · Netflix: unified/case-netflix.md
+          - 案例 · LinkedIn: unified/case-linkedin.md
+          - 案例 · Uber: unified/case-uber.md
   - 运维与生产:
       - ops/index.md
-      - 可观测性: ops/observability.md
-      - 性能调优: ops/performance-tuning.md
-      - 成本优化: ops/cost-optimization.md
-      - 安全与权限: ops/security-permissions.md
-      - 数据治理: ops/data-governance.md
-      - 多租户隔离: ops/multi-tenancy.md
-      - 灾难恢复 DR: ops/disaster-recovery.md
-      - 迁移手册: ops/migration-playbook.md
-      - 故障排查手册: ops/troubleshooting.md
-      - 20 反模式: ops/anti-patterns.md
-      - 容量规划: ops/capacity-planning.md
-      - SLA · SLO · DRE: ops/sla-slo.md
-      - 合规 · GDPR / 个保法: ops/compliance.md
-      - TCO 模型: ops/tco-model.md
+      - 日常运维 · 效率:
+          - 可观测性: ops/observability.md
+          - 性能调优: ops/performance-tuning.md
+          - 成本优化: ops/cost-optimization.md
+          - TCO 模型: ops/tco-model.md
+      - 安全 · 治理 · 合规:
+          - 安全与权限: ops/security-permissions.md
+          - 数据治理: ops/data-governance.md
+          - 多租户隔离: ops/multi-tenancy.md
+          - 合规 · GDPR / 个保法: ops/compliance.md
+      - 容量 · 目标:
+          - SLA · SLO · DRE: ops/sla-slo.md
+          - 容量规划: ops/capacity-planning.md
+      - 事故 · 变更:
+          - 故障排查手册: ops/troubleshooting.md
+          - 灾难恢复 DR: ops/disaster-recovery.md
+          - 迁移手册: ops/migration-playbook.md
+          - 20 反模式: ops/anti-patterns.md
   - 研究前沿:
       - frontier/index.md
       - DiskANN 论文笔记: frontier/diskann-paper.md
@@ -273,40 +312,27 @@ nav:
       - Iceberg v3 预览: frontier/iceberg-v3-preview.md
       - 三代数据系统演进史: frontier/data-systems-evolution.md
       - Modern Data Stack 全景: frontier/modern-data-stack.md
-  - 横向对比:
-      - compare/index.md
-      - DB 存储引擎 vs 湖表: compare/db-engine-vs-lake-table.md
-      - 四大表格式对比: compare/iceberg-vs-paimon-vs-hudi-vs-delta.md
-      - Catalog 全景对比: compare/catalog-landscape.md
-      - Parquet vs ORC vs Lance: compare/parquet-vs-orc-vs-lance.md
-      - ANN 索引对比: compare/ann-index-comparison.md
-      - 向量数据库对比: compare/vector-db-comparison.md
-      - Embedding 模型横比: compare/embedding-models.md
-      - 计算引擎对比: compare/compute-engines.md
-      - Puffin vs Lance: compare/puffin-vs-lance.md
-      - Feature Store 横比: compare/feature-store-comparison.md
-      - OLAP 加速副本横比: compare/olap-accelerator-comparison.md
-      - 流处理引擎横比: compare/streaming-engines.md
-      - Rerank 模型横比: compare/rerank-models.md
-      - 调度系统横比: compare/orchestrators.md
-      - 稀疏检索对比: compare/sparse-retrieval.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md
-      - RAG on Lake: scenarios/rag-on-lake.md
-      - BI on Lake: scenarios/bi-on-lake.md
-      - 多模检索流水线: scenarios/multimodal-search-pipeline.md
-      - 流式入湖: scenarios/streaming-ingestion.md
-      - 离线训练数据流水线: scenarios/offline-training-pipeline.md
-      - Feature Serving: scenarios/feature-serving.md
-      - Real-time Lakehouse: scenarios/real-time-lakehouse.md
-      - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
-      - 欺诈检测 · 风险控制: scenarios/fraud-detection.md
-      - CDP · 用户分群: scenarios/cdp-segmentation.md
-      - Agentic 工作流: scenarios/agentic-workflows.md
-      - Text-to-SQL 平台: scenarios/text-to-sql-platform.md
-      - 即席探索 · Notebook: scenarios/ad-hoc-exploration.md
-      - 经典 ML 预测: scenarios/classical-ml.md
+      - BI · 分析:
+          - BI on Lake: scenarios/bi-on-lake.md
+          - 即席探索 · Notebook: scenarios/ad-hoc-exploration.md
+      - RAG · AI:
+          - RAG on Lake: scenarios/rag-on-lake.md
+          - Agentic 工作流: scenarios/agentic-workflows.md
+          - Text-to-SQL 平台: scenarios/text-to-sql-platform.md
+          - 多模检索流水线: scenarios/multimodal-search-pipeline.md
+      - 流 · 实时:
+          - 流式入湖: scenarios/streaming-ingestion.md
+          - Real-time Lakehouse: scenarios/real-time-lakehouse.md
+          - CDP · 用户分群: scenarios/cdp-segmentation.md
+          - 欺诈检测 · 风险控制: scenarios/fraud-detection.md
+      - ML · 推荐:
+          - 离线训练数据流水线: scenarios/offline-training-pipeline.md
+          - Feature Serving: scenarios/feature-serving.md
+          - 经典 ML 预测: scenarios/classical-ml.md
+          - 推荐系统 · 搜索 · 发现: scenarios/recommender-systems.md
   - 学习路径:
       - learning-paths/index.md
       - 一周新人路径: learning-paths/week-1-newcomer.md
