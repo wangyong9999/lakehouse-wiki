@@ -53,15 +53,15 @@ status: stable
 | Commit 语义 | 表锁 | CAS 返回 409 冲突重试 |
 | 生态 | 逐渐淘汰 | 所有主流引擎都支持 |
 
-### 工业现状（2024-2025）
+### 工业现状（2024-2026）
 
-- **Snowflake** 开源 **Apache Polaris** 作为参考实现
-- **Databricks** 把 **Unity Catalog** 部分开源（也兼容 Iceberg REST）
-- **Tabular**（Ryan Blue 团队）商业化托管 REST Catalog
-- **Nessie** 既有自有 API 也暴露 Iceberg REST
-- **Gravitino** 作为元数据统一层，也实现 Iceberg REST
+- **Snowflake** 2024-08 开源 **Apache Polaris** 作为参考实现（2026-Q2 仍孵化 · 1.3.0-incubating）
+- **Databricks** 2024-06 把 **Unity Catalog** 核心 OSS（LF AI & Data 沙箱）· 商业版兼容 Iceberg REST
+- **Tabular**（Ryan Blue 团队）· **2024-06 被 Databricks 收购** · 原 Tabular 商业服务并入 Databricks；Iceberg 生态权力结构转折事件——Ryan Blue 等核心作者转向 Databricks，Iceberg REST spec 演进话语权重心位移
+- **Nessie** 既有自有 API 也暴露 Iceberg REST（Git-like 能力是差异化）
+- **Apache Polaris / Unity / Nessie / Gravitino** 的 Iceberg REST 兼容度参差——见下"兼容度矩阵"段
 
-REST Catalog 已成**Iceberg 生态的新默认**。
+REST Catalog 已成**Iceberg 生态的新默认**；**Iceberg 协议本身仍在 Apache 主导下中立演进**，但 Databricks/Snowflake 的商业推动加速了 spec 能力（OAuth2 · Vended Credentials · Scan Planning · Multi-table Commit）。
 
 ## 2. 协议深挖
 

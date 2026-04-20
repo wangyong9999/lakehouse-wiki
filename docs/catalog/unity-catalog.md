@@ -3,19 +3,19 @@ title: Unity Catalog · 多模态数据 + AI 资产统一目录
 type: system
 depth: 资深
 level: S
-last_reviewed: 2026-04-18
-applies_to: Unity Catalog OSS 0.2+（2024 开源）· Databricks Unity Catalog（商业）
+last_reviewed: 2026-04-20
+applies_to: Unity Catalog OSS 0.3-0.5（LF AI & Data 沙箱项目）· Databricks Unity Catalog（商业托管）
 tags: [catalog, governance, multimodal, ai-assets]
 category: catalog
 repo: https://github.com/unitycatalog/unitycatalog
 license: Apache-2.0
-status: stable
+status: preview
 ---
 
 # Unity Catalog
 
 !!! tip "一句话定位"
-    Databricks 开源的**多模态数据与 AI 资产统一目录**。不只是"表注册中心"——还管 **ML 模型**、**向量索引**、**Function**、**Volume**（非结构化文件）。把"数据治理 + 血缘 + 权限"作为一等公民，兼容 **Iceberg REST** 让非 Databricks 引擎也能消费。
+    Databricks 开源的**多模态数据与 AI 资产统一目录**。不只是"表注册中心"——还管 **ML 模型**、**向量索引**、**Function**、**Volume**（非结构化文件）。把"数据治理 + 血缘 + 权限"作为一等公民，兼容 **Iceberg REST** 让非 Databricks 引擎也能消费。**OSS 版 2024-06 Data+AI Summit 发布 · 提交给 LF AI & Data（沙箱项目）· 仍是 0.x 系列**。
 
 !!! abstract "TL;DR"
     - **三层命名**：`catalog.schema.resource`（资源可以是 table/model/function/volume/index）
@@ -23,8 +23,11 @@ status: stable
     - **细粒度权限**：行列级、tag-based、动态视图
     - **列级血缘**（Lineage）：跨引擎追溯
     - **开放协议**：Iceberg REST / Delta Sharing 双向兼容
-    - **开源 vs 商业**：OSS 2024 开源了核心；治理高级功能仍在 Databricks
+    - **开源 vs 商业 · 重要区分**：
+        - **UC OSS**（2024-06 开源）· LF AI & Data 沙箱项目 · 仍 0.x · 核心 Catalog API + 基础 RBAC
+        - **Databricks UC**（商业托管）· 完整功能 · 列级血缘 + 行级过滤 + Delta Sharing 托管 + AI 治理
     - **战略定位**：从"Catalog"升级到"**AI-native 数据治理平面**"
+    - **2024-06 Tabular 被 Databricks 收购对 Iceberg/UC 生态的影响**：Iceberg REST spec 话语权向 Databricks 集中；UC 对 Iceberg 的支持进一步深化
 
 ## 1. 它解决什么 · 从 HMS 到治理平面
 

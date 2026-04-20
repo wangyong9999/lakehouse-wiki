@@ -3,27 +3,28 @@ title: Apache Polaris · Snowflake 开源 Iceberg Catalog
 type: system
 depth: 资深
 level: A
-last_reviewed: 2026-04-18
-applies_to: Apache Polaris 0.9+ / 1.0 · Snowflake Open Catalog (商业托管)
+last_reviewed: 2026-04-20
+applies_to: Apache Polaris 1.3-incubating (2026-01) · Snowflake Open Catalog (商业托管)
 tags: [catalog, iceberg, rest, snowflake]
 category: catalog
 repo: https://github.com/apache/polaris
 license: Apache-2.0
-status: stable
+status: preview
 ---
 
 # Apache Polaris
 
 !!! tip "一句话定位"
-    **Snowflake 2024 开源的 Iceberg REST Catalog 参考实现**。范围聚焦：**协议纯净 + 权限模型 + 多云凭证代签发**。不做向量、不做模型、不做多模资产——那些交给上层。2024.07 贡献给 Apache 孵化。**和 Unity Catalog 构成 2024-2025 Catalog 生态的两大开源选项**。
+    **Snowflake 开源的 Iceberg REST Catalog 参考实现**。范围聚焦：**协议纯净 + 权限模型 + 多云凭证代签发**。不做向量、不做模型、不做多模资产——那些交给上层。**2024-08-09 进入 Apache 孵化 · 截至 2026-Q2 仍在孵化**（1.3.0-incubating 2026-01 发布）。与 Unity Catalog OSS 构成 2024-2026 Catalog 生态两大开源选项。
 
 !!! abstract "TL;DR"
     - **定位**：纯净的 Iceberg REST Catalog + RBAC 权限
-    - **出身**：Snowflake 2024 开源（先叫 Open Catalog）→ Apache Incubating
-    - **核心能力**：Iceberg REST v1 协议 + Credential Vending + 多云后端
+    - **出身时间线**：Snowflake 2024-06 宣布 Open Catalog → 2024-08-09 捐献 Apache 孵化 → 2026-01 发布 1.3.0-incubating（仍孵化中）
+    - **核心能力**：Iceberg REST v1 协议 + Credential Vending（含 2026 新增 SigV4 / KMS per-catalog / 位置限制） + 多云后端 + Generic Table（1.3 GA · 支持非 Iceberg 表元数据）
     - **不做**：向量表 / 模型注册 / 血缘 / Volume（留给上层）
     - **对比 Unity**：Polaris 纯净 + Iceberg-first；Unity 全栈 + 多模资产
     - **对比 Nessie**：Polaris 无 Git-like 分支；Nessie 专做分支工作流
+    - **成熟度声明**：**仍孵化期** · 生产采用建议用 Snowflake Open Catalog 托管版本或跟紧上游发版
 
 ## 1. 它解决什么
 
@@ -243,9 +244,21 @@ polaris grant TABLE_READ_DATA on table prod.sales.orders to catalog-role read_on
 
 ### 成熟度
 
-- **Snowflake Open Catalog（商业托管）**：Snowflake 客户生产可用
-- **Apache Polaris 开源**：2024.07 贡献 Apache，**仍是孵化期**
-- 企业自部署案例还少
+- **Snowflake Open Catalog（商业托管）**：Snowflake 客户生产可用 · 基于上游 Polaris 代码但自带商业 SLA
+- **Apache Polaris 开源**：2024-08-09 进入 Apache 孵化 · 1.3.0-incubating（2026-01）· **仍孵化中**，朝毕业推进
+- 企业自部署案例仍在增加；大多数生产选 Snowflake 托管
+
+### Open Catalog（商业） vs Apache Polaris（OSS）的关系
+
+| 维度 | Snowflake Open Catalog | Apache Polaris |
+|---|---|---|
+| 代码基础 | 基于上游 Apache Polaris | 社区主干 |
+| 同步延迟 | 通常 1-2 个版本 | 实时 |
+| 支持 SLA | Snowflake 商业支持 | 社区 |
+| 使用门槛 | 一键开通 · 按量计费 | 自部署 · 运维自担 |
+| 使用场景 | Snowflake 客户 + 生产重负载 | 自主可控 + OSS 栈 + 实验性 |
+
+**选择原则**：生产重负载选 Open Catalog；自主可控 + 愿意跟上游选 Apache Polaris OSS。
 
 ### Polaris vs Unity 选择的微妙
 
