@@ -312,3 +312,5 @@ class TextToSQLAgent:
 
 - [业务场景全景](business-scenarios.md) · [BI on Lake](bi-on-lake.md) · [Agentic Workflows](agentic-workflows.md)
 - [RAG](../ai-workloads/rag.md) · [MCP](../ai-workloads/mcp.md) · [向量数据库](../retrieval/vector-database.md)
+- [BI × LLM](../bi-workloads/bi-plus-llm.md) · BI 视角的 LLM 入口 · 本页是场景编排对照
+- [语义层](../bi-workloads/semantic-layer.md) · Text-to-SQL 经 SL 中介是 2026 主流路径

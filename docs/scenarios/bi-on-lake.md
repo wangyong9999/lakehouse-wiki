@@ -402,6 +402,7 @@ flowchart LR
 - 底座：[湖表](../lakehouse/lake-table.md) · [Iceberg](../lakehouse/iceberg.md) · [Paimon](../lakehouse/paimon.md)
 - 引擎：[Trino](../query-engines/trino.md) · [Spark](../query-engines/spark.md) · [DuckDB](../query-engines/duckdb.md)
 - 对比：[计算引擎对比](../compare/compute-engines.md) · [OLAP 加速副本对比](../compare/olap-accelerator-comparison.md)
+- 机制章节：[BI 负载](../bi-workloads/index.md) · [OLAP 建模](../bi-workloads/olap-modeling.md) · [语义层](../bi-workloads/semantic-layer.md) · [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md) · [仪表盘 SLO](../bi-workloads/dashboard-slo.md) · [BI × LLM](../bi-workloads/bi-plus-llm.md)
 - 业务：[业务场景全景](business-scenarios.md) · [CDP / 用户分群](cdp-segmentation.md)
 
 ## 延伸阅读

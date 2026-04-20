@@ -25,10 +25,12 @@ hide:
 
 ## BI 核心
 
-- [OLAP 建模](../bi-workloads/olap-modeling.md) —— 星型 / 雪花 / 宽表 / Data Vault
-- [**语义层 · Semantic Layer**](../bi-workloads/semantic-layer.md) ⭐ —— dbt / Cube / LookML 指标中台，BI 近年最大演进
-- [物化视图](../bi-workloads/materialized-view.md)
-- [查询加速](../bi-workloads/query-acceleration.md) —— Zone Maps / Sort / Z-order
+- [OLAP 建模](../bi-workloads/olap-modeling.md) —— 星型 / 雪花 / 宽表 / Data Vault / Galaxy / VARIANT
+- [**语义层 · Semantic Layer**](../bi-workloads/semantic-layer.md) ⭐ —— dbt / Cube / LookML 指标中台 · LLM × SL
+- [物化视图](../bi-workloads/materialized-view.md) —— IVM · Query Rewrite · Iceberg MV
+- [查询加速](../bi-workloads/query-acceleration.md) —— Zone Maps / Sort / Z-order / Puffin / 加速副本
+- [**仪表盘 SLO**](../bi-workloads/dashboard-slo.md) ⭐ —— 并发/延迟/新鲜度工程
+- [**BI × LLM**](../bi-workloads/bi-plus-llm.md) ⭐ —— 2026 变革 · Genie/Cortex Analyst/Tableau Pulse
 - [BI on Lake 场景](../scenarios/bi-on-lake.md)
 
 !!! tip "你要不要当 Analytics Engineer"
