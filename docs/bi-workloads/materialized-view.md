@@ -1,10 +1,14 @@
 ---
-title: 物化视图（Materialized View）
+title: 物化视图 · IVM / Query Rewrite / Iceberg MV
 type: concept
-tags: [bi, mv, optimization]
-aliases: [MV, Materialized View]
-related: [query-acceleration, olap-modeling]
-systems: [iceberg, starrocks, trino, spark]
+depth: 资深
+level: A
+last_reviewed: 2026-04-20
+applies_to: Iceberg MV spec（incubating）· Delta MV · StarRocks/Doris MV · Trino MV · Materialize · Paimon
+tags: [bi, mv, optimization, ivm, query-rewrite]
+aliases: [MV, Materialized View, 物化视图, IVM]
+related: [query-acceleration, olap-modeling, semantic-layer]
+systems: [iceberg, delta, paimon, starrocks, trino, spark, materialize]
 status: stable
 ---
 
