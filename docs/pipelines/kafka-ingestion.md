@@ -16,7 +16,8 @@ status: stable
 
 !!! abstract "TL;DR"
     - Kafka 解耦**上游突发吞吐**与**下游入湖节奏**
-    - **Flink CDC 2.x 可以直接对接 MySQL / PG / Mongo**，不一定非走 Kafka；但生产环境通常仍留 Kafka 做缓冲和多消费者
+    - **Flink CDC 3.x Pipeline**（3.1 起进入 Apache Flink 主线）可以直接对接 MySQL / PG / Mongo 等，不一定非走 Kafka；但生产环境通常仍留 Kafka 做缓冲和多消费者 · 详见 [CDC 内核](cdc-internals.md)
+    - **不想自建 Kafka+Flink 栈**？考虑 [托管数据入湖](managed-ingestion.md)（Airbyte / Fivetran / SeaTunnel / AWS DMS）
     - Paimon 直接消费 Kafka topic 时是一条非常短的链路
     - **Schema Registry 必须配套**，否则 schema 变化会让整条流崩
 

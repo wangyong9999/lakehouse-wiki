@@ -133,7 +133,10 @@ DataStream<Event> stream = env.fromSource(...,
 - **CDC 入湖的"新鲜度"** = Watermark 推进速度
   - Debezium / Flink CDC 给每条消息打 `source.ts_ms`
   - Flink 按这个 ts_ms 推进 Watermark
-  - **commit 触发 ≠ watermark**：Paimon / Iceberg 的 commit 是由 **Flink checkpoint 完成**触发的（每次成功 checkpoint 做一次原子 commit），不是 watermark。watermark 决定的是**下游 window emission** 和**延迟数据怎么处理**，不是湖表提交节奏
+  - **commit 触发 ≠ watermark · 两者分开看**：
+      - **commit 节奏**由 **Flink checkpoint 决定**——每次 checkpoint 成功 · Flink 的 `TwoPhaseCommitSinkFunction` 和 Paimon / Iceberg sink 完成原子 commit（详见 [管线韧性 · 端到端 Exactly-once](pipeline-resilience.md)）
+      - **Watermark 决定**的是：下游**窗口触发**（`window end ≤ watermark` 才 emit）· **延迟数据处理**（超过 watermark 的 event 走 side output）· **SQL 事件时间聚合**的正确性
+      - 两者**都依赖 checkpoint interval**（commit 周期 = checkpoint 周期 · 通常 30s-5min）· 但解决**不同问题** · 别混为一谈
 - **Paimon Changelog Producer 的 `lookup` 模式** 对 watermark 对齐敏感（需要等同一 key 的 change 到齐后再 lookup 生成完整 changelog）
 - **Iceberg 流式读（incremental_read）** 基于 **snapshot ID 范围**（`start-snapshot-id` / `end-snapshot-id`）定位增量，**不靠上游 watermark 保证完整性**。snapshot chain 本身就是增量读的真相源
 

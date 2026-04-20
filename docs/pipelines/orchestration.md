@@ -20,7 +20,7 @@ status: stable
     - **Prefect**：开发体验好、Python 原生
     - **Flyte / Argo Workflows**：ML / K8s 原生
     - **Temporal**：流程编排（workflow），和数据管线略不同定位
-    - **选型要看团队 "声音" 大小**：现有 Spark / Flink 栈偏 Airflow；ML 重 Dagster / Flyte；K8s 重 Argo
+    - **选型基于三维度**：**现有技术栈**（Spark/Flink 栈偏 Airflow · K8s 原生偏 Argo）· **ML 比例**（ML 重选 Dagster / Flyte 的 asset / type 模型）· **团队 Python 成熟度**（Prefect 上手最快）
 
 ## 为什么要编排系统
 
@@ -151,9 +151,10 @@ def dwd_orders(orders):
 
 ### 4. 回填策略
 
-- 业务表按 `partition_date` 回填
-- 流式入湖不要用编排系统"回填"—— Flink 作业本身持有 state
-- 回填一批分区时限并发，避免下游压垮
+- **批业务表** · 按 `partition_date` 回填 · 编排系统是正确工具
+- **流式入湖作业** · **不要用编排系统回填**——Flink 作业本身持有 state · 正确做法是 **Flink savepoint 回退 + Kafka offset 重置**（详见 [管线韧性 · Backfill](pipeline-resilience.md)）
+- 编排系统回填流作业会导致**双写**（原流作业 + 回填作业并行跑）· 数据重复事故常见源
+- 回填一批分区要**限并发**（`max_active_runs`）· 避免下游压垮
 
 ### 5. 和 Catalog 集成
 

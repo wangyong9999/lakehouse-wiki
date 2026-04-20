@@ -151,6 +151,20 @@ SELECT * FROM mysql_snapshot_dump;
 
 Paimon 的 `dynamic-bucket` 模式在初始化时特别有用——写入时自动决定分桶，不要预估分桶数。
 
+### Paimon `bucket` vs Iceberg `hidden partitioning` 对照
+
+初始化装载时两家的分区/分桶策略**理念不同**：
+
+| 维度 | Paimon | Iceberg |
+|---|---|---|
+| **分组粒度** | **Partition + Bucket** 双层（粗+细）| 纯 **Partition**（hidden transforms）|
+| **细粒度策略** | Bucket 按主键 hash · 决定**并行写**和**合并粒度** | 分区 transform（`bucket(N, col)` / `days(ts)` 等）· 决定**剪枝粒度** |
+| **初始化灵活性** | **`dynamic-bucket`** 模式写入时自动定桶数 · 免预估 | 分区 spec 改动需 `PARTITION SPEC` evolution（协议层支持演化 · 数据不动）|
+| **失败回退** | 错了改 bucket 数要 rescale | 错了改 spec 不影响历史数据（见 Iceberg Partition Evolution）|
+| **初装建议** | 从 16 bucket 起 · 或用 dynamic | 先小粒度分区试跑 · 再按查询路径 evolve |
+
+**结论**：初次装载时**两家都不用过度预估**——Paimon 有 dynamic-bucket 兜底；Iceberg 有 partition evolution 事后可改。详见 [湖仓表格式 · Partition Evolution](../lakehouse/partition-evolution.md)。
+
 ## 常见陷阱
 
 - **装载时关闭 compaction → 小文件海啸**
