@@ -2,6 +2,8 @@
 title: Kafka 到湖
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: [streaming-upsert-cdc, paimon]
 tags: [pipelines, kafka, cdc, ingestion]
 related: [streaming-upsert-cdc, paimon, flink]
@@ -63,6 +65,20 @@ Flink CDC 3.x 确实可以直连数据库 binlog → 湖表，不经 Kafka。什
 - **重放**：Kafka 可保留 N 天，作业出 bug 时重放修复
 - **突发削峰**：业务高峰的瞬时吞吐由 Kafka 承接
 - **解耦升级**：Kafka 稳在那，上下游独立变更
+
+### 什么时候 **不** 应该用 Kafka · 平衡判断
+
+"生产上通常还是加 Kafka" 是企业级默认——但**小团队 / 单一场景下 · Kafka 是过度架构**。以下信号意味着**不应该**引入 Kafka：
+
+| 信号 | 为什么 |
+|---|---|
+| **只有 1 个 sink · 无多下游分发需求** | Flink CDC Pipeline 直连 source → sink · 少 1 套集群（[模式 A](pipeline-patterns.md)）|
+| **团队没有 Kafka 运维能力** | Kafka 集群 · broker · retain 策略 · Schema Registry · 至少 0.5 FTE 专职 |
+| **吞吐小 + 延迟要求不严** | Airbyte / Fivetran / AWS DMS 等[托管方案](managed-ingestion.md)成本更低（[模式 D](pipeline-patterns.md)）|
+| **不需要"回放修复"能力** | 从 source DB 重放 CDC 一样可以 · Kafka retain 不是唯一路径 |
+| **总数据量小（GB 级）** | 规模撑不起 Kafka 集群成本 |
+
+**结论**：Kafka 是**正确默认**但**不是唯一答案**。生产前诚实评估"多下游 + 回放 + 削峰 + 解耦"这四个需求，**如果 < 2 项强需求 · 直接 Flink CDC 直入湖（模式 A）或托管路径（模式 D）更合理**。
 
 ## 关键工程决策
 

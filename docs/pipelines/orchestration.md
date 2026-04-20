@@ -2,6 +2,8 @@
 title: 编排系统概览
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: []
 tags: [pipelines, orchestration, airflow, dagster]
 related: [streaming-ingestion, embedding-pipelines]

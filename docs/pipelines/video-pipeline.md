@@ -2,6 +2,8 @@
 title: 视频管线
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: [image-pipeline, multimodal-embedding]
 tags: [pipelines, multimodal, video]
 related: [image-pipeline, audio-pipeline, multimodal-embedding]

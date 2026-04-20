@@ -2,6 +2,8 @@
 title: 音频管线
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: [multimodal-embedding]
 tags: [pipelines, multimodal, audio, asr]
 related: [video-pipeline, multimodal-embedding]

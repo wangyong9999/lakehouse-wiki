@@ -2,6 +2,8 @@
 title: 图像管线
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: [multimodal-data-modeling, multimodal-embedding]
 tags: [pipelines, multimodal, image]
 related: [multimodal-embedding, multimodal-data-modeling, lake-plus-vector]

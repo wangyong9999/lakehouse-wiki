@@ -73,6 +73,18 @@ status: stable
 
 ## 2. 五大托管路径
 
+!!! warning "先分清 4 类 · 不要混排横比"
+    这 5 个产品**不是同一类东西**——错误横比会导致错误 shortlist：
+
+    | 类别 | 代表 | 本质 |
+    |---|---|---|
+    | **SaaS EL(T)** | Fivetran · Airbyte Cloud | 商业托管服务 · 连接器 + 运行时都由厂商担 · 按 MAR/用量计费 |
+    | **OSS 集成框架** | Airbyte OSS · Apache SeaTunnel | 开源框架 · 自部署 · 连接器开源 + 运行时自运维 |
+    | **文件增量发现 / 落湖** | Databricks Auto Loader | **不是 DB log-based CDC** · 是检测对象存储新文件并增量加载 · Databricks 平台能力 |
+    | **DB CDC 迁移工具** | AWS DMS | 数据库迁移服务 · log-based CDC · AWS 原生 |
+
+    **选型时要先选类别再选产品**——比如"我需要 DB CDC"时对标 AWS DMS / 自建 Debezium · 不要和 Auto Loader 对比（后者根本不做 log-based CDC）。
+
 ### Airbyte · OSS + Cloud
 
 - **定位** · 开源 + 托管商业化并行 · 社区路径

@@ -2,6 +2,7 @@
 title: 文档管线
 type: concept
 depth: 进阶
+level: A
 prerequisites: [rag, multimodal-data-modeling]
 tags: [pipelines, document, ocr, rag]
 related: [rag, rag-evaluation, image-pipeline]

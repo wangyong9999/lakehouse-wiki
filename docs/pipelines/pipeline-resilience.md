@@ -31,6 +31,8 @@ status: stable
     - **DLQ · 脏数据对策** · Poison pill 隔离 · 幂等重试 · 失败事件归档
     - **Backfill 正确做法** · Flink savepoint 回退 + offset 重置 · **不是** Airflow 重跑流作业
     - **Backpressure** · 识别瓶颈段 + 针对性扩容
+    - **Cutover / Handoff** · 生产最大事故面 · 4 类交接点（bulk→CDC · backlog 恢复 · DLQ 回放 · schema 穿多下游）
+    - **可观测性契约** · 8 个 SLI · 强制 vs 可选 · 自动降级触发条件
 
 ## 1. 端到端 Exactly-once · 三方握手
 
@@ -240,7 +242,136 @@ Source → Parse → Transform → Sink
 | **State 太大** | 换 RocksDB backend · 加 TTL · 检查 key 分布（防热点）|
 | **Shuffle 数据倾斜** | 加盐打散 key · 两阶段聚合 |
 
-## 6. 陷阱
+## 6. Cutover / Handoff · 管线最大的事故面
+
+**观察**：生产中**最容易翻车的不是某个组件坏掉** · 而是**状态转换点**——全量切增量 / Kafka backlog 恢复 / DLQ 回放 / schema 演进穿多下游。这一节把这些交接点立成一等主题。
+
+### 四个关键 Handoff
+
+**Handoff 1 · Bulk → CDC 切换**（模式 C 的核心难点）
+
+```
+Phase 1: Bulk 装载(全量 snapshot)
+        ↓
+Handoff: 对齐 source DB 的 binlog offset / WAL LSN
+        ↓
+Phase 2: CDC 增量(从 handoff offset 开始)
+```
+
+**陷阱**：
+- **binlog 已回收**——源 DB binlog retain 太短 · bulk 期间 offset 就被清 · 切换失败
+- **重叠区处理不当**——snapshot 和 binlog 有重叠（snapshot 读过的行 · binlog 里又有 update）· 不去重会双写
+- **业务双写**——切换期间 application 同时写老系统和新系统 · 数据不一致
+
+**正确做法**：
+1. 启动 bulk 前 · 确认源 DB binlog retain > 预估 bulk 时间 × 2
+2. bulk 开始时**立即**记录 binlog offset / WAL LSN
+3. bulk 完成后 · 从记录的 offset 开始 CDC · **不是** 当前最新 offset
+4. 重叠区依赖 Flink CDC / Debezium 的 watermark 对齐去重
+5. 业务切换窗口短一点 · 用 primary key + upsert 语义容忍瞬时双写
+
+**详见**：[Bulk Loading · 和流式入湖的配合](bulk-loading.md) · [CDC 内核 · snapshot+increment](cdc-internals.md)
+
+**Handoff 2 · 长时间停机后的 Kafka Backlog 恢复**
+
+作业 crash / 集群升级 / 机房切换 · 下游消费者停了几小时：
+
+```
+恢复后: offset-lag 爆表 · 下游要追赶
+  → source 吞吐 + 下游处理能力能不能撑住?
+  → checkpoint 间隔要不要临时调大?
+  → sink 的 commit 频率要不要临时降?
+```
+
+**策略**：
+- **追赶期缩减 sink commit 频率**（例如 1min → 10min）· 减少 metadata 冲击
+- **关闭非必要 transform**（例如调试日志 / side output）
+- **独立恢复作业** · 和主流作业并行不共资源 · 追上后切回
+
+**Handoff 3 · DLQ 回放（poison pill 修复后重新入主流）**
+
+DLQ 里的脏消息经人工修复后重新回放到主流：
+
+```
+DLQ 中脏消息 → 修复脚本 → 写入主 Kafka topic(或触发重跑)
+                            ↓
+                        保证幂等(主键 upsert · 或 unique event id)
+```
+
+**陷阱**：
+- **不幂等**——重放产生主流的重复
+- **时序错乱**——DLQ 消息原本时间早 · 回放时当作"当前时间" · event-time 逻辑错
+- **水位线后移**——历史消息回放触发晚窗口重算 · 下游受冲击
+
+**正确做法**：
+- 主流走 primary key upsert（Paimon PK 表 / Iceberg MERGE）保证幂等
+- 回放消息保留原 event-time · 通过 side output 或 replay-only topic 走
+- 下游预期"回放时段有窗口重算" · 不要在此期做关键决策
+
+**Handoff 4 · Schema Evolution 穿多下游**
+
+Debezium 检测到源 DB `ALTER TABLE` · 一条事件要穿透：
+
+```
+source DB → Debezium → Schema Registry → Kafka → Flink → Iceberg sink
+                                                         → Paimon sink
+                                                         → ES / 实时 sink
+```
+
+**挑战**：每个下游对 schema change 的支持度不同 · 一家 fail 就阻塞主流。
+
+**策略**（见上 **§2 Schema Evolution 传播**）：
+- Flink CDC `schema.change.behavior: try_evolve` 让不兼容的下游降级而非 fail
+- 多 sink 场景优先考虑 Pipeline 能否按 sink 分叉（部分支持 · 部分跳过）
+
+## 7. 可观测性契约 · 应该盯什么 SLI
+
+**观察**：运维一条管线 · 光知道 "checkpoint 和重试" 不够——真正要回答的是 **"上线后盯哪些指标才算知道它活着"**。
+
+### 必须监控的 8 个 SLI
+
+| SLI | 描述 | 告警阈值参考 |
+|---|---|---|
+| **Source Lag** | source 最新 offset - consumer 已消费 offset | 流场景 > 1 min 告警 |
+| **End-to-End Freshness** | 数据入库时间 - 事件原生成时间（event-time）| SLA 违约前 30% 告警 |
+| **Commit 成功率** | 成功 commit 数 / 尝试 commit 数 | < 99% 告警 |
+| **Schema Error Rate** | schema 解析失败 / 总消息数 | > 0.1% 告警（pipeline 要人工介入）|
+| **DLQ Volume** | DLQ topic 消息数增长速率 | 持续 > 0 且**连续 N 分钟增长**告警（有漏网脏数据）|
+| **Replay / Backfill Backlog** | 正在补跑的数据量（offset 范围）| 手动任务 · 进度可视化而非阈值告警 |
+| **Checkpoint Duration** | 单次 checkpoint 从 start 到 ack 的时长 | > checkpoint interval 告警（表示追不上）|
+| **Sink Commit Latency** | sink 从 pre-commit 到 commit 的耗时 | P99 > 1min 告警（指针切换阻塞）|
+
+### 强制 vs 可选
+
+**强制监控**（不配就不能上生产）：
+- Source Lag · Commit 成功率 · Schema Error Rate · DLQ Volume
+
+**强烈推荐**：
+- End-to-End Freshness（SLA 的具体体现）
+- Checkpoint Duration
+
+**情境性**：
+- Replay Backlog · 只在 backfill 时看
+- Sink Commit Latency · 大 Iceberg 表 / 高频 commit 场景
+
+### 自动降级触发条件
+
+| 触发条件 | 自动响应 |
+|---|---|
+| Source Lag 持续 > 5 min | 扩 source parallelism · 告警 oncall |
+| DLQ Volume > threshold 且持续增 | 暂停主流 · 人工分析 dirty message 样本 |
+| Schema Error Rate > 1% | 暂停 · 不要带着错 schema 继续写湖表 |
+| Checkpoint Duration > 5 × interval | 说明 state 膨胀或 sink 阻塞 · 告警 |
+| Commit 成功率 < 95% | sink 级问题 · 告警 + 查 catalog 冲突 |
+
+### 和 ops/observability 的边界
+
+**本页 SLI 清单** · 针对 **管线本身**的运行时指标  
+[ops/可观测性](../ops/observability.md) · 讲 **湖表层**的可观测（表级 stats / query latency / 存储成本等）
+
+两层都要盯 · 互为补充。
+
+## 9. 陷阱
 
 - **以为 Exactly-once 自动得到** · 三方都要配置 · 漏一环就降级 at-least-once
 - **`schema.change.behavior` 设成 `exception`** · 一改字段 pipeline 就崩 · 生产用 `try_evolve`

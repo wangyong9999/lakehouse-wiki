@@ -2,6 +2,8 @@
 title: 事件时间 · Watermark · 乱序
 type: concept
 depth: 进阶
+level: A
+last_reviewed: 2026-04-20
 prerequisites: [oltp-vs-olap]
 tags: [foundations, streaming, flink, watermark]
 related: [flink, streaming-upsert-cdc, paimon, kafka-ingestion]
