@@ -139,6 +139,51 @@ nDCG = DCG / IDCG（理想 DCG）
 - 在**自家 Golden Set** 上评 · 见下 §4
 - 特别关注**业务长尾 query**（稀有词 / 专业术语 / 多意歧义）· 这是模型最容易翻车的地方
 
+### 多模评估 · 不要把文本 benchmark 结论外推
+
+!!! warning "MTEB / BEIR 主要评的是文本检索"
+    以上 benchmark 都是**文本为主**——**把文本结论直接外推到多模检索是典型错误**。多模评估有独立的挑战：
+
+- **跨模态 benchmark 不多 · 且偏差大**：
+  - **COCO Caption / Flickr30k** · 最常用的图文检索 benchmark · 但 caption 风格很工具化 · 和业务 query 分布差很远
+  - **MSCOCO Image-to-Text / Text-to-Image** · 对齐 benchmark · 但 1 图 × 5 caption 的设定和生产"1 图 × N 种业务描述"不同
+  - **MSR-VTT / MSVD** · 视频检索 benchmark · 2016-2019 构造 · 规模小 · 领域窄
+  - **AudioSet / Clotho** · 音频检索 benchmark · 但 caption 覆盖有限
+
+- **各模态组合的评估成熟度不均衡**：
+    - 图 ↔ 文 · 有 benchmark 但有偏差
+    - 视频 ↔ 文 · benchmark 数量少 · 多为实验室级别
+    - 音频 ↔ 文 · benchmark 规模小
+    - 图 ↔ 音 / 音 ↔ 视 等 · 几乎无 benchmark
+
+### 多模检索评估 · 业务驱动方法论
+
+**对"多模检索"章节**来说 · 评估应该按业务场景定义：
+
+| 多模场景 | 评估思路 | 典型指标 |
+|---|---|---|
+| **文搜图**（产品 / 素材） | 自家图文对 + 业务分类分桶 · 图像 recall 人工抽样 | Recall@10 + 点击率 |
+| **图搜图**（视觉相似） | 同类图对 + 专家标注 · "同款 / 相似 / 无关" 三级 | nDCG@10 |
+| **视频语义搜索** | 业务 query + 视频 shot 级相关性 · 视频标注**粒度和业务对齐**（见 [retrieval-granularity](retrieval-granularity.md)）| Hit Rate + 视频跳转位置准确率 |
+| **音频内容搜索**（播客 / 会议）| 关键词 + 音频段 · **优先评估 ASR 后的文本检索路径** | 句级 Recall + 说话人段定位准确 |
+| **多模 RAG**（检索 + LLM 回答）| 参见 [RAG 评估](../ai-workloads/rag-evaluation.md) · 检索层 + 生成层分开评 | 检索 Recall@K + RAG 端到端 faithfulness |
+
+### 多模评估的关键差异点
+
+**和文本检索评估的 5 个不同**：
+
+1. **相关性分级更难**——文本"相关/不相关"清晰 · 图"同款/相似/稍相似/无关"四级判断要视觉专家
+2. **多模态召回分布要监控**——纯看综合 Recall 看不到"文本路 100% 文本 · 图像路 0% 图像"的不平衡（见 [multimodal-retrieval-patterns §4 失败 3](multimodal-retrieval-patterns.md)）
+3. **粒度和评估绑定**——以 shot 还是 frame 为单位评估视频 · 决定了召回定义
+4. **对齐度 ≠ 检索质量**——benchmark 显示 CLIP 对齐 85% 不代表业务 Recall@10 是 85%（见 [multimodal-embedding 失败 5](multimodal-embedding.md)）
+5. **跨语言 / 跨文化**——英文 benchmark 的图文结论在中文业务里可能不成立
+
+### 多模 Golden Set 的特殊工程
+
+- **相关性需要视觉 / 听觉专家**——不是文本标注员能做的 · 标注成本更高
+- **分桶维度多**——除了 query 长度 / 类型 · 还要按**模态 · 视觉复杂度 · 场景**分
+- **业务 A/B 是最终裁判**——多模评估指标远未成熟 · 最好**指标 + 业务 A/B 双验证**
+
 ## 4. Golden Set 工程
 
 **Golden Set** = (query, relevant_doc_ids, relevance_level) 三元组集合 · 是所有评估的**真相源**。
