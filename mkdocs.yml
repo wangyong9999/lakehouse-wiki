@@ -192,13 +192,16 @@ nav:
       - pipelines/index.md
       - 事件时间 · Watermark: pipelines/event-time-watermark.md
       - 入湖模式:
+          - CDC 内核: pipelines/cdc-internals.md
           - Kafka 到湖: pipelines/kafka-ingestion.md
+          - 托管数据入湖: pipelines/managed-ingestion.md
           - Bulk Loading: pipelines/bulk-loading.md
       - 模态管线:
           - 图像管线: pipelines/image-pipeline.md
           - 视频管线: pipelines/video-pipeline.md
           - 音频管线: pipelines/audio-pipeline.md
           - 文档管线: pipelines/document-pipeline.md
+      - 管线韧性: pipelines/pipeline-resilience.md
       - 编排系统: pipelines/orchestration.md
       - 调度系统横比: compare/orchestrators.md
   - 查询引擎:
