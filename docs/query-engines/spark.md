@@ -235,13 +235,15 @@ WHERE d.year = 2024;
 
 ## 5. 性能数字
 
-### TPC-DS 100 (typical)
+### TPC-DS 100 (typical · 社区公开基准引用 · 非严格对齐)
 
-| 引擎 | 总时间 |
-|---|---|
-| Spark 3.5 + AQE (10 × 32 core) | 30-40 分钟 |
-| Databricks Photon | 10-15 分钟（闭源 C++ 引擎） |
-| Trino 450 (相同硬件) | 15-20 分钟 |
+| 引擎 | 总时间 | 硬件 |
+|---|---|---|
+| Spark 3.5 + AQE | 30-40 分钟 | 10 × 32 core worker |
+| Databricks Photon | 10-15 分钟 | 同规格 worker（闭源 C++ 引擎）|
+| Trino 450 | 15-20 分钟 | 同规格 coordinator + worker |
+
+**注**：TPC-DS 100 = 100GB scale · 上述是典型社区数据点；不同存储格式（Parquet / Iceberg）/ 网络 / JVM 调优 / 并行度差异都会显著影响结果——**不是绝对真理，选型对比前建议在自己环境复现**。
 
 ### 典型 ETL 吞吐
 

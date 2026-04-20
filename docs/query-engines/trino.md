@@ -91,7 +91,7 @@ SQL → Logical Plan → Distributed Plan (Stage DAG)
 **核心概念**：
 - **Stage** 之间用 **Exchange**（网络 shuffle）连
 - **Pipeline 执行**：数据流式地从 Scan → Filter → ... → Exchange，**不落盘**（与 Spark 不同）
-- **无 Fault Tolerance**（默认）：任一 Worker 挂 → 查询失败；**FTE 模式**（Trino 398+）可选
+- **无 Fault Tolerance**（默认）：任一 Worker 挂 → 查询失败；**FTE 模式**（Fault-Tolerant Execution · Trino 398+ 引入 · 近几版持续完善）可选
 
 ### Connector 架构（联邦查询的核心）
 
