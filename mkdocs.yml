@@ -173,13 +173,16 @@ nav:
           - Hive Metastore: catalog/hive-metastore.md
   - 查询引擎:
       - query-engines/index.md
-      - Trino: query-engines/trino.md
-      - Apache Spark: query-engines/spark.md
-      - Apache Flink: query-engines/flink.md
-      - DuckDB: query-engines/duckdb.md
-      - StarRocks: query-engines/starrocks.md
-      - ClickHouse: query-engines/clickhouse.md
-      - Apache Doris: query-engines/doris.md
+      - 纯查询引擎:
+          - Trino: query-engines/trino.md
+          - DuckDB: query-engines/duckdb.md
+      - 通用处理框架:
+          - Apache Spark: query-engines/spark.md
+          - Apache Flink: query-engines/flink.md
+      - MPP OLAP 数据库:
+          - StarRocks: query-engines/starrocks.md
+          - ClickHouse: query-engines/clickhouse.md
+          - Apache Doris: query-engines/doris.md
   - 数据管线:
       - pipelines/index.md
       - Kafka 到湖: pipelines/kafka-ingestion.md
