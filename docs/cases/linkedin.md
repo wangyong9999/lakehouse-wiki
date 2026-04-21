@@ -17,6 +17,13 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于 LinkedIn 公开博客 / 论文 / 技术分享。机制深挖见对应技术栈章（[pipelines/kafka-ingestion](../pipelines/kafka-ingestion.md) · [compare/streaming-engines](../compare/streaming-engines.md) · [ml-infra/feature-store](../ml-infra/feature-store.md) 等）· 本页讲"**历史 · 规模 · 取舍 · 教训 · 启示**"。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **LinkedIn 全栈视角**。**场景切面**在 scenarios/：
+    - [scenarios/recommender-systems](../scenarios/recommender-systems.md) §工业案例 · Venice + Feathr 推荐
+    - [scenarios/feature-serving](../scenarios/feature-serving.md) §工业案例 · Venice 在线特征
+    - [scenarios/fraud-detection](../scenarios/fraud-detection.md) §工业案例 · LinkedIn 内容安全推断
+    - [scenarios/cdp-segmentation](../scenarios/cdp-segmentation.md) §工业案例 · LinkedIn 用户分群推断
+
 !!! abstract "TL;DR"
     - **身份**：**开源界的重型卡车** · Kafka / Pinot / Samza / Venice / DataHub / Feathr / **OpenHouse** 全家桶诞生地
     - **2024 重大事件**：**OpenHouse 开源**（基于 Iceberg 的 OSS 湖仓管理层）+ **Feathr 捐 Apache**（2024 入 Incubator）+ **从 Hive 迁 Iceberg 大规模进行**

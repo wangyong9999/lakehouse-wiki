@@ -228,6 +228,28 @@ status: stable
 
 具体案例看各深度页 §5 关键组件和 §8 取舍。
 
+## 5.6 按 scenarios 场景找案例（场景-案例配对反向索引）
+
+**读者典型路径**：读 scenarios/X 业务页 · 想看工业案例 · 查这张表找哪家在 X 场景有值得学的做法。
+
+| scenarios 页 | 主推案例 + 哪家看哪部分 | 次要参考 |
+|---|---|---|
+| [scenarios/recommender-systems](../scenarios/recommender-systems.md) | [**Pinterest**](pinterest.md) §5.1 PinSage · §5.2 Pixie · [**阿里**](alibaba.md) §5.2 Flink + Paimon 推荐数据栈 · [**LinkedIn**](linkedin.md) §5.3 Venice | — |
+| [scenarios/rag-on-lake](../scenarios/rag-on-lake.md) | [**Databricks**](databricks.md) §5.3 UC + §5.6 AI Functions · [**Snowflake**](snowflake.md) §5.2 Cortex · §5.3 Cortex Search | [Netflix](netflix.md) · 内部 RAG 推断 |
+| [scenarios/bi-on-lake](../scenarios/bi-on-lake.md) | [**Databricks**](databricks.md) §5.4 Photon · §5.9 DBSQL · [**Snowflake**](snowflake.md) §5.1 VW · [**Netflix**](netflix.md) §5.1 Metacat + Trino/Iceberg | — |
+| [scenarios/fraud-detection](../scenarios/fraud-detection.md) | [**Uber**](uber.md) §5.2 Michelangelo · §5.3 Palette/Genoa | [LinkedIn](linkedin.md) 内容安全推断 |
+| [scenarios/cdp-segmentation](../scenarios/cdp-segmentation.md) | [**阿里**](alibaba.md) §5.3 Hologres HSAP | [LinkedIn](linkedin.md) 用户分群推断 |
+| [scenarios/agentic-workflows](../scenarios/agentic-workflows.md) | [**Databricks**](databricks.md) §5.10 Genie · [**Snowflake**](snowflake.md) §5.3 Cortex Agents 2025+ | — |
+| [scenarios/text-to-sql-platform](../scenarios/text-to-sql-platform.md) | [**Databricks**](databricks.md) §5.10 Genie · [**Snowflake**](snowflake.md) Cortex Analyst | [阿里](alibaba.md) 内部 Text-to-SQL 推断 |
+| [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md) | [**Pinterest**](pinterest.md) §5.5 多模 embedding 产线 · [**阿里**](alibaba.md) OpenSearch 向量 · [**Databricks**](databricks.md) §5.5 Vector Search | — |
+| [scenarios/offline-training-pipeline](../scenarios/offline-training-pipeline.md) | [**Uber**](uber.md) §5.2 Michelangelo · [**Netflix**](netflix.md) §5.4 Metaflow | — |
+| [scenarios/feature-serving](../scenarios/feature-serving.md) | [**LinkedIn**](linkedin.md) §5.3 Venice · [**Uber**](uber.md) §5.3 Palette/Genoa | — |
+| [scenarios/real-time-lakehouse](../scenarios/real-time-lakehouse.md) | [**阿里**](alibaba.md) §5.1 Paimon · §5.2 Flink CDC · [**Uber**](uber.md) §5.1 Hudi | — |
+| [scenarios/streaming-ingestion](../scenarios/streaming-ingestion.md) | [**LinkedIn**](linkedin.md) §5.1 Kafka · [**阿里**](alibaba.md) Flink CDC | — |
+
+**用法**：
+- 你想做 **X 场景** · 看 scenarios/X 是"怎么做"的 · 回来查这张表看"哪家怎么做的" · 点深度案例页看全栈上下文
+
 ## 6. 按问题找案例（反向索引）
 
 **"做 X 该学谁"**：

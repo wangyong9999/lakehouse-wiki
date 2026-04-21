@@ -17,6 +17,11 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     本页基于 Netflix 公开博客 / 论文 / 技术分享整理 · 按统一 12 节坐标系拆解 · **不复述机制原理**（机制见 [lakehouse/iceberg](../lakehouse/iceberg.md) 等技术栈 canonical）· 本页只讲"**历史 · 规模 · 取舍 · 教训 · 启示**"。数字和具体实现以各公司最新公开材料为准 · 本页有**时效性** · 按 ADR 0007 SOP 定期复检。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **Netflix 全栈视角**。**场景切面**在 scenarios/：
+    - [scenarios/bi-on-lake](../scenarios/bi-on-lake.md) §工业案例 · Netflix Iceberg + Trino BI
+    - [scenarios/offline-training-pipeline](../scenarios/offline-training-pipeline.md) §工业案例 · Netflix Metaflow
+
 !!! abstract "TL;DR"
     - **身份**：Apache Iceberg **诞生地**（2017 Ryan Blue）· 2026 仍是 Iceberg v3 spec 演进的核心贡献方（和 Apple / LinkedIn / Databricks 共推）
     - **规模量级**（来源：Netflix Tech Blog 系列文章 · 2023-2024 各次披露 · `[具体数字依年份公开程度差异大]`）：**10 万+** Iceberg 表 · **EB 级** S3 · **3M+** Presto 查询 / 日 · 10 万+ Spark 作业 / 日

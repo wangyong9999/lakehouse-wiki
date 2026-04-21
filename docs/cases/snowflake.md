@@ -17,6 +17,13 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于 Snowflake 博客 · 产品文档 · keynote 整理。机制深挖见 [catalog/polaris](../catalog/polaris.md) · [catalog/strategy](../catalog/strategy.md) · [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **Snowflake 商业平台全栈**。**场景切面**在 scenarios/：
+    - [scenarios/bi-on-lake](../scenarios/bi-on-lake.md) §工业案例 · Snowflake Data Cloud
+    - [scenarios/rag-on-lake](../scenarios/rag-on-lake.md) §工业案例 · Cortex RAG（数据不出栈）
+    - [scenarios/agentic-workflows](../scenarios/agentic-workflows.md) §工业案例 · Cortex Agents
+    - [scenarios/text-to-sql-platform](../scenarios/text-to-sql-platform.md) §工业案例 · Cortex Analyst
+
 !!! abstract "TL;DR"
     - **身份**：**云数仓一体化时代的开创者** · 2026 市值千亿级 · 和 Databricks 构成工业一体化平台"双雄"
     - **核心技术差异化**：**"SQL 为中心"的数仓 + AI 内嵌** · Cortex 让 SQL 直接调 LLM 成为这家公司最独特的产品定位

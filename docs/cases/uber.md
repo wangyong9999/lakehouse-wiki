@@ -17,6 +17,13 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于 Uber Engineering Blog / 开源项目 / 公开演讲整理。机制深挖见 [lakehouse/hudi](../lakehouse/hudi.md) · [ml-infra/mlops-lifecycle](../ml-infra/mlops-lifecycle.md) · [ml-infra/feature-store](../ml-infra/feature-store.md)。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **Uber 全栈视角**。**场景切面**在 scenarios/：
+    - [scenarios/fraud-detection](../scenarios/fraud-detection.md) §工业案例 · Uber 实时欺诈 + 图
+    - [scenarios/offline-training-pipeline](../scenarios/offline-training-pipeline.md) §工业案例 · Michelangelo
+    - [scenarios/feature-serving](../scenarios/feature-serving.md) §工业案例 · Palette / Genoa
+    - [scenarios/real-time-lakehouse](../scenarios/real-time-lakehouse.md) §工业案例 · Hudi 流式湖仓
+
 !!! abstract "TL;DR"
     - **身份**：**实时 + ML 驱动的巨无霸** · 每分钟数千万 event · 每秒数百万 ML 决策
     - **核心开源贡献**：**Apache Hudi**（2019 TLP · 流式湖表先驱）· AthenaX（流 SQL）· Peloton（资源调度）· Jaeger（分布式 tracing）

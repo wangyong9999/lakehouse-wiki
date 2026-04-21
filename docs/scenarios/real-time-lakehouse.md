@@ -213,6 +213,42 @@ INSERT INTO paimon_orders SELECT * FROM source_orders;
 - [BI on Lake](bi-on-lake.md) —— 新鲜度要求高时这个场景就会变成本场景
 - [RAG on Lake](rag-on-lake.md) —— AI 侧，如果要求实时 RAG，就叠加这个场景
 
+## 工业案例 · 流式湖仓场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**流式湖仓场景**的独特做法。
+
+### 阿里巴巴 · Paimon + Flink CDC
+
+**核心特点**（见 [cases/alibaba §5.1-5.2](../cases/alibaba.md)）：
+- **Paimon LSM-tree 存储** · 为流式 upsert 优化（vs Iceberg Parquet 文件式）
+- **Flink CDC**（MySQL/PG/MongoDB/Oracle 原生 CDC source）
+- **Changelog Producer** 自动产 CDC · 下游消费增量
+- 双 11 规模：**数十万 TPS 订单 · 数百万 QPS 实时大屏** `[来源未验证]`
+
+**启示**：Paimon + Flink CDC 组合是**中国团队做流式湖仓最可复制的路径**。详见 [lakehouse/paimon](../lakehouse/paimon.md)。
+
+### Uber · Hudi（流式湖表第一代）
+
+**核心特点**（见 [cases/uber §5.1](../cases/uber.md)）：
+- **CoW / MoR 两种表类型**
+- **主键 Upsert** 原生（早于 Iceberg）
+- **Incremental Query** 下游消费只读新变更
+- 2016 内部 · 2019 ASF TLP · 第一代流式湖表
+
+**启示**：Hudi 思想（流批一体 · 增量消费）**被 Paimon 继承并现代化** · 2024+ 新建项目多选 Paimon · 存量 Hudi 保留。
+
+### 两家对比
+
+| 维度 | 阿里 Paimon | Uber Hudi |
+|---|---|---|
+| 设计重心 | LSM-tree · Flink 原生 | CoW/MoR · Spark 原生 |
+| 开源时间 | 2022 独立 · 2024 TLP | 2019 TLP |
+| 社区活跃度 | 2024+ 上升快 | 2020+ 稳定但增长慢 |
+| 引擎中立 | Flink-first · Spark 也行 | Spark-first · Flink 支持在补 |
+
+---
+
 ## 反模式
 
 - **既要端到端毫秒又要湖仓成本便宜** → 选 Kafka + ClickHouse / Pinot 独立栈。湖仓不是毫秒级系统

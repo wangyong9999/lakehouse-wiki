@@ -17,6 +17,11 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于 Pinterest Engineering Blog · 论文（PinSage SIGKDD 2018 · Pixie SIGMOD 2018）· 公开演讲整理。机制深挖见 [retrieval/multimodal-embedding](../retrieval/multimodal-embedding.md) · [scenarios/recommender-systems](../scenarios/recommender-systems.md)。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **Pinterest 业务系统全栈**（推荐场景深度）。**场景切面**在 scenarios/：
+    - [scenarios/recommender-systems](../scenarios/recommender-systems.md) §工业案例 · PinSage + Pixie 推荐切面
+    - [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md) §工业案例 · Pinterest 多模检索切面
+
 !!! abstract "TL;DR"
     - **身份**：**多模推荐系统工业代表** · "**图(Pin) + 文 + 用户行为**"融合推荐最成熟案例
     - **核心技术贡献**：**PinSage**（SIGKDD 2018 · 大规模 GNN 推荐）· **Pixie**（SIGMOD 2018 · 大规模实时 random walk 推荐）

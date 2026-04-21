@@ -86,6 +86,27 @@ last_reviewed: 2026-04-21
 | 11 | 对团队的启示（标观点 warning）| 主张分层 |
 | 12 | 技术博客 / 论文 + 相关章节 | 延伸入口 |
 
+## 2.5 cases/ 和 scenarios/ 的配对关系（S33 重要）
+
+!!! success "本章 = 全栈企业视角 · scenarios/ = 业务场景切面视角 · 两者配对阅读"
+    2026-Q2 S33 建立 **场景-案例强配对**：
+    
+    | 视角 | 章 | 定位 |
+    |---|---|---|
+    | **全栈企业视角** | 本章 cases/ | "这家公司做数据平台的全栈 · 历史 · 取舍 · 失败 · 启示" |
+    | **业务场景切面** | [scenarios/](../scenarios/index.md) | "在 X 业务场景下 · 这家公司怎么做的 · 关键数字 · 踩坑 · 和本 wiki 推荐路径对比" |
+    
+    **每家案例在哪些 scenarios 有切面分析**：
+    - [Netflix](netflix.md) → [bi-on-lake](../scenarios/bi-on-lake.md) · [offline-training-pipeline](../scenarios/offline-training-pipeline.md)
+    - [LinkedIn](linkedin.md) → [recommender-systems](../scenarios/recommender-systems.md) · [feature-serving](../scenarios/feature-serving.md) · [fraud-detection](../scenarios/fraud-detection.md) · [cdp-segmentation](../scenarios/cdp-segmentation.md)
+    - [Uber](uber.md) → [fraud-detection](../scenarios/fraud-detection.md) · [offline-training-pipeline](../scenarios/offline-training-pipeline.md) · [feature-serving](../scenarios/feature-serving.md) · [real-time-lakehouse](../scenarios/real-time-lakehouse.md)
+    - [Pinterest](pinterest.md) → [recommender-systems](../scenarios/recommender-systems.md) · [multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
+    - [阿里巴巴](alibaba.md) → [cdp-segmentation](../scenarios/cdp-segmentation.md) · [real-time-lakehouse](../scenarios/real-time-lakehouse.md) · [recommender-systems](../scenarios/recommender-systems.md) · [multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
+    - [Databricks](databricks.md) → [bi-on-lake](../scenarios/bi-on-lake.md) · [rag-on-lake](../scenarios/rag-on-lake.md) · [agentic-workflows](../scenarios/agentic-workflows.md) · [text-to-sql-platform](../scenarios/text-to-sql-platform.md) · [multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
+    - [Snowflake](snowflake.md) → [bi-on-lake](../scenarios/bi-on-lake.md) · [rag-on-lake](../scenarios/rag-on-lake.md) · [agentic-workflows](../scenarios/agentic-workflows.md) · [text-to-sql-platform](../scenarios/text-to-sql-platform.md)
+    
+    **反向索引**（从场景找哪家案例）· 见 [studies.md §5.6](studies.md)。
+
 ## 3. 按问题找案例 · 反向索引
 
 **"做 X 该学谁"**（详见 [studies.md §5](studies.md)）：

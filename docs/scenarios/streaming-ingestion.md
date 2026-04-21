@@ -108,6 +108,38 @@ flowchart LR
 - **Compaction 跟进情况**（commit 堆积与合并比）
 - **DLQ（Dead Letter Queue）量**
 
+## 工业案例 · 流式入湖场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**流式入湖场景**的独特做法。
+
+### LinkedIn · Kafka 全家桶
+
+**核心做法**（见 [cases/linkedin §5.1](../cases/linkedin.md)）：
+- **Kafka 作核心事件总线** · 所有服务"生产方只写一次 · 消费方订阅"
+- **Brooklin** · 数据分发（Kafka → 其他系统）· 2017 开源
+- **Samza → Flink**（2020+）· 流处理
+- 规模：**7000+ Kafka brokers · 每日数百 PB 事件** `[来源未验证 · 量级参考]`
+
+**启示**：Kafka 作"**公司统一事件总线**"是流式入湖的**基础范式** · 不要让每个业务自己造。
+
+### 阿里巴巴 · Flink CDC + Kafka
+
+**核心做法**（见 [cases/alibaba §5.2](../cases/alibaba.md)）：
+- **Flink CDC**（阿里主导的开源贡献 · 2024+ 3.x 事实标准）
+- OLTP（MySQL / PG / OceanBase）→ Flink CDC → Paimon
+- 2024+ Fluss（流存储新思路 · 分析优化）探索
+
+**启示**：**Flink CDC 是 CDC 的事实标准** · Paimon 作流式湖表底座 · 中国团队首选组合。
+
+### 共同规律（事实观察）
+
+- 流式入湖的**设计模式** = 生产方 Kafka 写 + 消费方订阅 + 流处理落湖
+- CDC 是 OLTP 入湖的**核心能力**（Debezium / Flink CDC 是主流）
+- 详见 [pipelines/kafka-ingestion](../pipelines/kafka-ingestion.md) · [pipelines/cdc-internals](../pipelines/cdc-internals.md)
+
+---
+
 ## 相关
 
 - [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)

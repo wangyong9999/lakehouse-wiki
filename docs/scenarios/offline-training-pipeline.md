@@ -431,6 +431,40 @@ for epoch in range(10):
   - 增量：快但复杂、需严格对账
   - **中小团队用重新**、大厂用增量
 
+## 7.5 工业案例 · 离线训练流水线场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**离线训练流水线场景**的独特做法。
+
+### Uber · Michelangelo 的训练数据流水线
+
+**核心特点**：
+- **Palette / Genoa Feature Store** 作训练数据底座
+- **PIT Join 工程化**（见本页 §PIT）· Michelangelo 内置
+- **训推一致性**是 Michelangelo 核心卖点（离线 · 在线特征同算）
+- 规模：**5000+ active 模型 · 每日重训多数** `[来源未验证]`
+
+**启示**：Feature Store 是 MLOps 的**数据底座** · PIT Join + snapshot 锁定是可靠训练的基础。详见 [cases/uber §5.2](../cases/uber.md)。
+
+### Netflix · Metaflow + Iceberg 的训练流水线
+
+**核心特点**：
+- **Metaflow** 作 pipeline（本地-云端统一）
+- **Iceberg snapshot_id** 锁定训练集版本
+- **MLflow 作 Registry · Metaflow 作 workflow**（两者互补）
+- 2024 Metaflow 商业化（Outerbounds）
+
+**启示**：**Metaflow + Iceberg + MLflow** 开源组合是训练流水线的工业标杆。详见 [cases/netflix §5.4](../cases/netflix.md)。
+
+### 共同规律（事实观察）
+
+- **Iceberg / Paimon snapshot 锁定**是训练可复现的必备
+- **Feature Store** 是训推一致性的工程化保证
+- **Metaflow / MLflow / Kubeflow** 是训练 workflow 的主流选择
+- 详见 [ml-infra/training-orchestration](../ml-infra/training-orchestration.md) 和 [ml-infra/experiment-tracking](../ml-infra/experiment-tracking.md)
+
+---
+
 ## 8. 陷阱与反模式
 
 - **没 PIT 用当前值**：数据泄露 #1

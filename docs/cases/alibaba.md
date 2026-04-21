@@ -17,6 +17,13 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于阿里云官方博客 · Flink Forward 演讲 · Apache Paimon 社区内容整理。机制深挖见 [lakehouse/paimon](../lakehouse/paimon.md) · [lakehouse/streaming-upsert-cdc](../lakehouse/streaming-upsert-cdc.md)。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **阿里巴巴全栈视角**（Paimon 诞生地 · 电商规模）。**场景切面**在 scenarios/：
+    - [scenarios/cdp-segmentation](../scenarios/cdp-segmentation.md) §工业案例 · 阿里电商 CDP
+    - [scenarios/real-time-lakehouse](../scenarios/real-time-lakehouse.md) §工业案例 · Paimon + Flink CDC
+    - [scenarios/recommender-systems](../scenarios/recommender-systems.md) §工业案例 · 阿里电商推荐
+    - [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md) §工业案例 · 阿里图搜图
+
 !!! abstract "TL;DR"
     - **身份**：**Apache Paimon 诞生地** · 中国工业界最有影响力的数据平台之一 · **Flink 生态的主导者**
     - **核心技术贡献**：**Apache Paimon**（2022 从 Flink Table Store 独立 · 2024 ASF TLP）· **Apache Flink 持续贡献**（阿里是 Flink 最大贡献方之一）· **Apache Celeborn**（Shuffle Service）· **Apache Fluss**（流存储 · 2024 孵化）

@@ -17,6 +17,14 @@ status: stable
 !!! info "本页性质 · reference · 非机制 canonical"
     基于 Databricks 博客 · 官方文档 · 公开 keynote 整理。机制深挖见 [lakehouse/delta-lake](../lakehouse/delta-lake.md) · [catalog/unity-catalog](../catalog/unity-catalog.md) · [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)。本页讲"**产品演化 · 取舍 · 教训 · 启示**"。
 
+!!! success "对应场景 · 配对阅读"
+    本案例 = **Databricks 商业平台全栈**。**场景切面**（Databricks 在具体业务场景的做法）在 scenarios/：
+    - [scenarios/bi-on-lake](../scenarios/bi-on-lake.md) §工业案例 · DBSQL + Photon + Genie
+    - [scenarios/rag-on-lake](../scenarios/rag-on-lake.md) §工业案例 · Vector Search + AI Functions
+    - [scenarios/agentic-workflows](../scenarios/agentic-workflows.md) §工业案例 · Genie Agents
+    - [scenarios/text-to-sql-platform](../scenarios/text-to-sql-platform.md) §工业案例 · Genie
+    - [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md) §工业案例 · Vector Search 多模
+
 !!! abstract "TL;DR"
     - **身份**：**工业界最典型的"BI + AI 一体化平台"代表** · 2024-2026 市值千亿级美元
     - **技术哲学**：**"Lakehouse 架构"**（2020 提出 · Delta Lake 作基础）+ **"AI-native 数据平台"**（2023 收购 MosaicML 整合）

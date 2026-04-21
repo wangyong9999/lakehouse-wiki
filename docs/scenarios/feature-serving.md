@@ -334,6 +334,40 @@ spark.read.table("iceberg.features.user_stats") \
 - **[LinkedIn Venice](https://github.com/linkedin/venice)** —— 开源
 - 自建 Iceberg + Redis playbook（规划中，路径 `tutorials/feature-store-setup.md`）
 
+## 10.5 工业案例 · Feature Serving 场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**在线 Feature Serving 场景**的独特做法。
+
+### LinkedIn · Venice（在线 Feature Store 工业标杆）
+
+**Venice 独特设计**（见 [cases/linkedin §5.3](../cases/linkedin.md)）：
+- **写路径走 Kafka push**（不是客户端直写）· 解决写 QPS 失控
+- **批量加载 + 实时增量**一等支持
+- **Read-optimized 存储** · ML feature 读负载极致优化
+- 规模：**百万级 QPS · ms 级 p99** `[来源未验证 · 量级参考]`
+
+**对 Feature Serving 的启示**：
+- 写路径**通过 Kafka 统一**比客户端直写更可控
+- **批量 bulk load + 实时 stream 增量** 是在线 FS 的正确抽象（通用 KV 做不好）
+- Read-optimized 独特存储比通用 Cassandra / DynamoDB 好
+
+### Uber · Palette / Genoa（Michelangelo 的在线 store）
+
+**独特做法**（见 [cases/uber §5.3](../cases/uber.md)）：
+- **训推一致性**（离线批特征 · 在线实时特征 · 同算逻辑）
+- **Palette 2022**（Feature Store 独立子产品）→ **Genoa 2024+**（重构 · 流式特征强化）
+- ms 级推理时间 · 欺诈 / ETA / 匹配场景
+
+### 共同规律（事实观察）
+
+- **在线 Feature Store ≠ 通用 KV** · 需要专门设计（Venice 设计哲学）
+- **训推一致**是 Feature Store 的核心价值（Michelangelo 鼻祖）
+- **批 + 流混合加载**是工业刚需
+- 详见 [ml-infra/feature-store](../ml-infra/feature-store.md)
+
+---
+
 ## 11. 陷阱与反模式
 
 - **离线在线不对账**：事故温床
