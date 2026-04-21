@@ -313,17 +313,16 @@ nav:
   - 工业案例:
       - cases/index.md
       - 7 家横比矩阵: cases/studies.md
-      - 商业一体化平台:
+      - 商业产品平台:
           - Databricks · Lakehouse AI: cases/databricks.md
           - Snowflake · Data Cloud + Cortex: cases/snowflake.md
-      - OSS 基础设施代表:
+      - 大厂内部数据平台:
           - Netflix · Iceberg 诞生地: cases/netflix.md
           - LinkedIn · Kafka 全家桶 + OpenHouse: cases/linkedin.md
           - Uber · Hudi + Michelangelo: cases/uber.md
-      - 多模推荐代表:
-          - Pinterest · PinSage 多模推荐: cases/pinterest.md
-      - 中国工业代表:
           - 阿里巴巴 · Paimon 诞生地: cases/alibaba.md
+      - 业务系统案例:
+          - Pinterest · PinSage + Pixie 多模推荐: cases/pinterest.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md

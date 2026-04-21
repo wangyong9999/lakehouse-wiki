@@ -42,30 +42,36 @@ last_reviewed: 2026-04-21
 !!! info "本章**有时效性** · 按 ADR 0007 SOP 定期复检"
     工业案例的技术栈变化快（一年一个新动向）。**本章所有深度页 `last_reviewed: 2026-04-21`** · 下次计划在 2026-Q3 复检。读者使用时应**交叉验证各公司最新博客 / 发布**（见 §9 延伸阅读）。
 
-## 1. 7 家深度案例（按主题组织）
+## 1. 7 家深度案例 · 按样本类型分组（和 §S32 admonition 一致）
 
-### 1.1 商业一体化平台 · 代表双雄
+!!! info "分类轴 · 样本类型分层"
+    案例按**样本类型**分三类（和本页上方"样本类型分层"admonition · studies.md §1-2 矩阵对齐）。**不按业务领域 / 开源性质 / 地域混分类** —— 保证 MECE · 避免读者误导。
 
-- [**Databricks**](databricks.md) ⭐ —— Delta + **Unity Catalog**（多模资产最全）+ MosaicML 整合 + Vector Search + AI Functions · **2026 工业最重要一家**
-- [**Snowflake**](snowflake.md) ⭐ —— **Cortex（SQL LLM UDF 工业先驱 · 2024 GA）** + Polaris（2026-02 Apache TLP）+ Iceberg 原生支持 · 云数仓 AI 内嵌代表
+### 1.1 商业产品平台
 
-### 1.2 OSS 基础设施代表 · 三家工业标杆
+**公开资料 = 产品文档 + marketing + keynote · 作产品能力对比合适 · 作'内部规模'不可比**。
+
+- [**Databricks**](databricks.md) ⭐ —— Delta + **Unity Catalog**（多模资产最全）+ MosaicML 整合 + Vector Search + AI Functions · **2026 工业一体化平台代表**
+- [**Snowflake**](snowflake.md) ⭐ —— **Cortex**（SQL LLM UDF 工业先驱 · 2024 GA）+ Polaris（2026-02 Apache TLP）+ Iceberg 原生支持 · 云数仓 AI 内嵌代表
+
+### 1.2 大厂内部数据平台
+
+**公开资料 = 工程技术博客 + 论文 + 开源项目 · 作工程经验对比合适 · 作'客户规模'不可比**。
 
 - [**Netflix**](netflix.md) ⭐ —— **Iceberg 诞生地**（2017 Ryan Blue）· Metacat / Genie / Maestro / Metaflow 全开源 · 工程方法论最深远
-- [**LinkedIn**](linkedin.md) ⭐ —— **Kafka / Pinot / Venice / DataHub 全家桶** · **2024 OpenHouse 开源** + **Feathr 捐 Apache** · 单品开源 + 商业化典范
+- [**LinkedIn**](linkedin.md) ⭐ —— **Kafka / Pinot / Venice / DataHub 全家桶** · **2024 OpenHouse 开源** + **Feathr 捐 Apache** · 单品开源 + 商业化培育典范
 - [**Uber**](uber.md) ⭐ —— **Hudi 诞生地** + **Michelangelo MLOps 鼻祖**（2017 博客）· 实时 + ML 驱动巨无霸
+- [**阿里巴巴**](alibaba.md) ⭐ —— **Apache Paimon 诞生地**（2022）+ **Celeborn** + **Fluss** · Flink 最大贡献方 · Hologres HSAP · 中国工业实践直接借鉴
 
-### 1.3 多模推荐工业代表
+### 1.3 业务系统案例
+
+**公开资料 = 论文 + Engineering Blog · 不是数据平台全景 · 是特定业务系统（推荐）的工业代表**。
 
 - [**Pinterest**](pinterest.md) —— **PinSage GNN**（SIGKDD 2018）+ **Pixie random walk**（SIGMOD 2018）+ Homefeed · 多模推荐最成熟案例
 
-### 1.4 中国工业代表
+### 1.4 综述横比
 
-- [**阿里巴巴**](alibaba.md) —— **Apache Paimon 诞生地**（2022）+ Flink 生态深度贡献 + Hologres HSAP · 中国团队可直接借鉴
-
-### 1.5 综述横比
-
-- [**7 家横比矩阵**](studies.md) —— 8 维坐标系统一对比（表格式 · Catalog · 向量 · ML · SQL LLM UDF 等维度）
+- [**7 家横比矩阵**](studies.md) —— 8 维坐标系统一对比（表格式 · Catalog · 向量 · ML · SQL LLM UDF 等维度）+ 按场景找案例反向索引
 
 ## 2. 统一 12 节案例模板
 
