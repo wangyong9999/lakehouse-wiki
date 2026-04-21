@@ -86,7 +86,7 @@ last_reviewed: 2026-04-21
 | 11 | 对团队的启示（标观点 warning）| 主张分层 |
 | 12 | 技术博客 / 论文 + 相关章节 | 延伸入口 |
 
-## 2.5 cases/ 和 scenarios/ 的配对关系（S33 重要）
+## 3. cases/ 和 scenarios/ 的配对关系（S33 重要）
 
 !!! success "本章 = 全栈企业视角 · scenarios/ = 业务场景切面视角 · 两者配对阅读"
     2026-Q2 S33 建立 **场景-案例强配对**：
@@ -105,9 +105,9 @@ last_reviewed: 2026-04-21
     - [Databricks](databricks.md) → [bi-on-lake](../scenarios/bi-on-lake.md) · [rag-on-lake](../scenarios/rag-on-lake.md) · [agentic-workflows](../scenarios/agentic-workflows.md) · [text-to-sql-platform](../scenarios/text-to-sql-platform.md) · [multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
     - [Snowflake](snowflake.md) → [bi-on-lake](../scenarios/bi-on-lake.md) · [rag-on-lake](../scenarios/rag-on-lake.md) · [agentic-workflows](../scenarios/agentic-workflows.md) · [text-to-sql-platform](../scenarios/text-to-sql-platform.md)
     
-    **反向索引**（从场景找哪家案例）· 见 [studies.md §5.6](studies.md)。
+    **反向索引**（从场景找哪家案例）· 见 [studies.md §6](studies.md)。
 
-## 3. 按问题找案例 · 反向索引
+## 4. 按问题找案例 · 反向索引
 
 **"做 X 该学谁"**（详见 [studies.md §5](studies.md)）：
 
@@ -125,7 +125,7 @@ last_reviewed: 2026-04-21
 | 学 **大规模 Iceberg 运维** | [Netflix](netflix.md)（10 万+ 表）| [LinkedIn · OpenHouse](linkedin.md) |
 | 学 **中国工业实践** | [阿里巴巴](alibaba.md) | （后续加字节 / 腾讯 / 美团）|
 
-## 4. 和 frontier/vendor-landscape 的分工
+## 5. 和 frontier/vendor-landscape 的分工
 
 | | **本章 cases/** | **[frontier/vendor-landscape](../frontier/vendor-landscape.md)** |
 |---|---|---|
@@ -136,9 +136,9 @@ last_reviewed: 2026-04-21
 
 **两章可互为补充** · 不重叠。
 
-## 5. 不同读者的阅读建议
+## 6. 不同读者的阅读建议
 
-### 5.1 架构师 / CTO（30-60 分钟快读）
+### 6.1 架构师 / CTO（30-60 分钟快读）
 
 1. 读本 index §1-3 了解 7 家 · 找最相关的 2-3 家
 2. 对每家深度页 · 重点读：
@@ -147,18 +147,18 @@ last_reviewed: 2026-04-21
    - §10 失败 / 教训（实战信号）
 3. 读 [studies.md §3 关键维度对比](studies.md) 做跨案例综合判断
 
-### 5.2 做技术选型的资深工程师（2-3 小时深度）
+### 6.2 做技术选型的资深工程师（2-3 小时深度）
 
-按"反向索引"（§3）找 2-3 家相关 · 每家完整读 12 节。重点对照：
+按"反向索引"（§4）找 2-3 家相关 · 每家完整读 12 节。重点对照：
 - §6 关键组件（具体实现选择）
 - §9 深度取舍（替代方案对比）
 - §11 启示（主张分层 · 判断可借鉴性）
 
-### 5.3 新接触 wiki 的工程师（1 小时全景）
+### 6.3 新接触 wiki 的工程师（1 小时全景）
 
 先读 [studies.md](studies.md)（7 家横比矩阵）· 然后按兴趣挑 1 家深度页完整读。
 
-### 5.4 研究生 / 论文读者（学术视角）
+### 6.4 研究生 / 论文读者（学术视角）
 
 关注：
 - **Netflix · Iceberg** 论文（CIDR 2020）
@@ -167,7 +167,7 @@ last_reviewed: 2026-04-21
 - **Uber · Michelangelo** 博客
 - **Snowflake · Elastic DW** 论文（SIGMOD 2016）
 
-## 6. 从 7 家案例抽出的共同规律（客观观察）
+## 7. 从 7 家案例抽出的共同规律（客观观察）
 
 详见 [studies.md §4](studies.md)：
 
@@ -179,19 +179,20 @@ last_reviewed: 2026-04-21
 6. **闭源走向有限开放** —— 所有商业厂商"开放部分 + 锁定部分"
 7. **单品开源 + 商业化**（LinkedIn 模式）成为主流路径
 
-## 7. 对团队的启示（观点提炼 · 详见各深度页和 studies.md §6）
+## 8. 观察要点 · 战略指向 unified/
 
-!!! warning "以下是观点 · 不是客观事实"
+!!! warning "以下观点简明 · 战略判断 canonical 在 [unified/index §5 团队路线主张](../unified/index.md)"
+    本章 = reference · **不做战略主张**（S32 后规范）。以下仅列**从 7 家案例可以观察到的高价值信号** · 深度战略决策指向 [unified/](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md)。
 
-- **Catalog 治理平面先行** · 再谈一体化（见 [catalog/strategy](../catalog/strategy.md)）
-- **投资 Iceberg + Puffin 组合**（向量索引下沉）
-- **Embedding 流水线作基础设施** 不是"AI 项目附属"
-- **跟进 SQL LLM UDF 趋势**（Cortex / AI Functions 或开源 Spark+Ray+vLLM）
-- **国内团队重点看阿里 Paimon + Flink CDC** 组合（最现代化 · 可复制）
-- **规模打折** —— 不要照搬 Netflix / Uber 全栈 · 按自己规模取舍
+- **Catalog 治理平面先行** · 具体选型见 [catalog/strategy](../catalog/strategy.md)
+- **Iceberg + Puffin 组合**是 2024-2026 OSS 主线之一
+- **Embedding 流水线**作基础设施（[ml-infra/embedding-pipelines](../ml-infra/embedding-pipelines.md) canonical）
+- **SQL LLM UDF** 是新范式（[query-engines/compute-pushdown](../query-engines/compute-pushdown.md) canonical）
+- **国内团队关注阿里 Paimon + Flink CDC** 组合（详见 [cases/alibaba](alibaba.md)）
+- **规模打折** —— 不照搬 Netflix / Uber 全栈 · 按自己规模取舍
 - **自研 ≠ 永恒** —— 定期评估 vs 社区方案 · 敢替换（LinkedIn Samza → Flink 教训）
 
-## 8. 后续待补案例（下一轮）
+## 9. 后续待补案例（下一轮）
 
 !!! note "本章未完成度声明"
     本轮（S31）重构完成 7 家深度案例。**下一轮计划新增**：
@@ -204,7 +205,7 @@ last_reviewed: 2026-04-21
     
     读者有具体建议可反馈。
 
-## 9. 延伸阅读 · 权威来源
+## 10. 延伸阅读 · 权威来源
 
 ### 各家官方技术博客（持续更新）
 
@@ -223,7 +224,7 @@ last_reviewed: 2026-04-21
 - *Modern Data Stack* 分析（本 wiki [frontier/modern-data-stack](../frontier/modern-data-stack.md)）
 - 各家开源项目官方文档（Iceberg / Paimon / Hudi / Delta · Kafka / Pinot / Flink 等）
 
-## 10. 章节相关
+## 11. 章节相关
 
 - [unified/](../unified/index.md) —— 跨章组合视角
 - [frontier/vendor-landscape](../frontier/vendor-landscape.md) —— 厂商选型商业视角

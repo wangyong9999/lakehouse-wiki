@@ -228,7 +228,7 @@ status: stable
 
 具体案例看各深度页 §5 关键组件和 §8 取舍。
 
-## 5.6 按 scenarios 场景找案例（场景-案例配对反向索引）
+## 6. 按 scenarios 场景找案例 · 配对反向索引
 
 **读者典型路径**：读 scenarios/X 业务页 · 想看工业案例 · 查这张表找哪家在 X 场景有值得学的做法。
 
@@ -250,7 +250,7 @@ status: stable
 **用法**：
 - 你想做 **X 场景** · 看 scenarios/X 是"怎么做"的 · 回来查这张表看"哪家怎么做的" · 点深度案例页看全栈上下文
 
-## 6. 按问题找案例（反向索引）
+## 7. 按问题找案例 · 能力反向索引
 
 **"做 X 该学谁"**：
 
@@ -269,7 +269,7 @@ status: stable
 | **学中国工业实践** | [阿里巴巴](alibaba.md) | （后续案例页可加字节 / 腾讯） |
 
 
-## 7. 不同读者的阅读路径建议
+## 8. 不同读者的阅读路径建议
 
 !!! info "本节是导航 · 不是推荐"
     以下路径是**按主题的读者导航** · 不是"这家最好"的主张。表述为**案例定位** · 不是评价。
@@ -295,7 +295,7 @@ status: stable
 
 先 [Uber · Michelangelo](uber.md)（鼻祖 · 7 年演进）· 再 [Databricks](databricks.md)（最成熟商业平台）· [Netflix · Metaflow](netflix.md)（Workflow 哲学）。
 
-## 8. 本章定位声明
+## 9. 本章定位声明
 
 !!! note "本章 = reference · 非机制 canonical"
     - **机制原理**：去对应技术栈章（[lakehouse/](../lakehouse/index.md) / [catalog/](../catalog/index.md) / [retrieval/](../retrieval/index.md) / [ml-infra/](../ml-infra/index.md) / [ai-workloads/](../ai-workloads/index.md)）
@@ -304,7 +304,7 @@ status: stable
     - **厂商选型（商业视角）**：[frontier/vendor-landscape](../frontier/vendor-landscape.md)
     - **前沿未来**：[frontier/](../frontier/index.md)
 
-## 9. 相关 · 延伸阅读
+## 10. 相关 · 延伸阅读
 
 - 各家深度案例：[Databricks](databricks.md) · [Snowflake](snowflake.md) · [Netflix](netflix.md) · [LinkedIn](linkedin.md) · [Uber](uber.md) · [Pinterest](pinterest.md) · [阿里巴巴](alibaba.md)
 - [Modern Data Stack](../frontier/modern-data-stack.md) —— 现代数据栈全景
