@@ -281,6 +281,7 @@ nav:
           - LLM Gateway: ai-workloads/llm-gateway.md
           - Semantic Cache: ai-workloads/semantic-cache.md
           - Guardrails: ai-workloads/guardrails.md
+          - LLM Observability: ai-workloads/llm-observability.md
   - ML 平台:
       - ml-infra/index.md
       - 特征与数据:
