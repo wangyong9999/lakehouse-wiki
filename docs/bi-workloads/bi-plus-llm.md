@@ -25,7 +25,7 @@ status: stable
 !!! abstract "TL;DR"
     - **四大能力**：Text-to-Query · Auto-Insight · Auto-Viz · Natural Narrative
     - **核心抽象**：LLM → 语义层查询（不直写 SQL）→ SL 编译成 SQL → 执行
-    - **2026 产品领跑**：**Databricks AI/BI Genie（GA · 4000+ accounts）** · **Snowflake Cortex Analyst**（Public Preview · 广泛采用）· **Tableau GPT / Pulse（GA）** · **dbt SL + MCP** · **Cube AI**
+    - **2026 产品领跑**：**Databricks AI/BI Genie（2025-06-12 GA · 4000+ accounts）** · **Snowflake Cortex Analyst**（Public Preview · 广泛采用）· **Tableau GPT / Pulse（GA）** · **dbt SL + MCP** · **Cube AI**
     - **落地关键**：语义层质量 · Few-shot 持续维护 · Feedback loop · 权限穿透
     - **现实**：**"不会 100% 准确 · 要可审查 + 可纠错"** · 别承诺取代分析师
 
@@ -165,7 +165,7 @@ flowchart LR
 
 | 产品 | 定位 | 状态 | 核心能力 | 生态 |
 |---|---|---|---|---|
-| **Databricks AI/BI Genie** | Unity Catalog 一体化 BI+LLM | **GA** · 4000+ accounts | Genie Space · Deep Research 预览 | Databricks 栈 |
+| **Databricks AI/BI Genie** | Unity Catalog 一体化 BI+LLM | **GA 2025-06-12** · 4000+ accounts | Genie Space · Deep Research 预览 | Databricks 栈 |
 | **Snowflake Cortex Analyst** | Semantic Model + LLM | Public Preview · 9100+ accounts 用 Cortex | SM YAML · REST API | Snowflake 栈 |
 | **Tableau GPT + Pulse** | 前端 + LLM | **GA** | NLQ · Auto-viz · Narrative | Tableau 生态 |
 | **ThoughtSpot Sage / Spotter** | 搜索式 BI + LLM 升级 | **GA** | Spotter · 自动归因 | 独立生态 |
