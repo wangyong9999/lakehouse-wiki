@@ -367,6 +367,50 @@ spark.read.table("iceberg.features.user_stats").foreachPartition(write_partition
 value = redis_client.get(f"u:{user_id}:avg_7d_gmv")
 ```
 
+## 6.5 Vector-enabled Feature Store · 2025-2026 新趋势
+
+2024 年以前 · Feature Store 和向量库是**两套独立系统**。2025+ 主流 FS 已经**内置向量特征**：
+
+| 平台 | 向量能力 |
+|---|---|
+| **Databricks Feature Store / Online Tables**（2024）| 直接存 embedding 作 feature · Delta + 向量索引一体 |
+| **Tecton**（2024+）| Vector feature · 内置 ANN 查询 |
+| **Hopsworks 4.x**（2024-2025）| OpenSearch 后端 · vector + structured feature 混合 |
+| **Vertex AI Feature Store** | Matching Engine 集成 |
+
+**为什么重要**：
+- LLM 时代推理请求经常要**同时**拉"结构化特征"（用户画像 · 订单数 · VIP 等级）和**向量特征**（用户兴趣 embedding · 最近 N 个点击的 item embedding）
+- 两套系统 → 两个 client · 两个延迟来源 · 两套权限 · 训推对账翻倍复杂
+- 一套 FS 接口 → LLM Agent / 推荐 / 风控 统一取数
+
+### 代码示例（Tecton · 2024+）
+
+```python
+# 结构化 + 向量 feature 一起取
+features = tecton.get_online_features(
+    feature_service="user_llm_context",
+    join_keys={"user_id": 12345},
+    request_data={"query_embedding": query_vec},  # 在线 ANN
+)
+# 返回：{vip_level: 3, avg_7d_gmv: 580.2, similar_items: [...], ...}
+```
+
+## 6.6 Feature Store × LLM Agent · Tool 一等公民
+
+LLM Agent（见 [agents-on-lakehouse](../ai-workloads/agents-on-lakehouse.md)）执行复杂任务时 · 经常需要**实时用户上下文**：
+
+- "帮用户查一下最近 3 天的订单" → Agent 调 FS `get_online_features(recent_orders)`
+- "推荐一个新商品" → Agent 调 FS `get_online_features(user_embedding + vip_level + preferences)`
+- "风险评估" → Agent 调 FS `get_online_features(risk_score + device_profile)`
+
+**Agent Tool 对 FS 的要求**：
+- **低延迟**（<50ms · Agent 调用链里 FS 是一环）
+- **权限感知**（Agent 代表具体用户查数据时 · FS 接口要传递 user identity · 不能读别人的特征）
+- **Schema 可发现**（Agent 动态决定调哪个 feature service · 需要 FS 暴露 registry / catalog）
+- **审计完整**（Agent 每次 FS 调用要有 trace · 对应 [llm-observability](../ai-workloads/llm-observability.md)）
+
+**反模式**：把 FS 当成"让 Agent 查所有数据"的通道 —— 应配 [authorization](../ai-workloads/authorization.md) §Tool ACL 严格限制 Agent 能读哪些 feature view。
+
 ## 7. 陷阱与反模式
 
 - **自建 FS 低估 PIT 复杂度**：PIT Join 几乎是 Feature Store 事故 #1 原因
