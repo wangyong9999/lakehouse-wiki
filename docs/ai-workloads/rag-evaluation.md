@@ -1,18 +1,22 @@
 ---
-title: RAG 评估
+title: LLM / RAG / Agent Evaluation · 质量评估全景
 type: concept
-depth: 进阶
-prerequisites: [rag, evaluation]
-tags: [ai, rag, evaluation]
-related: [rag, evaluation, prompt-management]
-systems: [ragas, trulens, langfuse, promptfoo]
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: RAGAS · TruLens · Langfuse · Promptfoo · Braintrust · DeepEval · SWE-bench · τ-bench · WebArena · 2024-2026 eval 生态
+prerequisites: [rag, agent-patterns]
+tags: [ai, rag, agent, evaluation, ragas, trulens]
+aliases: [RAG Evaluation, Agent Evaluation, LLM Evaluation]
+related: [rag, agent-patterns, prompt-management, llm-observability]
+systems: [ragas, trulens, langfuse, promptfoo, deepeval, braintrust]
 status: stable
 ---
 
-# RAG 评估
+# LLM / RAG / Agent Evaluation · 质量评估全景
 
 !!! tip "一句话理解"
-    检索评估只看"能不能召回到"；RAG 评估还要看"回答对不对、引用正不正、有没有幻觉"。没有这套框架，**RAG 调参就是猜**。
+    **LLM 应用没有评估就是盲飞 · 有评估才能迭代**。本页覆盖**三类评估**：**RAG 质量**（Groundedness / Context / Answer）· **通用 LLM 任务**（分类 / 摘要 / 代码 / 翻译）· **Agent**（Task Success / Tool Accuracy / Step Efficiency）。和 [LLM Observability](llm-observability.md) 分工：Obs 讲"**发生了什么**"· Eval 讲"**质量怎么样**"。
 
 !!! abstract "TL;DR"
     - RAG 质量 = **Retrieval 质量 + Generation 质量** 两层相乘
@@ -167,16 +171,126 @@ Cost per query ($)            0.012              0.015         +25% ⚠️
 
 必须把**所有维度摆一起**，而不是只看单一 metric。
 
+## 通用 LLM 任务评估 · 非 RAG 场景
+
+**除了 RAG · 大量 LLM 应用是"通用任务"**（分类 / 摘要 / 翻译 / 代码 / Chat）· 评估框架不同：
+
+### 任务类型 × 评估维度
+
+| 任务 | 主指标 | 典型工具 / Benchmark |
+|---|---|---|
+| **分类** | Accuracy · F1 · 混淆矩阵 | 自建 golden set · scikit-learn metrics |
+| **摘要** | ROUGE · BLEU · BERTScore · LLM-as-Judge | ROUGE · Anthropic 摘要质量评分 |
+| **翻译** | BLEU · COMET · METEOR · 人工 | sacreBLEU · COMET |
+| **代码生成** | Pass@k · HumanEval · MBPP | EvalPlus · LiveCodeBench |
+| **Chat / 通用对话** | LLM-as-Judge · Arena ELO · 用户满意度 | Chatbot Arena · MT-Bench |
+| **Long-context** | Needle-in-Haystack · RULER | RULER · Needle Test |
+| **推理** | GSM8K · MATH · MMLU-Pro · Math-Verify | 公开 benchmark |
+| **Safety** | ToxiGen · BOLD · 自建红队集 | Llama Guard 分类 |
+| **Instruction following** | IFEval · LLM-as-Judge | IFEval |
+
+### 关键原则
+
+1. **离线 benchmark + 在线 A/B 双轨**：离线挡回归 · 在线看真实
+2. **LLM-as-Judge 广泛适用但非万能**：主观类任务效果好 · 客观类任务用硬指标
+3. **评估模型最好不是被评估模型**：自己评自己有偏（详见 §陷阱）
+4. **任务不同指标不同** · 不要一刀切"answer relevance"
+
+### 主流通用 Eval 工具
+
+| 工具 | 定位 | 开源 |
+|---|---|---|
+| **OpenAI Evals** | OpenAI 官方 eval harness · 可扩展 | ✅ |
+| **DeepEval**（Confident AI）| Pytest 风格 LLM eval · CI 友好 | ✅ |
+| **Promptfoo** | Config 驱动 · CI 最顺 | ✅ |
+| **Braintrust** | 商业 · Eval + Obs 一体 | ❌ |
+| **Langfuse Evaluations** | 商业 / 自托管 · 内置 eval runner | ✅ MIT |
+| **lm-evaluation-harness**（EleutherAI）| 学术 benchmark 统一 runner | ✅ |
+
+## Agent 评估 · 比 RAG 更难
+
+详见 [Agent Patterns § 7 Agent 评估](agent-patterns.md) 的 benchmark 部分。本节**扩展生产维度**：
+
+### 生产 Agent 评估 5 维
+
+| 维度 | 测法 | 数据源 |
+|---|---|---|
+| **Task Success Rate** | 最终结果是否正确 · LLM judge 或人工 | 生产抽样 + golden set |
+| **Tool Call Accuracy** | 每步调用 tool 是否合理 · 参数是否对 | trace 数据（见 [LLM Observability](llm-observability.md)）|
+| **Step Efficiency** | 平均完成步数 · 比理想多几步 | trace |
+| **Cost per Task** | Token + tool 执行总成本 | 计费 / obs |
+| **Replan Rate** | 中途 replan 比例高 = planner 差 | trace |
+
+### Agent Benchmark（再引用 · 加生产视角）
+
+| Benchmark | 生产使用价值 | 注意 |
+|---|---|---|
+| **SWE-bench**（代码修复）| 高 · 接真实 GitHub issue | 自建变种更准 |
+| **τ-bench**（客服）| 高 · 对齐真实业务流 | 适合客服 agent |
+| **WebArena**（网页操作）| 中 · 测通用网页能力 | 具体业务仍需自建 |
+| **AgentBench** | 中 · 通用 sanity check | 不代表自家任务 |
+| **GAIA** | 低（SOTA < 40%）· 主要用于研究对标 | 生产用过高估模型 |
+
+### Agent 离线 Eval 模板
+
+```python
+# pytest-style · DeepEval
+from deepeval import evaluate
+from deepeval.test_case import LLMTestCase
+from deepeval.metrics import TaskCompletionMetric, ToolCorrectnessMetric
+
+test_cases = [
+    LLMTestCase(
+        input="帮我分析过去一周销售异常",
+        expected_tools=["query_sales", "identify_anomaly", "vector_search"],
+        expected_output_contains=["异常商品", "原因分析"],
+    ),
+    # ...
+]
+
+evaluate(
+    test_cases,
+    metrics=[TaskCompletionMetric(threshold=0.8), ToolCorrectnessMetric()],
+)
+```
+
+### 生产 Agent 在线 Eval
+
+- 用户反馈（👍/👎）作为 ground truth
+- **采样人工复核** · 5-10% trace
+- **灰度 eval**：新 agent 版本小流量 · 对比旧版 metrics
+- 关键任务**每次运行后 LLM judge 一下** · 立即发现退化
+
+## Eval 和 Observability 的分工（重要）
+
+**Agent 评审 #2 点出过**，两事混起来是常见误区：
+
+| | **Observability**（[llm-observability](llm-observability.md)）| **Evaluation**（本页）|
+|---|---|---|
+| 回答什么 | **发生了什么** · 请求怎么走的 · 哪步慢 · 哪步贵 | **质量怎么样** · 答对没 · 有没有幻觉 |
+| 数据 | Trace / Metrics / Logs · 实时生成 | Test cases / Golden set · 预先标注 |
+| 用法 | 事故排查 · 监控告警 | 回归测试 · 质量闭环 · A/B |
+| 频率 | 持续（每个请求）| 定期（PR / 版本 / 季度）|
+| 工具 | Langfuse / Phoenix / OTel | RAGAS / DeepEval / Promptfoo / 自建 |
+| 告警 | 技术指标（latency / error / cost）| 质量指标（groundedness / task success）|
+| 联动 | **Trace 数据可作为 Eval 输入** · Eval 可反哺 Obs 告警 | |
+
+**组合才是完整**：
+- Obs 发现 "latency 涨了" → 查 trace 定位
+- Eval 发现 "groundedness 退化了" → 找到哪个 prompt 版本 + 回滚
+- Obs trace → 抽样 → 人工标注 → 加入 Golden set → 下次 Eval 覆盖
+
 ## 相关
 
-- [RAG](rag.md)
+- [RAG](rag.md) · [Agent Patterns](agent-patterns.md) · [Prompt 管理](prompt-management.md) · [LLM Observability](llm-observability.md) · [Guardrails](guardrails.md)
 - [检索评估](../retrieval/evaluation.md)（更基础，偏检索层）
-- [Prompt 管理](prompt-management.md)
 - [Rerank](../retrieval/rerank.md)
 
 ## 延伸阅读
 
-- RAGAS: <https://docs.ragas.io/>
-- TruLens: <https://www.trulens.org/>
+- **[RAGAS](https://docs.ragas.io/)** · **[TruLens](https://www.trulens.org/)** · **[Promptfoo](https://www.promptfoo.dev/)** · **[DeepEval](https://docs.confident-ai.com/)**
+- **[OpenAI Evals](https://github.com/openai/evals)** · **[lm-evaluation-harness (EleutherAI)](https://github.com/EleutherAI/lm-evaluation-harness)**
+- **[SWE-bench](https://www.swebench.com/)** · **[τ-bench](https://github.com/sierra-research/tau-bench)** · **[WebArena](https://webarena.dev/)** · **[GAIA](https://huggingface.co/papers/2311.12983)** · **[IFEval](https://github.com/google-research/google-research/tree/master/instruction_following_eval)**
+- **[Chatbot Arena / MT-Bench](https://lmsys.org/blog/2023-05-03-arena/)**
+- **[RULER · Long-context benchmark](https://github.com/NVIDIA/RULER)** · **[Needle-in-a-Haystack](https://github.com/gkamradt/LLMTest_NeedleInAHaystack)**
 - *Evaluating RAG: A Practitioner's Guide*（Pinecone / LlamaIndex 博客系列）
-- *Automatic Evaluation of Retrieval-Augmented Generation*（各种 2024 论文）
