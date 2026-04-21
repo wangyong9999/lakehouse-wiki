@@ -20,7 +20,7 @@ status: stable
 !!! abstract "TL;DR"
     - 4 大量化家族：**Scalar Quantization (SQ)** · **Product Quantization (PQ)** · **Binary Quantization (BQ)** · **Matryoshka Embeddings**
     - **压缩比 × 精度损失** 双曲线 · 选型按"可接受精度 + 内存预算"反推
-    - **Matryoshka** 是 2024-2026 新范式 · 从"事后量化"变成"训练时多维"
+    - **Matryoshka** · 论文 NeurIPS 2022 · 2024-2026 成主流新范式 · 从"事后量化"变成"训练时多维"
     - Binary Quantization + rerank 组合是 2024-2026 极致压缩路线（压缩 32× · Recall 损失可接受）
     - 生产要**后验证**——不同数据集上同一 quantization 的效果可能差很多
 
@@ -107,7 +107,7 @@ BQ · 1024 bits = 128 bytes · 压缩 32×
 - OpenAI text-embedding-3 · 支持 binary 但质量依赖 dimensions 参数
 - BGE / Jina 社区模型 · 多数已支持
 
-### Matryoshka Embeddings · 训练时多维 · 2023+ 新范式
+### Matryoshka Embeddings · 训练时多维 · 2022 提出 · 2024+ 主流
 
 **原理**：训练时用**嵌套维度损失**——让同一个向量的**前 256 维 / 前 512 维 / 前 1024 维** 都是有效 embedding。
 
@@ -175,7 +175,7 @@ BQ · 1024 bits = 128 bytes · 压缩 32×
 
 ## 延伸阅读
 
-- **[Matryoshka Representation Learning](https://arxiv.org/abs/2205.13147)** · 原始论文
+- **[Matryoshka Representation Learning](https://arxiv.org/abs/2205.13147)** · Kusupati et al. · **NeurIPS 2022** 原始论文
 - **[Facebook AI · Billion-scale similarity search with GPUs](https://arxiv.org/abs/1702.08734)** · Faiss 基础
 - **[Cohere · Binary Embeddings](https://cohere.com/blog/int8-binary-embeddings)** · Binary 量化实战
 - **[Nomic Embed · 技术报告](https://blog.nomic.ai/posts/nomic-embed-text-v1)** · Matryoshka 商业化

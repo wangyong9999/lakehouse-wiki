@@ -140,7 +140,10 @@ flowchart TB
 
 **这是 2024-2026 生产多模检索最常见的路径之一**——不是唯一正确答案 · 但**在未明确"场景特异化"时**它是稳妥的默认起点。
 
-### Pattern E · 多向量细粒度 · ColBERT / Late Interaction
+### Pattern E · 多向量细粒度 · Late Interaction（ColBERT / ColPali）
+
+!!! note "范畴澄清"
+    **ColBERT (SIGIR 2020)** 本身是**文本检索**的 late-interaction 方法 · 不是多模方法。Pattern E 讲的是**把 late-interaction 范式扩展到多模场景**——图像 patch · 视频 frame 等细粒度 embedding + MaxSim 聚合。**ColPali (2024-06)** 才是明确为文档图像 retrieval 设计的 late-interaction 模型。
 
 ```mermaid
 flowchart LR
@@ -154,8 +157,9 @@ flowchart LR
 **核心**：**一个对象不是一个向量 · 是多个向量**（token / patch / frame）· 匹配时做 **late interaction**（MaxSim）。
 
 **代表**：
-- **文本**：ColBERT / ColBERTv2
-- **图像**：CLIP patch-level + late interaction
+- **文本**：ColBERT / ColBERTv2（late interaction 起源 · SIGIR 2020）
+- **文档图像**：**ColPali**（2024-06）· 文档页面 patch embedding + late interaction · 文档检索场景大放异彩
+- **图像**：CLIP patch-level + late interaction（工程扩展 · 非原生方法）
 - **视频**：frame-level embedding + temporal aggregation
 
 **优势**：
