@@ -11,7 +11,7 @@ status: stable
 # Semantic Cache（语义缓存）
 
 !!! tip "一句话理解"
-    **"语义相近的请求返回相同答案"**的缓存。传统缓存按 key 精确命中；语义缓存按 embedding 距离命中。主要用来**降低 LLM 调用成本和延迟**。
+    **"语义相近的请求返回相同答案"**的缓存。传统缓存按 key 精确命中；语义缓存按 embedding 距离命中。主要用来**降低 LLM 调用成本和延迟**。**注意区分**：和 **Prompt Caching**（2024+ LLM API 原生的前缀字节 KV cache · 本页末对比）机制完全不同。
 
 ## 为什么需要
 
@@ -92,13 +92,72 @@ flowchart LR
 - 节省的 LLM token 数 / 成本
 - 缓存大小 / 淘汰率
 
+## 代码示例 · GPTCache + LangChain
+
+```python
+from gptcache import Cache
+from gptcache.adapter.langchain_models import LangChainChat
+from gptcache.embedding import Onnx
+from gptcache.similarity_evaluation.distance import SearchDistanceEvaluation
+from gptcache.manager import CacheBase, VectorBase, get_data_manager
+
+cache = Cache()
+embedding = Onnx()  # or OpenAI / BGE / Cohere
+cache.init(
+    pre_embedding_func=lambda data, **_: data["messages"][-1]["content"],
+    embedding_func=embedding.to_embeddings,
+    data_manager=get_data_manager(
+        CacheBase("sqlite"),
+        VectorBase("lancedb", dimension=embedding.dimension, top_k=3),
+    ),
+    similarity_evaluation=SearchDistanceEvaluation(),
+)
+
+# 阈值：cosine distance ≤ 0.2 视为命中（等价 cosine similarity ≥ 0.8）
+cache.set_openai_key()  # 或其他 provider
+llm = LangChainChat(cache=cache, cache_obj=cache)
+
+# 首次调 LLM · 第二次相似 query 直接返回 cache
+```
+
+## 和 Prompt Caching（系统级）的区别 · 关键
+
+**2024+ 每家 LLM 厂商都推出 Prompt Caching** · 但**和 Semantic Cache 机制完全不同**：
+
+| | **Semantic Cache**（本页）| **Prompt Caching** |
+|---|---|---|
+| 层级 | **应用层缓存** · 我方代码 | **LLM 服务端 KV cache** |
+| 命中条件 | 语义相近（embedding 距离）| **前缀字节完全相同** |
+| 粒度 | Query 级（整个 user query）| Token 级（prompt 前缀） |
+| 效果 | **跳过整个 LLM 调用** | 减少**输入 token** 计费 |
+| 命中后延迟 | ~10ms（向量库查询）| LLM 仍要生成输出 · 只减少 prefill 延迟 |
+| 折扣 | 成本节省 100%（命中那次） | 10-90% 输入 token 成本 |
+| 典型命中率 | 10-60%（视业务）| System prompt / tool schema 复用场景 100% |
+
+### 2024-2026 厂商 Prompt Caching
+
+| 厂商 | 机制 | 定价 |
+|---|---|---|
+| **Anthropic Prompt Caching**（2024-08 GA）| 手动 `cache_control` 标记 · 5min / 1h TTL | 缓存写 +25% · 读 **-90%** |
+| **OpenAI Prompt Caching**（2024-10+）| **自动**检测相同前缀（≥ 1024 tokens）| 自动 · 约 **-50%** 命中部分 |
+| **Gemini Context Caching** | API 显式创建 cache · TTL 管理 | 按缓存部分 token 折扣 |
+
+### 何时用哪个
+
+- **System prompt 长** / **tool schema 定义长** / **RAG 大文档作 context** · → **Prompt Caching**
+- **Q&A 重复高** · 同类问题反复问 → **Semantic Cache**
+- **两者叠加用**（推荐）：Semantic Cache 挡语义重复 · Prompt Caching 减剩余调用的 token 成本
+- 详见 [Prompt 管理 · Prompt Caching 章节](prompt-management.md)
+
 ## 相关
 
-- [RAG](rag.md)
-- [Embedding](../retrieval/embedding.md)
-- [向量数据库](../retrieval/vector-database.md)
+- [RAG](rag.md) · [Prompt 管理](prompt-management.md) · [LLM Gateway](llm-gateway.md) · [LLM Inference](llm-inference.md)
+- [Embedding](../retrieval/embedding.md) · [向量数据库](../retrieval/vector-database.md)
 
 ## 延伸阅读
 
-- *GPTCache*（开源语义缓存项目）: <https://github.com/zilliztech/GPTCache>
-- *LangChain Semantic Cache* 文档
+- **[GPTCache 开源项目](https://github.com/zilliztech/GPTCache)**
+- **[Anthropic Prompt Caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)**
+- **[OpenAI Prompt Caching](https://platform.openai.com/docs/guides/prompt-caching)**
+- **[Gemini Context Caching](https://ai.google.dev/gemini-api/docs/caching)**
+- **[LangChain Semantic Cache 文档](https://python.langchain.com/docs/integrations/llm_caching/)**

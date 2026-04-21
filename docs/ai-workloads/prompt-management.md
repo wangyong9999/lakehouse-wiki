@@ -149,6 +149,110 @@ Prompt 里有变量（`{user_input}`）= **注入风险**：
 - **A/B 随机化**：同一 query 跑两条 Prompt，人眼盲测
 - **红队测试**：专门构造 adversarial query
 
+## DSPy · 自动 Prompt 优化（2023-2026 新范式）
+
+手写 Prompt 的痛点：
+- 改一个字 · 效果变 · 不知道为什么
+- 多步骤 pipeline 的 prompt 互相耦合 · 改一处动全局
+- 跨模型迁移（GPT-4 → Claude / 本地 Llama）需重写
+
+**DSPy**（Stanford 开源 · 2023 起持续迭代）：**把 prompt 当"可编译的程序"**，而非模板字符串。
+
+```python
+import dspy
+
+class GenerateAnswer(dspy.Signature):
+    """Answer a question using retrieved context."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField(desc="often < 20 words · cite source")
+
+class RAGModule(dspy.Module):
+    def __init__(self):
+        self.retrieve = dspy.Retrieve(k=5)
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+
+    def forward(self, question):
+        context = self.retrieve(question).passages
+        return self.generate(context=context, question=question)
+
+# 自动优化 few-shot examples
+rag = RAGModule()
+optimizer = dspy.BootstrapFewShotWithRandomSearch(metric=exact_match, num_candidate_programs=10)
+optimized_rag = optimizer.compile(rag, trainset=train_set)
+```
+
+**核心价值**：
+- **Signature** 声明输入 / 输出 · 不写 prompt 文本
+- **Module** 像 PyTorch 一样组合
+- **Optimizer** 自动找最佳 few-shot / 指令 / CoT 结构
+- **跨模型迁移**：同一程序换 LLM · optimizer 重编译
+
+**何时用 DSPy**：
+- ✅ 多步 LLM pipeline · 需要系统性优化
+- ✅ 有训练集（golden set）· 可评估
+- ✅ 跨 LLM 迁移需求
+- ❌ 简单单轮 prompt · 手写更快
+- ❌ 没有评估集 · DSPy 无从优化
+
+DSPy 2026 状态：核心稳定 · 社区活跃 · 但**生产采用仍小众** · 学习曲线陡。值得投入的场景有明显优势。
+
+## Prompt Caching（系统级 · 区别于 Semantic Cache）
+
+**2024 起 LLM 厂商原生引入** · 是 **KV Cache 的 API 层暴露**：
+
+| 厂商 | 机制 | 折扣 |
+|---|---|---|
+| **Anthropic Prompt Caching**（2024-08 GA）| 标记 `cache_control` 块 · 5min / 1h TTL | 缓存命中 **-90%** 输入 token 价格 |
+| **OpenAI Prompt Caching**（2024-10+）| **自动**缓存 · 检测相同前缀 | 自动 · 约 **-50%** 命中部分 |
+| **Gemini Context Caching** | API 显式创建 cache · TTL 管理 | 按缓存部分 token 折扣 |
+
+**与 [Semantic Cache](semantic-cache.md) 的区别**：
+
+| | **Prompt Caching**（本节）| **Semantic Cache** |
+|---|---|---|
+| 层级 | LLM 服务端 KV cache | 应用层缓存 |
+| 命中条件 | **前缀字节完全相同** | 语义相近（embedding 距离）|
+| 粒度 | Token 级 · API 透明 | Query 级 |
+| 折扣 | 10-90% 输入 token 成本 | 命中则跳过整个 LLM 调用 |
+| 适用 | 长 system prompt / 长文档 / tool schema | 高度重复的 user query |
+
+**工程最佳实践**：
+- **System prompt 放 prompt 最前** · 最容易命中 cache
+- **Tool schema 批量定义** · 一起缓存
+- **长参考文档放 prompt 中段** · RAG context 放末端（因 context 每次不同）
+- Anthropic 最多 4 个 `cache_control` 断点 · 规划好
+
+```python
+# Anthropic Prompt Caching
+response = anthropic.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    system=[
+        {"type": "text", "text": "You are a customer support bot...",
+         "cache_control": {"type": "ephemeral"}},  # 缓存 system prompt
+        {"type": "text", "text": long_tool_schema,
+         "cache_control": {"type": "ephemeral"}},  # 缓存 tool schema
+    ],
+    messages=[...],  # user message 每次不同 · 不缓存
+)
+# 读 response.usage.cache_read_input_tokens · 看命中多少
+```
+
+## System Prompt · Few-shot · CoT 的工程化
+
+### System Prompt 特殊性
+
+- **放哪里**：大多数 LLM API 有单独 `system` 角色 · **不要塞到 user message**
+- **稳定性**：生产 system prompt 改动需严格 review · 影响面大
+- **长 system prompt 问题**：每次调用都吃这部分 token · **必须用 Prompt Caching**
+
+### Few-shot Examples
+
+- 简单任务 3-5 个 · 复杂任务可到 10+
+- **多样性 > 数量** · examples 覆盖不同边缘 case
+- **Chain-of-Thought examples** 对推理任务特别有效
+- DSPy 自动筛选最佳 few-shot（上节）
+
 ## 陷阱
 
 - **硬编码 Prompt 在代码里** —— 改一次得发版
