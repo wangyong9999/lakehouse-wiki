@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-20
-applies_to: StarRocks 3.3+ (2024+) · 存算分离模式 3.0+
+applies_to: StarRocks 4.0+ (2025-10) · 存算分离模式 3.0+ · 湖读路径成熟
 tags: [query-engine, olap, mpp, mpp-database]
 category: query-engine
 repo: https://github.com/StarRocks/starrocks

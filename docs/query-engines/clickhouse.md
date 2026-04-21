@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-20
-applies_to: ClickHouse 25.x+（2025 末主流）· 湖读走 24.10+ iceberg()/s3() 表函数
+applies_to: ClickHouse 26.x+（2026-Q1 主流 · 最新 26.3）· 湖读走 24.10+ iceberg()/s3() 表函数
 tags: [query-engine, olap, columnar, mpp-database]
 category: query-engine
 repo: https://github.com/ClickHouse/ClickHouse

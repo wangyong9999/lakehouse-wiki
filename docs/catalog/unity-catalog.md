@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: S
 last_reviewed: 2026-04-20
-applies_to: Unity Catalog OSS 0.3-0.5（LF AI & Data 沙箱项目）· Databricks Unity Catalog（商业托管）
+applies_to: Unity Catalog OSS 0.4.1（2026-04 最新 · LF AI & Data 沙箱项目）· Databricks Unity Catalog（商业托管）
 tags: [catalog, governance, multimodal, ai-assets]
 category: catalog
 repo: https://github.com/unitycatalog/unitycatalog

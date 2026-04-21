@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: Flink 1.18+, Flink CDC 3.0+
+applies_to: Flink 1.20 LTS (2024-08) · Flink 2.x (2025+) · Flink CDC 3.6+ (2026-03)
 tags: [query-engine, streaming, cdc, real-time]
 category: query-engine
 repo: https://github.com/apache/flink
