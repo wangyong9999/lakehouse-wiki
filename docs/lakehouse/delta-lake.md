@@ -129,7 +129,7 @@ SELECT * FROM table_changes('db.orders', 1000, 1100);
 
 ### 机制 5 · UniForm（2024+）· 单向 read-only 互操作
 
-**一张 Delta 表可被 Iceberg / Hudi 读取器识别**——这是 **Delta 3.0（2023-06）引入 Iceberg 方向 + Delta 3.2（2024）加 Hudi 方向** 的 UniForm 能力。关键性质：**单向 · Delta 写、他家读**。
+**一张 Delta 表可被 Iceberg / Hudi 读取器识别**——这是 **Delta 3.0（2023-06）引入 Iceberg 方向 + Delta 3.2（2024）加 Hudi 方向** 的 UniForm 能力。关键性质：**协议层面单向** · Delta 是**唯一合法元数据作者** · Iceberg / Hudi 引擎读取时基于 UniForm 派生的只读 metadata · 他家引擎**写入** UniForm 表会破坏元数据一致性（非"表本身限制"· 是"共享元数据约定"）。
 
 做法：commit Delta 时**自动异步生成** Iceberg metadata.json + manifest list（或 Hudi metadata），但 Parquet 数据只存一份。他家 reader 直接读这份共享数据 + UniForm 派生元数据。
 

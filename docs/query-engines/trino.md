@@ -295,6 +295,7 @@ WHERE d.year = 2024;
 - **跨源 JOIN 走 broadcast**：大表 broadcast OOM
 - **Worker 数 < 3**：Coordinator 单点但 Worker 也单点；至少 3 副本
 - **Connector 版本和 Catalog 版本不匹配**：Iceberg Connector 要对齐 spec v2
+- **V3 Deletion Vectors 支持**：**OSS Trino 当前（480+）对 Iceberg V3 DV 支持不完整** · 读可以但 write/merge 路径仍在追赶；**Starburst Enterprise（476-e+）和 Starburst Galaxy** 的商业版先行支持 V3 DV · 生产需 V3 写路径时考虑商业发行版
 - **Query Cache 误用**：Trino 没有查询级 cache；想缓存用 MV 或加速副本
 - **用 Trino 替代 Postgres 做 OLTP**：单行 INSERT / UPDATE = 湖仓反模式
 - **Prepared Statement 不用**：大量相同 SQL 不用 prepared 浪费 parse 时间

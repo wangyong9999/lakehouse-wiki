@@ -70,7 +70,7 @@ status: stable
 - **Glue**：通用 Catalog，支持多表格式，深度集成 AWS 治理
 - **S3 Tables**：S3 原生 Iceberg 托管（内置 compaction / snapshot expiry / 维护）· 独立 namespace
 
-2024-2026 AWS 策略是**双轨并行**：新 Iceberg 工作负载可直接用 S3 Tables；有 Athena / Lake Formation 治理需求的仍走 Glue。**两者的整合方式**：AWS 2025 引入 **federated catalog `s3tablescatalog`**——启用后 Glue Data Catalog 自动发现 account + region 内的所有 S3 table bucket，并作为 federated 目录出现在 Glue 命名空间下；Lake Formation 可以对其授权、Athena / EMR 可以 `SELECT`。S3 Tables 本身仍是独立的元数据存储，Glue 只是**治理入口**和**跨分析服务的一致命名**。
+2024-2026 AWS 策略是**双轨并行**：新 Iceberg 工作负载可直接用 S3 Tables；有 Athena / Lake Formation 治理需求的仍走 Glue。**两者的整合方式**：AWS 2025 引入 **federated catalog `s3tablescatalog`**——启用后 Glue Data Catalog 自动发现 account + region 内的所有 S3 table bucket，**作为 federated child catalog 挂到 Glue 命名空间下**（非完全独立 namespace）；Lake Formation 可统一授权、Athena / EMR 可 `SELECT`。S3 Tables 有自己的元数据存储层 · Glue 通过 federated 引用聚合治理 · 读者可把它理解为"S3 Tables 是数据平面 · Glue 是治理平面"。
 
 ## 3. 和其他 Catalog 的边界
 
