@@ -39,6 +39,9 @@ status: stable
 
 Lake + Vector 的主张是：**别搬家，让湖支持向量就地检索**。
 
+!!! note "本节（§三种落地范式）· 客观知识"
+    以下三范式的**机制描述 + 能力对比**是行业共识 · 非团队观点。范式 A（Puffin）、B（Lance / LanceDB）、C（Catalog 联邦）是工业界公认的三条技术路径 · 可被独立引用。对具体产品的好恶 / 选型倾向在下文 §怎么选 和 §相关章节中分层标注。
+
 ## 三种落地范式
 
 ![Lake + Vector 三范式对比](../assets/diagrams/lake-plus-vector.svg#only-light){ loading=lazy }
@@ -107,13 +110,25 @@ flowchart LR
 
 ## 怎么选
 
-| 你的情况 | 推荐范式 |
-| --- | --- |
-| 以 Iceberg 为事实表，向量规模 ≤ 千万，想最少系统 | **A（Puffin）** |
-| 多模资产多、训练任务重、向量规模亿级 | **B（Lance / LanceDB）** |
-| 已经在跑 Milvus / Qdrant、规模大、不想动 | **C（Catalog 统一）** |
+!!! info "本节 · 决策框架（可辩 · 有适用边界）"
+    以下决策矩阵是**基于工业实践的经验判断** · 不是唯一答案。**每一行有具体的前提假设**（向量规模 · 团队能力 · 已有栈） · 读者应根据自己场景校验。
 
-三种不互斥 —— 一家公司可以 A + C 并存：高频小向量表用 Puffin，大型多模向量用独立向量库，通过 Unity / Polaris 统一注册。
+| 你的情况 | 推荐范式 | 前提假设 |
+| --- | --- | --- |
+| 以 Iceberg 为事实表 · 向量规模 ≤ 千万 · 想最少系统 | **A（Puffin）** | Iceberg 生态已铺开 · Puffin 工具链能接受"相对新"· 向量查询 QPS 不极端 |
+| 多模资产多 · 训练任务重 · 向量规模亿级 | **B（Lance / LanceDB）** | 团队可以接受 Lance 相对新的生态 · 有一定运维 Lance 格式的能力 |
+| 已经在跑 Milvus / Qdrant · 规模大 · 不想动 | **C（Catalog 统一）** | 存量向量库 + 新建 Catalog 可以共存 · 治理层升级比物理搬迁更经济 |
+
+三种**不互斥** —— 一家公司可以 A + C 并存（高频小向量表用 Puffin · 大型多模向量用独立向量库 · 通过 Unity / Polaris 统一注册）。
+
+!!! warning "团队推荐（主张性 · 见 [unified/index §5 团队路线主张](index.md)）"
+    对于"BI + AI 并存 + 多模场景主线"的中大型团队 · 本 wiki 的推荐组合是：
+    
+    - **短期稳态**（L1-L2）：范式 **C**（Iceberg + LanceDB / Milvus 独立 + Unity Catalog / Polaris 统一）
+    - **长期目标**（L2-L3）：范式 **B**（Lance 作多模主向量 · 见 [ADR-0003](../adr/0003-lancedb-for-multimodal-vectors.md)）
+    - **过渡路径**：**C → B**（先治理统一 · 再物理一体化）
+    
+    **这是团队主张** · 不认同可以只采纳客观三范式分析部分。纯 BI / 纯 LLM / 纯 Classical ML 团队无需适用本推荐。
 
 ## 一体化带来的新能力
 
