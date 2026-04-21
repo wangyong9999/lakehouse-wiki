@@ -1,71 +1,193 @@
 ---
 title: 工业案例 · 数据平台参考
-description: Netflix · LinkedIn · Uber · Databricks · Snowflake · Pinterest 等工业数据平台深度参考
+description: 7 家工业数据平台深度案例 · Databricks / Snowflake / Netflix / LinkedIn / Uber / Pinterest / 阿里巴巴 · 统一 12 节坐标系深度拆解
+applies_to: 2024-2026 各家公开资料 · 具体技术栈版本见各深度页 applies_to
 last_reviewed: 2026-04-21
 ---
 
 # 工业案例 · 数据平台参考
 
 !!! tip "一句话定位"
-    **世界级数据平台公开资料的拆解归档**。Netflix / LinkedIn / Uber / Databricks / Snowflake / Pinterest / Airbnb 等工业团队的数据平台架构 · 按统一坐标系（存储 / 表格式 / Catalog / 检索 / 计算 / 消费）整理 · 供团队做架构决策和方案评审时参考。
+    **世界级数据平台公开资料的深度拆解归档**。**7 家深度案例**按统一 12 节坐标系（历史 · 架构 · 组件 · 演进 · 规模 · 取舍 · 失败 · 启示）整理 · 供资深工程师做**架构决策 / 方案评审 / 技术选型**时参考。
 
-!!! warning "本章定位 · reference 性质 · 非机制 canonical"
-    - **本章**：**工业案例参考**（reference）· 讲"别人怎么做 · 规模多大 · 有什么经验"· **不深挖机制原理**
-    - **机制原理**：去对应技术栈章（[lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [catalog/](../catalog/index.md) · [query-engines/](../query-engines/index.md) · [ai-workloads/](../ai-workloads/index.md) · [ml-infra/](../ml-infra/index.md)）
+!!! warning "本章定位 · reference 性质"
+    - **本章**：**工业案例参考**（reference）· 讲"**别人怎么做 · 规模多大 · 取舍为何 · 失败在哪**"
+    - **不讲机制原理**：机制去对应技术栈章（[lakehouse/](../lakehouse/index.md) / [retrieval/](../retrieval/index.md) / [catalog/](../catalog/index.md) / [query-engines/](../query-engines/index.md) / [ai-workloads/](../ai-workloads/index.md) / [ml-infra/](../ml-infra/index.md)）
     - **架构模式**：去 [unified/](../unified/index.md) · 讲跨章组合视角
-    - **业务端到端**：去 [scenarios/](../scenarios/index.md) · 讲具体业务场景的编排
+    - **业务场景端到端**：去 [scenarios/](../scenarios/index.md) · 讲具体业务
+    - **厂商选型商业视角**：去 [frontier/vendor-landscape](../frontier/vendor-landscape.md)
     
-    **用法**：做架构设计 / 选型评审时翻一翻 · 知道"业界是怎么做的"。
+    **用法**：做架构设计 / 选型评审 / 方案论证时翻一翻 · 知道"业界是怎么做的 · 为什么这么做 · 哪里踩过坑"。
 
-## 深度案例（每案 200+ 行）
+!!! info "本章**有时效性** · 按 ADR 0007 SOP 定期复检"
+    工业案例的技术栈变化快（一年一个新动向）。**本章所有深度页 `last_reviewed: 2026-04-21`** · 下次计划在 2026-Q3 复检。读者使用时应**交叉验证各公司最新博客 / 发布**（见 §9 延伸阅读）。
 
-- [**Netflix 数据平台**](netflix.md) ⭐ —— Apache Iceberg 创始地 · 10 万+ Iceberg 表 · Metacat / Genie / Maestro / Metaflow 全开源
-- [**LinkedIn 数据平台**](linkedin.md) ⭐ —— Kafka 原生地 · Pinot / Samza / Venice / Feathr / DataHub 全家桶
-- [**Uber 数据平台**](uber.md) ⭐ —— Apache Hudi 诞生地 · Michelangelo MLOps 鼻祖 · 实时 + ML 驱动
+## 1. 7 家深度案例（按主题组织）
 
-## 综述 · 多家横比
+### 1.1 商业一体化平台 · 代表双雄
 
-- [**六家综述**](studies.md) —— Databricks · Snowflake · Netflix · LinkedIn · Uber · Pinterest 按统一坐标系对比
+- [**Databricks**](databricks.md) ⭐ —— Delta + **Unity Catalog**（多模资产最全）+ MosaicML 整合 + Vector Search + AI Functions · **2026 工业最重要一家**
+- [**Snowflake**](snowflake.md) ⭐ —— **Cortex（SQL LLM UDF 工业先驱 · 2024 GA）** + Polaris（2026-02 Apache TLP）+ Iceberg 原生支持 · 云数仓 AI 内嵌代表
 
-## 评估坐标系 · 怎么读案例
+### 1.2 OSS 基础设施代表 · 三家工业标杆
 
-每个案例按这 8 个维度描述：
+- [**Netflix**](netflix.md) ⭐ —— **Iceberg 诞生地**（2017 Ryan Blue）· Metacat / Genie / Maestro / Metaflow 全开源 · 工程方法论最深远
+- [**LinkedIn**](linkedin.md) ⭐ —— **Kafka / Pinot / Venice / DataHub 全家桶** · **2024 OpenHouse 开源** + **Feathr 捐 Apache** · 单品开源 + 商业化典范
+- [**Uber**](uber.md) ⭐ —— **Hudi 诞生地** + **Michelangelo MLOps 鼻祖**（2017 博客）· 实时 + ML 驱动巨无霸
 
-| 维度 | 关注点 |
-|---|---|
-| **主场景** | BI / AI / 搜索 / 推荐 / 多模 |
-| **表格式** | Iceberg / Delta / Paimon / Hudi / 自研 |
-| **Catalog** | HMS / UC / Polaris / 自研 |
-| **存储** | 对象存储 / 自建分布式文件系统 |
-| **向量层** | 独立向量库 / 湖原生 / Puffin |
-| **检索** | Dense / Hybrid / Rerank |
-| **主要引擎** | Spark / Trino / Flink / 内部 |
-| **独特做法** | 最值得学的那件事 |
+### 1.3 多模推荐工业代表
 
-## 从这些案例能抽出的共同规律
+- [**Pinterest**](pinterest.md) —— **PinSage GNN**（SIGKDD 2018）+ GraphJet（VLDB 2017）+ Homefeed · 多模推荐最成熟案例
 
-1. **Catalog 在升级成治理平面** —— Unity / Polaris / DataHub 都在往"多模资产 + 血缘 + 权限"走
-2. **SQL 是长期入口** —— 底层都在把 embedding / LLM / rerank 做成 SQL 算子（详见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)）
-3. **向量层的位置在变** —— 从"独立系统"正在逐步被"湖上就地检索"蚕食
-4. **表格式与协议中立化** —— Iceberg REST 作为事实标准被越来越多家采纳
-5. **Embedding 是工程主语料** —— 不是"给 RAG 用" · 是"给检索、推荐、训练、缓存、去重通用"
+### 1.4 中国工业代表
 
-## 对团队的启示
+- [**阿里巴巴**](alibaba.md) —— **Apache Paimon 诞生地**（2022）+ Flink 生态深度贡献 + Hologres HSAP · 中国团队可直接借鉴
 
-- **Catalog 治理平面** —— 先有 Unity / Polaris · 再谈其他一体化（详见 [catalog/strategy](../catalog/strategy.md)）
-- **表格式 + Puffin** —— 投资 Iceberg 上的向量索引下沉能力（详见 [lakehouse/puffin](../lakehouse/puffin.md)）
-- **Embedding 流水线** —— 作为事实上的基础设施而非"某 AI 项目的附属"（详见 [ml-infra/embedding-pipelines](../ml-infra/embedding-pipelines.md)）
-- **SQL 层的 Vector / LLM UDF 标准** —— 关注社区进展（详见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)）
+### 1.5 综述横比
 
-## 相关
+- [**7 家横比矩阵**](studies.md) —— 8 维坐标系统一对比（表格式 · Catalog · 向量 · ML · SQL LLM UDF 等维度）
 
-- [一体化架构](../unified/index.md) —— 跨章组合视角
-- [Lake + Vector 融合架构](../unified/lake-plus-vector.md) —— 三种融合范式
-- [Catalog 策略](../catalog/strategy.md) —— 选型决策 canonical
-- [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 表格式横比
-- [Vendor Landscape](../frontier/vendor-landscape.md) —— 厂商生态全景
+## 2. 统一 12 节案例模板
 
-## 来源与更新
+每家深度案例按以下 12 节组织（这是 S31 系统重构的成果）：
 
-!!! note "信息来源"
-    以下案例信息**来源于各家公开博客、技术分享、官方文档**。具体实现细节以对应公司最新公开材料为准。技术栈演进快 · 建议交叉验证最新博客。
+| 节 | 内容 | 资深读者价值点 |
+|---|---|---|
+| 1 | 性质声明 + TL;DR | 快速判断是否继续读 |
+| 2 | 为什么这个案例值得学 | 明确阅读收益 |
+| 3 | 历史背景 · 关键转折 | 理解选型动机 |
+| 4 | 核心架构（Mermaid）| 全景视图 |
+| 5 | 8 维坐标系表 | 跨案例可比 |
+| 6 | 关键技术组件深度（3-5 个）| 选关键不罗列 |
+| 7 | 2024-2026 关键演进 | 时效性 |
+| 8 | 规模数字（带来源标签）| 量级感 |
+| 9 | **★ 深度技术取舍**（为什么选 X 不选 Y）| **资深读者核心价值** |
+| 10 | **真实失败 / 踩坑 / 教训** | **工业案例最稀缺信号** |
+| 11 | 对团队的启示（标观点 warning）| 主张分层 |
+| 12 | 技术博客 / 论文 + 相关章节 | 延伸入口 |
+
+## 3. 按问题找案例 · 反向索引
+
+**"做 X 该学谁"**（详见 [studies.md §5](studies.md)）：
+
+| 问题 | 首选案例 | 备选 |
+|---|---|---|
+| 做 **ML 平台** | [Uber · Michelangelo](uber.md)（鼻祖 · 7 年演进）| [Databricks](databricks.md) · [Netflix · Metaflow](netflix.md) |
+| 做 **多模推荐** | [Pinterest](pinterest.md)（PinSage 论文级）| [LinkedIn](linkedin.md) · [阿里](alibaba.md) |
+| 做 **Catalog / 治理平面** | [Databricks · UC](databricks.md)（最全）| [Snowflake · Polaris](snowflake.md) · [Netflix · Metacat](netflix.md) |
+| 做 **流式湖仓** | [阿里巴巴 · Paimon](alibaba.md)（最现代）| [Uber · Hudi](uber.md)（第一代） |
+| 做 **实时 OLAP** | [LinkedIn · Pinot](linkedin.md)（工业标杆）| [Uber](uber.md) · [阿里 · Hologres](alibaba.md) |
+| 做 **SQL LLM UDF** | [Snowflake · Cortex](snowflake.md)（工业先驱 · 2024 GA）| [Databricks · AI Functions](databricks.md) |
+| 做 **Feature Store** | [Uber · Palette/Genoa](uber.md)（鼻祖）| [LinkedIn · Feathr ASF](linkedin.md) |
+| 学 **BI + AI 一体化商业化** | [Databricks](databricks.md) | [Snowflake](snowflake.md) |
+| 学 **开源策略** | [LinkedIn](linkedin.md)（单品专精 + 商业化）| [Netflix](netflix.md) · [阿里巴巴](alibaba.md) |
+| 学 **大规模 Iceberg 运维** | [Netflix](netflix.md)（10 万+ 表）| [LinkedIn · OpenHouse](linkedin.md) |
+| 学 **中国工业实践** | [阿里巴巴](alibaba.md) | （后续加字节 / 腾讯 / 美团）|
+
+## 4. 和 frontier/vendor-landscape 的分工
+
+| | **本章 cases/** | **[frontier/vendor-landscape](../frontier/vendor-landscape.md)** |
+|---|---|---|
+| **视角** | **案例事实**（历史 · 规模 · 取舍 · 教训）| **厂商选型**（商业产品横比 · 定价 · 生态） |
+| **性质** | reference 拆解 | compare + 前沿观察 |
+| **对象** | 具体公司的数据平台 | 商业产品和开源项目 |
+| **时间** | 历史 + 当前 | 当前 + 未来展望 |
+
+**两章可互为补充** · 不重叠。
+
+## 5. 不同读者的阅读建议
+
+### 5.1 架构师 / CTO（30-60 分钟快读）
+
+1. 读本 index §1-3 了解 7 家 · 找最相关的 2-3 家
+2. 对每家深度页 · 重点读：
+   - §1 TL;DR + §5 8 维坐标系（量级感）
+   - §9 深度技术取舍（资深价值）
+   - §10 失败 / 教训（实战信号）
+3. 读 [studies.md §3 关键维度对比](studies.md) 做跨案例综合判断
+
+### 5.2 做技术选型的资深工程师（2-3 小时深度）
+
+按"反向索引"（§3）找 2-3 家相关 · 每家完整读 12 节。重点对照：
+- §6 关键组件（具体实现选择）
+- §9 深度取舍（替代方案对比）
+- §11 启示（主张分层 · 判断可借鉴性）
+
+### 5.3 新接触 wiki 的工程师（1 小时全景）
+
+先读 [studies.md](studies.md)（7 家横比矩阵）· 然后按兴趣挑 1 家深度页完整读。
+
+### 5.4 研究生 / 论文读者（学术视角）
+
+关注：
+- **Netflix · Iceberg** 论文（CIDR 2020）
+- **Databricks · Lakehouse** 论文（CIDR 2021）
+- **Pinterest · PinSage** 论文（SIGKDD 2018）· **GraphJet** 论文（VLDB 2017）
+- **Uber · Michelangelo** 博客
+- **Snowflake · Elastic DW** 论文（SIGMOD 2016）
+
+## 6. 从 7 家案例抽出的共同规律（客观观察）
+
+详见 [studies.md §4](studies.md)：
+
+1. **Catalog 升级成治理平面** —— UC / Polaris / DataHub / OpenHouse 都往"多模资产 + 血缘 + 权限"走
+2. **SQL 是长期 AI 入口** —— Cortex / AI Functions / BigQuery ML 先驱 SQL LLM UDF
+3. **向量层从"独立"转"湖仓原生"** —— Databricks Vector Search / Snowflake Cortex / Hologres 向量
+4. **表格式协议中立化** —— Iceberg REST 成事实标准 · 商业厂商"绑 primary + 开放 secondary"
+5. **Embedding 是工程主语料** —— 不只"给 RAG 用"· 是检索 + 推荐 + 训练 + 缓存 + 去重通用基础设施
+6. **闭源走向有限开放** —— 所有商业厂商"开放部分 + 锁定部分"
+7. **单品开源 + 商业化**（LinkedIn 模式）成为主流路径
+
+## 7. 对团队的启示（观点提炼 · 详见各深度页和 studies.md §6）
+
+!!! warning "以下是观点 · 不是客观事实"
+
+- **Catalog 治理平面先行** · 再谈一体化（见 [catalog/strategy](../catalog/strategy.md)）
+- **投资 Iceberg + Puffin 组合**（向量索引下沉）
+- **Embedding 流水线作基础设施** 不是"AI 项目附属"
+- **跟进 SQL LLM UDF 趋势**（Cortex / AI Functions 或开源 Spark+Ray+vLLM）
+- **国内团队重点看阿里 Paimon + Flink CDC** 组合（最现代化 · 可复制）
+- **规模打折** —— 不要照搬 Netflix / Uber 全栈 · 按自己规模取舍
+- **自研 ≠ 永恒** —— 定期评估 vs 社区方案 · 敢替换（LinkedIn Samza → Flink 教训）
+
+## 8. 后续待补案例（下一轮）
+
+!!! note "本章未完成度声明"
+    本轮（S31）重构完成 7 家深度案例。**下一轮计划新增**：
+    
+    - **Meta**（Presto 诞生地 · FBLearner · PyTorch 原生 · RocksDB）
+    - **Airbnb**（Minerva 语义层鼻祖 · dbt-like experimentation）
+    - **Stripe** / **Shopify**（中型团队规模参考）
+    - **字节跳动**（ByConity · Doris 背后 · 数据栈多元）
+    - **Booking**（欧洲成熟 ML + BI 团队）
+    
+    读者有具体建议可反馈。
+
+## 9. 延伸阅读 · 权威来源
+
+### 各家官方技术博客（持续更新）
+
+- [Databricks Engineering Blog](https://www.databricks.com/blog/engineering)
+- [Snowflake Engineering Blog](https://www.snowflake.com/engineering-blog/)
+- [Netflix Tech Blog](https://netflixtechblog.com/)
+- [LinkedIn Engineering Blog](https://engineering.linkedin.com/)
+- [Uber Engineering Blog](https://www.uber.com/blog/engineering/)
+- [Pinterest Engineering Medium](https://medium.com/pinterest-engineering)
+- [阿里云开发者博客](https://developer.aliyun.com/)
+
+### 综述 / 分析
+
+- *Designing Data-Intensive Applications*（Kleppmann · 数据系统设计必读）
+- *The Composable Data Stack*（a16z · 数据栈演进视角）
+- *Modern Data Stack* 分析（本 wiki [frontier/modern-data-stack](../frontier/modern-data-stack.md)）
+- 各家开源项目官方文档（Iceberg / Paimon / Hudi / Delta · Kafka / Pinot / Flink 等）
+
+## 10. 章节相关
+
+- [unified/](../unified/index.md) —— 跨章组合视角
+- [frontier/vendor-landscape](../frontier/vendor-landscape.md) —— 厂商选型商业视角
+- [frontier/modern-data-stack](../frontier/modern-data-stack.md) —— 现代数据栈全景
+- [frontier/data-systems-evolution](../frontier/data-systems-evolution.md) —— 三代数据系统演进史（Netflix / LinkedIn / Uber 在第三代）
+- [compare/iceberg-vs-paimon-vs-hudi-vs-delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 表格式横比
+- [catalog/strategy](../catalog/strategy.md) —— Catalog 选型决策（综合 7 家案例经验）
+- [lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [catalog/](../catalog/index.md) · [ml-infra/](../ml-infra/index.md) · [ai-workloads/](../ai-workloads/index.md) —— 机制 canonical

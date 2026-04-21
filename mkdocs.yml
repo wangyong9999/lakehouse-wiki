@@ -312,10 +312,18 @@ nav:
       - 多模数据建模: unified/multimodal-data-modeling.md
   - 工业案例:
       - cases/index.md
-      - 案例综述（多家横比）: cases/studies.md
-      - Netflix 数据平台: cases/netflix.md
-      - LinkedIn 数据平台: cases/linkedin.md
-      - Uber 数据平台: cases/uber.md
+      - 7 家横比矩阵: cases/studies.md
+      - 商业一体化平台:
+          - Databricks · Lakehouse AI: cases/databricks.md
+          - Snowflake · Data Cloud + Cortex: cases/snowflake.md
+      - OSS 基础设施代表:
+          - Netflix · Iceberg 诞生地: cases/netflix.md
+          - LinkedIn · Kafka 全家桶 + OpenHouse: cases/linkedin.md
+          - Uber · Hudi + Michelangelo: cases/uber.md
+      - 多模推荐代表:
+          - Pinterest · PinSage 多模推荐: cases/pinterest.md
+      - 中国工业代表:
+          - 阿里巴巴 · Paimon 诞生地: cases/alibaba.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md
