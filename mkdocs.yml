@@ -283,6 +283,7 @@ nav:
           - Guardrails: ai-workloads/guardrails.md
           - LLM Observability: ai-workloads/llm-observability.md
           - Conversation Lifecycle: ai-workloads/conversation-lifecycle.md
+          - AI App Authorization: ai-workloads/authorization.md
   - ML 平台:
       - ml-infra/index.md
       - 特征与数据:
