@@ -381,6 +381,7 @@ nav:
       - FAQ: faq.md
       - 术语表: glossary.md
       - 数据来源声明: about-sources.md
+      - 横向对比索引: compare/index.md
       - 按技术栈索引: index-by-technology.md
       - 按 Tag 浏览: tags/index.md
       - Changelog: changelog.md
