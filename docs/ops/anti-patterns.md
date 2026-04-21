@@ -1,14 +1,17 @@
 ---
-title: 湖仓 20 反模式 · 别这样做
+title: 湖仓 + AI 28 反模式 · 别这样做
 type: reference
 depth: 进阶
-tags: [ops, anti-patterns, best-practices]
+level: A
+last_reviewed: 2026-04-21
+applies_to: 2024-2026 湖仓 + AI 生产运维实践
+tags: [ops, anti-patterns, best-practices, ai-anti-patterns]
 aliases: [反模式清单, Anti-Patterns]
-related: [performance-tuning, cost-optimization, troubleshooting]
+related: [performance-tuning, cost-optimization, troubleshooting, production-checklist]
 status: stable
 ---
 
-# 湖仓 20 反模式
+# 湖仓 + AI 28 反模式
 
 !!! tip "一句话定位"
     **新手最常踩的坑总汇**。涵盖**表格式设计 · 入湖 · 查询 · 检索 · AI · 运维 · 治理**七个维度的 20 个反模式。每条带**症状 / 根因 / 正确做法**。**上线前自查一遍，能避 80% 的生产事故**。
@@ -200,7 +203,101 @@ PARTITIONED BY (days(ts), bucket(16, user_id))
 
 ---
 
-## 补充（超 20 条的"还见过的"）
+## AI 应用 / LLM
+
+### 反模式 21 · Prompt 硬编码在应用代码里
+
+**症状**：Prompt 改一字要发版 · 不同环境 prompt 版本不同 · 事故时不知道用的哪版。
+
+**根因**：Prompt 没作版本化资产管理。
+
+**正确做法**：
+- Prompt 存 Registry（MLflow / 自建 · 详见 [ai-workloads/prompt-management](../ai-workloads/prompt-management.md)）
+- 每次调用记录 prompt_version
+- Prompt 评估集 + 上线前回归
+
+### 反模式 22 · 无 Guardrails 的 LLM 输出直连业务
+
+**症状**：LLM 输出**未经过滤**直接进业务（Agent 执行 / 用户可见）· 注入攻击 / 越狱 / PII 泄漏。
+
+**根因**：把 LLM 当"API"用 · 忽略它是**不可信输入源**。
+
+**正确做法**：
+- 入口 + 出口双向 Guardrails（见 [ai-workloads/guardrails](../ai-workloads/guardrails.md)）
+- 输入：prompt injection 检测 · 敏感内容过滤
+- 输出：PII mask · 幻觉验证 · Tool call 白名单
+
+### 反模式 23 · Agent 无 sandbox 执行任意 Tool
+
+**症状**：LLM Agent 被给**全权限**（读写库 / 调 shell / 外部 API）· 一次坏决策毁库。
+
+**根因**：Tool 设计没有 authorization · Agent 当管理员。
+
+**正确做法**：
+- Tool ACL（见 [ai-workloads/authorization](../ai-workloads/authorization.md)）
+- Agent 的身份 ≠ 当前用户（identity 流转）
+- 高风险 Tool 必须 HITL（human-in-the-loop）
+
+### 反模式 24 · 向量库无权限模型
+
+**症状**：RAG 检索跨用户 / 跨租户 · 用户 A 问问题检索到用户 B 的私密文档。
+
+**根因**：向量库没有 row-level filter · 权限只在 Prompt 里说"别返回别人文档"（LLM 靠不住）。
+
+**正确做法**：
+- 向量库原生**元数据过滤**（LanceDB / Milvus / Qdrant 都支持）
+- 强制 `WHERE tenant_id = current_user_tenant()` 在向量库侧
+- 详见 [retrieval/cross-modal-queries](../retrieval/cross-modal-queries.md) §多租户权限
+
+### 反模式 25 · 模型 artifact 无 License 管理
+
+**症状**：用了 Llama 3 微调模型商业化 · 没看过**Llama Community License**（7 亿 MAU 限制 / 不得训练竞品 LLM）· 法律风险。
+
+**根因**：Model Registry 没有 license 字段 · 使用合规不成体系。
+
+**正确做法**：
+- Model Registry 强制 license 元数据（见 [ml-infra/model-registry](../ml-infra/model-registry.md) §合规）
+- 派生模型（fine-tuned）继承 license 限制
+- 合规扫描（某 adapter 基于 Llama · 自动告警 MAU 接近限制）
+
+## 运维 / 生产（AI 扩展）
+
+### 反模式 26 · LLM 输出没 SLO
+
+**症状**：LLM 服务上线半年 · 质量悄悄退化（模型换版 / prompt 改了 / 上游数据变了）· 业务投诉才发现。
+
+**根因**：只监控技术指标（延迟 / 错误率）· 没监控业务指标（幻觉率 / groundedness / user thumbs）。
+
+**正确做法**：
+- LLM SLO 体系（见 [sla-slo](sla-slo.md) §AI SLO）
+- 定期 LLM-as-judge 评估 + 人工抽检
+- 详见 [ai-workloads/llm-observability](../ai-workloads/llm-observability.md)
+
+### 反模式 27 · GPU 不归因成本
+
+**症状**：月底 GPU 账单爆 · 不知道哪个业务 / 模型用了多少 · 优化无从下手。
+
+**根因**：无 per-team / per-model tag · 成本看板只看总账。
+
+**正确做法**：
+- K8s namespace 或 pod label tag cost-center
+- Kubecost 或厂商 billing API 按 tag 聚合
+- 详见 [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) §FinOps
+
+### 反模式 28 · AI 应用无 DR 规划
+
+**症状**：向量库 / Prompt 仓库 / RAG 索引挂了 · 业务 AI 功能全停 · 没有备份。
+
+**根因**：把向量库 / Prompt 当"应用状态"· 没作**数据资产**做 DR。
+
+**正确做法**：
+- 向量库定期快照（见 [disaster-recovery](disaster-recovery.md) §AI DR）
+- Prompt 仓库版本化（Git / Registry）
+- RAG 索引能从湖表重建（记录 `source_snapshot_id`）
+
+---
+
+## 补充（超 28 条的"还见过的"）
 
 - **副本当真相源**：StarRocks / ClickHouse 挂了就丢数据
 - **数据沼泽**：数据不分类、不 owner，一堆表没人管

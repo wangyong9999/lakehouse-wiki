@@ -349,21 +349,26 @@ nav:
       - 日常运维 · 效率:
           - 可观测性: ops/observability.md
           - 性能调优: ops/performance-tuning.md
-          - 成本优化: ops/cost-optimization.md
+          - 故障排查手册: ops/troubleshooting.md
+      - 容量 · 目标:
+          - SLA · SLO · DRE: ops/sla-slo.md
+          - 容量规划: ops/capacity-planning.md
+      - 成本 · 效益:
+          - 成本优化 · FinOps: ops/cost-optimization.md
           - TCO 模型: ops/tco-model.md
       - 安全 · 治理 · 合规:
           - 安全与权限: ops/security-permissions.md
           - 数据治理: ops/data-governance.md
           - 多租户隔离: ops/multi-tenancy.md
-          - 合规 · GDPR / 个保法: ops/compliance.md
-      - 容量 · 目标:
-          - SLA · SLO · DRE: ops/sla-slo.md
-          - 容量规划: ops/capacity-planning.md
-      - 事故 · 变更:
-          - 故障排查手册: ops/troubleshooting.md
+          - 合规 · GDPR / AI Act / 个保法: ops/compliance.md
+      - DR · 变更 · 事故:
           - 灾难恢复 DR: ops/disaster-recovery.md
+          - 变更管理 · CI/CD · Schema Evolution: ops/change-management.md
+          - 事故管理 · SEV / Oncall / Postmortem: ops/incident-management.md
           - 迁移手册: ops/migration-playbook.md
-          - 20 反模式: ops/anti-patterns.md
+      - 反模式 · 清单:
+          - 28 反模式: ops/anti-patterns.md
+          - 生产上线检查清单: ops/production-checklist.md
   - 研究前沿:
       - frontier/index.md
       - AI · 检索前沿:

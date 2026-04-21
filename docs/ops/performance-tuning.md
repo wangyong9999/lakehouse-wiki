@@ -1,12 +1,22 @@
 ---
-title: 性能调优
+title: 性能调优 · Performance Tuning
 type: concept
-tags: [ops, performance]
+depth: 资深
+level: A
+last_reviewed: 2026-04-21
+applies_to: Iceberg v2/v3 · Paimon 1.4+ · Spark 4.1+ · Trino 480+ · Flink 2.x · Photon · Velox · DataFusion · 向量检索 HNSW/IVF-PQ · 2024-2026 实践
+tags: [ops, performance, tuning, iceberg-v3, vectorization]
 aliases: [Performance Tuning]
-related: [query-acceleration, compaction, observability, cost-optimization]
-systems: [iceberg, spark, trino]
+related: [query-acceleration, compaction, observability, cost-optimization, troubleshooting]
+systems: [iceberg, spark, trino, flink, photon, velox, datafusion]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：湖仓 + 向量检索的通用性能调优方法
+    - **机制深入**：[Compaction](../lakehouse/compaction.md) · [谓词下推](../query-engines/predicate-pushdown.md) · [向量化执行](../query-engines/vectorized-execution.md)
+    - **AI 应用延迟预算**（TTFT / Token · RAG 端到端分解）→ [ai-workloads/llm-inference](../ai-workloads/llm-inference.md) · [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
+    - **诊断手段**：靠 [可观测性](observability.md) · 无观测不调优
 
 # 性能调优
 
@@ -93,6 +103,81 @@ flowchart TD
 - **大 shuffle + OOM** → 调 shuffle 分区数、开 AQE
 - **Flink 作业越跑越慢** → 状态膨胀，检查 TTL / checkpoint 大小
 - **Trino 高峰崩** → coordinator 单点，Resource Group 没上
+
+## 2024-2026 性能前沿
+
+### 向量化执行引擎的代际
+
+**2024-2026 年性能竞赛的主战场是向量化执行引擎**：
+
+| 引擎 | 代表 | 特点 |
+|---|---|---|
+| **Photon**（Databricks）| C++ 重写 Spark · SIMD 列批 · 编译 | 商业闭源 · Databricks 商业护城河 |
+| **Velox**（Meta · OSS）| Presto / Spark 共享的 C++ 执行库 | 跨引擎 OSS 库 · 2024+ 生态活跃 |
+| **DataFusion**（Apache OSS · Rust）| Rust 向量化 · Arrow 原生 | OSS 新主力 · 数仓引擎底座 |
+| **Vortex / LiquidCache**（2024-2025 新）| 存储 + 执行融合 | 前沿 |
+
+**调优启示**：如果你在 OSS Spark / Trino · 可以评估接入 Velox / DataFusion（性能提升一档级别 · `[来源未验证 · 需自测]`）。
+
+### Iceberg v3 的性能影响
+
+Iceberg v3（2025-2026 演进）对性能的影响：
+
+- **Row lineage**：细粒度追踪 · **查询多一层 metadata 读取** · 规划时间略增
+- **Deletion Vector** · 替代 position delete · **MoR 读性能显著改善**（对比 Iceberg v2 delete files）
+- **Multi-table transaction**：跨表 commit 原子性 · 但 **commit 延迟略增**（Catalog CAS 次数）
+- **Variant 类型**：半结构化数据查询性能接近原生列
+
+**调优建议**：
+- 新项目默认 v3（享受 deletion vector）
+- 历史 MoR 表评估 v2→v3 迁移（重度写入场景收益大）
+
+## 向量检索性能调优（本章新增）
+
+### HNSW 调优
+
+```
+核心参数:
+- M: 邻居数 · 默认 16 · 增大提升 recall · 增大内存
+- ef_construction: 建索引时的搜索深度 · 默认 128
+- ef: 查询时深度 · 默认 64 · 增大提升 recall / 增大延迟
+```
+
+**调优矩阵** `[来源未验证 · 示意性 · 依数据集差异大]`：
+
+| 场景 | M | ef | 备注 |
+|---|---|---|---|
+| 通用 | 16 | 64 | 默认 · 平衡 recall 和延迟 |
+| 高 recall 要求 | 32 | 128 | 内存 × 2 · 延迟 × 1.5 |
+| 低延迟要求 | 8 | 32 | Recall 降低 · 延迟减半 |
+
+### IVF-PQ 调优（大规模场景）
+
+- **nlist**（聚类数）：典型 `sqrt(N)` · N 是向量数
+- **nprobe**（查询几个聚类）：10-50 · 影响 recall vs 延迟
+- **PQ**（量化）：降维比 4-16× · 精度损失可接受
+
+### 过滤感知 ANN（2024-2026 新）
+
+Qdrant / Milvus 2.4+ / LanceDB 的 **filter-aware ANN**：
+- 索引构建时记录元数据
+- 查询时边搜索边过滤
+- 避免 post-filter 召回失效
+
+**详见 [retrieval/filter-aware-search](../retrieval/filter-aware-search.md)**。
+
+## AI 应用延迟预算（引用 ai-workloads）
+
+RAG 端到端 p95 < 1.5s 示例：
+
+| 阶段 | 预算 |
+|---|---|
+| 检索（向量 + Hybrid）| 100-300ms |
+| Rerank | 50-150ms |
+| LLM TTFT | 200-500ms |
+| LLM 剩余 tokens | 500-1000ms |
+
+**TTFT 是 LLM UX 关键**。详细见 [ai-workloads/llm-inference](../ai-workloads/llm-inference.md) · [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md) §SLO 预算。
 
 ## 和可观测性的关系
 

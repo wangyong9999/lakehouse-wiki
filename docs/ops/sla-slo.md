@@ -1,15 +1,22 @@
 ---
-title: SLA · SLO · 数据产品可靠性工程
+title: SLA · SLO · 数据产品可靠性工程（DRE）
 type: reference
 depth: 资深
-level: A
-last_reviewed: 2026-04-18
-applies_to: 2024-2026 SRE + Data Engineering 实践
-tags: [ops, sla, slo, reliability, data-product]
-aliases: [SLO/SLA/SLI, Data Reliability Engineering]
-related: [observability, data-governance, troubleshooting]
+level: S
+last_reviewed: 2026-04-21
+applies_to: Google SRE · FinOps Framework · DRE 2024-2026 工业实践
+tags: [ops, sla, slo, reliability, data-product, dre, ai-slo]
+aliases: [SLO/SLA/SLI, Data Reliability Engineering, AI SLO]
+related: [observability, incident-management, data-governance, troubleshooting, model-monitoring, llm-observability]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：数据 / AI 系统的 SLO 体系（SLI/SLO/SLA/Error Budget 框架）
+    - **ML 模型监控实施**（Drift / Fairness / Auto-retrain 契约）→ [ml-infra/model-monitoring](../ml-infra/model-monitoring.md) canonical
+    - **LLM 可观测实施**（Trace / Cost / Prompt Version）→ [ai-workloads/llm-observability](../ai-workloads/llm-observability.md) canonical
+    - **故障响应流程**（SEV 分级 / oncall / postmortem）→ [incident-management](incident-management.md)
+    - 本页关注**SLO 的设计和承诺** · 和 observability / incident-management / model-monitoring 形成闭环
 
 # SLA · SLO · 数据产品可靠性
 
@@ -279,8 +286,96 @@ models:
 ### 2026 前瞻
 
 - **Data Contract + ML Contract** 会成为新标准
-- **AI / LLM 输出的 SLO** 是新领域（hallucination rate、token budget）
+- **AI / LLM SLO** 是新领域 · 见下方独立节
 - **自愈系统**：告警 → 自动修复（简单场景）
+
+## 9.5 AI / LLM SLO 专题（2024-2026 新领域）
+
+!!! info "本节是 SLO 在 AI 场景的扩展 · 工具实施见 [ai-workloads/llm-observability](../ai-workloads/llm-observability.md) · [ml-infra/model-monitoring](../ml-infra/model-monitoring.md)"
+
+### AI SLO 的独特维度
+
+传统数据 SLO 主要关心"**数据对不对 · 及不及时**"。AI SLO 增加：
+
+| 维度 | 传统数据 | AI / LLM |
+|---|---|---|
+| **准确** | 数字对 | **幻觉率 / 事实性** |
+| **及时** | 新鲜度 | **TTFT · Token 吞吐** |
+| **成本** | 算力 · 存储 | **Token 成本 · GPU hour** |
+| **安全** | 权限 · 审计 | **越狱率 · 注入防御** |
+| **一致性** | 口径一致 | **Prompt 版本一致 · 模型版本一致** |
+
+### LLM 应用 SLO 示例
+
+```yaml
+name: customer_support_rag_slo
+sli:
+  # 业务 SLI
+  - name: groundedness
+    source: ragas_evaluation
+    threshold: 0.85
+  - name: hallucination_rate
+    source: llm_judge_sampling
+    threshold: 0.05       # < 5% 幻觉
+  - name: user_satisfaction
+    source: thumbs_up_rate
+    threshold: 0.80
+  # 技术 SLI
+  - name: ttft_p95
+    threshold: 1000       # < 1s first token
+  - name: error_rate
+    threshold: 0.01
+slo:
+  objective: 99 of time
+  window: 30d
+alert:
+  fast_burn:
+    hallucination_rate > 0.10 for 1h
+  slow_burn:
+    groundedness < 0.80 for 24h
+budget:
+  per_request_token_p95: 2000
+  monthly_token_budget: 50M
+```
+
+### ML 模型 SLO 示例
+
+```yaml
+name: fraud_detection_model_slo
+sli:
+  - name: auc
+    source: rolling_evaluation
+    threshold: 0.92
+  - name: drift_psi
+    source: model_monitoring
+    threshold: 0.15
+  - name: fairness_gap
+    source: subgroup_metrics
+    threshold: 0.05       # demographic parity 差距 < 5%
+  - name: inference_p99
+    threshold: 50         # ms
+slo:
+  objective: 99.5 of time
+  window: 30d
+alert:
+  drift_detected:
+    psi > 0.25 + performance decline
+    → trigger auto-retrain pipeline (详见 ml-infra/model-monitoring §Auto-retrain)
+```
+
+### AI SLO 难点
+
+1. **Ground truth 难得**：LLM 输出没有标准答案 · 只能用 LLM-as-judge + 人工抽检近似
+2. **Cost 和 Quality 的 trade-off**：更好的模型贵 · 选哪个 tier 要 SLA
+3. **Prompt 版本漂移**：Prompt 改一字 · SLO 可能全变
+4. **模型供应商不稳**：OpenAI / Anthropic 外部 API 有自己的 SLA · 你的 SLO 依赖他们
+5. **评估延迟**：LLM 输出的质量评估本身可能耗时 · 不是实时 SLI
+
+### AI SLO 和传统 SLO 的协同
+
+- **共享 Error Budget 框架** · 但 AI 侧可能需要**更宽的 budget**（幻觉不是 0）
+- **共享 observability 入口**（OTel GenAI 规范 · 数据 + AI trace 统一）
+- **故障响应流程复用**（见 [incident-management](incident-management.md)）· 但 AI 事故的 postmortem 有特殊维度（prompt 审查 / 模型版本对比）
 
 ## 10. 陷阱与反模式
 

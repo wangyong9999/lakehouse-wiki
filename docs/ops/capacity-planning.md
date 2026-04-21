@@ -1,12 +1,21 @@
 ---
-title: 容量规划 · 集群规模与资源预估
+title: 容量规划 · 集群规模 + GPU + 向量库 + LLM
 type: reference
-depth: 进阶
-tags: [ops, capacity, sizing, resource]
+depth: 资深
+level: A
+last_reviewed: 2026-04-21
+applies_to: 2024-2026 云 + 自建集群容量规划 · 含 AI 负载
+tags: [ops, capacity, sizing, resource, gpu-capacity, llm-capacity]
 aliases: [Sizing, Resource Planning]
-related: [cost-optimization, performance-tuning, tco-model]
+related: [cost-optimization, performance-tuning, tco-model, gpu-scheduling]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：湖仓 + AI 生产的**容量估算方法**
+    - **GPU 调度机制**（MIG / 多租户 / topology-aware）→ [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md)
+    - **LLM 推理性能**（TTFT / Tokens/sec / 并发）→ [ai-workloads/llm-inference](../ai-workloads/llm-inference.md)
+    - **成本优化**细节 → [cost-optimization](cost-optimization.md)
 
 # 容量规划
 
@@ -269,6 +278,61 @@ Scan 吞吐 × 并行度 = 所需网络
 | 向量总内存 | 10M × 768 × 4 = 30GB + 图 50GB = 80GB × 3 副本 |
 | QPS 目标 | 100 × 3 = 300 全局 |
 | **月成本** | ~$3k |
+
+## 9.5 GPU 容量规划（AI 时代必需）
+
+### GPU 池分层
+
+| 负载 | 卡型示例 | 容量特点 |
+|---|---|---|
+| **在线推理 P0** | H100 / H200 / B200 | 独占 · SLO 严 · 24/7 |
+| **LLM Serving** | H100 80GB / H200 141GB | 显存决定 · 越大支持的模型和 context 越长 |
+| **训练**（大模型）| B200 / GB200 NVL72 | 多卡 gang · 可抢占 + checkpoint |
+| **微调 / RLHF** | A100 / H100 | 中等规模 · 可 spot |
+| **探索 / Notebook** | A10 / L4 · MIG 切分 | 共享 · 弹性 |
+
+### LLM 推理容量估算
+
+```
+单卡 LLM 吞吐（H100 · Llama-3.3-70B AWQ 量化）`[来源未验证 · 示意性]`:
+- 短 prompt（<1k tokens）：~100 tokens/sec
+- 长 context（8k+）：50-80 tokens/sec
+- 并发 batch：10-50 requests 同时
+
+容量估算示例:
+业务 QPS = 10 req/s · avg tokens = 500
+→ 需要 tokens/sec = 5000
+→ 单卡 100 tokens/sec × N 卡 = 5000
+→ N = 50 卡（高峰）
+```
+
+**工具**：vLLM · TGI · SGLang benchmark（详见 [ai-workloads/llm-inference](../ai-workloads/llm-inference.md) §6 性能数字）。
+
+### 向量库容量估算
+
+```
+向量库存储 = N 向量 × 维度 × 4 bytes × (1 + 索引 overhead 0.3-0.5)
+
+示例：
+- 1 亿向量 × 1024 维 × 4B = 400GB 原始
+- HNSW 索引 overhead × 1.4 = 560GB 总存储
+- 单节点 SSD 4TB 够存 · 内存需要 400GB（索引 hot path）
+- 多节点：3 节点 × 200GB 内存 = 够覆盖
+```
+
+**QPS 估算**：
+- HNSW on NVMe：单机 1000-5000 QPS `[来源未验证]`
+- 多节点分片：线性扩展
+
+详见 [retrieval/hnsw](../retrieval/hnsw.md) · [retrieval/ivf-pq](../retrieval/ivf-pq.md) 机制 canonical。
+
+### 典型 AI 推理 SLA 对应容量
+
+| SLA | GPU / 向量库 |
+|---|---|
+| 单模型 · 1000 QPS · p99 < 100ms | 2-4 H100 + 3 节点向量库 |
+| RAG · 100 QPS · p95 < 1.5s | 1-2 H100 LLM + 2 节点向量库 + 1 节点 rerank |
+| 大规模推荐召回 · 10k QPS | 自研 ANN + 10-20 节点（Pinterest 级规模）|
 
 ## 10. 陷阱
 

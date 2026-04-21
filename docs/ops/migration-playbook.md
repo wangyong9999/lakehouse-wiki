@@ -1,13 +1,23 @@
 ---
-title: 迁移手册
+title: 迁移手册 · 7 条路径
 type: concept
-depth: 进阶
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: Iceberg · Paimon · Delta · Hudi · UniForm · Catalog（UC/Polaris/Gravitino）· 向量库 · 商业 SaaS(Databricks/Snowflake) · 2024-2026 实践
 prerequisites: [bulk-loading]
-tags: [ops, migration]
-related: [bulk-loading, iceberg, streaming-ingestion]
-systems: [hive, iceberg, milvus, lancedb]
+tags: [ops, migration, delta-to-iceberg, hudi-to-paimon, saas-migration]
+aliases: [Migration, 迁移]
+related: [bulk-loading, iceberg, streaming-ingestion, change-management, catalog-strategy]
+systems: [iceberg, paimon, delta, hudi, unity-catalog, polaris, milvus, lancedb]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：**跨系统迁移**的 7 条常见路径
+    - **同系统内变更**（Schema 演化 · 版本升级）→ [change-management](change-management.md)
+    - **表格式机制**（Iceberg / Paimon / Hudi / Delta 对比）→ [compare/iceberg-vs-paimon-vs-hudi-vs-delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md)
+    - **Catalog 选型**（迁移目标决策）→ [catalog/strategy](../catalog/strategy.md)
 
 # 迁移手册
 
@@ -142,6 +152,132 @@ flowchart LR
 - 对相同 query 两边 Recall@K 对齐（±1%）
 - 延迟在预算内
 - 结构化过滤语义一致
+
+## 路径 4：Delta ↔ Iceberg 迁移（2024-2026 热点）
+
+Databricks 推 UniForm（Delta 读 Iceberg）· 但客户层面真实迁移也在发生。
+
+### 4A · Delta → Iceberg（去 lock-in 场景）
+
+**场景**：客户想离开 Databricks / 想要 Iceberg 多引擎生态
+
+**方式**：
+1. **UniForm 过渡**（2024+ · Delta 数据暴露 Iceberg metadata · 过渡期可读）
+2. **重写**（CTAS 从 Delta 读 · 写 Iceberg）
+3. **双写**（写入侧同时写两个表 · 切读后停旧写）
+
+**坑**：
+- Delta CDF（Change Data Feed）和 Iceberg changelog 概念有差异
+- Delta Time Travel 和 Iceberg snapshot 不互通 · 历史 snapshot 丢失
+
+### 4B · Iceberg → Delta（Databricks 采购场景）
+
+**场景**：客户采购了 Databricks · 内部既有 Iceberg 表要集成
+
+**方式**：
+1. Iceberg 外部表（Databricks 2023+ 支持读 Iceberg）· **通常不迁** · 直接读
+2. 必要时 CTAS 转 Delta（少数深度 Databricks 能力依赖场景）
+
+### 4C · Hudi → Iceberg / Paimon（2024-2026 常见）
+
+**场景**：早期选了 Hudi · 现在评估迁移（生态 · 社区活跃度）
+
+**决策矩阵**：
+- **生态广 + 批为主** → Iceberg
+- **流式重 + Flink 生态** → Paimon
+- **Spark-first + MoR 写密集** → 留 Hudi（Hudi 在 MoR 极致场景仍有优势）
+
+**迁移方式**：CTAS 重写（通常需要 TB 级重写 · 按分区批次）
+
+## 路径 5：HMS → 现代 Catalog（UC / Polaris / Gravitino）
+
+### 5A · HMS → Iceberg REST（过渡）
+
+最常见的第一步：
+1. 上 Polaris / UC OSS 作 Iceberg REST Catalog
+2. 新表建在新 Catalog
+3. 老表仍在 HMS · 逐步迁
+
+### 5B · HMS → Unity Catalog（多模治理一步到位）
+
+**场景**：客户选 Databricks 生态 · 想要 UC 的多模资产全覆盖
+
+**难点**：
+- HMS 的 GRANT 表和 UC RBAC 模型**不对等**（详见 [catalog/strategy §7 HMS 迁移](../catalog/strategy.md)）
+- 业务团队教育成本高
+
+### 5C · 多 HMS 联邦 → Gravitino
+
+**场景**：多个业务线各有 HMS · 想统一但不搬
+
+**方式**：Gravitino 作上层联邦 · 不动底层 HMS · 渐进迁移。
+
+## 路径 6：商业 SaaS ↔ 自建（2024-2026 双向）
+
+### 6A · 自建 → 商业 SaaS（采购场景）
+
+**场景**：公司采购 Databricks / Snowflake · 客户自建栈要迁入
+
+**要点**：
+- 数据 Copy（S3 数据还是 S3 数据 · 主要是 Catalog 元数据搬迁）
+- 权限模型映射（自建 RBAC vs UC / Polaris）
+- 计算作业重写（Spark → Databricks Runtime / Snowpark）
+- **人员培训**是最大成本
+
+### 6B · 商业 SaaS → 自建（去 lock-in 潮流）
+
+**场景**：成本优化 · 数据主权 · 避免供应商绑定
+
+**典型动作**：
+- **Snowflake 数据 → Iceberg 外部表**（保计算在 Snowflake 但数据格式开放）
+- **Databricks Delta → Iceberg + 自建 Spark**（UniForm 辅助）
+- **MosaicML → Apache 栈 + 自建 GPU**
+
+**难点**：
+- Photon / Photon 独家优化 · 开源 Spark 性能差距（需评估是否接受）
+- UC 多模能力 · 自建 UC OSS 是否够（多数客户够）
+
+## 路径 7：AI 应用迁移（向量库 / Prompt / 模型）
+
+### 7A · 商业向量库 → 开源 / 湖原生
+
+**场景**：Pinecone / Zilliz Cloud → Milvus 自建 / LanceDB
+
+**步骤**：
+1. Export 向量（每家都有 API · 但没通用工具）
+2. 在目标向量库重建 index
+3. 双读验证（Top-K 召回对比）
+4. 切流量
+
+**坑**：
+- **Embedding 模型必须一致**（不同模型向量空间不可比）
+- HNSW / IVF-PQ 参数重调 · 不同实现性能不同
+- 业务层 SDK 要换
+
+### 7B · 外部 LLM API → 自托管
+
+**场景**：OpenAI / Anthropic → Llama 3.3 自托管 · 数据主权 + 成本
+
+**步骤**：
+1. 评估质量（domain benchmark + 用户 A/B）
+2. 部署 vLLM / SGLang + GPU（见 [ai-workloads/llm-inference](../ai-workloads/llm-inference.md)）
+3. LLM Gateway 加路由（见 [ai-workloads/llm-gateway](../ai-workloads/llm-gateway.md)）
+4. 渐进切流量
+
+**坑**：
+- **自托管 Llama 质量可能不如 GPT-4**（domain 取决）· 需要自评
+- GPU 运维能力要求
+- TCO 计算（见 [tco-model §AI 场景 TCO](tco-model.md)）
+
+### 7C · Prompt 从硬编码 → Registry
+
+**场景**：之前 Prompt 写代码里 · 现在要版本化管理
+
+**步骤**：
+1. Prompt 抽离到 YAML / Registry
+2. 应用读取方式改为 pull（带 version 标识）
+3. 建立评估集
+4. 上线 CI（Prompt 改动过评估集才允许合并）
 
 ## 版本 Freeze 与回退
 

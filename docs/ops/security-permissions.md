@@ -1,12 +1,24 @@
 ---
-title: 安全与权限
+title: 安全与权限 · Zero Trust · Credential Vending · Secrets
 type: concept
-tags: [ops, security, acl]
-aliases: [Security, Permissions, RBAC]
-related: [unified-catalog-strategy, observability, data-governance]
-systems: [unity-catalog, polaris, ranger]
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: Zero Trust 架构 · OIDC / OAuth 2.1 / SAML · Credential Vending · HashiCorp Vault · AWS Secrets Manager · mTLS / Service Mesh · 2024-2026 实践
+tags: [ops, security, acl, zero-trust, oidc, credential-vending]
+aliases: [Security, Permissions, RBAC, Zero Trust]
+related: [catalog-strategy, observability, data-governance, compliance, multi-tenancy, authorization]
+systems: [unity-catalog, polaris, ranger, vault, opa]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：**湖仓通用权限 + 安全基础设施**（身份 · Catalog 权限 · SQL 细粒度 · 凭证 · Zero Trust）
+    - **AI 应用权限**（Tool ACL · Data ACL · Cache 隔离 · Identity 流转 · Multi-tenant）→ [ai-workloads/authorization](../ai-workloads/authorization.md) canonical
+    - **Catalog 治理细节** → [catalog/strategy](../catalog/strategy.md)
+    - **多租户隔离** → [multi-tenancy](multi-tenancy.md)
+    - **合规法规**（GDPR · EU AI Act）→ [compliance](compliance.md)
+    - 本页专注**湖仓数据层的安全基础设施** · AI 应用层的权限去 authorization canonical
 
 # 安全与权限
 
@@ -110,6 +122,102 @@ Unity Catalog / Gravitino 都把"向量列""模型""Volume"当资源纳入 RBAC 
 - **所有人都是 admin 角色** —— 早期常见，事故后才拆
 - **审计关了省钱** —— 出事后无法溯源
 - **多模资产（向量/模型）没权限模型** —— 一致性被打破
+
+## 现代身份协议（2024-2026 更新）
+
+### OIDC vs SAML vs OAuth 2.1
+
+| 协议 | 场景 | 2024-2026 趋势 |
+|---|---|---|
+| **OIDC**（OpenID Connect）| Web + API 身份 | **主流**（OAuth 2.1 的身份扩展）|
+| **SAML 2.0** | 企业 SSO 传统 | 大企业存量 · 新集成少 |
+| **OAuth 2.1** | API 授权 | RFC 2024+ 整合 OAuth 2.0 的最佳实践 |
+| **Passkeys / WebAuthn** | 无密码登录 | **2024-2026 新主流**（Apple / Google / Microsoft 推） |
+
+**数据平台主要用 OIDC + OAuth 2.1**（用户 → Catalog → 引擎链路）。
+
+### Zero Trust 架构
+
+**核心原则**："**Never Trust · Always Verify**" —— 不信任网络 · 每次访问都验证身份。
+
+数据平台的 Zero Trust 落地：
+- **没有网络边界豁免**（VPN 内也要验证 · 不是"内网就信任"）
+- **最小权限** · Credential Vending（见 §为什么 SQL 层权限不够）
+- **持续验证**（session 每 15min 刷 token）
+- **所有访问审计**
+- **mTLS 跨服务通信**（Service Mesh / Istio / Linkerd）
+
+**工具**：BeyondCorp（Google 原型）· Zscaler · Cloudflare Access · Tailscale。
+
+## Secrets Management
+
+**专用 Secrets 管理是生产必备**：
+
+| 工具 | 定位 |
+|---|---|
+| **HashiCorp Vault** | 开源 · 事实标准 · Dynamic Secrets · PKI |
+| **AWS Secrets Manager** | AWS 原生 · KMS 集成 |
+| **GCP Secret Manager** · **Azure Key Vault** | 各云原生 |
+| **Sealed Secrets**（K8s）| K8s 内 secret 加密 · GitOps 友好 |
+| **SOPS + Age/GPG** | 文件级加密 · GitOps 基础 |
+
+**典型实践**：
+- 数据库密码 / API Key / Catalog token 全部走 Vault
+- 应用启动时拉 secret · 不写入镜像 / 环境变量硬编码
+- **Dynamic Secrets**：Vault 动态生成短时 DB 账号（比静态账号更安全）
+
+**反模式**：
+- AWS Access Key 写配置文件
+- Slack 里发密码
+- Git 仓库提交 secret（用 **git-secrets** / **trufflehog** 扫描）
+
+## mTLS 和 Service Mesh
+
+跨服务通信加密 + 身份验证：
+
+- **mTLS**（mutual TLS）：双向证书验证 · 防中间人 · 证明对方身份
+- **Service Mesh**（Istio / Linkerd / Consul Connect）：
+  - 自动 mTLS 所有服务间通信
+  - 零配置策略（身份即证书）
+  - 统一审计 / observability
+
+**数据平台场景**：Spark → Trino → Iceberg Catalog → 对象存储 · 每段都 mTLS 保护。
+
+## 审计日志 · 详细模式
+
+### 保留期限
+
+| 用途 | 建议保留 |
+|---|---|
+| 合规审计（GDPR / SOC 2） | ≥ 3 年 |
+| 安全事件追溯 | ≥ 1 年 |
+| 日常排查 | ≥ 90 天 |
+
+### SIEM 集成
+
+审计日志送 **SIEM**（Security Information and Event Management）系统：
+- **Splunk**（商业 · 最广）
+- **Elastic Security**（ELK 生态）
+- **Datadog Cloud SIEM**
+- **AWS CloudTrail** + **GuardDuty**
+
+### 异常检测
+
+审计日志上做异常检测：
+- 异常访问模式（半夜扫大表）
+- 权限提升尝试（短时间多次查高敏感表）
+- 数据外泄信号（大批 SELECT + 导出）
+
+## AI 应用权限的边界（指向 canonical）
+
+AI 应用（LLM · Agent · RAG）有**专属权限维度**：
+- **Tool ACL**（Agent 能调哪些 Tool）
+- **Data ACL**（RAG 检索能看哪些文档）
+- **Cache 隔离**（语义缓存不跨租户）
+- **Log 隔离**（Prompt 日志不跨租户）
+- **Identity 流转**（Agent 以谁的身份执行）
+
+**canonical 在 [ai-workloads/authorization](../ai-workloads/authorization.md)** · 本页不重复。
 
 ## 最小可用清单
 

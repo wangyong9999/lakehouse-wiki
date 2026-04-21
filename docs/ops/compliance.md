@@ -1,15 +1,22 @@
 ---
-title: 数据合规 · GDPR / HIPAA / PDPA / 个保法 / 跨境
+title: 数据合规 · GDPR · EU AI Act · HIPAA · 个保法 · 生成式 AI 法规
 type: concept
 depth: 资深
-level: A
-last_reviewed: 2026-04-18
-applies_to: GDPR · HIPAA · PDPA · 个保法 · CCPA · SOC2 · 2024-2025
-tags: [ops, compliance, governance, privacy]
-aliases: [Compliance, Data Privacy]
-related: [data-governance, security-permissions, ai-governance]
+level: S
+last_reviewed: 2026-04-21
+applies_to: GDPR · HIPAA · PDPA · 个保法 · CCPA · SOC2 · EU AI Act (2024-08 生效) · NIST AI RMF · 中国《生成式 AI 服务管理办法》(2023-07) · 2024-2026 实践
+tags: [ops, compliance, governance, privacy, eu-ai-act, ai-compliance]
+aliases: [Compliance, Data Privacy, AI Compliance]
+related: [data-governance, security-permissions, ai-governance, model-registry]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：合规法规的**工程实施视角**（具体要求 · 技术对应 · 落地清单）
+    - **AI 治理战略视角**（Red Teaming 组织 · 伦理框架 · 前沿讨论）→ [frontier/ai-governance](../frontier/ai-governance.md)
+    - **Model Card / 模型许可工程实施** → [ml-infra/model-registry](../ml-infra/model-registry.md) §合规 artifact
+    - **Guardrails 技术层** → [ai-workloads/guardrails](../ai-workloads/guardrails.md)
+    - 本页讲**法规对数据 / AI 平台的具体工程要求**
 
 # 数据合规
 
@@ -211,14 +218,93 @@ PARTITIONED BY (days(event_ts));
 - Cross-region 流动**经审批路径**
 - **数据分级** + **出境清单** 管理
 
-## 4. AI 合规叠加
+## 4. AI 合规叠加（2024-2026 重点）
 
-详见 [AI 治理](../frontier/ai-governance.md)。
+AI 法规**2024-2026 爆发** · 本节详细讲工程影响。战略视角和 Red Teaming 去 [frontier/ai-governance](../frontier/ai-governance.md)。
 
-核心：
-- LLM 训练数据 **来源合规**
-- Prompt / Output 的**审计与过滤**
-- **EU AI Act** 分级
+### 4.1 EU AI Act（2024-08 生效 · 2026-08 全量执行）
+
+**全球最严格的 AI 法规**。核心是**风险分级**：
+
+| 风险级 | 定义 | 工程要求 |
+|---|---|---|
+| **Unacceptable Risk** | 社会评分 · 实时生物识别执法 · 操纵人类行为 | **禁止** |
+| **High Risk** | 招聘 · 信贷 · 执法 · 教育 · 医疗决策 · 关键基础设施 | **严格监管**（见下方详细） |
+| **Limited Risk** | 聊天机器人 · 深度伪造 | **透明度要求**（告知用户是 AI） |
+| **Minimal Risk** | 游戏 AI · 垃圾邮件过滤 | 无特殊要求 |
+
+**High Risk 系统工程要求**（对数据平台影响最大）：
+
+1. **Risk Management System** · 系统化风险识别 / 评估 / 缓解流程
+2. **Data Governance** · 训练 / 验证 / 测试数据的质量 + 偏见检查
+3. **Technical Documentation**（必须有 **Model Card** + 训练数据描述）· 见 [ml-infra/model-registry](../ml-infra/model-registry.md) §合规 artifact
+4. **Record-Keeping** · 自动日志保存 · 用于事后审计
+5. **Transparency** · 使用者理解系统输出
+6. **Human Oversight** · HITL · 人可以停掉 / 审核
+7. **Accuracy · Robustness · Cybersecurity**
+
+**处罚**：最高 **3500 万欧元或全球营业额 7%**（更严 GDPR）。
+
+### 4.2 NIST AI Risk Management Framework（AI RMF · 2023）
+
+**美国联邦层面的 AI 风险管理框架**（非法律但政府采购要求）：
+
+**AI RMF 四功能**：
+- **Govern** · 组织治理 AI 风险
+- **Map** · 识别 AI 使用场景和风险
+- **Measure** · 测量风险（准确性 · 偏见 · 鲁棒性 · 可解释性 · 隐私）
+- **Manage** · 优先级排序 · 分配资源 · 缓解
+
+**工程对应**：Model Card + 自动评估 + Fairness subgroup 监控 + 文档。
+
+### 4.3 中国《生成式 AI 服务管理办法》（2023-07 生效）
+
+**中国针对生成式 AI 的专门法规**：
+
+核心要求：
+- **备案** · 提供服务需向网信办备案
+- **数据合规** · 训练数据来源合法 · 不侵犯知识产权
+- **内容安全** · 输出不得生成违法有害内容
+- **用户标识** · 生成内容明示为 AI 生成
+- **个人信息** · 不得非法处理个人信息
+- **未成年人保护** · 防沉迷
+
+**工程对应**：
+- 内容过滤（见 [ai-workloads/guardrails](../ai-workloads/guardrails.md)）
+- 输出水印 / 标识
+- 训练数据来源审计
+- 用户行为日志保存
+
+**更宽**：还有《互联网信息服务算法推荐管理规定》（2022）· 《互联网信息服务深度合成管理规定》（2023）· 《生成式 AI 服务管理办法》（2023）· 三者组合。
+
+### 4.4 AI 供应链合规（2024-2026 新话题）
+
+**模型 License 合规**是 AI 供应链核心问题：
+
+- **Llama 3 Community License**：**7 亿 MAU 上限**（超限要单独谈）· 不得训练竞品 LLM
+- **Gemma Terms**：相对宽松但有使用政策
+- **Mistral**（开源系列）：Apache 2.0 · 商用友好
+- **Qwen / DeepSeek / Baichuan** · 各版本不同
+
+**工程对应**：
+- Model Registry 强制 license 元数据（见 [ml-infra/model-registry](../ml-infra/model-registry.md)）
+- Fine-tuned 模型**继承 base license 限制**
+- 自动扫描（MAU 接近限制告警）
+
+### 4.5 AI 系统的典型合规清单
+
+对应 EU AI Act High Risk 系统 · 工程 checklist：
+
+- [ ] Model Card 完整（预期用途 / 限制 / 训练数据）
+- [ ] Fairness subgroup 监控（demographic parity / equal opportunity）
+- [ ] Drift 监控 + 告警
+- [ ] Human-in-the-loop 机制（高风险决策可人工 override）
+- [ ] 审计日志（模型输入输出完整留存 ≥ 3 年）
+- [ ] 透明度（用户知道这是 AI 决策）
+- [ ] Red Teaming 报告（安全测试）
+- [ ] 训练数据来源合规证明
+- [ ] 数据删除权（GDPR 的 Right to be forgotten · 叠加 AI 场景）
+- [ ] Unlearning 策略（虽然技术不成熟 · 合规期待）
 
 ## 5. SOC 2 落地要点
 

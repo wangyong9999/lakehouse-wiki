@@ -1,12 +1,24 @@
 ---
-title: 数据治理（Data Governance）
+title: 数据治理 · 血缘 · 契约 · 合规
 type: concept
-tags: [ops, governance, lineage, quality]
-aliases: [Data Governance, 血缘, 数据质量]
-related: [security-permissions, observability, unified-catalog-strategy]
-systems: [datahub, openlineage, great-expectations]
+depth: 资深
+level: A
+last_reviewed: 2026-04-21
+applies_to: OpenLineage 1.x · DataHub 0.14+ · Unity Catalog · Data Contracts 规范 · 2024-2026 实践
+tags: [ops, governance, lineage, contract]
+aliases: [Data Governance, 血缘, 数据契约]
+related: [security-permissions, observability, catalog-strategy, data-quality-for-ml]
+systems: [datahub, openlineage, unity-catalog]
 status: stable
 ---
+
+!!! warning "章节分工声明（S34 重要）"
+    - **本页**：湖仓通用治理——**血缘 · Data Contract · 合规标签 · Catalog 治理平面集成**
+    - **ML 数据质量**（PIT · Label Quality · Evaluation 集泄漏 · GE/Soda ML 用法 · Data Quality Gates）→ [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) **canonical**
+    - **Catalog 治理平面机制**（UC / Polaris / Gravitino）→ [catalog/strategy](../catalog/strategy.md) canonical
+    - **合规法规**（GDPR / EU AI Act 等）→ [compliance](compliance.md)
+    - **观测集成** → [observability](observability.md) §专用面 Data Quality Observability
+    - 本页瘦身后关注**治理工程视角**（血缘 / 契约 / 合规标签）· 不讲 ML 数据质量工程细节
 
 # 数据治理
 
@@ -40,14 +52,15 @@ status: stable
 - **校验（Validation）** —— 定期或事件触发跑校验
 - **可见（Visibility）** —— 结果写回 Catalog，BI 用户查表能看到"质量评分"
 
-工具链：
+!!! info "数据质量工程深度在 [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md)"
+    S27 建立了 data-quality-for-ml 作 ML 数据质量 canonical（三层 Quality Gates · Label Quality · 评估集泄漏 · Schema Evolution 对 ML 的影响 · 工具矩阵 GE / Soda / Monte Carlo / Anomalo / Elementary · 成熟度 L0-L3）· **本页不重复机制细节**。
 
-- **Great Expectations** —— 最成熟的 OSS
-- **Soda / Soda Core** —— 云原生
-- **dbt tests** —— 如果用 dbt
-- **Iceberg / Paimon 的 Stats Plugin** —— 自带列直方图
+工具链（精简 · 指向 canonical 深度）：
+- **Great Expectations / Soda / dbt tests** · OSS 数据质量框架
+- **Elementary**（dbt-native · 2024 活跃）· **Monte Carlo / Anomalo**（企业自动异常检测）
+- **Iceberg / Paimon Stats Plugin** · 自带列直方图
 
-坏的数据悄悄上线远比"表挂了"破坏性大。质量门禁是治理的第一道防线。
+质量门禁是治理第一道防线。具体的 Data Contract + Quality Gates 工程实施 · 去 data-quality-for-ml canonical。
 
 ### 3. 契约（Data Contract）
 

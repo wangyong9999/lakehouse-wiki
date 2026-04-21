@@ -1,13 +1,13 @@
 ---
-title: TCO 模型 · 自建 vs 云 vs SaaS 的真实成本
+title: TCO 模型 · 自建 vs 云 vs SaaS · 含 AI 场景
 type: concept
-depth: 进阶
-level: A
-last_reviewed: 2026-04-18
-applies_to: 2024-2026 云 + 商业产品定价
-tags: [ops, cost, tco, economics]
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: 2024-2026 云 + 商业产品定价 · 含 AI / LLM 场景
+tags: [ops, cost, tco, economics, ai-tco]
 aliases: [TCO, Total Cost of Ownership]
-related: [cost-optimization, data-systems-evolution]
+related: [cost-optimization, capacity-planning, data-systems-evolution]
 status: stable
 ---
 
@@ -244,6 +244,66 @@ status: stable
 | 合规严（金融 / 医疗）| **混合（自建 + 商业治理）** |
 | AI 重型 | **Databricks 或自建湖 + 向量库** |
 | 特定云厂绑定（AWS 深度用户）| **EMR / Glue / Redshift Spectrum 混合** |
+
+## 6.5 AI 场景 TCO（2024-2026 关键决策）
+
+### LLM API vs 自托管 GPU · Break-even 分析
+
+这是 2024-2026 最常问的成本决策。
+
+**参数设定** `[来源未验证 · 价格快速变化 · 以官方为准]`：
+- OpenAI GPT-4o：$5/1M input · $15/1M output
+- Anthropic Claude Sonnet：$3/1M input · $15/1M output  
+- Mistral Large：$2/1M input · $6/1M output
+- 自托管 Llama-3.3-70B on H100：~$4/hour × 多卡
+
+**Break-even 公式**：
+
+```
+月 tokens × (API 价 - 自托管 token 成本) vs 自托管 GPU 固定月成本
+
+示例:
+月 output tokens = 1B
+GPT-4o 成本 = 1B × $15/1M = $15,000/月
+自托管 Llama-3.3-70B · 4 × H100 · 月 $4 × 720 × 4 = $11,520/月（纯硬件）
++ 工程师 + 运维 ≈ $25,000/月总成本
+
+→ 1B token/月场景 · GPT-4o API 反而便宜（$15k vs $25k）
+→ 10B token/月场景 · 自托管胜（$150k vs $25k）
+```
+
+**决策矩阵**：
+
+| 月 Output Tokens | 推荐方案 |
+|---|---|
+| < 500M | **API 为主**（工程成本 > 硬件成本节省）|
+| 500M - 5B | **混合**（简单 query 自托管 Mistral / Llama · 复杂 query 用 API）|
+| > 5B | **自托管为主**（但保留 API 兜底大峰值）|
+| 合规要求"数据不出栈" | **自托管必然**（不看成本）|
+
+### Vector DB 商业 vs 自建 TCO
+
+| 方案 | 月成本估算 `[示例 · 以官方报价为准]` | 适合 |
+|---|---|---|
+| **Pinecone**（商业托管）| $0.096/hour × pod × N · 中等规模月 $1k-10k | 快速启动 · 不想运维 |
+| **Zilliz Cloud**（Milvus 托管）| 类似 Pinecone 定价 | 已用 Milvus 想托管 |
+| **自建 Milvus on K8s** | 3 节点 · 64GB · $500/月硬件 + 工程师 | 有 K8s 能力 · 中等规模 |
+| **LanceDB 嵌入式** | 对象存储费 · 无独立服务成本 | 嵌入应用 / Lakehouse |
+| **湖上向量**（Iceberg Puffin / Lance）| 复用湖仓基础设施 · 几乎零增量 | 已有湖仓栈 |
+
+**AI 原生向量场景 TCO**：
+- 小规模（< 1000 万向量）· **LanceDB 嵌入式**或 Pinecone Starter
+- 中等规模（亿级）· **自建 Milvus** 或 Zilliz Cloud
+- 超大规模（十亿+）· **自建 + 深度优化**（见 Pinterest / 阿里案例）
+
+### ML 平台 TCO
+
+| 方案 | 月成本典型 | 适合 |
+|---|---|---|
+| **Databricks Mosaic AI** | $50k-500k+（含计算）| BI + AI 一体化 · 高端客户 |
+| **Sagemaker / Vertex AI** | 用量付费 · 变数大 | 云原生 · 中等规模 |
+| **MLflow + 自建 K8s + Ray** | 工程师 2-5 人 + $10k-50k 硬件 | 开源自主 |
+| **Weights & Biases + 外部计算** | $500-5k · SaaS | 小团队 experiment tracking |
 
 ## 7. 陷阱
 

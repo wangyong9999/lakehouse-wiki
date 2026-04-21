@@ -1,13 +1,24 @@
 ---
-title: 多租户隔离
+title: 多租户隔离 · 5 层 + AI 资源
 type: concept
 depth: 资深
-prerequisites: [security-permissions, unified-catalog-strategy]
-tags: [ops, multi-tenancy, isolation]
-related: [security-permissions, data-governance, cost-optimization]
-systems: [iceberg, unity-catalog, kubernetes]
+level: S
+last_reviewed: 2026-04-21
+applies_to: Kubernetes · Unity Catalog · Iceberg · GPU MIG / MPS · 向量库分片 · 2024-2026 实践
+prerequisites: [security-permissions, catalog-strategy]
+tags: [ops, multi-tenancy, isolation, gpu-multi-tenant, vector-isolation]
+aliases: [Multi-Tenancy, 租户隔离]
+related: [security-permissions, data-governance, cost-optimization, gpu-scheduling, authorization]
+systems: [iceberg, unity-catalog, kubernetes, milvus, qdrant]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：湖仓 + AI 的**通用多租户隔离**（5 层 + AI 资源隔离）
+    - **GPU 多租户机制**（MIG / MPS / Run:ai / Namespace + Quota）→ [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) §Multi-tenant canonical
+    - **AI 应用多租户**（Agent 身份 / Cache 隔离 / Log 隔离）→ [ai-workloads/authorization](../ai-workloads/authorization.md) §Multi-tenant canonical
+    - **Catalog 多租户命名空间** → [catalog/strategy](../catalog/strategy.md)
+    - 本页关注**数据层多租户** · 指向各专章 canonical
 
 # 多租户隔离
 
@@ -145,6 +156,46 @@ resource-groups.json:
 - K8s 资源用量（CPU·h + GPU·h × 单价）
 
 写成月度 dashboard，每个租户对自己账单可见。
+
+## AI 资源的多租户（2024-2026 新增）
+
+### GPU 多租户
+
+**核心问题**：GPU 昂贵 · 共享是必然 · 但隔离是难题。
+
+- **MIG**（Multi-Instance GPU · A100+ 硬件隔离）· 隔离最强
+- **MPS**（Multi-Process Service · 软隔离）· 灵活但互扰
+- **Time-Slicing**（K8s Device Plugin）· 最简但不是真并行
+- **Run:ai**（NVIDIA 2024 收购）· 分数 GPU · 企业级
+
+**详见 [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) canonical**。
+
+### 向量库多租户
+
+向量库的多租户实施（2024-2026）：
+
+| 方案 | 实现 | 隔离强度 |
+|---|---|---|
+| **Collection / Namespace 分离** | Milvus Database · Pinecone namespace · Qdrant collection | 弱-中（软隔离） |
+| **元数据过滤**（tenant_id 字段 + 强制 filter） | LanceDB · Milvus · Qdrant 原生 | 中（要靠应用层强制） |
+| **物理分片**（每租户独立 index）| 大租户独立分片 | 强（资源 + 权限） |
+| **独立集群**（高敏感租户） | Multi-cluster | 最强 · 成本高 |
+
+**关键**：不管哪个方案 · **元数据过滤必须在向量库侧强制**（不是 Prompt 里说说）。详见 [retrieval/cross-modal-queries](../retrieval/cross-modal-queries.md) §多租户权限。
+
+### ML 模型多租户
+
+每个租户的 ML 模型隔离：
+- **Model Registry 按租户 namespace**（UC catalog 三段式：`tenant.schema.model`）
+- **推理服务分池**（租户独立 serving endpoint · 或 multi-tenant with authz）
+- **Feature Store 按 tenant_id 过滤**
+
+### AI 应用多租户（Cache / Log）
+
+AI 应用特有隔离维度（详见 [ai-workloads/authorization](../ai-workloads/authorization.md)）：
+- **Semantic Cache 按租户分 key**（不跨租户命中）
+- **Prompt 日志按租户隔离**（审计 / 合规）
+- **Agent 身份跟随用户**（Identity 流转）
 
 ## 爆炸半径（Blast Radius）
 
