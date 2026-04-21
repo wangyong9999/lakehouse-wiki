@@ -257,7 +257,7 @@ flowchart BT
 
 ### 前沿研究
 - [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
-- [**LLM 推理优化**](frontier/llm-inference-opt.md) — vLLM / Flash Attn / Speculative / MoE
+- [**LLM Inference**](ai-workloads/llm-inference.md) — vLLM / SGLang / TRT-LLM / Dynamo / speculative（按 ADR 0009 已从 frontier 下沉）
 - [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
 - [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
 - [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — spec 演进与团队实务

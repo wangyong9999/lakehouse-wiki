@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-21
-applies_to: Spark 3.5+ · Ray 2.9+ · Flink 1.18+ · Lance 0.20+ · Iceberg / Paimon · BGE-M3 / jina-v3 / e5-mistral / Voyage-3 / Cohere-v4 / Nomic · 2024-2026 实践
+applies_to: Spark 4.1+ · Ray 2.9+ · Flink 2.x · Lance 0.20+ · Iceberg / Paimon · BGE-M3 / jina-v3 / e5-mistral / Voyage-3 / Cohere-v4 / Nomic · 2024-2026 实践
 prerequisites: [lake-table, embedding]
 tags: [ai, embedding, pipeline, cdc, lakehouse]
 aliases: [Embedding Pipeline, 向量化流水线]

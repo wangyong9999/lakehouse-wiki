@@ -94,7 +94,7 @@ hide:
 - **向量**：[LanceDB](retrieval/lancedb.md) · [Milvus](retrieval/milvus.md) · [pgvector](retrieval/pgvector.md)
 - **Embedding**：BGE / E5 / Cohere（[对比](compare/embedding-models.md)）
 - **Rerank**：bge-reranker / Cohere Rerank（[对比](compare/rerank-models.md)）
-- **LLM**：[vLLM / SGLang / TGI](frontier/llm-inference-opt.md)
+- **LLM**：[vLLM / SGLang / TGI](ai-workloads/llm-inference.md)
 - **前沿**：[Contextual Retrieval / CRAG / Self-RAG](frontier/rag-advances-2025.md)
 - **管线**：LangChain / LlamaIndex / Haystack
 - **评估**：RAGAS / TruLens
@@ -130,7 +130,7 @@ hide:
 - **训练**：Spark MLlib / Ray Train / PyTorch
 - **跟踪**：MLflow / Weights & Biases
 - **Registry**：MLflow / [Unity Catalog](catalog/unity-catalog.md)
-- **Serving**：[vLLM / TGI](frontier/llm-inference-opt.md) / Triton / Ray Serve
+- **Serving**：[vLLM / TGI](ai-workloads/llm-inference.md) / Triton / Ray Serve
 - **监控**：Prometheus + 自建 drift
 - **闭环**：[MLOps Lifecycle](ml-infra/mlops-lifecycle.md)
 
@@ -138,7 +138,7 @@ hide:
 
 ## Agent 技术栈（2025+）
 
-- **LLM**：Claude / GPT / 开源（[推理优化](frontier/llm-inference-opt.md)）
+- **LLM**：Claude / GPT / 开源（[推理优化](ai-workloads/llm-inference.md)）
 - **协议**：[MCP](ai-workloads/mcp.md)
 - **框架**：LangGraph / AutoGen / CrewAI
 - **工具**：Tool-based（SQL / API / 代码执行）

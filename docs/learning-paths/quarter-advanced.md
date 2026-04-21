@@ -61,12 +61,18 @@ status: stable
 
 ### Week 9-10 · ML Infra
 
-- [Model Registry](../ml-infra/model-registry.md)
-- [Model Serving](../ml-infra/model-serving.md)
-- [训练编排](../ml-infra/training-orchestration.md)
-- [GPU 调度](../ml-infra/gpu-scheduling.md)
-- [Feature Store](../ml-infra/feature-store.md)
-- 做：把 Week 7-8 的 embedding 模型注册到 MLflow + 用 Ray Serve 部署
+**推荐顺序**（先叙事总览 · 再数据底座 · 再训练 · 最后部署运维）：
+
+1. [MLOps 生命周期](../ml-infra/mlops-lifecycle.md) —— 建立六环节全局
+2. [Feature Store](../ml-infra/feature-store.md) —— 数据底座（PIT / 训推一致）
+3. [训练编排](../ml-infra/training-orchestration.md) —— FSDP2 / torchtitan / DCP
+4. [Model Registry](../ml-infra/model-registry.md) —— alias API / Model Card / 合规
+5. [Model Serving](../ml-infra/model-serving.md) —— Inference Graph / Shadow / Canary / Rollback
+6. [Model Monitoring](../ml-infra/model-monitoring.md) —— Drift / Auto-retrain 契约
+7. [GPU 调度](../ml-infra/gpu-scheduling.md) —— 资源 + FinOps
+8. [LLM Fine-tuning](../ml-infra/fine-tuning-data.md) —— LoRA / QLoRA / DPO 一体（LLM 应用方向必读）
+
+- 做：把 Week 7-8 的 embedding 模型注册到 MLflow（alias champion）+ 用 Ray Serve 部署 + 配一条 drift 告警
 
 ### Week 11-12 · 生产化
 
