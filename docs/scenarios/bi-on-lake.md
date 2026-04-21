@@ -10,6 +10,9 @@ status: stable
 
 # BI on Lake · 湖上分析与仪表盘
 
+!!! info "本页是场景视角"
+    机制深挖见 [BI 负载章](../bi-workloads/index.md)：[OLAP 建模](../bi-workloads/olap-modeling.md) · [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md) · [语义层](../bi-workloads/semantic-layer.md) · [仪表盘 SLO](../bi-workloads/dashboard-slo.md) · [BI × LLM](../bi-workloads/bi-plus-llm.md)。本页**不复述机制原理** · 只讲端到端编排。
+
 !!! tip "一句话理解"
     **湖就是数仓**——传统 BI 负载（月报、仪表盘、即席查询）直接跑在 Iceberg/Paimon 之上，不再搬到独立的数仓层。核心收益：**一份数据多引擎消费、历史可追溯、AI + BI 共底座**；核心挑战：**查询性能** + **并发隔离** + **数据建模**。
 

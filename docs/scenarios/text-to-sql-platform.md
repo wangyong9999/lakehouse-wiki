@@ -10,6 +10,9 @@ status: stable
 
 # Text-to-SQL 平台
 
+!!! info "本页是场景视角"
+    机制深挖见：[BI × LLM](../bi-workloads/bi-plus-llm.md)（2026 产品全景 · 4 条架构路径）· [语义层](../bi-workloads/semantic-layer.md)（SL 是 LLM 的知识抓手）· [RAG](../ai-workloads/rag.md)（Schema RAG 技术基础）。本页**讲业务需求 + 工程护栏** · 不复述 RAG / SL 机制原理。
+
 !!! tip "一句话理解"
     让**业务人员用自然语言查询湖仓**。"给我看过去 30 天华北区 iPhone 销量"→ 系统自动写 SQL 并返回结果。2024-2025 年 LLM + Schema 理解 + 权限穿透 → 终于可用。**下一代 BI 的关键入口**。
 

@@ -10,6 +10,9 @@ status: stable
 
 # RAG on Lake · 企业知识库问答
 
+!!! info "本页是场景视角"
+    机制深挖见：[RAG 架构与范式](../ai-workloads/rag.md) · [RAG 评估](../ai-workloads/rag-evaluation.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Embedding](../retrieval/embedding.md) · [Rerank](../retrieval/rerank.md)。本页**讲湖上编排 + 5 表架构** · 不复述机制原理。
+
 !!! tip "一句话理解"
     把**湖仓作为 RAG 的单一事实源**：原始语料、chunk、embedding、日志全以 Iceberg/Paimon 表承载；检索层（向量 + BM25）和 LLM 生成层都从湖上消费。**核心价值**：一份数据，多模型共用；血缘可追溯；测试和生产一致。
 
@@ -314,11 +317,7 @@ Query → [Dense embedding] → 向量 TopN
 
 ### 基准 Benchmark
 
-- **[BEIR](https://github.com/beir-cellar/beir)** —— 18 个检索数据集
-- **[MS MARCO](https://microsoft.github.io/msmarco/)** —— 段落排序经典
-- **[Natural Questions](https://ai.google.com/research/NaturalQuestions)** —— 真实 Google query
-- **[HotpotQA](https://hotpotqa.github.io/)** —— 多跳推理
-- **[RAGBench](https://huggingface.co/datasets/galileo-ai/ragbench)** —— 多领域 RAG 评估
+benchmark 矩阵（BEIR / MS MARCO / Natural Questions / HotpotQA / RAGBench）与各自适用场景 · 统一见 [RAG 评估章](../ai-workloads/rag-evaluation.md) · 本页不重复枚举。
 
 ### RAGAS 四指标（最常用）
 

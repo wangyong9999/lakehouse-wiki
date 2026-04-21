@@ -10,6 +10,9 @@ status: stable
 
 # Agentic 工作流 · 自动化
 
+!!! info "本页是场景视角"
+    机制深挖见：[AI 负载章](../ai-workloads/index.md) · [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md)（湖仓侧 Agent 机制）· [MCP](../ai-workloads/mcp.md)（Tool 协议标准）· [Prompt 管理](../ai-workloads/prompt-management.md) · [RAG](../ai-workloads/rag.md)。本页**讲 L1/L2/L3 成熟度 + 场景落地 + 评估 / 成本 / 安全** · 不复述 Agent 机制原理。
+
 !!! tip "一句话理解"
     **LLM + 工具 + 控制循环** 自主完成多步任务——不是"问答一次"，是"执行一段工作"。真正能用的 Agent 系统 = **强工具抽象 + 评估机制 + 成本控制 + 沙箱安全** 四位一体。演示很酷，工业化落地非常难。
 
