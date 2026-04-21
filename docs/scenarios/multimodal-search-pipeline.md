@@ -121,12 +121,174 @@ flowchart LR
 - **隐私 / 权限越权** —— `visibility` 过滤没下推。**兜底**：Catalog 层强制 row-level policy，不信任应用层
 - **多模对齐漂移** —— 模型升级后老向量和新向量不共空间。**兜底**：`embedding_model_version` 字段 + 增量回填 + 过渡期双索引
 
+## SLO 预算详细拆解
+
+多模检索 p95 < 400ms 端到端分解（典型经验 `[来源未验证 · 依模型 / 规模差异大]`）：
+
+| 阶段 | 预算 |
+|---|---|
+| Query 解析 + Router | < 10ms |
+| Query Embedding（CLIP / BGE） | 30-80ms |
+| 结构化过滤（前置） | < 20ms |
+| 向量召回（ANN · Top 100-500） | 30-80ms |
+| Hybrid 融合（稀疏 + 稠密 RRF） | 10-30ms |
+| Rerank（cross-encoder · Top 10-20） | 80-150ms |
+| 元数据查询 + URI 构造 | < 30ms |
+| **端到端 p95** | **< 400ms** |
+
+**性能优化杠杆**：
+- **Query embedding 缓存**（热门 query 跳过 encode · 见 [ai-workloads/semantic-cache](../ai-workloads/semantic-cache.md)）
+- **ANN 参数**（HNSW M/ef · IVF-PQ 中心数）· [retrieval/hnsw](../retrieval/hnsw.md) · [retrieval/ivf-pq](../retrieval/ivf-pq.md)
+- **Rerank 轻量化**（小 reranker · 或 Rerank 只做 Top 10 而非 Top 100）
+- **Filter-aware ANN**（Qdrant / Milvus 2.4+ · LanceDB · 见 [retrieval/filter-aware-search](../retrieval/filter-aware-search.md)）
+
+## 评估与监控
+
+**离线评估**：
+- **Recall@K**（K=10 · 20 · 50）· 以人工标注 golden set 为准
+- **MRR / NDCG**（考虑排序质量）
+- **跨模态对齐**：图检查询文 / 文检索图 · 分模式评估
+- **Benchmark**：MS-COCO · Flickr30K · LAION subset 等
+
+**在线监控**：
+- p99 延迟 / p99 Recall（在线估计 · 用 click-through proxy）
+- **CTR 代理**（用户点击 Top 10 的哪个 · 位置越靠前越好）
+- **Cache 命中率**（semantic cache / query embedding cache）
+- **向量索引延迟**（新数据到可检索）
+- **模型版本一致性**（query encoder / index encoder / rerank 三方版本对齐）
+
+## 多租户 / 权限
+
+**Catalog 层强制 row-level policy**（不要指望应用层）：
+- `visibility = 'internal'` 只对内部用户可见
+- `owner = $user OR shared_with LIKE ...`
+- 详见 [catalog/strategy](../catalog/strategy.md) §治理 + [ops/security-permissions](../ops/security-permissions.md)
+
+**向量库侧强制元数据过滤**：
+- 别让应用层过滤 Top 100 后用户看到不该看的
+- Filter-aware ANN 直接在图搜索过程中裁剪
+- 详见 [retrieval/filter-aware-search](../retrieval/filter-aware-search.md)
+
+## 工业案例 · 多模检索场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 3 家在**多模检索场景**的独特做法。
+
+### Pinterest · 多模推荐 + 搜索（PinSage + Pixie + 多模 embedding）
+
+**为什么值得学**：Pinterest 业务本质是**图片发现 + 兴趣组织** · 多模推荐是**核心业务场景**而非附加能力。**全栈视角见 [cases/pinterest](../cases/pinterest.md)**。
+
+**多模检索场景独特做法**：
+
+1. **多模 embedding 独立产线**：
+   - 图像 embedding（自研 VLM · CLIP 风格 · 专门 Pin 场景调优）
+   - 文本 embedding（Pin 标题 + 描述 + 评论）
+   - 用户 embedding（行为 + 社交）
+   - 图结构 embedding（PinSage GNN）
+   - **每种独立训练 + 独立 ANN 索引** · 召回时多 index 并行查询
+
+2. **Pixie 实时 random walk 做多模召回**：
+   - in-memory 图（Pin × User × Board · 10+ TB）
+   - ms 级实时召回 · 处理新鲜度和冷启动
+   - 和 PinSage GNN（深度相关性）互补
+
+3. **自研 ANN**：
+   - 规模决定（数十亿级候选）· 通用向量库不够
+   - **过滤感知 ANN** 在推荐场景关键
+   - 规模：Homefeed p95 < 300ms · 每请求处理数十亿候选
+
+**和本页架构对比**：
+- ✅ 多 embedding 分列（CLIP / BGE / audio）对齐 Pinterest 经验
+- ⚠️ 自研 ANN 对中小团队过度 · 通用向量库（LanceDB / Milvus）千万级候选够用
+- ⚠️ GNN 召回训练成本高 · 本页架构的 dense + sparse + rerank 三段式对多数团队更友好
+
+### 阿里巴巴 · 电商多模搜索（OpenSearch 向量 + Flink + Hologres）
+
+**为什么值得学**：阿里电商搜索是**中国工业多模检索代表**（图搜图 · 同款识别 · 以图搜商品）。**全栈视角见 [cases/alibaba](../cases/alibaba.md)**。
+
+**多模场景独特做法**：
+
+1. **图搜图 / 以图搜商品**：
+   - 商家上传商品图 → 图像 embedding → 入湖（Paimon / Lance）
+   - 用户拍照搜款式 → 图像 embedding → ANN 召回 + 结构化过滤（类目 / 价格带）
+   - **双 11 规模峰值数百万 QPS**
+
+2. **OpenSearch 向量引擎**（阿里云商业产品）：
+   - 原生支持图 / 文 / 视频 embedding
+   - 和 Paimon / Hologres 集成 · 构成电商多模栈
+   - 2024+ LLM 集成 · Agent 化搜索
+
+3. **实时更新（Flink + Paimon）**：
+   - 新商品上架秒级可检索
+   - 下架 / 更新 也实时
+   - Paimon Changelog Producer 驱动
+
+**规模** `[来源未验证]`：双 11 多模搜索 QPS 数百万 · 商品池数亿。
+
+**和本页架构对比**：
+- ✅ Paimon + Flink CDC 实时更新是中国团队可直接复制的路径
+- ⚠️ OpenSearch 阿里云商业产品 · 开源替代用 Milvus / LanceDB
+- ⚠️ 双 11 规模过度 · 中型电商团队参考架构不参考规模
+
+### Databricks · 多模 RAG（Vector Search + AI Functions）
+
+**为什么值得学**：Databricks 多模 RAG 是**商业平台多模化**的代表。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
+
+**多模场景独特做法**：
+
+1. **Volume 作多模资产一等公民**：
+   - UC Volume 存图 / 视频 / 音频 / PDF
+   - **Volume 权限 + 血缘**和数据表一套 RBAC
+   - 这是本 wiki 多模建模推崇的路径（见 [unified/multimodal-data-modeling](../unified/multimodal-data-modeling.md)）
+
+2. **Vector Search 多模索引**：
+   - Delta 表上一等向量索引
+   - 多 embedding 列（CLIP / BGE / 自定义）同表
+   - 和 SQL 过滤一起执行
+
+3. **AI Functions 多模 UDF**：
+   - `ai_caption`（图像描述）· `ai_transcribe`（音频转写）· `ai_embed`（向量化）
+   - **SQL 里直接做多模 ETL**（见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)）
+
+**和本页架构对比**：
+- ✅ UC Volume + Vector Search 架构和本页多模表设计思路一致
+- ⚠️ 商业锁定深 · 开源栈用 Iceberg + LanceDB / Milvus + Spark 替代
+
+### 跨案例综合对比
+
+| 维度 | Pinterest | 阿里 | Databricks |
+|---|---|---|---|
+| 主场景 | Pin 发现推荐 | 电商图搜 + 同款 | 多模 RAG |
+| 表格式 | Iceberg | Paimon + Lance | Delta + UniForm |
+| 向量层 | 自研 ANN | OpenSearch 商业 | Vector Search 托管 |
+| 多 embedding | 多 index 独立 | 多列 Paimon 表 | 多列 Delta 表 |
+| 实时更新 | 实时（Pixie）+ 离线（PinSage） | **Paimon 秒级** | Delta Live Tables |
+| 规模 | 亿级 Pin | 双 11 峰值 | 客户可配 |
+
+**共同规律**（事实观察）：
+- **多模不是一个 embedding** · 是**多个 embedding 独立训练 + 多 index 并行查询**
+- **实时更新是工业刚需**（秒-分钟级 · T+1 不够）
+- **过滤前置 + filter-aware ANN** 是性能关键（详见 [retrieval/filter-aware-search](../retrieval/filter-aware-search.md)）
+
+### 对中型团队的启示（事实观察）
+
+- **不要照搬 Pinterest 规模**（数十亿候选 · 自研 ANN）· 千万级用 LanceDB / Milvus 足够
+- **Paimon + Flink CDC 组合最适合中国团队**（阿里路径 · 社区活跃）
+- **多模 embedding 独立**（CLIP 用图文 · BGE 用精细文 · 独立索引）是跨规模通用做法
+
+---
+
 ## 相关
 
-- 概念：[多模 Embedding](../retrieval/multimodal-embedding.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Rerank](../retrieval/rerank.md)
+- 概念：[多模 Embedding](../retrieval/multimodal-embedding.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Rerank](../retrieval/rerank.md) · [Filter-aware Search](../retrieval/filter-aware-search.md)
 - 架构：[Lake + Vector](../unified/lake-plus-vector.md) · [多模数据建模](../unified/multimodal-data-modeling.md)
+- 机制：[HNSW](../retrieval/hnsw.md) · [IVF-PQ](../retrieval/ivf-pq.md) · [多模检索模式](../retrieval/multimodal-retrieval-patterns.md)
+- 工业案例：[Pinterest](../cases/pinterest.md) · [阿里巴巴](../cases/alibaba.md) · [Databricks](../cases/databricks.md)
 
 ## 延伸阅读
 
-- Meta 公开的多模检索系统 blueprint
+- *Jina CLIP v2* 论文（2024 · 多模 embedding）
+- *ColBERT v2* / *ColPali*（late interaction 方向）
 - LanceDB 多模 tutorial 系列
+- Pinterest Engineering · PinSage + Pixie 系列
+- 阿里云 OpenSearch 向量引擎技术博客

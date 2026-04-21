@@ -439,6 +439,104 @@ result = evaluate(
 
 ---
 
+## 工业案例 · RAG 场景深度切面
+
+!!! info "本节定位 · RAG 场景的案例切面"
+    **不重复公司全栈介绍**（见 [cases/](../cases/index.md) 深度页）· 只分析 3 家在**RAG / AI 问答场景**的独特做法 · 关键数字 · 踩坑。
+
+### Databricks · Lakehouse AI + Genie（RAG 商业化代表）
+
+**为什么值得学**：Databricks 是**RAG 商业化最完整的平台**。Unity Catalog + Vector Search + AI Functions + Foundation Model API 全栈打通。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
+
+**在 RAG 场景的独特做法**：
+
+1. **"UC 作为 RAG 语料治理平面"**：
+   - 文档 / Volume（图文 PDF）/ Vector Index / Model / Function · **都是 UC 一等公民**
+   - 权限 / 血缘 / Tag 策略 · **BI 和 AI 一套 RBAC**
+   - RAG 语料的**分片 · 向量 · 索引 · 查询日志**都在 UC 里
+
+2. **Vector Search + Hybrid + Reranker 三段式**：
+   - Delta 表上一等向量索引（HNSW）
+   - Hybrid：向量 + Full-text BM25
+   - Rerank：集成的 Rerank 模型
+   - 和本页 5 表架构高度对应
+
+3. **AI Functions · SQL 里直接写 RAG**：
+   - `ai_embed` · `ai_retrieve` · `ai_generate` 可串联
+   - 数据不出 Databricks · 合规友好
+   - 细节 API 在 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)
+
+4. **Genie · Text-to-SQL + RAG 融合**：
+   - 自然语言问 BI 问题 · 背后融合 Schema RAG + LLM SQL 生成
+   - 2024+ 产品化 · 客户规模增长
+
+**踩坑和教训** `[来自 cases/databricks §9]`：
+- UniForm 在**复杂 schema evolution 下有 bug**（2024 客户报告）· 多格式互操作不是零成本
+- UC OSS 2024 才捐 LF AI · 3 年窗口让 Polaris 抢占 Iceberg Catalog 心智
+
+**和本页推荐架构的对比**：
+- ✅ 5 表架构（raw_docs → chunks → embeddings → logs → evals）和 Databricks UC 架构**高度对齐**
+- ✅ Hybrid + Rerank 三段式是**工业标杆**
+- ⚠️ 商业平台深度锁定（Delta + UC + Photon）· 开源栈替代成本高
+
+### Snowflake · Cortex RAG（"数据不出栈"的合规优势）
+
+**为什么值得学**：Snowflake Cortex 是**SQL LLM UDF 工业先驱**（2024 GA · 早于 Databricks AI Functions）。**全栈视角见 [cases/snowflake](../cases/snowflake.md)**。
+
+**在 RAG 场景的独特做法**：
+
+1. **"数据不出 Snowflake"的合规锚点**：
+   - 所有 RAG 组件（Embed / Search / LLM）都在 Snowflake 内部
+   - 客户合规场景（金融 / 医疗）最敏感的"数据主权"问题直接解
+   - 商业产品的**合规卖点** · 对**强合规客户**是首选
+
+2. **Cortex Search · 向量检索**（2024 GA）：
+   - 原生向量索引 + Hybrid + Reranker 三段式
+   - 和 Snowflake 表一等集成
+   - 对标 Databricks Vector Search
+
+3. **Cortex Agents · Text-to-SQL + RAG 融合**（2025+）：
+   - 类似 Databricks Genie · 但路线是"**SQL 优先**"
+   - 客户体验和 Databricks 对比 · 核心差异在"SQL vs Notebook"哲学
+
+**Cortex 后端 LLM 限制**：
+- 支持 Mistral / Llama 3 / Snowflake Arctic
+- **不直接支持 OpenAI GPT / Anthropic Claude**（数据主权原因）
+- 追求最强 LLM 的客户要用 Claude 等需要额外接入
+
+**和本页推荐架构的对比**：
+- ✅ 合规场景（"数据不出栈"）· Snowflake 是**首选**
+- ⚠️ 追求最前沿 LLM（Claude 4.X · GPT 最新版）的场景 · Cortex 是短板
+
+### Netflix · 内部 RAG 实践（全栈开源视角）
+
+**为什么值得学**：Netflix 作为 Iceberg 诞生地 · 内部 RAG 实践**以开源栈为主** · 和商业平台路线对比鲜明。**全栈视角见 [cases/netflix](../cases/netflix.md)**。
+
+!!! warning "以下为作者推断 · 非 Netflix 官方 RAG 具体产品披露"
+    Netflix 公开的 RAG 具体产品较少（不是主业务）· 以下是**基于其数据平台能力的合理推断** · 非官方产品。
+
+- **数据底座**：Iceberg 10 万+ 表 + S3 EB 级 · 文档表可直接 Iceberg
+- **ML 平台**：Metaflow（pipeline · 2024 商业化）+ MLflow（Registry）
+- **LLM 方式**：推测用外部 API（OpenAI / Anthropic）+ 部分自托管 · **不完全 in-house**
+- **关键启示**：**"开源 + 外部 LLM"路径可行** · 不一定需要 Databricks / Snowflake 一体化商业栈
+
+### 跨案例对比
+
+| 维度 | Databricks | Snowflake | Netflix 推断 |
+|---|---|---|---|
+| **路径** | 商业一体化 | 商业一体化 + 合规锚点 | 开源 + 外部 LLM |
+| **LLM 支持** | DBRX / Llama / Claude 代理 | Mistral / Llama / Arctic（**不含 GPT/Claude**） | 外部 API 为主 |
+| **合规强度** | 中高（UC 治理） | 高（"数据不出栈"） | 看自主实施 |
+| **SQL-first vs Notebook-first** | Notebook + SQL 并重 | **SQL 为中心** | Notebook 为主 |
+| **对中国团队参考** | 可借鉴架构 · 商业成本高 | 同上 · 跨云能力好 | **开源路径 · 最可复制** |
+
+**共同规律**（事实观察）：
+- RAG 是**多组件组合** · 不是"一个产品"
+- **Catalog 治理 + 权限 + 血缘** 是 RAG 生产的必需（不是加分项）
+- **SQL LLM UDF** 正在成为 BI 侧 RAG 的主要入口（详见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)）
+
+---
+
 ## 陷阱
 
 - **以为向量检索万能**：信息检索 50 年积累的 BM25 不要丢

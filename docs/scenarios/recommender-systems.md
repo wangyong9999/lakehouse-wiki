@@ -279,6 +279,134 @@ flowchart LR
 
 ---
 
+## 工业案例 · 推荐场景深度切面
+
+!!! info "本节定位 · 场景切面视角"
+    本节分析 3 家工业代表在**推荐场景**的独特做法 · 不重复公司全栈介绍（那在 [cases/](../cases/index.md) 各深度页）。**切入角度**：每家**如何做推荐** · 关键数字 · 踩过的坑 · 和本页推荐架构的对比。
+
+### Pinterest · 多模推荐工业代表（PinSage + Pixie + Homefeed）
+
+**为什么值得学**：Pinterest 是**纯推荐业务公司**（核心产品 Pin + Board 推荐）· 公开论文质量最高。**全栈视角深度页见 [cases/pinterest](../cases/pinterest.md)**。
+
+**在推荐场景的独特做法**：
+
+1. **四段式推荐系统**（和本页四阶段流水线对应）：
+   - **召回**：PinSage（GNN · SIGKDD 2018）+ Pixie（实时 random walk · SIGMOD 2018）+ 内容 embedding + 协同过滤 **多路并行**
+   - **粗排 / 精排**：LTR / GBDT / DNN
+   - **重排**：多样性 · 新鲜度 · 广告插入
+   - 每路召回专门解决一类问题（相关性 / 新鲜度 / 冷启动）· 精排融合
+
+2. **Pixie vs PinSage 并存的工程智慧**：
+   - Pixie · **实时 + 轻量**（ms 级 random walk · 每请求几毫秒 · 内存 10+ TB 图）
+   - PinSage · **离线 + 深度**（GNN · 72 GPU × 72 小时训练 · 30 亿+ Pin）
+   - 两者并存 · 处理**不同子场景**（实时新鲜度 vs 深度相关性）· 不是互相替代
+
+3. **多 embedding 独立架构**：
+   - 图像 embedding（自研 VLM · CLIP 风格）
+   - 文本 embedding（Pin 标题 + 描述 + 评论）
+   - 用户 embedding（行为 + 社交）
+   - 图结构 embedding（PinSage）
+   - **每种独立训练 + 独立 ANN 索引** · 召回时多 index 并行查询 · 融合 Top-K
+
+4. **规模数字** `[来源未验证 · 量级参考 · 来自 Pinterest Engineering Blog / 论文]`：
+   - 5 亿+ MAU · 万亿级 Pin
+   - Homefeed p95 端到端 **< 300ms**
+   - 每请求处理**数十亿候选**（多级剪枝）
+   - 数百个 online 模型
+
+**踩坑和教训**：
+- **自研 ANN 不用通用向量库**（规模决定）· 但维护成本高
+- **GNN 推理成本高** · 2024+ 有向更轻量召回回归的讨论
+- **A/B 实验疲劳**（实验重叠 / proxy metric / 新奇效应）· 详细讨论见 [cases/pinterest §9](../cases/pinterest.md)
+
+**和本页推荐架构的对比**：
+- ✅ Pinterest 四段式和本页四阶段完全对齐 · 可复用
+- ⚠️ 自研 ANN 对多数团队**过度** · 通用向量库（Milvus / LanceDB）在千万级候选池是够用的
+- ⚠️ GNN 召回对**训练成本**有硬门槛 · 本页推荐路径（Feature Store + 向量召回）对中型团队更友好
+
+### 阿里巴巴 · 电商推荐 + 流式湖仓底座
+
+**为什么值得学**：阿里电商推荐是**中国工业代表** · 规模在双 11 达到极限。**全栈视角深度页见 [cases/alibaba](../cases/alibaba.md)**。
+
+**在推荐场景的独特做法**：
+
+1. **Paimon + Flink CDC 的流式推荐数据栈**：
+   - 业务行为事件 → Kafka → Flink CDC → **Paimon 主键表**（近实时 upsert）
+   - 下游：Paimon Changelog Producer → Flink 实时特征计算 → Hologres / Redis（在线 store）
+   - **同一张 Paimon 表既被批训练扫描 · 也被流消费**（流批一体的核心价值 · 见 [lakehouse/paimon](../lakehouse/paimon.md)）
+
+2. **Hologres HSAP 在推荐中的作用**：
+   - OLAP + 轻量 OLTP 混合 · 支持**实时特征查询**（ms 级）+ **实时分析**
+   - 双 11 实时大屏 + 商家后台推荐指标都在 Hologres
+   - **2024+ 向量能力 GA** · 向量召回也可以走 Hologres（对抗 Milvus / Qdrant）
+
+3. **规模数字** `[来源未验证 · 量级参考 · 来自阿里云官方博客 / 双 11 战报]`：
+   - 双 11 峰值**数十万 TPS 订单**
+   - 实时大屏 QPS **数百万**
+   - Paimon 内部表数**数万级**（大规模业务）
+
+**踩坑和教训**：
+- **MaxCompute 闭源 + Paimon 开源早期互读困难** · 两条栈大量 ETL · 2023+ 逐步互操作
+- **ProxiMA 自研 ANN 不开源** · 外部团队接触不到 · 通用向量库生态压力下逐步被动
+- **Hologres 向量能力 2024 才 GA** · 比 Milvus 晚 2-3 年 · "晚跟进补课"代价大
+
+**和本页推荐架构的对比**：
+- ✅ **Flink CDC + Paimon** 组合**最适合中国团队做流式推荐**（Hudi 包袱重 · Iceberg 流弱）
+- ✅ Hologres HSAP 思想对**实时看板 + 推荐混合场景**有参考价值
+- ⚠️ 阿里双 11 量级的架构**对中型团队是过度工程** · 规模打折看
+
+### LinkedIn · Feed 推荐 + Venice 在线特征
+
+**为什么值得学**：LinkedIn 推荐的**基础设施扎实** · Venice 是 ML 在线 KV 的行业标杆。**全栈视角深度页见 [cases/linkedin](../cases/linkedin.md)**。
+
+**在推荐场景的独特做法**：
+
+1. **Venice · 推荐 Feature Store 在线 store 的专用设计**：
+   - 写路径**走 Kafka push**（不是客户端直写）· 解决写 QPS 失控
+   - **批量加载 + 实时增量**一等支持（通用 KV 把 bulk load 当次要功能）
+   - Read-optimized 存储 · 对 ML feature 读负载极致优化
+   - 规模 `[来源未验证]`：**百万级 QPS · ms 级 p99**
+
+2. **Dense + 结构化 + Learning-to-rank 三元组**：
+   - Dense embedding（用户 + 内容 embedding）
+   - **结构化特征**（画像 · 行为聚合 · 用户-内容亲和度）
+   - **LTR 精排**（传统 GBDT → 2022+ DNN）
+   - **这三者组合的工程化是工业标杆** · 纯向量或纯 BM25 都不够
+
+3. **Feathr Feature Store**（2024 捐 Apache Incubator）：
+   - 声明式 DSL · 和 Spark / Azure / Redis 集成
+   - 流 + 批 + 图特征
+
+**踩坑和教训**：
+- **Samza → Flink 迁移**展示了"**敢承认自研不是最优**"的工程文化 —— 连推荐流处理系统也愿意换
+- **Feathr 捐 Apache** 说明 LinkedIn 的"单品开源 + 社区化"长期策略在推荐基础设施上延续
+
+**和本页推荐架构的对比**：
+- ✅ **Venice 设计哲学**（push-based write / read-optimized / batch + incremental）是任何 Feature Store 在线 store 的参考
+- ✅ Dense + 结构化 + LTR 三元组的工程组合 · 是本页推荐链路的标杆实现
+- ⚠️ Venice 对应 ≤ 10 万 QPS 场景可直接用 Redis · 不必上 Venice
+
+### 跨案例综合对比
+
+三家推荐业务的**共性 + 差异**：
+
+| 维度 | Pinterest | 阿里 | LinkedIn |
+|---|---|---|---|
+| **召回主路线** | 多路（PinSage GNN + Pixie + 内容）| 向量 + 规则 + 协同过滤 | Dense + 结构化 + 协同 |
+| **Feature Store 在线 store** | 自研（和推荐紧耦合） | Hologres / Redis | **Venice**（专用设计） |
+| **流式数据底座** | Iceberg + 自建 | **Paimon + Flink CDC** | Kafka + Iceberg 迁移中 |
+| **GNN 推荐** | **PinSage 工业代表** | 内部有 GNN 实践 | 相对少公开 |
+| **规模特征** | 万亿 Pin + 5 亿 MAU | 双 11 峰值 | 10 亿用户 + 数百 PB |
+| **可复制性** | 自研多 · 对中小团队过度 | Paimon 组合直接可学 | Venice 思想可学 · 实现轻 |
+
+**工业共同规律**（仅**事实观察** · 非主张）：
+- **推荐系统 = 多路召回 + 精排 + 重排** · 三家都这么做
+- **在线 Feature Store 是推荐的生命线** · Venice / 自研 / Hologres 各家方式不同
+- **GNN + 向量 + 行为三者组合** · 不是"一个模型解决所有"
+- **实时特征越来越重要**（阿里 Flink + Paimon / LinkedIn Venice / Pinterest 实时 Pixie）
+
+---
+
 ## 陷阱
 
 - **训练集直接用历史曝光数据**：没做 PIT → 未来特征泄露 → 离线 AUC 飙但线上崩

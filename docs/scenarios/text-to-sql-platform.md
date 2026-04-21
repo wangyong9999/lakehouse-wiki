@@ -297,6 +297,90 @@ class TextToSQLAgent:
 - **[Dify](https://github.com/langgenius/dify)** —— 内置 Text-to-SQL 应用
 - **[Text-to-SQL cookbook (OpenAI)](https://cookbook.openai.com/)**
 
+## 9.5 工业案例 · Text-to-SQL 场景切面
+
+!!! info "本节定位 · 场景切面"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 分析 2 家在 **Text-to-SQL 场景**的独特做法。
+
+### Databricks · Genie（AI/BI Genie · 2024+）
+
+**为什么值得学**：Databricks Genie 是**商业平台 Text-to-SQL 的代表**。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
+
+**Text-to-SQL 场景独特做法**：
+
+1. **UC Schema RAG**：
+   - 利用 UC 的表 schema + 列级元数据 + 血缘
+   - **Tag 策略**（PII · 业务域）辅助 SQL 生成
+   - 权限穿透：Genie 用当前用户身份查 UC · 不越权
+
+2. **AI Functions 作后端**：
+   - `ai_generate_text` 生成 SQL · `ai_classify` 分类意图 · 组合
+   - **数据不出平台** · 合规友好
+
+3. **自然语言 + 会话式 BI**：
+   - Dashboard 上"问一下"· 生成 SQL · 可视化 · 可迭代
+   - 类似 ChatGPT 但问 BI 数据
+
+**规模** `[来源未验证]`：Genie 2024+ 在 Databricks 客户群快速增长。
+
+**踩坑**（来自 [cases/databricks §9](../cases/databricks.md)）：早期 SQL 生成准确率有限 · schema 复杂场景退化明显。
+
+### Snowflake · Cortex Analyst（SQL-first 路线）
+
+**为什么值得学**：**SQL 作为 Snowflake 核心** · Cortex Analyst 是 SQL-first 路线的代表。**全栈视角见 [cases/snowflake](../cases/snowflake.md)**。
+
+**Text-to-SQL 场景独特做法**：
+
+1. **Semantic Model 作 RAG 基底**：
+   - Snowflake 鼓励客户定义 **semantic model** 给 Cortex Analyst
+   - semantic model 包含业务术语 · 指标定义 · 口径
+   - 类似 dbt semantic layer · 但集成 Cortex
+
+2. **"数据不出 Snowflake"的合规强项**：
+   - 合规客户（金融 / 医疗）最敏感的"自然语言问数据"不希望数据发外部 LLM
+   - Cortex Analyst 全栈在 Snowflake 内 · 是合规首选
+
+3. **Cortex Analyst + Search 融合**：
+   - 结构化问题 → SQL（Analyst）
+   - 文档问题 → Cortex Search（RAG）
+   - 两者组合处理混合问题
+
+### 阿里巴巴 · 内部 Text-to-SQL 实践（推断）
+
+!!! warning "以下为推断 · 阿里 Text-to-SQL 具体产品公开有限"
+    - **内部假设**：基于 MaxCompute / Hologres 的自然语言查询 · 用于运营 / 商家后台
+    - **DashScope / 通义千问** 作 LLM 后端
+    - **业务驱动**：阿里运营人员多 · 自助 BI 需求强 · Text-to-SQL 降低 SQL 门槛
+    - 具体产品和规模未正式公开 · 以阿里云官方为准
+
+### 开源路径（供中型团队参考）
+
+不用商业平台的开源实现：
+
+- **Vanna AI**（开源 · 2024+）· 最活跃的 OSS Text-to-SQL
+- **LangChain SQL Agent / LlamaIndex SQL**
+- **自建**：Schema RAG（embedding DDL）+ LLM + SQL 验证 + fallback
+
+**核心挑战**：
+- Schema 规模（1000+ 表 · LLM context 装不下）→ RAG + 分层
+- 权限穿透 → 代理 user 身份
+- 准确性 → 多模型投票 / 执行验证 / 回答拒绝
+
+### 共同规律（事实观察）
+
+- **Schema 本身就是 RAG 语料**（DDL + 业务定义）· 不是独立 prompt
+- **权限穿透刚需**（生成的 SQL 必须用查询用户身份执行）
+- **Semantic Layer** 显著提升准确性（dbt / Cube / Snowflake semantic model）
+- **不要假设 100% 准确** · 可验证 / 可拒绝 / 可兜底的设计
+
+### 对团队的启示（事实观察）
+
+- 有 Snowflake / Databricks → 用商业产品（Genie / Cortex Analyst）最经济
+- 自主可控需求 → 开源 Vanna AI · 组合 Schema RAG + LLM + 执行验证
+- **Semantic Layer** 先做 · Text-to-SQL 才能准确
+
+---
+
 ## 10. 和其他场景的关系
 
 - **vs [BI on Lake](bi-on-lake.md)**：Text-to-SQL 是 **BI 入口的自然语言升级**

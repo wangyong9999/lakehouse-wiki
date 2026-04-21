@@ -377,6 +377,120 @@ flowchart LR
 
 ---
 
+## 工业案例 · BI 场景深度切面
+
+!!! info "本节定位 · BI 场景切面视角"
+    不重复公司全栈（见 [cases/](../cases/index.md)）· 只分析 3 家在 **BI on Lakehouse 场景**的独特做法。
+
+### Databricks · Lakehouse BI（Photon + DBSQL + Genie）
+
+**为什么值得学**：Databricks 2022+ 推 DBSQL · 是"**从 ML 平台扩张到 BI**"的商业化典范。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
+
+**BI 场景独特做法**：
+
+1. **Photon 向量化执行引擎**：
+   - C++ 重写 Spark 执行层 · SIMD / 列批 / 编译技术
+   - **商业版独家 · 不开源** · 是 Databricks BI 侧的**商业护城河**
+   - 让 DBSQL 能和 Snowflake 竞争性能
+
+2. **DBSQL · 对标 Snowflake 的交互 SQL**（2022+）：
+   - Serverless 计算（弹性扩缩）
+   - SQL 智能补全 / Dashboard 内建
+   - 2022+ 商业化重要支柱
+
+3. **Genie · Text-to-SQL + BI 融合**（2024+）：
+   - 自然语言问 BI 问题
+   - 后端融合 UC Schema + AI Functions
+   - 核心差异化："**UC 治理 + AI 原生**"
+
+4. **UC 作 BI + ML 一套 RBAC**：
+   - 行列级 + Tag 策略 + 血缘
+   - BI 侧治理做到行业顶级
+
+**规模** `[来源未验证 · 量级参考]`：全客户合计 EB 级。DBSQL 2024+ 客户规模快速增长。
+
+**踩坑**：Delta 生态相对 Iceberg 偏窄（2024 UniForm 缓解）· UC OSS 2024 才捐 LF AI · 抢标准晚。
+
+### Snowflake · Data Cloud BI（数仓老牌 + 向量/AI 扩展）
+
+**为什么值得学**：Snowflake 是**云数仓 BI 开创者**（2012 创立）· BI 场景积累最深。**全栈视角见 [cases/snowflake](../cases/snowflake.md)**。
+
+**BI 场景独特做法**：
+
+1. **Virtual Warehouse · 存算分离典范**（2012）：
+   - 领先业界 5-10 年 · 被 Databricks / BigQuery 复刻
+   - 不同 BI 负载用不同 VW · **物理隔离** · 互不影响
+   - BI 报表 / Ad-hoc 分析 / ETL 可独立付费和扩容
+
+2. **Native Apps Framework · 数据产品市场**（2024+）：
+   - 第三方在 Snowflake 上发布 BI 应用
+   - 客户订阅 · 数据不出 Snowflake
+
+3. **Iceberg 外部表支持**（2023+）：
+   - "**封闭计算 + 开放格式**"混合模式
+   - BI 客户用 Iceberg 保数据主权 · 同时用 Snowflake 计算
+
+4. **Cortex Agents · BI + AI 融合**（2025+）：
+   - Text-to-SQL 自然语言问 BI
+   - 对抗 Databricks Genie · SQL-first 路线
+
+**规模** `[来源未验证 · 量级参考]`：10000+ 客户 · 每日数十亿查询级。
+
+**Snowflake BI 独特性**：
+- **"数据不出 Snowflake"的合规锚点**（金融 / 医疗首选）
+- **跨云能力**（AWS / Azure / GCP）· 不被单云绑死
+- SQL-first 哲学 · BI 分析师体验好
+
+**踩坑**：Unistore（OLTP+OLAP）接受度低 · ML 起步晚（2023 年 Snowpark ML 才发力）。
+
+### Netflix · Iceberg + Trino BI（OSS 路径代表）
+
+**为什么值得学**：Netflix 作为 Iceberg 诞生地 · BI 侧**走纯开源路径**（Trino + Iceberg + Tableau）· 和商业平台对比鲜明。**全栈视角见 [cases/netflix](../cases/netflix.md)**。
+
+**BI 场景独特做法**：
+
+1. **Trino / Presto 主交互引擎**：
+   - 2015+ Presto 早期大用户 · 现在主力 Trino（自建 fork）
+   - 规模：**3M+ 查询 / 日** `[来源未验证 · 量级参考]`
+
+2. **Iceberg 10 万+ 表 · 和 BI 深度集成**：
+   - 所有 BI 报表底层表**都是 Iceberg**
+   - Schema Evolution · Time Travel 作常规 debug 工具
+   - Tableau / Looker 直接连 Trino · 查 Iceberg
+
+3. **Metacat 联邦 Catalog**：
+   - BI 侧数据发现 / 血缘走 Metacat
+   - **不统一 Catalog · 多源联邦** · 和商业平台的"统一 Catalog"路线相反
+
+**Netflix BI vs 商业平台的路线对比**：
+- ✅ 开源栈完全可行（Iceberg + Trino + Tableau）· 无商业锁定
+- ⚠️ 治理能力需要自建（Metacat 不如 UC 多模完整）
+- ⚠️ 纯开源的"**工程团队能力要求**"远高于商业平台
+
+### 跨案例对比 · BI 路线
+
+| 维度 | Databricks | Snowflake | Netflix（OSS） |
+|---|---|---|---|
+| **BI 引擎** | DBSQL + Photon | Snowflake SQL + VW | Trino · 自建 fork |
+| **表格式** | Delta + UniForm | FDN 内部 + Iceberg 外部 | Iceberg（自创） |
+| **Catalog** | UC（多模全包） | Polaris + Horizon | Metacat（联邦） |
+| **Text-to-SQL** | **Genie** | **Cortex Analyst** | 外部 / 自研 |
+| **跨云** | ✅ | ✅ | AWS 为主 |
+| **OSS 路径难度** | 中（Delta OSS） | 中（Polaris OSS） | 低（全栈 OSS） |
+| **合规强度** | 中高 | **高**（数据不出栈） | 看自主实施 |
+
+**BI 场景共同规律**（事实观察）：
+- **Photon / VW / Trino 都追向量化 C++ 执行**（SIMD + 列批 + 编译）· BI 性能核心
+- **Text-to-SQL + LLM 融合**成为 2024-2026 BI 新入口（Genie / Cortex Analyst）
+- **Catalog 治理**是 BI 的隐性基础设施 · 权限 / 血缘 / 质量决定企业 BI 落地
+- **跨云能力**让客户不被单云绑死 · 成为商业差异化
+
+**对中国团队的启示**（事实观察 · 非推荐）：
+- Databricks / Snowflake **商业锁定成本高** · 自主可控需求建议开源栈
+- Text-to-SQL 是**下一代 BI 入口** · 评估开源路径（Vanna AI / 自建 schema RAG + LLM）
+
+---
+
 ## 陷阱
 
 - **直接让 BI 连 OLTP**：业务量一大两边都崩；**一定**走湖

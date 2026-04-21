@@ -305,6 +305,81 @@ Agent 访问湖仓通常通过：
 - **AutoGen 官方 scenarios**
 - **SWE-bench 参考解**（看顶级 agent 怎么做代码任务）
 
+## 工业案例 · Agentic 场景切面
+
+!!! info "本节定位 · 场景切面"
+    Agentic 工作流是 2024-2026 新兴场景 · 公开的大厂工业案例集中在**商业数据平台的 Agent 产品**上。不重复平台全栈（见 [cases/](../cases/index.md)）· 聚焦 Agent 实现。
+
+### Databricks · Genie Agents（BI + Agent 融合）
+
+**为什么值得学**：Databricks Genie 是**商业数据平台 Agent 化**的代表。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
+
+**Agent 场景独特做法**：
+
+1. **BI + Agent 深度融合**：
+   - 自然语言问 BI 问题 · 后端 Agent 规划 + 执行
+   - UC Schema + AI Functions + Vector Search 作 Agent Tool
+   - **数据不出平台** · 合规友好
+
+2. **Agent Tool = UC Function**：
+   - AI Functions（`ai_classify` · `ai_embed` · `ai_generate`）可串
+   - Custom Function 注册 UC · Agent 自动发现
+   - **治理一致**：Function 权限 · 审计 · 血缘都在 UC
+
+3. **L2 → L3 渐进**：
+   - 早期 Genie 是 L2（受限流程 · 强约束 SQL）
+   - 2024-2026 逐步 L3（计划 · 反思 · 多步执行）
+   - 符合本页"L1/L2/L3 成熟度"推进路径
+
+**踩坑**（来自 [cases/databricks §9](../cases/databricks.md)）：
+- Genie 早期版本 **SQL 生成准确率**有限 · 需多轮优化
+- UC 深度依赖 · 非 Databricks 客户无法用
+
+### Snowflake · Cortex Agents（SQL-first Agent 路线）
+
+**为什么值得学**：Snowflake Cortex Agents 是 **SQL 为中心的 Agent 产品**。**全栈视角见 [cases/snowflake](../cases/snowflake.md)**。
+
+**Agent 场景独特做法**：
+
+1. **Cortex Analyst**：
+   - 自然语言 → SQL（结构化 BI 问题）
+   - Schema RAG + LLM + SQL 验证三段
+   - 类似 Databricks Genie · 但 SQL-first
+
+2. **Cortex Search + Agent 融合**：
+   - Agent 可调 Cortex Search（向量 + Hybrid）作 Tool
+   - 文档问答 + 结构化 BI 融合
+
+3. **"数据不出 Snowflake"的合规锚点在 Agent 场景尤重要**：
+   - 合规场景（金融 / 医疗）不能让 Agent 把客户数据发外部 LLM
+   - Cortex Agents 整栈在 Snowflake 内部 · 是合规客户首选
+
+**Snowflake vs Databricks Agent 路线对比**：
+- **Genie**（Databricks）：Notebook + SQL 融合 · 更灵活
+- **Cortex Analyst**（Snowflake）：SQL-first · 更聚焦结构化 BI
+
+### Anthropic Claude Code / OpenAI Operators · Agent 工具商业化
+
+**为什么值得学**：不是数据平台案例 · 但是 **Agent 产品本身的商业化代表**。
+
+- **Claude Code**（2024 公开）：代码 Agent · 可读写文件 · 执行 shell · 是**通用 Agent** 商业化标杆
+- **OpenAI Operators**（2025）：Browse / 点击 / 表单填充 · 浏览器 Agent
+- **对数据平台的启示**：通用 Agent 框架可接入数据 Tool（Databricks MCP / Snowflake Cortex）
+
+!!! warning "以下为事实观察 · 非产品推荐"
+    通用 Agent 框架（Claude Code / Operators）和数据平台 Agent（Genie / Cortex）**各有 niche**：
+    - 数据平台 Agent · 优势在**数据治理 + 合规**（UC / Cortex 内）
+    - 通用 Agent · 优势在**能力边界广**（可跨系统 / 浏览器 / 代码 / 文件）
+    - 2025+ 两者可能通过 **MCP 协议**互通（详见 [ai-workloads/mcp](../ai-workloads/mcp.md)）
+
+### 对中型团队的启示
+
+- **L1 → L2 先落地** · 不追 L3（工业教训）· 本页 L1/L2/L3 成熟度路径和 Databricks Genie 演进一致
+- **Tool 治理比 Tool 数量重要** · 和本页"Tool 设计"呼应
+- **合规场景选 Snowflake Cortex · 灵活需求选 Databricks Genie · 自建选开源**（LangGraph / AutoGen）
+
+---
+
 ## 陷阱
 
 - **上来就做 L3 Agent**：失败率高，改 L2 workflow 落地快
