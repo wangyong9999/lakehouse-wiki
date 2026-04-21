@@ -79,9 +79,9 @@ status: stable
 - 多 key 聚集 · 比 Z-order 理论最优
 
 **2026-04 生产状态**：
-- **Delta Lake · GA**（Databricks 2024 推出 · 2025 生态广泛）
-- **Apache Iceberg 侧** · 规范本身**还没有统一的 clustering**（只有 sort_order）· Databricks 2026-04 V3 Public Preview 里支持 managed Iceberg 的 liquid clustering · 但**不在 Iceberg spec 本身**
-- **社区 proposal 进行中** · 但跨引擎统一支持仍未到位
+- **Delta Lake · GA**（Databricks 2024 推出 · OSS Delta 3.1+ 可用 · 2025 生态广泛 · Delta 4.0 2025-09 进一步改进 clustered tables kernel）
+- **Apache Iceberg spec 不包含 Liquid Clustering 定义**（仅 sort_order）· **Databricks managed Iceberg V3 (2026-04 Public Preview) 独家支持** liquid clustering · 不是 OSS Iceberg 规范的一部分
+- **社区 proposal 进行中** · 但跨引擎统一支持仍未到位 · 多引擎环境用 Z-order 替代
 
 **选型提示**：Databricks 生态用 · 其他引擎等规范 · 暂用 Z-order 替代。
 

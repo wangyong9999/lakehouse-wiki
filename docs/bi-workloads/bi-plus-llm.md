@@ -166,7 +166,7 @@ flowchart LR
 | 产品 | 定位 | 状态 | 核心能力 | 生态 |
 |---|---|---|---|---|
 | **Databricks AI/BI Genie** | Unity Catalog 一体化 BI+LLM | **GA 2025-06-12** · 4000+ accounts | Genie Space · Deep Research 预览 | Databricks 栈 |
-| **Snowflake Cortex Analyst** | Semantic Model + LLM | Public Preview · 9100+ accounts 用 Cortex | SM YAML · REST API | Snowflake 栈 |
+| **Snowflake Cortex Analyst** | Semantic Model + LLM | **Public Preview（非 GA · 2026-04 仍 Preview）** · 9100+ accounts 用 Cortex 系列 | SM YAML · REST API | Snowflake 栈 |
 | **Tableau GPT + Pulse** | 前端 + LLM | **GA** | NLQ · Auto-viz · Narrative | Tableau 生态 |
 | **ThoughtSpot Sage / Spotter** | 搜索式 BI + LLM 升级 | **GA** | Spotter · 自动归因 | 独立生态 |
 | **dbt Semantic Layer + MCP** | 开放 SL + MCP server | 2025 发布 · 2026 集成度提升 | dbt SL GraphQL · MCP 接入 | 多前端 |

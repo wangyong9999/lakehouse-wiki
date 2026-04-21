@@ -166,7 +166,7 @@ WHERE {{ dimension('order__order_ts__week') }} >= '2024-01-01';
 **2026 迁出信号**：
 - Google 内部优先级下降 · 新资源投向 Gemini/BigQuery
 - 客户反馈"Looker 功能冻结感" · 开始迁 Tableau / dbt+Hex / ThoughtSpot
-- **迁出策略** · 先把 LookML 里的指标定义翻译到 dbt SL（工具：`dbt2looker` 反向 · 或人工迁移）· 再换前端
+- **迁出策略** · 先把 LookML 里的指标定义翻译到 **dbt SL 或 Cube**（工具：`dbt2looker` 反向 · 或人工迁移）· 再换前端。**Malloy 不适合作为 Looker 替代**（仍属实验 · 见下方 § 3.4）
 - **风险** · LookML 的 dimension `sql_table_name` 在 dbt SL 不完全等价 · 要测试
 
 ### Malloy（malloydata 开源 · 社区主导）
@@ -410,6 +410,9 @@ r = requests.post("https://cube.corp/cubejs-api/v1/load", json={
 ```
 
 ## 10. LLM × Semantic Layer · 2026 核心变革
+
+!!! info "本节定位"
+    本节讲 **语义层视角的 LLM 集成机制**（SL 里的 metrics 如何被 LLM 消费 · SL 对 Text-to-Query 的必要性）。**端到端 BI+LLM 产品对比** 和 **架构选型决策** 见 [BI × LLM](bi-plus-llm.md)。
 
 !!! info "2026 最大转折"
     语义层从 "BI 口径治理" 转变为 **"LLM 访问企业数据的知识抓手"**。Databricks Genie · Snowflake Cortex Analyst · dbt SL MCP · Cube AI 都在走这条路。

@@ -251,15 +251,19 @@ event_ts → landing_ts → silver_ts → mart_ts → view_ts
 - **MV refresh lag** · MV 最后刷新时间 vs 源表 snapshot
 - **Cache TTL** · BI 工具缓存 TTL 设置
 
-### 5.2 新鲜度 SLO 的典型目标
+### 5.2 新鲜度 SLO 的典型目标 · 按 lag 段分拆
 
-| 场景 | event→view 目标 | 实现 |
-|---|---|---|
-| 财务月报 | T+1 | 批调度 |
-| 运营日报 | < 4h | 批调度 + 重试 |
-| 运营实时看板 | < 15min | 增量 MV · StarRocks 异步 |
-| 监控告警 | < 30s | Flink + 流存 · ClickHouse 直消费 |
-| 实时大屏 | < 5s | Flink + Kafka + 专用引擎 |
+只看端到端 "event→view" 目标不够 · 配置 SLO 时要拆到每段（否则哪段卡住无法定位）：
+
+| 场景 | event→view 目标 | CDC lag | ETL lag | MV refresh lag | 实现 |
+|---|---|---|---|---|---|
+| 财务月报 | T+1 | N/A | T+1 批完成 | 每日一次 | 批调度 |
+| 运营日报 | < 4h | < 15min | < 3h | < 30min | 批调度 + 重试 |
+| 运营实时看板 | < 15min | < 2min | < 10min | < 3min | 增量 MV · StarRocks 异步 |
+| 监控告警 | < 30s | < 5s | < 20s | 无 MV · 直查 | Flink + 流存 · ClickHouse 直消费 |
+| 实时大屏 | < 5s | < 1s | < 3s | 无 MV · 直查 | Flink + Kafka + 专用引擎 |
+
+**监控维度**：每段 lag 独立 SLI + 分段告警 · 端到端 SLO 是各段的松弛累加（留 20-30% buffer）。
 
 ### 5.3 陷阱
 

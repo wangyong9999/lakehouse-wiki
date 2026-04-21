@@ -157,7 +157,7 @@ REFRESH ASYNC EVERY (INTERVAL 10 MINUTE)
 AS SELECT dt, shop_id, sum(amount) AS gmv FROM sales GROUP BY dt, shop_id;
 ```
 
-- **Trino 和 Iceberg 都支持物化视图**（Iceberg MV 还在成熟中）
+- **Trino 和 Iceberg 都支持物化视图**（Iceberg MV spec 截至 2026-04 **仍 incubating** · 未合入 format spec · 单引擎内 Trino 480+ / AWS Glue 2025-11 / Spark 3.5.6+ 可用 · 跨引擎共享不现实 · 详见 [物化视图](../bi-workloads/materialized-view.md)）
 - **StarRocks 的增量 MV** 最成熟（自动路由、rewrite）
 - Top 10 热查询打 MV → 剩下走原表
 - **不要 MV 一切**——维护成本高，覆盖率低于 70% 就要考虑合并
