@@ -191,31 +191,82 @@ MlflowClient().set_registered_model_alias(
 
 ## 3. 成熟度模型
 
+L0-L3 成熟度框架参考 **Google Cloud "MLOps: Continuous delivery and automation pipelines in machine learning"**（ml-ops.org 呼应）· 以下为结合工业实践的通俗版：
+
 ### L0 · 手工（大多数团队起点）
 
 - Jupyter 训练 → pickle 保存 → FastAPI 挂上去
 - 无版本、无 CI/CD、无监控
 
-### L1 · 自动化训练（80% 团队停在这）
+### L1 · 自动化训练（很多团队停在这一阶段）
 
 - 训练作业调度化（Airflow / Kubeflow）
-- Model Registry（MLflow）
+- Model Registry（MLflow · alias API）
 - 离线评估自动化
 - **缺**：在线监控 + 漂移 + 持续重训
 
-### L2 · CI/CD for ML（CD4ML）
+### L2 · CI/CD for ML（CD4ML）· 工业级标配
 
-- 代码 / 数据 / 特征 / 模型全版本化（Git + DVC + MLflow）
+- 代码 / 数据 / 特征 / 模型全版本化（Git + Iceberg snapshot + Feast + MLflow）
 - 离线评估 + 影子流量 + Canary 自动化
-- 模型监控 + 告警
-- **这是工业级标配**
+- 模型监控 + 告警（详见 [model-monitoring](model-monitoring.md)）
+- Model Card + Model BOM 合规 artifact（详见 [model-registry](model-registry.md)）
 
-### L3 · 持续学习
+### L3 · 持续学习（务实版）
 
-- 漂移检测自动触发重训
-- A/B 常态化
-- **Online Learning**（River / Vowpal Wabbit）
-- **闭环自治**
+- 漂移检测触发重训 · **但必须过 auto-retrain 守门契约**（见 [model-monitoring](model-monitoring.md) §7）
+- **Champion / Challenger 常态化**（背景持续训 · 稳定优于后再 promote）
+- A/B 常态化 · 置信 / 显著性正确计算
+- **Online Learning**（River / Vowpal Wabbit / FTRL）**适用窄**：高 QPS · label 快回流（CTR / feed 排序）· 工业主流仍是**周期性批重训** · online learning 是加成而非替代
+
+!!! note ""L3 = 闭环自治"是理想 · 不是目标"
+    现实里 L2 + champion/challenger + 定期批重训 已经覆盖 80%+ 场景 · 不必追求极端 online learning · 多数业务的 label 回流和 concept drift 节奏支撑不了真"自治"· 别把成熟度模型当跑分目标。
+
+## 3.5 LLMOps 分支 · MLOps 的 LLM 时代对偶
+
+**本页六环节是**经典 ML（推荐 · 风控 · CTR · 分类 · 回归）**闭环** · LLM 应用有自己的对偶形态 —— **LLMOps**。两者共享思想但**工具链 + 迭代节奏 + 评估方式 + 监控指标**都不同。
+
+### 核心分歧
+
+| 维度 | MLOps（本章）| LLMOps（[ai-workloads](../ai-workloads/index.md) §层 3）|
+|---|---|---|
+| **迭代主体** | 模型权重（每周 / 月重训）| Prompt（每天 / 小时改）+ RAG 语料 + 少量 fine-tune |
+| **版本化对象** | 模型 + 特征 + 数据 snapshot | Prompt 模板 + RAG 索引 + 评估集 + adapter |
+| **评估** | AUC / NDCG / MAE / calibration | LLM-as-Judge · Groundedness · Faithfulness · MT-Bench · 领域 golden set |
+| **监控** | Feature drift · prediction drift · business KPI | Prompt drift · Tool trace · Token cost · Latency · Hallucination rate |
+| **错误模式** | 准确率掉 / 分布漂移 | 幻觉 / 越狱 / 工具错误 / 无限循环 |
+| **合规** | EU AI Act 高风险 ML | + prompt injection 防御 · + adapter 许可链 |
+
+### LLMOps 闭环对应
+
+```
+MLOps 闭环（本章）             LLMOps 闭环（ai-workloads）
+─────────────────              ────────────────────────────
+1. 数据 (Iceberg)              1. 语料 + 评估集（版本化）
+2. 特征 (Feature Store)        2. RAG 索引 + Prompt 模板
+3. 训练                         3. Prompt 调优 / DSPy 优化 / 少量 fine-tune
+4. 评估                         4. Eval（RAGAS · TruLens · DeepEval）
+5. 部署                         5. Deploy（prompt version + model alias）
+6. 监控                         6. LLM Observability（Langfuse · Phoenix · Trace）
+```
+
+### 对应 canonical 页
+
+| 环节 | MLOps 页 | LLMOps 页 |
+|---|---|---|
+| 定义 / 版本化 | 本页 + [model-registry](model-registry.md) | [prompt-management](../ai-workloads/prompt-management.md) |
+| 评估 | §4 业务模拟 / Shadow / A/B | [rag-evaluation](../ai-workloads/rag-evaluation.md) |
+| 监控 | [model-monitoring](model-monitoring.md) | [llm-observability](../ai-workloads/llm-observability.md) |
+| 部署运维 | [model-serving](model-serving.md) | [llm-inference](../ai-workloads/llm-inference.md) + [llm-gateway](../ai-workloads/llm-gateway.md) |
+| 安全 | [model-registry](model-registry.md) §合规 | [guardrails](../ai-workloads/guardrails.md) + [authorization](../ai-workloads/authorization.md) |
+| Fine-tuning | [fine-tuning-data](fine-tuning-data.md) | — |
+
+### 实务建议
+
+- **公司里两套都有**（推荐系统 + LLM 客服 + BI Text-to-SQL · 都要做）· **不要只选一套工具链**
+- **共享底座**：湖仓 / Catalog / 权限 / 监控基础设施共用
+- **分叉工具**：Prompt 管理 / LLM eval / LLM obs / guardrails 用 LLM 专属工具链 · 不强塞进 MLflow
+- **人员协作**：ML 工程师和 LLM 应用工程师需要**互相理解对方工具链** · 避免"LLM 工程师不懂 PSI · ML 工程师不懂 prompt injection"
 
 ## 4. 工程细节 · 端到端管线示例
 
