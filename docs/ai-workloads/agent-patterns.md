@@ -51,6 +51,15 @@ status: stable
 
 ## 2. 5 大控制循环模式
 
+!!! info "稳定路径 vs 演进跟踪"
+    **2026 生产默认路径**：**StateGraph（显式图 · LangGraph）+ Function Calling + 窄 tools + HITL approval**。这是最可控、最可观测、最好恢复的路径。
+
+    其他模式按场景取舍 · 不要一上来全用：
+    - ✅ **ReAct** · 单场景 Agent 入门 · 适合 3 步以内
+    - ✅ **Plan-and-Execute** · 多步任务 · planner 用强模型 / executor 用轻模型
+    - 🟡 **Reflexion** · 可重试场景（编码 / 数学）· 非可重试场景不适合
+    - 🟡 **Tree of Thoughts** · 搜索 / 推理重 · 代价明显 · 多数场景不划算
+
 ### 模式 1 · ReAct（Reason + Act · 2022）
 
 ```

@@ -176,6 +176,15 @@ Chunk 决定召回上限：
 
 ## 4. 工程细节 · 2024-2025 高级范式
 
+!!! info "稳定路径 vs 演进跟踪 · 别把"值得了解"误读成"应优先采用""
+    **2026 生产默认路径**就是 § 3 基础管线：**chunk → Hybrid（BM25+Dense）→ Rerank（v2-m3 / Cohere v3.5）→ Prompt → LLM + 引用**。这 5 步做扎实 · 加上 [评估](rag-evaluation.md) 闭环 · 已经能覆盖 **80%+ 生产场景**。
+
+    以下范式是**演进跟踪** · 按顺序选择性采用 · 不要一上来全部：
+    - ✅ **Contextual Retrieval**（Anthropic 2024）· 效果确证 · 可优先尝试
+    - 🟡 **CRAG / Self-RAG** · 实验验证 · 适合复杂检索可用性不稳定的场景
+    - 🟡 **Agentic RAG** · 需 Agent 能力成熟 · 成本显著高
+    - 🟡 **GraphRAG** · 综合性查询优势 · 但 10-100× 离线构建成本
+
 ### Contextual Retrieval（Anthropic 2024）
 
 **给每个 chunk 前置补充"这个 chunk 在整份文档中的背景描述"**（用 LLM 预处理），embed 整体。
