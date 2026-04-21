@@ -21,7 +21,7 @@ status: stable
     - **六大环节**：数据 → 特征 → 训练 → 评估 → 部署 → 监控
     - **核心范式**：所有资产（data / features / model / config）**版本化**
     - **湖仓一体化的价值**：数据底座统一 → PIT Join 可做 → 训推一致
-    - **常见失败**：Train-serve skew（90% 事故）· Data drift（60%）· 模型退化（40%）
+    - **常见失败分布**：Train-serve skew / Data drift / 模型退化为头部三类（具体比例依团队差异大 · **不要直接套用某"90%"这类精确百分比** · 需自测自评）
     - **工具族**：MLflow / Kubeflow / Ray / DVC / Weights & Biases / Feast
     - **成熟度**：**L0（手工）→ L1（自动化训练）→ L2（CI/CD/CD4ML）→ L3（持续学习）**
 
@@ -38,13 +38,13 @@ status: stable
 | **A/B 结果看不了** | 没 logging | 🔥 |
 | **违规查权责** | 无血缘审计 | 🔥（合规场景致命）|
 
-### 真实事故
+### 示意场景 `[以下为典型链路示意 · 非具体事故 · 不代表特定公司的真实数字]`
 
-- 某电商 2020：推荐模型两周悄悄从 AUC 0.83 劣化到 0.71，业务发现才查。根因：用户行为分布迁移，模型没重训。
-- 某金融 2022：风控模型升级，特征算法在线离线不一致，5% 正常交易被拒。监管要求 24 小时内复盘 → 团队爬代码爬到天亮。
-- 某广告 2023：因数据格式变更，训练数据有 2% 漂移，CTR 预测偏差，一晚损失 200 万。
+- **推荐系统静默退化**：模型上线后用户行为分布持续迁移（季节 / 促销 / 新用户涌入），AUC 缓慢从上线期下降 · 无监控则业务发现才查 · 根因回归重训节奏。
+- **风控 train-serve skew**：线上特征计算用 Java 重写离线 Spark SQL，在 timezone / null 处理 / 边界上漂移 · 导致正常交易被误拒 · 监管要求短时间内复盘时没有血缘可查。
+- **CTR 数据格式突变**：上游数据源 schema 变更未被下游感知 · 训练集出现几个百分点漂移 · 预测偏差在高 QPS 场景下放大为明显业务损失。
 
-这些都是 **MLOps 缺失的税**。
+这些都是 **MLOps 缺失的税** · 具体数字会依团队 / 规模 / 时段差异很大 · 不要把示意链路当基准。
 
 ## 2. 六大环节深挖
 
@@ -147,13 +147,16 @@ with mlflow.start_run():
 
 ### 环节 5 · 部署 (Model Serving)
 
-**Model Registry**：版本化 + 环境（Staging / Production）+ Stage 转换流程。
+**Model Registry**：版本化 + **alias**（champion / challenger · MLflow 2.9+）替代老式 stage 转换。
 
 ```python
-mlflow.register_model("runs:/<run-id>/model", "recall_model")
-mlflow.transition_model_version_stage(
-    name="recall_model", version=3, stage="Production"
+# MLflow 2.9+ 推荐 alias API · transition_model_version_stage 已 deprecated
+from mlflow import MlflowClient
+
+MlflowClient().set_registered_model_alias(
+    name="recall_model", alias="champion", version=3
 )
+# serving 侧：models:/recall_model@champion
 ```
 
 **Serving 选型**：
@@ -283,11 +286,13 @@ Dockerfile:
 | 漂移监控延迟 | 5-60 分钟 |
 | 重训节奏（典型） | 日 / 周 / 月 |
 
-### 工业数据点
+### 工业规模感 `[来源未验证 · 量级参考 · 具体数字年代差异大]`
 
-- Netflix 推荐：每天重训，3000+ 模型并存
-- Uber Michelangelo：日训练 5000+ 模型
-- TikTok 推荐：实时特征 + 增量学习
+- Netflix 推荐：每天多次重训 · 数千模型并存（2020+ 博客量级）
+- Uber Michelangelo：日训练数千模型（2017 博客基础上迭代 · 具体当前数字未公开）
+- TikTok 推荐：实时特征 + 流式 / 增量更新（行业传闻 · 细节未公开披露）
+
+读者提醒：这些**量级**有参考意义 · 精确数字（"3000+"、"5000+"）不应被直接引用作基准。
 
 ## 6. 代码示例
 
@@ -320,9 +325,11 @@ with mlflow.start_run():
     mlflow.log_metric("auc", auc)
     mlflow.sklearn.log_model(model, "model", registered_model_name="churn_v3")
 
-# 3. 注册 + stage 转换
+# 3. 注册 + alias（MLflow 2.9+ · stage API 已 deprecated）
 client = mlflow.MlflowClient()
-client.transition_model_version_stage("churn_v3", version=1, stage="Staging")
+client.set_registered_model_alias(
+    name="churn_v3", alias="challenger", version=1
+)
 ```
 
 ### 漂移监控（PSI）

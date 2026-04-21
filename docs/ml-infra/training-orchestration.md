@@ -136,12 +136,20 @@ for batch in ds.iter_batches(batch_size=1024):
 ### 路径 2：PyTorch Dataset + Lance
 
 ```python
-import lance
-ds = lance.dataset("s3://.../train.lance")
-loader = DataLoader(ds, batch_size=1024, num_workers=8, shuffle=True)
+# Lance 提供 torch 子包 · 直接把 Lance dataset 适配为 IterableDataset
+from lance.torch.data import LanceDataset
+from torch.utils.data import DataLoader
+
+ds = LanceDataset(
+    dataset="s3://.../train.lance",
+    batch_size=1024,
+    columns=["features", "label"],
+    shuffle=True,
+)
+loader = DataLoader(ds, batch_size=None, num_workers=8)  # batch_size=None · LanceDataset 已批
 ```
 
-Lance 的 per-row random access 让 `shuffle=True` 不再是性能杀手。
+Lance 的 per-row random access 让 shuffle 不再是性能杀手。注意**不要**把 `lance.dataset(...)` 的返回（原生 LanceDataset）直接喂 `DataLoader`，那不是 torch Dataset · 需要用 `lance.torch.data.LanceDataset` 适配层。
 
 ## 和 Model Registry 的闭环
 

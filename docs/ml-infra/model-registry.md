@@ -39,17 +39,18 @@ with mlflow.start_run():
     mlflow.log_metrics(metrics)
     mlflow.sklearn.log_model(model, "model", registered_model_name="churn_predictor")
 
-# Stage 流转
+# MLflow 2.9+ 推荐用 alias（champion / challenger）· 老式 stage API 已 deprecated
 client = mlflow.MlflowClient()
-client.transition_model_version_stage(
-    name="churn_predictor",
-    version=5,
-    stage="Production"
+client.set_registered_model_alias(
+    name="churn_predictor", alias="champion", version=5
 )
 
-# 下游加载
-model = mlflow.sklearn.load_model("models:/churn_predictor/Production")
+# 下游加载 · alias 语法
+model = mlflow.sklearn.load_model("models:/churn_predictor@champion")
 ```
+
+!!! warning "API 迁移 · MLflow 2.9+"
+    `transition_model_version_stage(..., stage="Production")` 和 `models:/name/Production` 语法 **自 MLflow 2.9 起已 deprecated** · 请用 `set_registered_model_alias` + `models:/name@alias`。老代码搜一下全仓替换。
 
 **优点**：开源、集成简单、社区大。
 **缺点**：权限弱，和 Catalog 治理不打通。

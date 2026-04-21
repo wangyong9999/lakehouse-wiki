@@ -222,15 +222,16 @@ Flink 维护 state、FS 暴露 online lookup。
 ### Feast 典型定义
 
 ```python
+# Feast 0.40+ API · value_type 已 deprecated · 改用 join_keys
 from feast import Entity, FeatureView, Field, FileSource
 from feast.types import Float32, Int64
 from datetime import timedelta
 
-user = Entity(name="user_id", value_type=ValueType.INT64)
+user = Entity(name="user", join_keys=["user_id"])
 
 user_source = FileSource(
     path="s3://lake/features/user_stats.parquet",
-    event_timestamp_column="event_ts",
+    timestamp_field="event_ts",
 )
 
 user_stats = FeatureView(
@@ -286,6 +287,8 @@ feast materialize-incremental $(date -u +"%Y-%m-%dT%H:%M:%S")
 
 ## 5. 性能数字
 
+以下数字为经验基线 `[来源未验证 · 示意性 · 依硬件 / 数据 / 调优差异大 · 不要直接套用]`。
+
 ### Feast + Redis（典型规模）
 
 | 指标 | 基线 |
@@ -293,13 +296,13 @@ feast materialize-incremental $(date -u +"%Y-%m-%dT%H:%M:%S")
 | Online get_online_features（单 entity）| 2-10ms |
 | Batch get_online_features（100 entity）| 20-50ms |
 | 单 Feature View Registry 规模 | 数百 feature OK |
-| PIT Join 性能（Spark）| 100M 样本 × 20 FV ≈ 30 分钟 |
+| PIT Join 性能（Spark · 硬件 / broadcast / 分区未声明）| 100M 样本 × 20 FV ≈ 30 分钟 |
 | Materialization 吞吐 | 10k-100k rows/s |
 
-### Tecton 生产案例
+### Tecton 生产案例 `[来源未验证 · 示意性 · 自测为准]`
 
-- 某推荐系统：3000+ features，在线 p99 < 20ms，每秒 50k QPS
-- 某风控系统：实时特征延迟 < 2 分钟从 Kafka 到 online store
+- 某推荐系统：3000+ features · 在线 p99 < 20ms · 50k QPS 级
+- 某风控系统：实时特征延迟 < 2 分钟（Kafka → online store）
 
 ## 6. 代码示例
 
@@ -348,10 +351,17 @@ SELECT
     AS avg_7d_gmv
 FROM orders;
 
-# 2. Spark 每小时物化到 Redis
-spark.read.table("iceberg.features.user_stats").foreachPartition(lambda p:
-    redis_client.mset({f"u:{r.user_id}:avg_7d_gmv": r.avg_7d_gmv for r in p})
-)
+# 2. Spark 每小时物化到 Redis · 注意：redis client 必须在 executor 内初始化
+#    直接在 lambda 里 capture driver 端的 client 会 pickle 失败 / 反模式
+def write_partition(rows):
+    import redis
+    client = redis.Redis(host="redis.internal", port=6379)
+    pipe = client.pipeline()
+    for r in rows:
+        pipe.set(f"u:{r.user_id}:avg_7d_gmv", r.avg_7d_gmv)
+    pipe.execute()
+
+spark.read.table("iceberg.features.user_stats").foreachPartition(write_partition)
 
 # 3. 推理侧读 Redis
 value = redis_client.get(f"u:{user_id}:avg_7d_gmv")

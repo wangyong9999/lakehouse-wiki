@@ -80,15 +80,15 @@ Embedding 是 GPU-bound。两条路：
 
 百万级以下前者简单，亿级以上后者更灵活。
 
-## 典型日吞吐参考
+## 典型日吞吐参考 `[来源未验证 · 示意性 · 依 batch / 序列长度 / 硬件差异大]`
 
-| 模型 | 硬件 | 吞吐（近似） |
+| 模型 | 硬件 | 吞吐（粗估） |
 | --- | --- | --- |
 | BGE-base（文本 768 维） | A10 GPU | 50k–100k docs/min |
 | CLIP-ViT-B/32（图） | A10 GPU | 5k–10k images/min |
 | OpenAI text-embed-3（API） | — | 受 TPM / RPM 限制，≈ 30k/min |
 
-批 size + 序列长度差异大，实际以 benchmark 为准。
+批 size + 序列长度差异大 · 以上为粗估 · **实际以自己 benchmark 为准** · 不要直接套用这些数字做容量规划。
 
 ## 一张生产级表长什么样
 
