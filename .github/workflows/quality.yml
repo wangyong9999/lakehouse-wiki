@@ -64,3 +64,13 @@ jobs:
       - run: python scripts/version_scan.py
       - run: python scripts/version_scan.py --strict
         continue-on-error: true  # report, don't fail build
+
+  unsourced-numbers-scan:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # candidate generator · human review required
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/unsourced_numbers_scan.py | head -50
