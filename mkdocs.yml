@@ -272,11 +272,15 @@ nav:
           - RAG: ai-workloads/rag.md
           - RAG 评估: ai-workloads/rag-evaluation.md
           - Prompt 管理: ai-workloads/prompt-management.md
+          - Structured Output: ai-workloads/structured-output.md
+          - Agent Patterns: ai-workloads/agent-patterns.md
           - Agents on Lakehouse: ai-workloads/agents-on-lakehouse.md
           - MCP · Model Context Protocol: ai-workloads/mcp.md
       - 应用侧基础设施:
-          - Semantic Cache: ai-workloads/semantic-cache.md
+          - LLM Inference: ai-workloads/llm-inference.md
           - LLM Gateway: ai-workloads/llm-gateway.md
+          - Semantic Cache: ai-workloads/semantic-cache.md
+          - Guardrails: ai-workloads/guardrails.md
   - ML 平台:
       - ml-infra/index.md
       - 特征与数据:
@@ -377,6 +381,7 @@ nav:
       - 0006 章节结构与维度划分: adr/0006-chapter-structure-dimensions.md
       - 0007 版本刷新 SOP: adr/0007-version-refresh-sop.md
       - 0008 对抗评审 SOP: adr/0008-adversarial-review-sop.md
+      - 0009 frontier → main 下沉判据: adr/0009-frontier-to-main-migration.md
   - 附录:
       - FAQ: faq.md
       - 术语表: glossary.md
