@@ -292,9 +292,10 @@ nav:
           - Embedding 流水线: ml-infra/embedding-pipelines.md
           - Feature Store 横比: compare/feature-store-comparison.md
       - 模型生命周期:
+          - MLOps 生命周期: ml-infra/mlops-lifecycle.md
           - Model Registry: ml-infra/model-registry.md
           - Model Serving: ml-infra/model-serving.md
-          - MLOps 生命周期: ml-infra/mlops-lifecycle.md
+          - Model Monitoring: ml-infra/model-monitoring.md
       - 训练基础设施:
           - 训练编排: ml-infra/training-orchestration.md
           - GPU 调度: ml-infra/gpu-scheduling.md
