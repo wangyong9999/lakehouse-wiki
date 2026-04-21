@@ -1,12 +1,26 @@
 ---
-title: 多模数据建模（Multimodal Data Modeling）
+title: 多模数据建模 · 表 Schema 设计
 type: concept
-tags: [unified, multimodal, modeling]
-aliases: [多模建表, 多模 Schema 设计]
-related: [multimodal-embedding, lake-plus-vector, lake-table]
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: Iceberg 1.10+ · Paimon 1.4+ · Lance 0.20+ · 2024-2026 实践
+tags: [unified, multimodal, modeling, schema, cross-chapter]
+aliases: [多模建表, 多模 Schema 设计, Multimodal Data Modeling]
+related: [multimodal-embedding, lake-plus-vector, lake-table, schema-evolution, multi-modal-lake]
 systems: [iceberg, lance, paimon]
 status: stable
 ---
+
+!!! info "本页是跨章组合视角 · schema 设计焦点"
+    本页讲"**一张湖表同时承载 BI 和 AI 数据**的 schema 设计"· 涉及机制深挖去：
+    
+    - **湖表底层机制** → [lakehouse/lake-table](../lakehouse/lake-table.md) · [lakehouse/multi-modal-lake](../lakehouse/multi-modal-lake.md)
+    - **Schema Evolution** → [lakehouse/schema-evolution](../lakehouse/schema-evolution.md)
+    - **Embedding 模型选型** → [retrieval/embedding](../retrieval/embedding.md) · [retrieval/multimodal-embedding](../retrieval/multimodal-embedding.md)
+    - **Embedding 生成流水线** → [ml-infra/embedding-pipelines](../ml-infra/embedding-pipelines.md)
+    
+    **本页专做**：多模表 schema 的**跨 BI + AI 设计**。
 
 # 多模数据建模
 

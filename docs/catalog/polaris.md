@@ -331,4 +331,4 @@ Polaris 的"纯净 · 最小实现"是**双刃剑**：
 - [Unity Catalog](unity-catalog.md) —— 主要竞争者
 - [Nessie](nessie.md) —— 侧重 Git-like 工作流
 - [Catalog 全景对比](../compare/catalog-landscape.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)

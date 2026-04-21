@@ -49,7 +49,7 @@ status: stable
 
 - [ ] 读 [Lake + Vector 融合架构](../unified/lake-plus-vector.md)
 - [ ] 读 [多模数据建模](../unified/multimodal-data-modeling.md)
-- [ ] 读 [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [ ] 读 [统一 Catalog 策略](../catalog/strategy.md)
 - [ ] 读 [多模检索流水线](../scenarios/multimodal-search-pipeline.md) 场景
 - [ ] 读 [Feature Store](../ml-infra/feature-store.md)
 - [ ] 做：设计一张 `multimodal_assets` 表，含三种模态和两种向量列；在 Iceberg / Lance 二选一落地

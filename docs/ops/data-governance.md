@@ -123,7 +123,7 @@ contract:
 
 - [可观测性](observability.md) —— 治理的邻居
 - [安全与权限](security-permissions.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 - [Unity Catalog](../catalog/unity-catalog.md)
 
 ## 延伸阅读

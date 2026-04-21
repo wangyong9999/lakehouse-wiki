@@ -298,7 +298,7 @@ WHERE _change_type IN ('update_postimage', 'insert');
 - **[Delta Protocol](https://github.com/delta-io/delta/blob/master/PROTOCOL.md)**
 - **[*Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores* (VLDB 2020)](http://www.vldb.org/pvldb/vol13/p3411-armbrust.pdf)**
 - **[Delta Uniform 博客](https://docs.databricks.com/en/delta/uniform.html)**
-- **[案例拆解（含 Databricks Lakehouse）](../unified/case-studies.md)**
+- **[案例拆解（含 Databricks Lakehouse）](../cases/studies.md)**
 
 ## 相关
 

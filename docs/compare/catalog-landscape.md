@@ -88,7 +88,7 @@ flowchart TD
 ## 相关
 
 - 各系统页：[Hive Metastore](../catalog/hive-metastore.md) · [Iceberg REST Catalog](../catalog/iceberg-rest-catalog.md) · [Nessie](../catalog/nessie.md) · [Unity Catalog](../catalog/unity-catalog.md) · [Polaris](../catalog/polaris.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 
 ## 延伸阅读
 

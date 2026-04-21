@@ -99,7 +99,7 @@ flowchart TB
 - [Manifest](../lakehouse/manifest.md)
 - [查询加速](../bi-workloads/query-acceleration.md)
 - [性能调优](../ops/performance-tuning.md)
-- [Compute Pushdown](../unified/compute-pushdown.md) —— 更广义的下沉
+- [Compute Pushdown](../query-engines/compute-pushdown.md) —— 更广义的下沉
 
 ## 延伸阅读
 

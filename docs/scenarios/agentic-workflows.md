@@ -260,7 +260,7 @@ Agent 访问湖仓通常通过：
 
 ### 1. Text-to-SQL
 
-自然语言 → SQL → 执行 → 返回。详见 [Compute Pushdown](../unified/compute-pushdown.md)。
+自然语言 → SQL → 执行 → 返回。详见 [Compute Pushdown](../query-engines/compute-pushdown.md)。
 
 **湖仓侧要配合**：
 - Catalog 层提供表 schema + 业务描述给 LLM 做"schema retrieval"
@@ -319,7 +319,7 @@ Agent 访问湖仓通常通过：
 ## 相关
 
 - [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md) —— Agent 概念 + 湖上工具
-- [Compute Pushdown](../unified/compute-pushdown.md) —— 把计算 / 模型推下沉到湖
+- [Compute Pushdown](../query-engines/compute-pushdown.md) —— 把计算 / 模型推下沉到湖
 - [RAG](../ai-workloads/rag.md) · [RAG 评估](../ai-workloads/rag-evaluation.md)
 - [Prompt 管理](../ai-workloads/prompt-management.md)
 - [业务场景全景](business-scenarios.md)

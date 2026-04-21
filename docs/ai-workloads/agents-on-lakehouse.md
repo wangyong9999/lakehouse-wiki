@@ -199,7 +199,7 @@ async def call_tool(name, arguments):
 
 ## 4. 和 Compute Pushdown 的关系
 
-"Agent × Lakehouse" 本质上是 [Compute Pushdown](../unified/compute-pushdown.md) 的上层：
+"Agent × Lakehouse" 本质上是 [Compute Pushdown](../query-engines/compute-pushdown.md) 的上层：
 
 - **Compute Pushdown** 说 "把计算推到靠近数据" · Trino / Spark 直接访问湖
 - **Agent** 说 "让 LLM 决定做什么计算"
@@ -270,8 +270,8 @@ Agent（Claude + MCP lakehouse server）
 
 - [Agent Patterns](agent-patterns.md) —— 通用 Agent 机制（canonical）
 - [MCP](mcp.md) —— 首选跨 host tool 协议
-- [Compute Pushdown](../unified/compute-pushdown.md) —— 推计算 vs 拉数据
-- [跨模态查询](../unified/cross-modal-queries.md) —— 跨模 tool 的底层
+- [Compute Pushdown](../query-engines/compute-pushdown.md) —— 推计算 vs 拉数据
+- [跨模态查询](../retrieval/cross-modal-queries.md) —— 跨模 tool 的底层
 - [Text-to-SQL 场景](../scenarios/text-to-sql-platform.md) —— Text-to-SQL tool 的端到端
 - [Agentic Workflows 场景](../scenarios/agentic-workflows.md) —— L1/L2/L3 成熟度 + 业务编排
 - [安全与权限](../ops/security-permissions.md) —— 湖仓 ACL 基础
@@ -285,6 +285,6 @@ Agent（Claude + MCP lakehouse server）
 
 ## 相关
 
-- [Agent Patterns](agent-patterns.md) · [MCP](mcp.md) · [Compute Pushdown](../unified/compute-pushdown.md) · [跨模态查询](../unified/cross-modal-queries.md)
+- [Agent Patterns](agent-patterns.md) · [MCP](mcp.md) · [Compute Pushdown](../query-engines/compute-pushdown.md) · [跨模态查询](../retrieval/cross-modal-queries.md)
 - [RAG](rag.md) · [Text-to-SQL 场景](../scenarios/text-to-sql-platform.md) · [Agentic Workflows 场景](../scenarios/agentic-workflows.md)
 - [Unity Catalog](../catalog/unity-catalog.md) · [Polaris](../catalog/polaris.md) · [Nessie](../catalog/nessie.md)

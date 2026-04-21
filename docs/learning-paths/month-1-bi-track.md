@@ -46,7 +46,7 @@ status: stable
 ### Week 4 —— 运维、成本、治理
 
 - [ ] 读 [可观测性](../ops/observability.md) / [性能调优](../ops/performance-tuning.md) / [成本优化](../ops/cost-optimization.md)
-- [ ] 读 [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [ ] 读 [统一 Catalog 策略](../catalog/strategy.md)
 - [ ] 读 [Unity Catalog](../catalog/unity-catalog.md) 或 [Iceberg REST Catalog](../catalog/iceberg-rest-catalog.md)
 - [ ] 做：为 Week 1 的表族建一套监控 dashboard（查询 p95 / 数据新鲜度 / 小文件数 / MV 命中率 / 月度存储 $）
 - [ ] 做：写一份 ADR，题目 "在我们场景下选 X 作为 BI on Lake 加速层"，引用上面所有材料

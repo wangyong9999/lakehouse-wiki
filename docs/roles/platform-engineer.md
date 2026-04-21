@@ -17,7 +17,7 @@ hide:
 !!! tip "你偏向哪一路"
     本页覆盖面广，多数团队会进一步细分：
 
-    - **A · 数据治理方向**：Catalog 选型 / 权限模型 / Schema 治理 / 血缘。主线：Catalog 系统 + [统一 Catalog 策略](../unified/unified-catalog-strategy.md) + [数据治理](../ops/data-governance.md) + [安全与权限](../ops/security-permissions.md)
+    - **A · 数据治理方向**：Catalog 选型 / 权限模型 / Schema 治理 / 血缘。主线：Catalog 系统 + [统一 Catalog 策略](../catalog/strategy.md) + [数据治理](../ops/data-governance.md) + [安全与权限](../ops/security-permissions.md)
     - **B · 基础设施 / FinOps 方向**：K8s / GPU / 多租户 / 成本。主线：[多租户隔离](../ops/multi-tenancy.md) + [GPU 调度](../ml-infra/gpu-scheduling.md) + [成本优化](../ops/cost-optimization.md) + [TCO](../ops/tco-model.md)
     - **C · 可靠性 / 迁移方向**：SLA / 可观测 / 迁移 / DR。主线：[SLA·SLO](../ops/sla-slo.md) + [可观测性](../ops/observability.md) + [迁移手册](../ops/migration-playbook.md) + [灾难恢复](../ops/disaster-recovery.md)
 
@@ -25,7 +25,7 @@ hide:
 
 !!! tip "高频任务速跳"
     - **接入新 Catalog** → [Catalog 全景对比](../compare/catalog-landscape.md) · [Iceberg REST](../catalog/iceberg-rest-catalog.md) · [Unity](../catalog/unity-catalog.md) · [Nessie](../catalog/nessie.md)
-    - **排查权限拒绝** → [安全与权限](../ops/security-permissions.md) · [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+    - **排查权限拒绝** → [安全与权限](../ops/security-permissions.md) · [统一 Catalog 策略](../catalog/strategy.md)
     - **成本突增分析** → [成本优化](../ops/cost-optimization.md) · [TCO 模型](../ops/tco-model.md)
     - **迁移 / 跨云** → [迁移手册](../ops/migration-playbook.md) · [灾难恢复](../ops/disaster-recovery.md)
 
@@ -34,7 +34,7 @@ hide:
 - [存算分离](../foundations/compute-storage-separation.md)
 - [对象存储](../foundations/object-storage.md)
 - [一致性模型](../foundations/consistency-models.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 - [Catalog 全景对比](../compare/catalog-landscape.md)
 
 ## Catalog 系统
@@ -59,8 +59,8 @@ hide:
 ## 一体化架构
 
 - [Lake + Vector 融合架构](../unified/lake-plus-vector.md)
-- [Compute Pushdown](../unified/compute-pushdown.md)
-- [案例拆解](../unified/case-studies.md)
+- [Compute Pushdown](../query-engines/compute-pushdown.md)
+- [案例拆解](../cases/studies.md)
 
 ## 引擎平面（知道每个的定位）
 

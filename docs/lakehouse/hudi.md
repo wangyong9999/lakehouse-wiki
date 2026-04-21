@@ -293,9 +293,9 @@ CREATE TABLE hudi_orders (
 - **[Hudi 官方文档](https://hudi.apache.org/)**
 - **[*Hoodie: Incremental Processing on Hadoop*（Uber 原始博客, 2017）](https://www.uber.com/blog/hoodie/)**
 - **[Onehouse 技术博客](https://www.onehouse.ai/blog)** —— Hudi 商业化主要推动方
-- **[案例 · Uber 数据平台](../unified/case-uber.md)** —— Hudi 最大生产验证
+- **[案例 · Uber 数据平台](../cases/uber.md)** —— Hudi 最大生产验证
 
 ## 相关
 
 - [湖表](lake-table.md) · [Iceberg](iceberg.md) · [Paimon](paimon.md) · [Delta Lake](delta-lake.md)
-- [案例 · Uber](../unified/case-uber.md)
+- [案例 · Uber](../cases/uber.md)

@@ -41,7 +41,7 @@ status: stable
 - **向量层**：Vector Search（Databricks 托管）+ Mosaic Vector DB
 - **检索**：Dense + Hybrid + Rerank 全家桶，接入 Model Serving
 - **主引擎**：Spark（Photon 向量化）+ DBSQL
-- **最值得学**：**"Catalog 作为治理平面"** —— 从表权限到向量权限到模型权限一张模型，行列级 + Tag 策略 + 血缘。这是我们 [统一 Catalog 策略](unified-catalog-strategy.md) 的直接参考
+- **最值得学**：**"Catalog 作为治理平面"** —— 从表权限到向量权限到模型权限一张模型，行列级 + Tag 策略 + 血缘。这是我们 [Catalog 策略](../catalog/strategy.md) 的直接参考
 
 ---
 
@@ -54,7 +54,7 @@ status: stable
 - **向量层**：表内原生向量列 + Cortex Search
 - **检索**：Cortex Search（Dense + Hybrid + Reranker）
 - **主引擎**：Snowflake SQL 引擎 + Cortex LLM UDF
-- **最值得学**：**"SQL 里直接调 LLM / embedding 函数"** —— `CORTEX.EMBED_TEXT()` / `CORTEX.COMPLETE()` 作为一等表达式。这是 [Compute Pushdown](compute-pushdown.md) 的极致形态
+- **最值得学**：**"SQL 里直接调 LLM / embedding 函数"** —— `CORTEX.EMBED_TEXT()` / `CORTEX.COMPLETE()` 作为一等表达式。这是 [Compute Pushdown](../query-engines/compute-pushdown.md) 的极致形态
 
 ---
 
@@ -129,9 +129,10 @@ status: stable
 
 ## 相关
 
-- [Lake + Vector 融合架构](lake-plus-vector.md)
-- [统一 Catalog 策略](unified-catalog-strategy.md)
-- [Compute Pushdown](compute-pushdown.md)
+- [Lake + Vector 融合架构](../unified/lake-plus-vector.md)
+- [Catalog 策略](../catalog/strategy.md)
+- [Compute Pushdown](../query-engines/compute-pushdown.md)
+- [本章索引](index.md) —— 深度案例 + 综述
 - 学习路径：[一月 AI 方向](../learning-paths/month-1-ai-track.md)
 
 ## 延伸阅读

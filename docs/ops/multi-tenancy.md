@@ -183,7 +183,7 @@ resource-groups.json:
 - [安全与权限](security-permissions.md) —— 权限隔离的基础
 - [数据治理](data-governance.md) —— 治理视角
 - [成本优化](cost-optimization.md) —— charge-back 基础
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md) —— Catalog 作为锚点
+- [统一 Catalog 策略](../catalog/strategy.md) —— Catalog 作为锚点
 
 ## 延伸阅读
 

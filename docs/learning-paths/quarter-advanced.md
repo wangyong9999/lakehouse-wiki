@@ -31,7 +31,7 @@ status: stable
 ### Week 3-4 · Catalog 治理平面
 
 - 全部 Catalog 系统页 + [Catalog 全景对比](../compare/catalog-landscape.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 - [安全与权限](../ops/security-permissions.md)
 - [数据治理](../ops/data-governance.md)
 - [ADR-0004 Catalog 选型](../adr/0004-catalog-choice.md)
@@ -42,9 +42,9 @@ status: stable
 ### Week 5-6 · 一体化
 
 - [Lake + Vector 融合架构](../unified/lake-plus-vector.md)
-- [跨模态查询](../unified/cross-modal-queries.md)
-- [Compute Pushdown](../unified/compute-pushdown.md)
-- [案例拆解](../unified/case-studies.md)
+- [跨模态查询](../retrieval/cross-modal-queries.md)
+- [Compute Pushdown](../query-engines/compute-pushdown.md)
+- [案例拆解](../cases/studies.md)
 - [多模数据建模](../unified/multimodal-data-modeling.md)
 - 做：设计一张 `multimodal_assets` 表 schema（图+文+音），画出端到端架构图，写成 ADR 草稿
 

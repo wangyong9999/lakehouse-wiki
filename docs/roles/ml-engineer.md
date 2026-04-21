@@ -45,7 +45,7 @@ hide:
 - [Hybrid Search](../retrieval/hybrid-search.md)
 - [Rerank](../retrieval/rerank.md)
 - [检索评估](../retrieval/evaluation.md)
-- [跨模态查询](../unified/cross-modal-queries.md)
+- [跨模态查询](../retrieval/cross-modal-queries.md)
 
 ## AI 负载
 

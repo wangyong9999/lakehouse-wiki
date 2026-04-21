@@ -176,6 +176,7 @@ nav:
           - Puffin vs Lance: compare/puffin-vs-lance.md
   - 元数据与 Catalog:
       - catalog/index.md
+      - Catalog 策略 · 选型决策: catalog/strategy.md
       - 协议层:
           - Iceberg REST Catalog: catalog/iceberg-rest-catalog.md
       - OSS 实现层:
@@ -210,6 +211,7 @@ nav:
       - 引擎通用原理:
           - 向量化执行: query-engines/vectorized-execution.md
           - 谓词下推: query-engines/predicate-pushdown.md
+          - Compute Pushdown · UDF / LLM 下沉: query-engines/compute-pushdown.md
       - 纯查询引擎:
           - Trino: query-engines/trino.md
           - DuckDB: query-engines/duckdb.md
@@ -244,6 +246,7 @@ nav:
           - Hybrid Search: retrieval/hybrid-search.md
           - Sparse Retrieval: retrieval/sparse-retrieval.md
           - Filter-aware ANN: retrieval/filter-aware-search.md
+          - 跨模态查询: retrieval/cross-modal-queries.md
           - Rerank: retrieval/rerank.md
           - 检索评估: retrieval/evaluation.md
       - 产品实现:
@@ -305,17 +308,14 @@ nav:
           - LLM Fine-tuning: ml-infra/fine-tuning-data.md
   - 一体化架构:
       - unified/index.md
-      - 架构模式:
-          - Lake + Vector 融合架构: unified/lake-plus-vector.md
-          - 多模数据建模: unified/multimodal-data-modeling.md
-          - 统一 Catalog 策略: unified/unified-catalog-strategy.md
-          - 跨模态查询: unified/cross-modal-queries.md
-          - Compute Pushdown: unified/compute-pushdown.md
-      - 案例拆解:
-          - 案例拆解（汇总）: unified/case-studies.md
-          - 案例 · Netflix: unified/case-netflix.md
-          - 案例 · LinkedIn: unified/case-linkedin.md
-          - 案例 · Uber: unified/case-uber.md
+      - Lake + Vector 融合架构: unified/lake-plus-vector.md
+      - 多模数据建模: unified/multimodal-data-modeling.md
+  - 工业案例:
+      - cases/index.md
+      - 案例综述（多家横比）: cases/studies.md
+      - Netflix 数据平台: cases/netflix.md
+      - LinkedIn 数据平台: cases/linkedin.md
+      - Uber 数据平台: cases/uber.md
   - 场景指南:
       - scenarios/index.md
       - E2E 业务场景全景: scenarios/business-scenarios.md

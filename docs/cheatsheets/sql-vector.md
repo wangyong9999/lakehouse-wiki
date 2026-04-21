@@ -185,4 +185,4 @@ LIMIT 10;
 - [向量数据库](../retrieval/vector-database.md)
 - [向量数据库对比](../compare/vector-db-comparison.md)
 - [Hybrid Search](../retrieval/hybrid-search.md)
-- [跨模态查询](../unified/cross-modal-queries.md)
+- [跨模态查询](../retrieval/cross-modal-queries.md)

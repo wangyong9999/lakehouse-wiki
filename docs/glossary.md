@@ -26,7 +26,7 @@ description: 字母序的概念兜底索引
 - **Bulk Loading** —— 见 [Bulk Loading](pipelines/bulk-loading.md)
 - **Business Scenarios（业务场景全景）** —— 见 [业务场景全景](scenarios/business-scenarios.md)
 - **Capacity Planning（容量规划）** —— 见 [容量规划](ops/capacity-planning.md)
-- **Case Studies（案例拆解）** —— 见 [案例拆解](unified/case-studies.md)
+- **Case Studies（案例拆解）** —— 见 [案例拆解](cases/studies.md)
 - **Catalog** —— 见 [Catalog 章节](catalog/index.md)
 - **CDC（Change Data Capture）** —— 见 [Streaming Upsert / CDC](lakehouse/streaming-upsert-cdc.md)
 - **CDP（Customer Data Platform）** —— 见 [CDP · 用户分群](scenarios/cdp-segmentation.md)
@@ -40,12 +40,12 @@ description: 字母序的概念兜底索引
 - **ClickHouse** —— 见 [ClickHouse](query-engines/clickhouse.md)
 - **Columnar Storage** —— 见 [列式 vs 行式](foundations/columnar-vs-row.md)
 - **Compaction** —— 见 [Compaction](lakehouse/compaction.md)
-- **Compute Pushdown** —— 见 [Compute Pushdown](unified/compute-pushdown.md)
+- **Compute Pushdown** —— 见 [Compute Pushdown](query-engines/compute-pushdown.md)
 - **Compute-Storage Separation（存算分离）** —— 见 [存算分离](foundations/compute-storage-separation.md)
 - **Consistency（一致性模型）** —— 见 [一致性模型](foundations/consistency-models.md)
 - **CoW / MoR** —— 见 [Hudi](lakehouse/hudi.md) / [Delete Files](lakehouse/delete-files.md)
 - **Cost Optimization** —— 见 [成本优化](ops/cost-optimization.md)
-- **Cross-modal Query** —— 见 [跨模态查询](unified/cross-modal-queries.md)
+- **Cross-modal Query** —— 见 [跨模态查询](retrieval/cross-modal-queries.md)
 
 ## D – F
 

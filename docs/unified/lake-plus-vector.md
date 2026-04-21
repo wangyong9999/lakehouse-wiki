@@ -1,12 +1,28 @@
 ---
-title: Lake + Vector 融合架构
+title: Lake + Vector 融合架构 · 三范式对比
 type: concept
-tags: [unified, multimodal, vector, lakehouse]
+depth: 资深
+level: S
+last_reviewed: 2026-04-21
+applies_to: Iceberg 1.10+ · Puffin · Lance 0.20+ · LanceDB · Milvus 2.5+ · Unity Catalog · Polaris · 2024-2026 实践
+tags: [unified, multimodal, vector, lakehouse, cross-chapter]
 aliases: [湖上向量, 一体化湖仓]
-related: [vector-database, lake-table, lance-format, puffin]
-systems: [iceberg, lancedb, milvus, unity-catalog]
+related: [vector-database, lake-table, lance-format, puffin, multimodal-data-modeling, catalog-strategy]
+systems: [iceberg, lancedb, milvus, unity-catalog, polaris]
 status: stable
 ---
+
+!!! info "本页是跨章组合视角 · 不复述单产品机制"
+    三种融合范式涉及的单产品机制请去对应章：
+    
+    - **Iceberg Puffin** 机制 → [lakehouse/puffin](../lakehouse/puffin.md)
+    - **Lance Format** 格式 → [foundations/lance-format](../foundations/lance-format.md)
+    - **LanceDB** 产品 → [retrieval/lancedb](../retrieval/lancedb.md)
+    - **Milvus / Qdrant** 产品 → [retrieval/milvus](../retrieval/milvus.md) · [retrieval/qdrant](../retrieval/qdrant.md)
+    - **Unity Catalog / Polaris / Gravitino** → [catalog/unity-catalog](../catalog/unity-catalog.md) · [catalog/polaris](../catalog/polaris.md) · [catalog/gravitino](../catalog/gravitino.md)
+    - **Catalog 选型决策** → [catalog/strategy](../catalog/strategy.md)
+    
+    **本页专做**：三种路线选型决策 · 不讲单产品。
 
 # Lake + Vector 融合架构
 
@@ -117,7 +133,7 @@ flowchart LR
 - [湖表](../lakehouse/lake-table.md)、[Puffin](../lakehouse/puffin.md)
 - [Lance Format](../foundations/lance-format.md)、[LanceDB](../retrieval/lancedb.md)
 - [多模数据建模](multimodal-data-modeling.md)
-- [统一 Catalog 策略](unified-catalog-strategy.md)
+- [Catalog 策略](../catalog/strategy.md)
 
 ## 延伸阅读
 

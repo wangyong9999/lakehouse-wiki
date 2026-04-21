@@ -174,7 +174,7 @@ flowchart BT
     - **选表格式** → [四大表格式对比](compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) · [ADR-0002](adr/0002-iceberg-as-primary-table-format.md)
     - **查询慢定位** → [性能调优](ops/performance-tuning.md) · [20 反模式](ops/anti-patterns.md) · [量级数字](frontier/benchmark-numbers.md)
     - **已有数仓做 RAG** → [RAG](ai-workloads/rag.md) · [RAG on Lake 场景](scenarios/rag-on-lake.md) · [Embedding 流水线](ml-infra/embedding-pipelines.md)
-    - **平台权限 / 多租户** → [安全与权限](ops/security-permissions.md) · [统一 Catalog 策略](unified/unified-catalog-strategy.md) · [多租户隔离](ops/multi-tenancy.md)
+    - **平台权限 / 多租户** → [安全与权限](ops/security-permissions.md) · [统一 Catalog 策略](catalog/strategy.md) · [多租户隔离](ops/multi-tenancy.md)
     - **小文件治理** → [Compaction](lakehouse/compaction.md) · [FAQ](faq.md)
     - **选向量库** → [向量数据库对比](compare/vector-db-comparison.md) · [ADR-0003](adr/0003-lancedb-for-multimodal-vectors.md)
 
@@ -194,19 +194,19 @@ flowchart BT
     ---
     一张湖表承载图 / 文 / 音 / 视 + 多种向量
 
--   **[跨模态查询](unified/cross-modal-queries.md)**
+-   **[跨模态查询](retrieval/cross-modal-queries.md)**
     ---
     一条 SQL 同时做结构化过滤 + 向量相似度
 
--   **[Compute Pushdown](unified/compute-pushdown.md)**
+-   **[Compute Pushdown](query-engines/compute-pushdown.md)**
     ---
     把计算、UDF、模型推理下沉到湖
 
--   **[统一 Catalog 策略](unified/unified-catalog-strategy.md)**
+-   **[统一 Catalog 策略](catalog/strategy.md)**
     ---
     从"表注册中心"升级到"治理平面"
 
--   **[案例拆解](unified/case-studies.md)**
+-   **[案例拆解](cases/studies.md)**
     ---
     Databricks / Snowflake / Netflix / LinkedIn / Uber / Pinterest
 
@@ -227,7 +227,8 @@ flowchart BT
 | AI 负载 | RAG / Agent / Prompt / Feature Store / 微调数据 | [ai-workloads](ai-workloads/index.md) |
 | **ML 基础设施** | Model Registry / Serving / Training / GPU | [ml-infra](ml-infra/index.md) |
 | BI 负载 | OLAP 建模 / 物化视图 / 查询加速 | [bi-workloads](bi-workloads/index.md) |
-| **一体化架构** ⭐ | 湖 + 向量融合、多模建模、统一 Catalog、跨模态查询、案例 | [unified](unified/index.md) |
+| **一体化架构** ⭐ | 湖 + 向量融合、多模建模（跨章组合视角）| [unified](unified/index.md) |
+| **工业案例** | Netflix / LinkedIn / Uber / 六家横比 | [cases](cases/index.md) |
 | 运维与生产 | 可观测性 / 性能 / 成本 / 安全 / 治理 / 迁移 / 排障 | [ops](ops/index.md) |
 | 研究前沿 | 论文笔记、Benchmark | [frontier](frontier/index.md) |
 
@@ -253,7 +254,7 @@ flowchart BT
 - [Feature Store 横比](compare/feature-store-comparison.md) · [OLAP 加速副本](compare/olap-accelerator-comparison.md) · [流处理引擎](compare/streaming-engines.md) · [Rerank 模型](compare/rerank-models.md) · [稀疏检索](compare/sparse-retrieval.md) · [调度系统](compare/orchestrators.md)
 
 ### 深度案例
-- [**Netflix**](unified/case-netflix.md) · [**LinkedIn**](unified/case-linkedin.md) · [**Uber**](unified/case-uber.md) — 工业数据平台完整拆解
+- [**Netflix**](cases/netflix.md) · [**LinkedIn**](cases/linkedin.md) · [**Uber**](cases/uber.md) — 工业数据平台完整拆解
 
 ### 前沿研究
 - [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）

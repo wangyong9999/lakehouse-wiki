@@ -125,7 +125,7 @@ Unity Catalog / Gravitino 都把"向量列""模型""Volume"当资源纳入 RBAC 
 
 ## 相关
 
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 - [Unity Catalog](../catalog/unity-catalog.md)
 - [Apache Polaris](../catalog/polaris.md)
 - [可观测性](observability.md)

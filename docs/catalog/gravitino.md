@@ -174,7 +174,7 @@ Snowflake 生态：      Snowflake Open Catalog
 - [Polaris](polaris.md)
 - [Nessie](nessie.md)
 - [Catalog 全景对比](../compare/catalog-landscape.md)
-- [统一 Catalog 策略](../unified/unified-catalog-strategy.md)
+- [统一 Catalog 策略](../catalog/strategy.md)
 
 ## 延伸阅读
 
