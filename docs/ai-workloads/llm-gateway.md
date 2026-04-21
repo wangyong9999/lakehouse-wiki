@@ -370,6 +370,8 @@ response = client.chat.completions.create(
 
 - [Semantic Cache](../ai-workloads/semantic-cache.md) · [RAG](../ai-workloads/rag.md)
 - [MCP](../ai-workloads/mcp.md) —— 和 Gateway 关注点不同但互补
-- [LLM 推理优化](../frontier/llm-inference-opt.md) —— Gateway 后端是这个
-- [AI 治理](../frontier/ai-governance.md) —— Gateway 是 Guardrails 落地点
+- [LLM Inference](../ai-workloads/llm-inference.md) —— Gateway 后端是这个
+- [LLM Observability](../ai-workloads/llm-observability.md) —— Gateway 是观测数据产生端
+- [Guardrails](../ai-workloads/guardrails.md) —— Gateway 是 Guardrails 落地点
+- [AI App Authorization](../ai-workloads/authorization.md) —— Gateway 做 identity 流转的一站
 

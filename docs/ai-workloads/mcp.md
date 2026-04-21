@@ -395,7 +395,8 @@ MCP **是方向**，也是 2024-2025 年 AI infra 最重要的协议进展之一
 
 ## 相关
 
-- [Agentic Workflows](../scenarios/agentic-workflows.md)
-- [Agents on Lakehouse](agents-on-lakehouse.md)
+- [Agent Patterns](agent-patterns.md) · [Agents on Lakehouse](agents-on-lakehouse.md) · [Structured Output](structured-output.md)
+- [AI App Authorization](authorization.md) —— MCP tool 权限声明（2026 仍演进）
+- [LLM Observability](llm-observability.md) —— MCP tool span 追踪
 - [RAG](rag.md)
-- [业务场景全景](../scenarios/business-scenarios.md)
+- [Agentic Workflows 场景](../scenarios/agentic-workflows.md) · [业务场景全景](../scenarios/business-scenarios.md)

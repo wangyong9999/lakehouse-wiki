@@ -267,10 +267,10 @@ response = anthropic.messages.create(
 
 ## 相关
 
-- [RAG](rag.md)
-- [RAG 评估](rag-evaluation.md)
+- [RAG](rag.md) · [LLM / RAG / Agent 评估](rag-evaluation.md) · [Agent Patterns](agent-patterns.md)
+- [Semantic Cache](semantic-cache.md) · [LLM Observability](llm-observability.md) —— prompt_version 是 observability 的关键属性
+- [Conversation Lifecycle](conversation-lifecycle.md) —— prompt 和 session 的组装关系
 - [Agents on Lakehouse](agents-on-lakehouse.md)
-- [Semantic Cache](semantic-cache.md)
 
 ## 延伸阅读
 
