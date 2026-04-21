@@ -294,7 +294,9 @@ Maestro 早期 2019-2020 版本相当不成熟 · 业务团队抗拒使用。直
 
 ## 10. 对团队的启示
 
-!!! warning "以下为观点提炼 · 非客观事实"
+!!! warning "以下为观点提炼 · 非客观事实 · 选 2-3 条记住即可"
+    启示较多（5 条）· 不必全读全用。战略决策 canonical 在 [unified/index §5 团队路线主张](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md) · 本页启示是**可参考的观察** · 不是建议照搬。
+
     这些启示是**本 wiki 对 Netflix 经验的主观解读** · 未必适用所有团队。不同规模 / 文化 / 组织结构需要各自调整。
 
 ### 启示 1 · "从一张小表开始"的迁移哲学

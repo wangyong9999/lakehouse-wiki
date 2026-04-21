@@ -13,11 +13,31 @@ last_reviewed: 2026-04-21
 !!! warning "本章定位 · reference 性质"
     - **本章**：**工业案例参考**（reference）· 讲"**别人怎么做 · 规模多大 · 取舍为何 · 失败在哪**"
     - **不讲机制原理**：机制去对应技术栈章（[lakehouse/](../lakehouse/index.md) / [retrieval/](../retrieval/index.md) / [catalog/](../catalog/index.md) / [query-engines/](../query-engines/index.md) / [ai-workloads/](../ai-workloads/index.md) / [ml-infra/](../ml-infra/index.md)）
-    - **架构模式**：去 [unified/](../unified/index.md) · 讲跨章组合视角
+    - **架构模式 / 战略主张**：去 [unified/](../unified/index.md) · 本章**不做战略判断**
     - **业务场景端到端**：去 [scenarios/](../scenarios/index.md) · 讲具体业务
     - **厂商选型商业视角**：去 [frontier/vendor-landscape](../frontier/vendor-landscape.md)
     
     **用法**：做架构设计 / 选型评审 / 方案论证时翻一翻 · 知道"业界是怎么做的 · 为什么这么做 · 哪里踩过坑"。
+
+!!! danger "读前必读 · 样本类型分层（S32 重要修复）"
+    **cases/ 的 7 家案例不是同一层级对象** · 读横比结论前必须理解：
+    
+    | 类型 | 案例 | 公开资料性质 | 横比适用度 |
+    |---|---|---|---|
+    | **商业产品平台** | Databricks · Snowflake | 产品文档 + marketing + keynote | 作**产品能力对比**合适 · 作"内部规模"不可比 |
+    | **大厂内部数据平台** | Netflix · LinkedIn · Uber · 阿里巴巴 | 工程技术博客 + 论文 + 开源项目 | 作**工程经验对比**合适 · 作"客户规模"不可比 |
+    | **业务系统案例** | Pinterest（PinSage / Pixie 推荐系统）| 论文 + Engineering Blog | **不是数据平台全景** · 是特定业务系统（推荐）的工业代表 |
+    
+    **跨类型横比有天然失真风险**（如"Databricks 客户 10000+" vs "Netflix 内部 Iceberg 表 10 万+"不是同一维度）。本章 [studies.md](studies.md) 的横比矩阵**按类型分组** · 请配合类型声明阅读。
+
+!!! note "事实 / 推断 / 推测三层分层（S32 新规范）"
+    reference 章严格区分：
+    
+    - **客观事实**（来自公开博客 / 论文 / 发布公告）· 正文默认性质
+    - **作者合理推断**（基于事实的架构判断）· 用 `!!! info` 标注
+    - **未来推测**（未经官方确认的趋势判断）· 集中在 §6 关键演进的独立子节 · 不混入事实节
+    
+    各深度页已按此规范修订（S32）。
 
 !!! info "本章**有时效性** · 按 ADR 0007 SOP 定期复检"
     工业案例的技术栈变化快（一年一个新动向）。**本章所有深度页 `last_reviewed: 2026-04-21`** · 下次计划在 2026-Q3 复检。读者使用时应**交叉验证各公司最新博客 / 发布**（见 §9 延伸阅读）。
@@ -37,7 +57,7 @@ last_reviewed: 2026-04-21
 
 ### 1.3 多模推荐工业代表
 
-- [**Pinterest**](pinterest.md) —— **PinSage GNN**（SIGKDD 2018）+ GraphJet（VLDB 2017）+ Homefeed · 多模推荐最成熟案例
+- [**Pinterest**](pinterest.md) —— **PinSage GNN**（SIGKDD 2018）+ **Pixie random walk**（SIGMOD 2018）+ Homefeed · 多模推荐最成熟案例
 
 ### 1.4 中国工业代表
 
@@ -122,7 +142,7 @@ last_reviewed: 2026-04-21
 关注：
 - **Netflix · Iceberg** 论文（CIDR 2020）
 - **Databricks · Lakehouse** 论文（CIDR 2021）
-- **Pinterest · PinSage** 论文（SIGKDD 2018）· **GraphJet** 论文（VLDB 2017）
+- **Pinterest · PinSage** 论文（SIGKDD 2018 · GNN 推荐）· **Pixie** 论文（SIGMOD 2018 · 实时 random walk）
 - **Uber · Michelangelo** 博客
 - **Snowflake · Elastic DW** 论文（SIGMOD 2016）
 

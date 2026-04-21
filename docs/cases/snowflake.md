@@ -143,38 +143,13 @@ Snowflake **2012 年就实现了存算分离** · 领先业界 5-10 年：
 
 ### 5.2 Cortex · SQL LLM UDF 工业先驱
 
-**2024 年 Cortex AI 全家桶 GA**。关键函数：
+**2024 年 Cortex AI 全家桶 GA** · 主要函数族：`CORTEX.COMPLETE`（LLM 生成）· `EMBED_TEXT`（embedding）· `SENTIMENT` · `SUMMARIZE` · `TRANSLATE` · `CLASSIFY` 等。
 
-```sql
--- LLM 生成
-SELECT customer_id,
-       SNOWFLAKE.CORTEX.COMPLETE(
-         'mistral-large',
-         CONCAT('Summarize: ', support_log)
-       ) AS summary
-FROM support_tickets;
+**本页不展开 API 细节和代码示例**（产品用法 canonical 在 [query-engines/compute-pushdown §4.4](../query-engines/compute-pushdown.md)）。**本页关注商业/架构意义**：
 
--- Embedding
-SELECT doc_id,
-       SNOWFLAKE.CORTEX.EMBED_TEXT_768(
-         'e5-base-v2',
-         content
-       ) AS embedding
-FROM documents;
-
--- 情感分析
-SELECT review_id,
-       SNOWFLAKE.CORTEX.SENTIMENT(review_text) AS sentiment
-FROM reviews;
-
--- 翻译
-SELECT content,
-       SNOWFLAKE.CORTEX.TRANSLATE(content, 'en', 'zh-cn') AS translated
-FROM docs;
-
--- 摘要
-SELECT SNOWFLAKE.CORTEX.SUMMARIZE(long_text) FROM articles;
-```
+- **工业先驱地位**：Cortex 2024 GA **早于** Databricks AI Functions / BigQuery ML.GENERATE_TEXT · 是 SQL LLM UDF 产品化第一家
+- **产品定位**："数据不出 Snowflake" 让 Cortex 成为合规场景首选
+- **LLM 后端选择的商业取舍**：支持 Mistral / Llama / Snowflake Arctic · **不支持** OpenAI GPT / Anthropic Claude（见 §8.3）
 
 **支持的后端 LLM**（2024-2026）：
 - Snowflake 托管：`mistral-large` · `mixtral-8x7b` · `llama3-70b` · `snowflake-arctic`（2024 Snowflake 开源的 480B MoE）
@@ -406,7 +381,9 @@ Snowflake 2012-2022 年主要聚焦 SQL 数仓 · **对 ML 投入不足**。2023
 
 ## 10. 对团队的启示
 
-!!! warning "以下为观点提炼 · 非客观事实"
+!!! warning "以下为观点提炼 · 非客观事实 · 选 2-3 条记住即可"
+    启示较多（5 条）· 不必全读全用。战略决策 canonical 在 [unified/index §5 团队路线主张](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md) · 本页启示是**可参考的观察** · 不是建议照搬。
+
 
 ### 启示 1 · SQL LLM UDF 是新范式 · 但有场景边界
 

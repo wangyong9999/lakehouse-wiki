@@ -301,7 +301,9 @@ LinkedIn 初期 Iceberg 迁移计划是"18 个月完成" · 实际 2023-2026 进
 
 ## 10. 对团队的启示
 
-!!! warning "以下为观点提炼 · 非客观事实"
+!!! warning "以下为观点提炼 · 非客观事实 · 选 2-3 条记住即可"
+    启示较多（5 条）· 不必全读全用。战略决策 canonical 在 [unified/index §5 团队路线主张](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md) · 本页启示是**可参考的观察** · 不是建议照搬。
+
 
 ### 启示 1 · "先开源一个单品"
 

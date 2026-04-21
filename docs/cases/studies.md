@@ -14,8 +14,19 @@ status: stable
 
 # 工业案例综述 · 7 家横比矩阵
 
-!!! info "本页性质 · reference · 7 家统一坐标系横比 canonical"
-    对 cases/ 下的 7 家深度案例按**统一 8 维坐标系**做横比。每家**详细细节**看各自深度页。信息来自公开博客 / 论文 / 官方文档 · `[具体数字以公司最新披露为准 · 本页有时效性]`。
+!!! info "本页性质 · 纯事实横比 · 不做战略判断"
+    本页**仅做客观事实横比**（表格式 · Catalog · 引擎 · 向量层等维度）· **不做**"什么更好 / 团队应该选什么 / 工业共同规律"**等战略判断** —— 这些判断在 [unified/](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md) 做 canonical。
+    
+    读本页的正确方式：**看事实、找差异 · 回上层（unified/strategy/compare）做决策**。
+
+!!! danger "样本类型分层 · 跨类型横比有失真风险"
+    **7 家案例不是同一层级对象**：
+    
+    - **商业产品平台**：[Databricks](databricks.md) · [Snowflake](snowflake.md)
+    - **大厂内部数据平台**：[Netflix](netflix.md) · [LinkedIn](linkedin.md) · [Uber](uber.md) · [阿里巴巴](alibaba.md)
+    - **业务系统案例**（非通用数据平台）：[Pinterest](pinterest.md)（推荐系统专题 · PinSage/Pixie）
+    
+    矩阵的"规模"/"向量层"/"检索"等维度**在商业 vs 内部 vs 业务系统之间不完全可比**。本页按类型分组呈现。
 
 !!! abstract "7 家覆盖的光谱"
     - **商业一体化平台**：[Databricks](databricks.md)（Lakehouse AI）· [Snowflake](snowflake.md)（Data Cloud + Cortex）
@@ -45,7 +56,8 @@ status: stable
 |---|---|---|---|---|---|---|---|
 | **主场景** | BI+AI 一体化平台 | 云数仓+AI 内嵌 | 批+流+ML | 推荐+检索+实时 OLAP | 实时 ML 决策 | 多模推荐 | 电商超大规模 |
 | **表格式** | Delta + **UniForm** | 内部 FDN + Iceberg 外部 | **Iceberg**（诞生地）| **Iceberg**（迁移中） | **Hudi**（诞生地） | Iceberg | **Paimon**（诞生地）|
-| **Catalog** | **UC** 商业+OSS | **Polaris**（2024 捐 ASF · 2026 TLP）+ Horizon | **Metacat**（联邦） | 内部 + **OpenHouse**（2024 开源） | HMS → 现代 | 自研 + Iceberg REST | 阿里云 DMS |
+| **Catalog** | **UC** 商业+OSS | **Polaris**（2024 捐 ASF · 2026 TLP）+ Horizon | **Metacat**（联邦） | 内部（DataHub 做发现） | HMS → 现代 | 自研 + Iceberg REST | 阿里云 DMS |
+| **Table Lifecycle 层**（Catalog 之上）| Delta Lake 运维内建 | Snowflake 内部托管 | Iceberg 内建 + 自建脚本 | **OpenHouse**（2024 开源 · LinkedIn 独家贡献） | 自建 | 自建 | 自建 |
 | **存储** | 云对象（跨云） | 云对象（跨云） | S3 | HDFS + 对象 | HDFS + S3 | S3 | OSS + HDFS |
 | **向量层** | **Vector Search** 托管 | **Cortex Search**（向量原生）| 独立 · 业务内嵌 | 自研 · 紧耦合推荐 | ML 平台内嵌 | **自研 ANN**（PinSage）| Hologres 2024+ / ProxiMA 自研 |
 | **检索** | Dense + Hybrid + Reranker | Cortex Search（三段式）| 业务场景内 | **Dense + 结构化 + LTR** | Feature Store 驱动 | **多路召回+LTR+重排** | 多路召回+LTR |
@@ -115,73 +127,108 @@ status: stable
 | [LinkedIn](linkedin.md) | 推荐深度耦合 | 自研 |
 | [Uber](uber.md) | ML 平台内嵌 | Feature Store 驱动 |
 
-**关键观察**：
-- **"湖仓一体化向量"**（Databricks + Snowflake + Hologres）是 2024-2026 新趋势
-- **头部推荐公司普遍自研 ANN**（Pinterest · 阿里 · Netflix · LinkedIn 都自研）· 通用向量库在极大规模下不够
-- 中小规模团队用通用向量库（Milvus / Qdrant / LanceDB）足够
+**关键观察**（事实 · 非主张）：
+- "湖仓一体化向量"（Databricks + Snowflake + Hologres）是 2024-2026 可观察趋势
+- 头部推荐公司普遍自研 ANN（Pinterest · 阿里 · Netflix · LinkedIn）
+- 中小规模团队用通用向量库（Milvus / Qdrant / LanceDB）是常见选择
 
-## 4. 2024-2026 共同规律
+## 4. 事实观察 · 非战略判断
 
-!!! note "以下为客观观察 · 不是观点"
+!!! note "本节仅做事实观察 · 战略判断在别章"
+    以下是跨案例可观察的**事实模式** · 不是"团队应该怎么做"的推荐。**战略建议在 [unified/index §5 团队路线主张](../unified/index.md) · [catalog/strategy](../catalog/strategy.md) · [compare/](../compare/index.md)** · 本页不替它们做结论。
 
-### 规律 1 · Catalog 升级成"治理平面"
+### 4.1 Catalog 层分化 · 不是一条"规律"
 
-UC · Polaris · DataHub · OpenHouse 都在往"**多模资产 + 血缘 + 权限**"走。**Catalog 不再是"表注册中心"· 是整个平台的治理中枢**。
+各家 Catalog 选型差异反映不同战略 · **不是一条统一规律**：
 
-### 规律 2 · SQL 是长期 AI 入口
+- Databricks · UC 多模全包（商业 + OSS）· 争行业标准
+- Snowflake · Polaris 纯 Iceberg + RBAC（2024 捐 ASF · 2026 TLP）
+- Netflix · Metacat 联邦（多 metastore 联邦）
+- LinkedIn · 内部 + **OpenHouse**（**table lifecycle 层 · 不是 Catalog 替代**）
+- 阿里 · DMS 自研
 
-无论前端多花哨 · 底层都在把 embedding / LLM / rerank 做成 SQL 算子：
-- Snowflake Cortex（2024 先驱）
-- Databricks AI Functions
-- BigQuery ML.GENERATE_TEXT
-- Spark + Ray + vLLM（开源路径）
+**不同战略的取舍** · [catalog/strategy](../catalog/strategy.md) canonical 做深度分析 · 本页不重复。
 
-详见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)。
+### 4.2 商业厂商普遍"开放部分 + 锁定部分"
 
-### 规律 3 · 向量层位置在变
-
-**"独立向量系统" → "湖仓原生向量"**：
-- Databricks Vector Search（Delta 一等）
-- Snowflake Cortex Search
-- 阿里 Hologres 向量
-- Iceberg Puffin 向量索引（未来）
-
-独立向量库（Milvus / Qdrant）仍有位置 · 但**正在被蚕食**。
-
-### 规律 4 · 表格式与协议中立化
-
-**Iceberg REST Catalog 成为事实标准**：
-- Netflix / Snowflake / Databricks / Apple / LinkedIn 都支持
-- 多引擎可插拔
-- 商业厂商"**绑一个协议 · 开放另一个**"
-
-### 规律 5 · Embedding 是工程主语料
-
-**不只是"给 RAG 用"**。Embedding 是**检索 · 推荐 · 训练 · 缓存 · 去重**的通用基础设施：
-- Pinterest 的 embedding 产线（多模独立）
-- Netflix 内容特征
-- LinkedIn 推荐 + 搜索
-- 阿里电商 + 广告
-
-详见 [ml-infra/embedding-pipelines](../ml-infra/embedding-pipelines.md)。
-
-### 规律 6 · 闭源走向有限开放
-
-**所有商业厂商都在**"**开放部分 · 锁定部分**"**策略下演化**：
-- Snowflake：支持 Iceberg + 开源 Polaris · 但内部 FDN 仍主推
+- Snowflake：支持 Iceberg 外部表 + 开源 Polaris · 但内部 FDN 仍主推
 - Databricks：UniForm 读 Iceberg · 但 Delta 仍 primary
-- 阿里 MaxCompute：2023+ 支持 Paimon / Iceberg · 但内部格式仍主力
+- 阿里 MaxCompute：2023+ 支持 Paimon / Iceberg 外部表 · 但内部格式仍主力
 
-**"完全开放"的商业厂商不存在**。客户需要理解**开放边界**（见 [案例 · Databricks §8.1](databricks.md)）。
+**是事实观察** · 不代表读者应选什么。
 
-### 规律 7 · "单品开源 + 商业化"成熟模式
+### 4.3 商业案例 vs 内部平台的"失败"口径不同
 
-**LinkedIn 模式**（Kafka → Confluent · Pinot → StarTree · DataHub → Acryl）**被工业界广泛学习**：
-- Uber 的 Hudi（虽然商业化路径不如 Kafka 成功）
-- 阿里的 Paimon（ASF TLP 2024）
-- Netflix 的 Metaflow（Outerbounds 2024 商业化）
+**读者注意** · 跨类型比较失败有天然失真：
 
-## 5. 按问题找案例（反向索引）
+- **商业产品失败**（Databricks · Snowflake）= 生态战 / 增长节奏 / 产品线混乱
+  - 如 Snowflake Unistore 接受度低 · Databricks MosaicML 整合期产品线混乱
+- **内部平台失败**（Netflix · LinkedIn · Uber · 阿里）= 工程弯路 / 自研输给社区 / 迁移低估
+  - 如 Uber AresDB 降级 · Netflix 自研 OLAP 失败 · LinkedIn Azkaban 老化
+
+**跨类型的"失败"横比请谨慎** · 各家深度页 §9 保留各自口径的详细说明。
+
+## 5. 组织 / 迁移 / adoption 横比 · 工业案例最稀缺信号
+
+工业案例最有价值的**不是技术组件清单** · 是**组织和工程推进方式**。这一节从 7 家公开资料提炼相关信号。
+
+### 5.1 团队分工模式
+
+| 案例 | 平台团队定位 | 业务团队自由度 |
+|---|---|---|
+| Netflix | **Platform + Self-Service 模板**（Genie / Maestro / Metaflow · "给工具不给规定"） | 极高 · 业务选用或不用 |
+| LinkedIn | **独立平台组** · 多单品深度 | 中 · 标准栈 + 可不用（Samza → Flink 自然迁移） |
+| Uber | **强平台推动**（早期 Michelangelo adoption 强制）| 中低 · 2022+ 简化后改善 |
+| 阿里 | **多云多平台并存**（闭源 + 开源栈）| 中 · 业务选择云 / 开源组合 |
+| Databricks / Snowflake | 商业产品 · 客户视角 | 客户决定 |
+| Pinterest | **业务推荐团队独立** · 平台支撑 | 推荐团队自研多 |
+
+**观察**：大厂内部平台走向"**工具 + golden path · 不强制**"（Netflix / LinkedIn 2020+ 风格）· 比"**强平台 adoption**"（早期 Uber 风格）更可持续。
+
+### 5.2 adoption 推动策略
+
+| 案例 | 推动方式 |
+|---|---|
+| Netflix · Iceberg | 一张小表试点 · 业务自发扩展 · 5+ 年渐进 |
+| LinkedIn · Kafka | 公司统一"事件总线" · 强标准但接受度自然 |
+| LinkedIn · Iceberg 迁移 | 2023 启动 · 2-3 年窗口（大规模 Hive → Iceberg 进行时）|
+| Uber · Michelangelo | 早期 adoption 强推 · 2022+ 简化才稳定 |
+| 阿里 · Paimon | **通过开源社区扩展 · 内外部并行**（先开源生态再内部 adoption）|
+| Databricks / Snowflake | 商业营销 + 客户成功 + 社区（商业产品路径）|
+
+### 5.3 大规模迁移共同模式
+
+**Hive → Iceberg 大规模迁移都给出 2-3+ 年窗口**：
+
+- Netflix 2017-2020+（已完成大部分）
+- LinkedIn 2023-2026（进行中）
+- Pinterest 2020+（进行中）
+- Databricks / Snowflake 客户迁移（双方支持）
+
+**共同教训（事实观察）**：**表格式迁移是组织工程 · 不是技术工程** · 时间估算 × 2 起步 · 业务团队教育 + 下游工具链适配成本常被低估。
+
+### 5.4 build vs buy 取舍
+
+| 能力 | 代表 build 案例 | 代表 buy / 用 OSS 案例 | 工业观察 |
+|---|---|---|---|
+| **表格式** | Netflix Iceberg / Uber Hudi / 阿里 Paimon（build 后开源）| LinkedIn / Pinterest（用 OSS Iceberg） | **build 后开源 + 社区贡献**成主流 |
+| **Catalog** | Netflix Metacat · LinkedIn OpenHouse（build）· Databricks UC / Snowflake Polaris（build 后开源）| 中小团队（用 OSS UC/Polaris） | **商业产品主导 · 开源版可选** |
+| **ML 平台** | Uber Michelangelo · Netflix Metaflow（build 周期 7 年+）| MLflow + Databricks / 阿里 PAI | **build 周期 7 年起 · 非差异化需求优先用开源** |
+| **实时 OLAP** | LinkedIn Pinot（build 后开源）· Uber AresDB（build 后降级）| Pinot / Druid / ClickHouse（OSS）| **OSS 主导 · 自研逐步让位**（AresDB 典型） |
+| **调度** | Netflix Maestro · LinkedIn Azkaban · Uber Peloton（全 build · 多数降级）| Airflow / Dagster / Prefect（OSS）| **OSS 追上 · 自研维护困难是常态** |
+
+**资深观察**（事实 · 非推荐）：**2010-2020 是大厂自研黄金期** · **2020+ 社区 OSS 普遍追上** · 自研的长期维护成本高于起步预期。
+
+### 5.5 中央 vs self-service 边界
+
+**公开资料呈现的常见模式**（跨案例观察 · 非推荐）：
+- **工具 + 标准** 倾向中央提供（Registry · Catalog · Feature Store 后端 · 调度）
+- **业务逻辑 + 实验** 倾向 self-service（Notebook · 训练代码 · 模型超参搜索）
+- **边界在不同案例间不同** · 但"中央定规矩 · 不做业务代码"在 Netflix / LinkedIn 等成熟阶段是共识
+
+具体案例看各深度页 §5 关键组件和 §8 取舍。
+
+## 6. 按问题找案例（反向索引）
 
 **"做 X 该学谁"**：
 
@@ -199,39 +246,12 @@ UC · Polaris · DataHub · OpenHouse 都在往"**多模资产 + 血缘 + 权限
 | **学大规模 Iceberg 运维** | [Netflix](netflix.md) | [LinkedIn · OpenHouse](linkedin.md) |
 | **学中国工业实践** | [阿里巴巴](alibaba.md) | （后续案例页可加字节 / 腾讯） |
 
-## 6. 对团队的启示（观点性）
 
-!!! warning "以下为观点提炼 · 非客观事实"
+## 7. 不同读者的阅读路径建议
 
-### 启示 1 · Catalog 治理平面
+!!! info "本节是导航 · 不是推荐"
+    以下路径是**按主题的读者导航** · 不是"这家最好"的主张。表述为**案例定位** · 不是评价。
 
-先有 Unity / Polaris / Gravitino · 再谈其他一体化。Catalog 是多模一体化的**起点** · 不是"附属"。详见 [catalog/strategy](../catalog/strategy.md)。
-
-### 启示 2 · Iceberg + Puffin 投资
-
-Iceberg 生态 2024-2026 领先。投资 Iceberg 上的向量索引下沉（Puffin）能力是长期路径。
-
-### 启示 3 · Embedding 流水线作基础设施
-
-**不是"某 AI 项目的附属"**· 是**平台资产**。建立独立的 embedding 产线（批 + 流 + CDC 增量 + 模型版本治理）。
-
-### 启示 4 · SQL 层 Vector / LLM UDF 跟进
-
-关注 Cortex / AI Functions 为代表的 SQL LLM UDF 趋势。开源替代（Spark + Ray + vLLM）可以做到等效。
-
-### 启示 5 · 国内团队可直接学阿里
-
-阿里 Paimon + Flink CDC 组合**最适合中国流式场景**。社区活跃 · 中文资料丰富 · 工程经验可复制。
-
-### 启示 6 · "规模打折"看案例
-
-**不要照搬 Netflix / Uber / 阿里全栈**。他们 EB 级 / 10 亿级用户 · 你可能 PB 级 / 百万用户。**按规模打折**是关键。Pinterest / LinkedIn 的一些组件也是过度工程。
-
-### 启示 7 · 自研 ≠ 永恒
-
-AresDB / Peloton / Samza 的教训：**"自研但输给社区"是常态**。定期评估自研系统 vs 社区方案 · 敢于替换（如 LinkedIn Samza → Flink）。
-
-## 7. 不同读者的阅读建议
 
 ### 架构师 / CTO
 
