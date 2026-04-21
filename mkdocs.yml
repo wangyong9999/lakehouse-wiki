@@ -374,6 +374,9 @@ nav:
       - 0003 多模向量选 LanceDB: adr/0003-lancedb-for-multimodal-vectors.md
       - 0004 Catalog 选型: adr/0004-catalog-choice.md
       - 0005 引擎组合: adr/0005-engine-combination.md
+      - 0006 章节结构与维度划分: adr/0006-chapter-structure-dimensions.md
+      - 0007 版本刷新 SOP: adr/0007-version-refresh-sop.md
+      - 0008 对抗评审 SOP: adr/0008-adversarial-review-sop.md
   - 附录:
       - FAQ: faq.md
       - 术语表: glossary.md
