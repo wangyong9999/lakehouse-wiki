@@ -1,10 +1,14 @@
 ---
-title: Semantic Cache（语义缓存）
+title: Semantic Cache · 语义缓存 + Prompt Caching 对比
 type: concept
-tags: [ai, cache, rag]
-aliases: [语义缓存, LLM Cache]
-related: [rag, embedding, vector-database]
-systems: [redis, lancedb, milvus]
+depth: 资深
+level: A
+last_reviewed: 2026-04-21
+applies_to: GPTCache · LangChain Semantic Cache · Redis / LanceDB / Milvus · Anthropic Prompt Caching (2024-08 GA) · OpenAI Prompt Caching · Gemini Context Caching · 2024-2026
+tags: [ai, cache, rag, prompt-caching]
+aliases: [语义缓存, LLM Cache, Prompt Cache]
+related: [rag, embedding, vector-database, prompt-management, llm-gateway]
+systems: [redis, lancedb, milvus, gptcache]
 status: stable
 ---
 

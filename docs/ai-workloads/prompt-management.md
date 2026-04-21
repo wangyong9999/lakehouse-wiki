@@ -1,11 +1,15 @@
 ---
-title: Prompt 管理
+title: Prompt 管理 · 版本化 · DSPy · Prompt Caching
 type: concept
-depth: 进阶
+depth: 资深
+level: A
+last_reviewed: 2026-04-21
+applies_to: DSPy 2.x · Langfuse · PromptLayer · Helicone · MLflow · Anthropic / OpenAI / Gemini Prompt Caching · 2024-2026 实践
 prerequisites: [rag]
-tags: [ai, prompt, llm]
-related: [rag, rag-evaluation, agents-on-lakehouse]
-systems: [langchain, langfuse, promptlayer, mlflow]
+tags: [ai, prompt, llm, dspy, prompt-caching]
+aliases: [Prompt Engineering, Prompt Versioning]
+related: [rag, rag-evaluation, agents-on-lakehouse, llm-observability, semantic-cache]
+systems: [langchain, langfuse, promptlayer, mlflow, dspy]
 status: stable
 ---
 
