@@ -321,8 +321,9 @@ response = client.chat.completions.create(
 
 ### 成本节省（实际案例）
 
-- 某 AI 公司 2024：LiteLLM + Semantic Cache → 节省 ~15% LLM 账单
-- 某 SaaS：Smart Routing（简单任务走小模型）→ 节省 30%+
+- **某 AI 公司 2024**（匿名 case study）：LiteLLM + Semantic Cache → 节省 ~15% LLM 账单 `[来源未验证 · 无公开 postmortem]`
+- **某 SaaS**（匿名）：Smart Routing（简单任务走小模型）→ 节省 30%+ `[来源未验证]`
+- **读者提醒**：节省比例严重依赖业务 query 分布（重复率）· 不要直接套用 · 必须自测
 
 ## 7. 现实检视 · 2026 视角
 

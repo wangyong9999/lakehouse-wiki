@@ -235,7 +235,7 @@ Senior Agent
 | **OpenAI Agents SDK** | OpenAI only | **替代 Swarm（2025 GA）** · 内建 tracing + guardrails | Context variables（默认临时）| 高 | 快速原型 · OpenAI 栈 |
 | **Claude Agent SDK** | Claude only | 安全优先 · 深度集成 MCP · Extended Thinking | 通过 MCP servers | 高 | Anthropic 栈 · 安全敏感 |
 | **Google ADK** | 模型中立 | 2025 发布 · 4 种语言 SDK · GCP 集成 | — | 中 | GCP 生态 |
-| **CrewAI** | 模型中立 | **Role-based** · 快速原型 · 显式协作 | 任务历史 | 中 | 快 idea → prototype · 据报道比 LangGraph 快 40% |
+| **CrewAI** | 模型中立 | **Role-based** · 快速原型 · 显式协作 | 任务历史 | 中 | 快 idea → prototype · 据部分博客报道 prototype 速度快于 LangGraph（具体倍数依任务差异大 · 自评）|
 | **AutoGen (0.2 / 原)** | 模型中立 | GroupChat · Multi-agent · 已合并为 MS Agent Framework | 会话历史（in-memory）| 中 | 存量项目 · 2026 向合并后产品过渡 |
 | **LlamaIndex Agents** | 模型中立 | 检索优先 · workflow + FunctionAgent | 有 | 中 | RAG 重 agent |
 
