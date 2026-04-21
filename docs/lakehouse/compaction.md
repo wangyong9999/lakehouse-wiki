@@ -3,7 +3,7 @@ title: Compaction（合并）
 type: concept
 depth: 进阶
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2+, Delta 3+, Paimon 0.9+, Hudi 0.14+
+applies_to: Iceberg v2/v3, Delta 4.0+, Paimon 1.4+, Hudi 1.0.2+
 tags: [lakehouse, ops, maintenance]
 aliases: [文件合并, File Compaction]
 related: [lake-table, streaming-upsert-cdc, delete-files, manifest]

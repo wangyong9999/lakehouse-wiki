@@ -3,7 +3,7 @@ title: Delete Files（行级删除）
 type: concept
 depth: 资深
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2 (position/equality) · v3 (Deletion Vector) · Delta 3+ · Paimon 0.9+ · Hudi 0.14+
+applies_to: Iceberg v2 (position/equality) · v3 (Deletion Vector) · Delta 4.0+ · Paimon 1.4+ · Hudi 1.0.2+
 tags: [lakehouse, row-level-delete]
 aliases: [Row-level Delete, Deletion Vectors]
 related: [lake-table, streaming-upsert-cdc, compaction, puffin, snapshot]

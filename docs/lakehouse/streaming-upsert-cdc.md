@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Paimon 0.9+, Hudi 0.14+, Iceberg v2, Flink CDC 3.0+
+applies_to: Paimon 1.4+, Hudi 1.0.2+, Iceberg v2/v3, Flink CDC 3.6+
 tags: [lakehouse, streaming, cdc]
 aliases: [流式 upsert, Change Data Capture]
 related: [lake-table, paimon, hudi, snapshot]

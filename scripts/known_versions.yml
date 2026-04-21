@@ -73,16 +73,17 @@ products:
 
   "Delta Lake":
     aliases: [delta lake, delta-lake, delta]
-    latest: "3.3"
-    release_date: "2024"
-    source: https://github.com/delta-io/delta/releases
+    latest: "4.0"
+    release_date: "2025-09-25"
+    source: https://delta.io/blog/2025-09-25-delta-lake-40/
+    note: "3.x still supported LTS-style · 4.0 is major upgrade"
 
   "Apache Paimon":
     aliases: [apache paimon, paimon]
-    latest: "1.0+"
-    release_date: "2025-01-03"
-    source: https://paimon.apache.org/releases/
-    note: "1.0 GA 2025-01-03. Verify latest on releases page."
+    latest: "1.4"
+    release_date: "2026"
+    source: https://paimon.apache.org/docs/master/project/download/
+    note: "1.0 GA 2025-01-03 · 1.4 当前 stable (2026-Q1/Q2)"
 
   "Apache Hudi":
     aliases: [apache hudi, hudi]

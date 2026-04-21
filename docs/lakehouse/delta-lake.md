@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Delta 3.2+ / 4.0 · Databricks Runtime 15+
+applies_to: Delta 4.0+ (2025-09 发布) · Delta 3.x LTS · Databricks Runtime 15+
 tags: [lakehouse, table-format, databricks]
 category: table-format
 repo: https://github.com/delta-io/delta

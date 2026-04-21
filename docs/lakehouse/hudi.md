@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Hudi 0.14+ / 1.0 GA
+applies_to: Hudi 1.0.2+ (2025) · 0.14 LTS
 tags: [lakehouse, table-format, streaming]
 category: table-format
 repo: https://github.com/apache/hudi

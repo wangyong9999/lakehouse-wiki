@@ -1,7 +1,7 @@
 ---
 title: 湖仓表格式
 description: Lakehouse 表格式的核心概念与主流实现
-applies_to: Iceberg v2/v3, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3+
+applies_to: Iceberg v2/v3, Paimon 1.4+, Hudi 1.0.2+, Delta 4.0+
 ---
 
 # 湖仓表格式

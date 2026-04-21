@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: Iceberg 1.8+ · spec v2 (stable) / v3 (2025-06 ratified，引擎侧 rolling out)
+applies_to: Iceberg 1.10+ · spec v2 (stable) / v3 (2025-06 ratified · 1.10 为 v3 定稿后首个稳定版)
 tags: [lakehouse, table-format]
 category: table-format
 repo: https://github.com/apache/iceberg

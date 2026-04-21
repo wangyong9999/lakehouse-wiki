@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2+, Paimon 0.9+, Hudi 0.14+/1.0, Delta 3.2+
+applies_to: Iceberg v2/v3, Paimon 1.4+, Hudi 1.0.2+, Delta 4.0+
 tags: [lakehouse, table-format]
 aliases: [Lakehouse Table, 数据湖表]
 related: [snapshot, object-storage, parquet, iceberg, paimon, manifest]

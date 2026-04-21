@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-19
-applies_to: Iceberg MV proposal (2024+), Paimon 1.0+ aggregation, Delta (Databricks), Trino MV
+applies_to: Iceberg MV proposal (2024+), Paimon 1.4+ aggregation, Delta (Databricks) 4.0+, Trino MV 480+
 tags: [lakehouse, materialized-view, mv, feature-store, ai]
 aliases: [湖上 MV, Lakehouse MV, Incremental MV]
 related: [snapshot, streaming-upsert-cdc, iceberg, paimon, delta-lake]

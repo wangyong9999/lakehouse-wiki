@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2, Delta 3+, Paimon 0.9+, Hudi 0.14+
+applies_to: Iceberg v2/v3, Delta 4.0+, Paimon 1.4+, Hudi 1.0.2+
 tags: [lakehouse, metadata]
 aliases: [Manifest File, Manifest List, 清单文件]
 related: [lake-table, snapshot, iceberg]

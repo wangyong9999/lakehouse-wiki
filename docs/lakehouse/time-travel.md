@@ -4,7 +4,7 @@ type: concept
 depth: 进阶
 level: A
 last_reviewed: 2026-04-19
-applies_to: Iceberg v2+, Delta 3+, Hudi 0.14+, Paimon 0.9+
+applies_to: Iceberg v2/v3, Delta 4.0+, Hudi 1.0.2+, Paimon 1.4+
 tags: [lakehouse, table-format, time-travel]
 aliases: [时间旅行, Table Versioning]
 related: [snapshot, lake-table, iceberg, branching-tagging]
