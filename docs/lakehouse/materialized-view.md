@@ -14,6 +14,10 @@ status: stable
 
 # Materialized View · 湖上物化视图
 
+!!! info "本页是湖表格式视角"
+    本页从 **湖表格式协议层** 看 MV · 关注 spec 标准化 vs 各家实现的错位 · 湖表 vs RDBMS MV 的根本差异 · Flink 与 MV 的边界 · Embedding MV 对多模 AI 的启发。
+    **BI 工程师使用视角 + 产品选型矩阵 + IVM 算法家族 + Query Rewrite** 见 canonical 页 [bi-workloads/materialized-view.md](../bi-workloads/materialized-view.md)（按 [ADR 0006](../adr/0006-chapter-structure-dimensions.md) canonical source 原则）。
+
 !!! warning "重要说明 · 本页混合了"未来方向"与"当下实现""
     **到 2026-Q2，"湖上 MV" 尚未形成跨格式统一的协议标准**。本页讨论的是两类内容的混合：
 
@@ -80,91 +84,20 @@ flowchart LR
 
 **主流湖上 MV 实现目前都支持前 3 级**；JOIN / 窗口需要降级到全量刷新（periodic full refresh）或者只对新分区增量。
 
-## 四家状态 · 2026 横向对比
+## 四家格式的 spec-vs-实现速览
 
-### Iceberg · Connector 层 MV（Trino / Spark）· 协议层尚无 MV spec
+本节聚焦**湖表协议层视角的实现差异** · 详细的**产品能力矩阵 / SQL 示例 / IVM 算法家族 / Query Rewrite subsumption / 2026 Iceberg MV spec incubating 状态** 见 canonical 页 [bi-workloads/materialized-view.md § 3-4](../bi-workloads/materialized-view.md)。
 
-**辨清三件事**：
+从**格式 spec 层**看四家的本质差异：
 
-1. **Iceberg View Spec v1**（2023 ratified）—— **只定义 view**（跨引擎共享 SQL 定义），**不是 MV**
-2. **Iceberg MV spec** —— 社区有讨论但**尚未形成正式 spec**（截至 2026-Q2）
-3. **Trino Iceberg connector 的 MV 能力** —— **connector 层提供了 MV 管理**：view definition + Iceberg storage table + freshness 判定。这是引擎层功能，不是 spec 标准化
+| 格式 | MV 的"载体" | spec 层支持 | 生产共享跨引擎？ |
+|---|---|---|---|
+| **Iceberg** | Connector 层各自实现（Trino 480+ · AWS Glue 2025-11 · Spark 3.5.6+）· View Spec v1 （2023 ratified）仅定义只读 view · 非 MV | MV spec **incubating**（Issue #6420）· 2026-Q2 未进 format spec | ❌ · 管理语义不跨引擎 |
+| **Paimon** | **Aggregation Table / Partial-Update merge engine 是原生一等公民** · CDC 触发增量 | **原生支持** · 流式 CDC 增量刷新是杀手锏 | ✅ · 本身就是 Paimon 表 |
+| **Delta** | Databricks Managed MV + Delta Live Tables（DLT）· Photon 优化器感知 | **未进开源 Delta Protocol** · 商业 Runtime 能力 | ❌ · 商业独占 |
+| **Hudi** | 无 MV 对象 · Incremental Query 手写增量作业 · 管理位点 · 灵活但工作量大 | 无 spec 层 MV 支持 | ⚠ · 手写每次 |
 
-**Trino 的做法**（版本号：Trino MV 能力在 **397（2022-09）** 之后逐步完善，近期如 **479（2025-12）** 加了 `GRACE PERIOD` 扩展）：
-
-```sql
--- Trino Iceberg connector · MV 创建
-CREATE MATERIALIZED VIEW iceberg.default.sales_by_region_daily
-  WITH (format = 'PARQUET')
-  AS SELECT region, date_trunc('day', ts) AS dt, SUM(amount) AS total
-  FROM iceberg.default.sales
-  GROUP BY region, date_trunc('day', ts);
-
--- 手动刷新（Trino 没有内置自动刷新调度，要靠外部 cron / Airflow）
--- 注：Iceberg spec 本身不定义"刷新调度"语义，是不是自动由引擎决定
-REFRESH MATERIALIZED VIEW iceberg.default.sales_by_region_daily;
-
--- 新版本可加 GRACE PERIOD · 超过 stale 窗口就 fallback 到源表
-CREATE MATERIALIZED VIEW ... GRACE PERIOD INTERVAL '1' HOUR ...;
-```
-
-**关键认知**：**不要把 connector 能力当 Iceberg spec 能力**。换到 Spark 或 Flink 读 Trino 建的 MV，表数据能读（就是一张 Iceberg 表），但 **freshness 判定和刷新语义不自动共享**。
-
-**Spark / Flink 的 Iceberg MV 能力**：目前主要通过**手写作业 + Iceberg View Spec** 模拟，还没有像 Trino connector 那种一等管理。
-
-### Paimon · Aggregation Table + Partial-Update（原生）
-
-Paimon 没有叫 "MV" 的东西，但 **Aggregation Table** + **Partial-Update** merge engine 本质就是"一等公民的增量 MV"：
-
-- 定义 MV 为一张 Paimon 主键表，`merge-engine = 'aggregation'`
-- 源表 CDC 进来直接按 PK 合并（SUM / MAX / 等聚合函数表）
-- **原生 snapshot + changelog**：下游还能继续流读这张 MV 产生的 changelog
-
-```sql
-CREATE TABLE user_stats (
-  user_id BIGINT,
-  order_count BIGINT,
-  total_amount DECIMAL(18, 2),
-  PRIMARY KEY (user_id) NOT ENFORCED
-) WITH (
-  'merge-engine' = 'aggregation',
-  'fields.order_count.aggregate-function' = 'sum',
-  'fields.total_amount.aggregate-function' = 'sum'
-);
-```
-
-**Paimon 的优势**：**流式 CDC 天然增量刷 MV**——比 Iceberg MV 的 "定期 diff" 模式实时性更好。**这是 Paimon 在 "实时数仓 + Feature Store" 场景的杀手锏**。
-
-### Delta · Databricks Materialized Views（商业 · 非 spec）
-
-- **商业能力**：较新的 Databricks Runtime（配 Unity Catalog）提供 Managed MV · 自动刷新 + Photon 查询优化器感知
-- **开源 Delta 协议**：Materialized View **未进开源 Delta Protocol**——截至 2026-Q2，它是 Databricks Runtime 层能力
-- **Delta Live Tables (DLT)** 是 Databricks 的声明式 pipeline 产品，能自动生成 MV 风格的增量表，但同样是商业能力
-- **开源栈的替代**：Delta 开源版没有原生 MV；要做类似功能走 Spark Structured Streaming + MERGE 手写
-
-这是 Delta 最明显的**开源 vs 商业版差异点**之一——同样提示 "不要把商业 Runtime 能力当 Delta protocol 能力"。
-
-### Hudi · 无独立 MV · Incremental Query 自建
-
-Hudi 没有原生 MV 对象，但 **Incremental Query** 让你**自己写增量作业**：
-
-```python
-# 每 10 分钟一跑
-last_instant = load_last_processed_instant()
-incremental_df = spark.read.format("hudi") \
-    .option("hoodie.datasource.query.type", "incremental") \
-    .option("hoodie.datasource.read.begin.instanttime", last_instant) \
-    .load(source_path)
-
-# 在 incremental_df 上做聚合
-agg_df = incremental_df.groupBy("region").agg(...)
-
-# MERGE 到 MV 表
-mv_table.merge(agg_df, ...).execute()
-save_last_processed_instant(current_instant)
-```
-
-**缺点**：每个 MV 都要自己写作业 + 管理位点。**优势**：灵活，任何复杂度的 MV 都能手写。
+**关键认知**：**不要把 connector / runtime 能力当格式 spec 能力**。同一张 MV 在 Trino 下有 freshness 判定 + 刷新语义 · 换 Spark 读就变成普通 Iceberg 表 · 管理语义不自动跨引擎共享。这是湖表 MV 区别于 RDBMS MV 的**核心约束**。
 
 ## MV 和流计算的边界
 
