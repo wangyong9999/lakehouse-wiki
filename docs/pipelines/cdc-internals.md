@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-20
-applies_to: Debezium 2.x · Flink CDC 3.1-3.5（截至 2025-09 · 生产跟最新稳定版）· Paimon CDC · Iceberg Sink 跨引擎
+applies_to: Debezium 2.x · Flink CDC 3.6+（2026-03 最新稳定版 · 生产跟上游发版）· Paimon CDC · Iceberg Sink 跨引擎
 tags: [pipelines, cdc, debezium, flink-cdc, paimon-cdc]
 aliases: [CDC, 变更数据捕获]
 related: [streaming-upsert-cdc, kafka-ingestion, managed-ingestion, pipeline-resilience]

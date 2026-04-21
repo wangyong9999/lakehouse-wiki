@@ -1,7 +1,7 @@
 ---
 title: 元数据与 Catalog
 description: 湖仓的"表注册中心" —— 协议 / OSS 实现 / 商业托管 / 联邦层 四层视角
-applies_to: Iceberg REST v1 / Polaris 1.3+ (2026-02 TLP) / Gravitino 1.0+ (TLP) / Unity Catalog OSS 0.x / AWS Glue / Snowflake Open Catalog / Hive 4.0
+applies_to: Iceberg REST v1 / Polaris 1.3+ (2026-02 TLP) / Gravitino 1.0+ (TLP) / Unity Catalog OSS 0.4.1+ / AWS Glue / Snowflake Open Catalog / Hive 4.0
 last_reviewed: 2026-04-20
 ---
 

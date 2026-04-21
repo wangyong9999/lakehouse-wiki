@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-20
-applies_to: Iceberg 1.x-V3 · Delta Liquid Clustering · Paimon · StarRocks/Doris · Puffin · Lance
+applies_to: Iceberg 1.10+/v3 · Delta Liquid Clustering · Paimon 1.4+ · StarRocks/Doris · Puffin · Lance
 tags: [bi, optimization, lakehouse, clustering, index, accelerator]
 aliases: [查询加速, 数据布局优化, Data Layout Optimization]
 related: [materialized-view, olap-modeling, lake-table, compaction, dashboard-slo]

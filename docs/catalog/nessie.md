@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Nessie 0.107+ (2025) / 2024-2026 生产
+applies_to: Nessie 0.107.4+ (2025) / 2024-2026 生产
 tags: [catalog, lakehouse, git-like, branching]
 category: catalog
 repo: https://github.com/projectnessie/nessie

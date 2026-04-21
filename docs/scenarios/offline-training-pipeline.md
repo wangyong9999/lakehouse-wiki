@@ -4,7 +4,7 @@ type: scenario
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Iceberg v2 + Feast 0.40+ + Spark 3.5+ · Lance 0.8+ · Ray 2.x
+applies_to: Iceberg v2/v3 + Feast 0.40+ + Spark 4.1+ (2025-12 · 3.5.8 LTS 仍支持) · Lance 0.8+ · Ray 2.x
 tags: [scenario, training, ml, lakehouse, pit-join]
 related: [feature-store, feature-serving, mlops-lifecycle, classical-ml, recommender-systems]
 status: stable

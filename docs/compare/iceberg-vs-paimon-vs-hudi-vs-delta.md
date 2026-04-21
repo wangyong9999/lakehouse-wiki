@@ -4,7 +4,7 @@ type: comparison
 depth: 资深
 level: A
 last_reviewed: 2026-04-18
-applies_to: Iceberg 1.4+ / v3 预览 · Paimon 0.9+/1.0 · Hudi 0.14+/1.0 · Delta 3.2+/4.0
+applies_to: Iceberg 1.10+/v3 稳定 · Paimon 1.4+ · Hudi 1.0.2+ · Delta 4.0+
 tags: [comparison, lakehouse, table-format]
 subjects: [iceberg, paimon, hudi, delta-lake]
 status: stable
