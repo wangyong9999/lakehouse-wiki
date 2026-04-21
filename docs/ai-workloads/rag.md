@@ -188,7 +188,7 @@ Contextual Chunk:
  控制图的邻居数。M 参数默认 16。"
 ```
 
-**效果**：BEIR 平均 recall 提升 35%（Anthropic 2024 报告）。
+**效果**（Anthropic 2024 Contextual Retrieval 报告原文解读）：**检索失败率**相对降低 35%（5.7% → 3.7%）· 配合 reranker 后失败率相对降 67%（5.7% → 2.9%）。注意原报告讲的是"失败率降幅"· 不是"recall 绝对提升 35 个百分点"——这两个指标容易混淆。
 
 ### CRAG (Corrective RAG)
 

@@ -324,7 +324,7 @@ Claude Desktop 的 `claude_desktop_config.json`：
 | **Zed Editor** | 集成 |
 | **Open WebUI** | 集成 |
 | **LangChain** | 适配层 |
-| **ChatGPT** | 尚未（OpenAI 有自己的 GPTs）|
+| **ChatGPT** | 2025-03 OpenAI 官方采纳 · 2025-09-09 Developer Mode 完整支持 MCP Server Tools（Pro/Plus/Business/Enterprise/Education 可用）|
 
 ### 对比其他"Tool 协议"
 
@@ -338,14 +338,13 @@ Claude Desktop 的 `claude_desktop_config.json`：
 
 ## 6.5. 现实检视 · 2026 视角
 
-MCP 在 2024.11 发布后生态推进很快，但工程落地有几点**需要清醒看待**：
+MCP 在 2024-11 发布后生态推进极快 · 2025 主要 host 陆续原生支持（OpenAI 2025-03 官方采纳 · Google DeepMind / Microsoft / Anthropic 均已支持）· 2025-11-25 发布新 spec 版本。但工程落地有几点**需要清醒看待**：
 
 ### 争议与不确定
 
-- **"USB-C of AI" 的比喻还在验证**：目前 MCP 主要优势是**消除客户端层集成**，但 server 端的通用性仍然有限——多数 server 仍是"为 Claude Desktop 单场景写的"而非真正跨 host 通吃
-- **ChatGPT / OpenAI 并未采纳**：OpenAI 继续走 GPTs / Custom Tools 路线，大模型 host 层尚未完全统一
-- **企业采用曲线**：直接上生产的比例不高；多数还在 POC / 内部工具层。**真正"把企业 API 通过 MCP 给 LLM"**的大规模案例，到 2026.04 仍是少数
-- **安全边界**：prompt injection + tool poisoning 这两类攻击对 MCP server 是天然风险，至今**没有成熟的 host 侧 sandbox 标准**
+- **"USB-C of AI" 的比喻有所验证但仍在扩展**：客户端层集成确已消除 · server 端通用性仍分化——多数 server 针对特定 host 场景优化，跨 host 通吃的"真 USB-C"server 不多
+- **企业采用曲线**：host 层已统一 · 但企业"把内部 API 通过 MCP 给 LLM"的大规模生产化用例到 2026-04 仍是少数 · 多数在 POC / 内部工具 / 代码辅助层
+- **安全边界**：prompt injection + tool poisoning 这两类攻击对 MCP server 是天然风险 · 至今**没有成熟的 host 侧 sandbox 标准**（2025-11 spec 虽更新 · 安全约定仍弱）
 
 ### 已验证的有价值的场景
 
