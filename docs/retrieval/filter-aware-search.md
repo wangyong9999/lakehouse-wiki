@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: A
 last_reviewed: 2026-04-20
-applies_to: Milvus 2.x · Qdrant 1.x · pgvector 0.7+ · LanceDB
+applies_to: Milvus 2.x · Qdrant 1.x · pgvector 0.8+ (2024-10) / 0.8.2+ (2026-02 · 修复并行 HNSW) · LanceDB
 tags: [retrieval, filter, ann, hybrid, structured-predicate]
 aliases: [带过滤的 ANN, filtered-vector-search, 结构化检索]
 related: [hnsw, ivf-pq, qdrant, milvus, hybrid-search]
@@ -29,8 +29,8 @@ status: stable
 !!! abstract "TL;DR"
     - **三种实现策略**：**Pre-filter** · **Post-filter** · **In-filter (Filterable HNSW)**
     - 选哪种取决于**过滤选择性**：过滤后剩 < 5% 用 pre · > 50% 用 post · 中间用 in-filter
-    - **Filterable HNSW**（2023+ · Qdrant 最早商业化 · Milvus / pgvector 0.7+ 跟进）是 2024-2026 中等选择性场景的常见方案
-    - **pgvector 2024 hnsw.ef_search + parallel seq scan** 是 PG 场景新突破
+    - **Filterable HNSW**（2023+ · Qdrant 最早商业化 · Milvus / pgvector 0.8+ 跟进）是 2024-2026 中等选择性场景的常见方案
+    - **pgvector 0.8+（2024-10）iterative_scan** 三种模式（off / strict_order / relaxed_order）· **0.8.2+（2026-02）** 修复并行 HNSW 缓冲区溢出 · 是 PG 场景新突破
     - **量化和 filter-aware 互相影响** · 组合设计要一起考虑
 
 ## 1. 问题定义 · 为什么"看起来简单"不简单
@@ -103,7 +103,7 @@ HNSW 图遍历:
 
 - **Qdrant 的 Filterable HNSW (2023+)** · 较早商业化 · 通过在图构建时考虑过滤场景 · 或动态调整图遍历
 - **Milvus 2.3+ 的 Filtered Search** · 支持 bitmap / expression-based
-- **pgvector 0.6-0.7+** · `hnsw.ef_search` + parallel seq scan 组合 · PostgreSQL 场景新突破
+- **pgvector 0.8.0+（2024-10 发布）** · 新增 `iterative_scan` 三种模式（off / strict_order / relaxed_order） · **0.8.2+（2026-02）** 修复并行 HNSW 缓冲区溢出 · PostgreSQL 场景新突破
 - **LanceDB** · filter 推到 Lance 文件层做 pruning
 
 **优势**：
@@ -121,7 +121,7 @@ HNSW 图遍历:
 | 过滤选择性 | 推荐策略 | 典型产品 |
 |---|---|---|
 | **< 5%**（极严格 · 结果极少） | Pre-filter | 所有向量库都支持 |
-| **5-50%**（中等选择性） | **In-filter / Filterable HNSW** | Qdrant / Milvus / pgvector 0.7+ |
+| **5-50%**（中等选择性） | **In-filter / Filterable HNSW** | Qdrant / Milvus / pgvector 0.8+ |
 | **> 50%**（宽松 · 过滤少数排除） | Post-filter + 合适扩展倍数 | 所有向量库都支持 |
 
 **动态策略**：生产场景**无法知道 query 的选择性** · 两种应对：
@@ -172,7 +172,7 @@ Stage 2: Rerank 模型 · Top 10
 - [Quantization](quantization.md) · 量化和 filter 的组合影响
 - [Hybrid Search](hybrid-search.md) · Sparse+Dense 融合（**不同**概念别混）
 - [Qdrant](qdrant.md) · Filterable HNSW 较早商业化
-- [pgvector](pgvector.md) · PG 场景 filter-aware 0.7+
+- [pgvector](pgvector.md) · PG 场景 filter-aware 0.8+
 - [Milvus](milvus.md) · Filtered Search 支持
 
 ## 延伸阅读
