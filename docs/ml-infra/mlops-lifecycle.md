@@ -84,10 +84,11 @@ flowchart LR
 
 ### 环节 1 · 数据（湖仓）
 
-**关键原则**：
-- 所有训练数据都带 **Snapshot ID / commit hash**
-- 重跑能锁定到同一份数据
-- 数据质量检查（**Great Expectations / Soda**）作为训练前置
+**关键原则**（深入 canonical 见 [data-quality-for-ml.md](data-quality-for-ml.md)）：
+- **Data Contract** 上下游契约（schema · 完整性 · freshness · breaking change policy）
+- 所有训练数据带 **Snapshot ID / commit hash** · 重跑可复现
+- **Data Quality Gates**（GE / Soda / Monte Carlo / Anomalo）作为训练前置
+- **Label Quality** · **评估集泄漏防御** 是独立话题（见 data-quality-for-ml §4/§5）
 
 ```python
 # Iceberg Snapshot 锁定
@@ -107,7 +108,7 @@ VERSION AS OF 1234567890
 
 ### 环节 3 · 训练
 
-**可选栈**：
+**可选栈**（详细见 [training-orchestration](training-orchestration.md) · 实验追踪 canonical 在 [experiment-tracking](experiment-tracking.md)）：
 
 | 框架 | 适合 |
 |---|---|
@@ -133,17 +134,17 @@ with mlflow.start_run():
 
 ### 环节 4 · 评估
 
-**三层**：
+**概览**（深入 canonical 见 [ml-evaluation.md](ml-evaluation.md)）：
 
 | 层 | 目标 |
 |---|---|
-| **离线指标** | AUC / NDCG / BLEU / ... 基线 |
+| **离线指标** | AUC / NDCG / BLEU / ... · Calibration · Fairness |
 | **业务模拟** | 回放 + 计算业务 KPI（CTR / GMV） |
-| **影子流量**（Shadow Traffic）| 生产流量 parallel 跑新模型，不影响用户 |
-| **A/B 测试** | 真实业务验证 |
+| **影子流量**（Shadow）| 生产流量 parallel 跑 · 不影响用户 · 对账 KL / top-K |
+| **Canary Progressive Delivery** | 逐级流量 + 自动 rollback |
+| **A/B 测试** | 显著性 · power · 样本量 · 多重比较校正 |
 
-**离线 AUC 涨 ≠ 业务会涨**。必须：
-- 离线 → 业务模拟 → 影子 → A/B → 全量
+**离线 AUC 涨 ≠ 业务会涨**。完整守门链：离线 → Calibration → Fairness → 业务模拟 → Shadow → Canary → A/B → 全量。详见 [ml-evaluation](ml-evaluation.md)。
 
 ### 环节 5 · 部署 (Model Serving)
 

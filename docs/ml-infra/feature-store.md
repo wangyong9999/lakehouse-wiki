@@ -411,6 +411,42 @@ LLM Agent（见 [agents-on-lakehouse](../ai-workloads/agents-on-lakehouse.md)）
 
 **反模式**：把 FS 当成"让 Agent 查所有数据"的通道 —— 应配 [authorization](../ai-workloads/authorization.md) §Tool ACL 严格限制 Agent 能读哪些 feature view。
 
+## 6.7 何时**不需要** Feature Store · Anti-pattern
+
+Feature Store 是有成本的系统投资（在线 store 运维 · Registry 维护 · 团队学习曲线）。**不是所有 ML 团队都该上**。以下场景 **Feature Store 是过度工程**：
+
+| 场景 | 理由 | 替代方案 |
+|---|---|---|
+| **模型数量少**（1-5 个） | FS 的"特征复用"价值出不来 | 直接 SQL + pickle cache 够用 |
+| **无在线推理 / 只跑批** | FS 在线 store 的主要价值浪费 | Iceberg / Parquet 离线表 + dbt 够用 |
+| **特征重用极少**（每模型各自算特征） | 跨模型复用是 FS 核心卖点 | 模型各自 feature pipe · 放 Iceberg 就行 |
+| **特征更新频率低**（天 / 周级） | 实时在线 store 无意义 | 定期批物化到 Redis · 不需要完整 FS |
+| **团队维护能力薄弱**（< 2 平台工程师） | 在线 store 故障 SRE 负担大 | 延后 FS · 先做 golden path |
+| **数据还在 OLTP / 数仓 · 不在湖** | FS 要先落湖 · 路径长 | 先统一入湖 · 再考虑 FS |
+| **跨数据源**（湖 + 外部 API + 三方） | FS 不擅长非湖源 | 业务层自己拉 |
+
+**决策 checklist**：
+1. 有 **5+ 个**模型 **共用** 3+ 个特征？
+2. 有**在线推理**且 p99 < 50ms 对特征延迟敏感？
+3. **训推不一致**是明确痛点（线上效果差于离线）？
+4. 有 **2+ 人**可以投入 FS 维护？
+
+**≥ 3 个 Yes 才考虑上 Feature Store**。否则用 "Iceberg + dbt + Redis 手工 materialize" 极简方案已经能解决 70% 需求。
+
+## 6.8 Feature Store ROI 考量
+
+**不要把 FS 当成"成熟度标配"**。FS 是**有明确 ROI 门槛的系统投资**：
+
+- **投入**：初期 1-2 人月 + 持续维护 0.5 人 · 工具费（Tecton SaaS）· 学习成本
+- **产出**：特征复用 · 训推一致 · 审计血缘 · 业务 KPI 提升
+- **ROI 可见期**：通常 6-12 月 · 模型数量 < 5 时基本不见
+- **隐性成本**：团队思维模式切换（从"SQL 写特征"到"定义 FeatureView"）
+
+**阶段性推荐**：
+- **0-5 模型**：先 Iceberg + dbt + Redis DIY · 积累特征定义
+- **5-20 模型**：Feast 开源栈 · 解决复用和训推一致
+- **20+ 模型 · 或要求 SLA**：Tecton / Databricks FS / Hopsworks
+
 ## 7. 陷阱与反模式
 
 - **自建 FS 低估 PIT 复杂度**：PIT Join 几乎是 Feature Store 事故 #1 原因

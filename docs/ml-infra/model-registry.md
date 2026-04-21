@@ -18,6 +18,19 @@ status: stable
 !!! tip "一句话定位"
     模型的 Catalog —— 每个模型是一个**带版本 · alias · 血缘 · Model Card · BOM · 审批**的一等资产。没有 Registry = 模型部署全靠 Wiki + 口口相传 + 合规事故。
 
+!!! warning "Registry ≠ 完整发布控制面 · 只是其一半"
+    Registry 治理好**不等于**发布治理好。Registry 回答的是 "**模型 artifact 本身的版本 · 元数据 · 合规属性**"——但生产部署的发布**控制面**还包括：
+    
+    - **Environment promotion**（dev / staging / prod 推进 · 带 gate）
+    - **Release policy**（回滚计划 · 灰度节奏 · SLO 守门）
+    - **Runtime compatibility**（CUDA / vLLM / 依赖版本兼容性检查）
+    - **Rollback orchestration**（MTTR · runbook · 自动触发）
+    - **Approval / Evidence flow**（多人审批 · 合规审计记录）
+    
+    这些控制面能力**分布在** [Model Serving §Rollback runbook](model-serving.md) · [Model Monitoring §Auto-retrain 契约](model-monitoring.md) · [MLOps Lifecycle §部署](mlops-lifecycle.md) · 不是仅靠 Registry 就完整。
+    
+    **读本页时请记住**：Registry 是**发布控制面的"模型属性面"** · 不是控制面全部。Registry 本身不负责"决定什么时候切流量"。
+
 !!! abstract "TL;DR"
     - **核心六件事**：artifact 存储 · 版本 · **alias**（MLflow 2.9+ 取代 deprecated stage）· 元数据 · 血缘 · 审批
     - **三大主流**：**MLflow**（开源事实标准）· **Unity Catalog Models**（数据模型同治）· **W&B Artifacts**（experiment 衔接）

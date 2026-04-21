@@ -18,6 +18,14 @@ status: stable
 !!! tip "一句话理解"
     把模型训练作为一个**可调度、可重跑、可扩展、可监控**的**分布式作业**。核心挑战：**数据并行 / Tensor 并行 / Pipeline 并行 / Context 并行 / Expert 并行（MoE）/ checkpoint / 故障恢复**。
 
+!!! warning "覆盖范围 · 两类场景并重"
+    本页内容**同时适用于**：
+    
+    - **传统 ML 训练**（tabular / 推荐 / 风控 / CTR / CV / 时序 / 小中模型 · 1-100M 参数级）—— 规模 A / 规模 B + DDP 即可覆盖
+    - **LLM / 大模型训练**（7B+ · 70B+ · MoE）—— 规模 C + FSDP2 / TP / PP / CP / EP 组合
+    
+    **注意**：本页 §规模 C 和大量 2024-2026 新技术（torchtitan / Context Parallel / Expert Parallel / Megatron / DeepSpeed）**对大多数团队用不上** —— 它们是 LLM 大模型训练的专题。如果你做的是 tabular / 中小模型 · **规模 A + §6 数据读取 + §7 Registry 闭环就足够** · 跳过 §1 规模 C 和相关章节。
+
 !!! abstract "TL;DR"
     - **单机多卡**：PyTorch DDP / **FSDP2**（2024 新代 · 替代 FSDP）/ DeepSpeed ZeRO
     - **多机多卡编排**：**Ray Train** / Kubeflow PyTorchJob / Flyte / Metaflow / ZenML

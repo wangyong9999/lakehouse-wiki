@@ -100,6 +100,13 @@ description: 字母序的概念兜底索引
 - **Migration Playbook** —— 见 [迁移手册](ops/migration-playbook.md)
 - **Milvus** —— 见 [Milvus](retrieval/milvus.md)
 - **MLOps Lifecycle** —— 见 [MLOps 生命周期](ml-infra/mlops-lifecycle.md)
+- **ML Evaluation** —— 见 [ML Evaluation](ml-infra/ml-evaluation.md)（传统 ML · LLM/RAG 在 [rag-evaluation](ai-workloads/rag-evaluation.md)）
+- **Experiment Tracking** —— 见 [Experiment Tracking](ml-infra/experiment-tracking.md)
+- **Data Contract / Data Quality for ML** —— 见 [Data Quality for ML](ml-infra/data-quality-for-ml.md)
+- **Label Quality** —— 见 [Data Quality for ML §4](ml-infra/data-quality-for-ml.md) + [Model Monitoring §Label Quality](ml-infra/model-monitoring.md)
+- **Calibration** —— 见 [ML Evaluation §Calibration](ml-infra/ml-evaluation.md)
+- **Fairness**（公平性 · Demographic Parity / Equalized Odds / Disparate Impact）—— 见 [ML Evaluation §Fairness](ml-infra/ml-evaluation.md) · [Model Monitoring §Fairness](ml-infra/model-monitoring.md)
+- **A/B Testing（显著性 · power · sample size）** —— 见 [ML Evaluation §A/B](ml-infra/ml-evaluation.md)
 - **Model Card** —— 模型合规 artifact（EU AI Act 高风险系统必需）· 见 [Model Registry §Model Card](ml-infra/model-registry.md)
 - **Model Monitoring** —— 见 [Model Monitoring](ml-infra/model-monitoring.md)
 - **Model Registry** —— 见 [Model Registry](ml-infra/model-registry.md)
