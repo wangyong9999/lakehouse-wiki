@@ -201,46 +201,17 @@ optimized_rag = optimizer.compile(rag, trainset=train_set)
 
 DSPy 2026 状态：核心稳定 · 社区活跃 · 但**生产采用仍小众** · 学习曲线陡。值得投入的场景有明显优势。
 
-## Prompt Caching（系统级 · 区别于 Semantic Cache）
+## Prompt Caching（简 · canonical 在 [semantic-cache](semantic-cache.md)）
 
-**2024 起 LLM 厂商原生引入** · 是 **KV Cache 的 API 层暴露**：
+**系统级 Prompt Caching**（Anthropic 2024-08 GA · OpenAI 2024-10+ 自动 · Gemini Context Caching）是 **KV Cache 的 API 层暴露**· 和应用层 Semantic Cache 是两件事。
 
-| 厂商 | 机制 | 折扣 |
-|---|---|---|
-| **Anthropic Prompt Caching**（2024-08 GA）| 标记 `cache_control` 块 · 5min / 1h TTL | 缓存命中 **-90%** 输入 token 价格 |
-| **OpenAI Prompt Caching**（2024-10+）| **自动**缓存 · 检测相同前缀 | 自动 · 约 **-50%** 命中部分 |
-| **Gemini Context Caching** | API 显式创建 cache · TTL 管理 | 按缓存部分 token 折扣 |
+**Prompt 管理侧的要点**（详细机制 / 对比 / 工程建议 → [semantic-cache](semantic-cache.md)）：
 
-**与 [Semantic Cache](semantic-cache.md) 的区别**：
+- **和 Prompt 管理直接相关的**：长 system prompt + Tool schema 作为**稳定前缀**放 prompt 最前 · 最容易命中 cache（节省成本）
+- **Prompt 版本治理影响**：每改一次 system prompt · cache 就失效一轮 · 因此**稳定的 system prompt 版本**比"频繁微调"更友好
+- **变量注入顺序**：变化的部分（user query · 检索结果）**一定放末端** · 不破坏前缀
 
-| | **Prompt Caching**（本节）| **Semantic Cache** |
-|---|---|---|
-| 层级 | LLM 服务端 KV cache | 应用层缓存 |
-| 命中条件 | **前缀字节完全相同** | 语义相近（embedding 距离）|
-| 粒度 | Token 级 · API 透明 | Query 级 |
-| 折扣 | 10-90% 输入 token 成本 | 命中则跳过整个 LLM 调用 |
-| 适用 | 长 system prompt / 长文档 / tool schema | 高度重复的 user query |
-
-**工程最佳实践**：
-- **System prompt 放 prompt 最前** · 最容易命中 cache
-- **Tool schema 批量定义** · 一起缓存
-- **长参考文档放 prompt 中段** · RAG context 放末端（因 context 每次不同）
-- Anthropic 最多 4 个 `cache_control` 断点 · 规划好
-
-```python
-# Anthropic Prompt Caching
-response = anthropic.messages.create(
-    model="claude-3-5-sonnet-20241022",
-    system=[
-        {"type": "text", "text": "You are a customer support bot...",
-         "cache_control": {"type": "ephemeral"}},  # 缓存 system prompt
-        {"type": "text", "text": long_tool_schema,
-         "cache_control": {"type": "ephemeral"}},  # 缓存 tool schema
-    ],
-    messages=[...],  # user message 每次不同 · 不缓存
-)
-# 读 response.usage.cache_read_input_tokens · 看命中多少
-```
+详细机制（各厂商折扣比例 · cache_control 断点规划 · TTL · 代码示例）**不在本页重复** · 请看 [semantic-cache §Prompt Caching](semantic-cache.md)。
 
 ## System Prompt · Few-shot · CoT 的工程化
 
