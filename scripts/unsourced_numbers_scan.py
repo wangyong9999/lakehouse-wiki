@@ -58,6 +58,65 @@ SKIP_LINE_PATTERNS = [
     re.compile(r"^\s*\|.*\|.*\|\s*$"),      # table row (multi-column)
 ]
 
+# Definitional patterns · the % is a concept definition or design target · not empirical claim
+# Conservative: only skip when match is high-confidence non-empirical
+AVAILABILITY_PATTERN = re.compile(r"\b99\.\d+%")          # 99.9% 99.95% 99.99% SLO targets
+PERCENTILE_CONTEXT = re.compile(r"\bp(?:50|90|95|99)\b", re.IGNORECASE)  # p95 line · "%"通常是定义
+# 100% 作修辞最大（"不可能 100%" · "追求 100% 不现实"）· · 是中文标点 · 用 [\s·]*
+RHETORICAL_100 = re.compile(
+    r"100%[\s·]*(?:不|做不到|不可能|不现实|无法|追求|别.*承诺|安全|准确|可靠|覆盖|命中)"
+)
+# e.g.  " < 5% 触发" / "> 95% 目标" —— design criteria, not empirical
+DESIGN_CRITERIA_WORDS = re.compile(
+    r"目标|SLO|预算|阈值|触发|budget|target|threshold|"
+    r"你得|必须|应该|需要|不能|不超过|超过|以上|以下|限制|确保|保证|"
+    r"must|should|limit",
+    re.IGNORECASE,
+)
+# 范围近似（10%-30% / 10%–30% / 10-30% / 10%—30%）· 作者意图是"典型值范围"· 非精确 benchmark
+RANGE_APPROX_PATTERN = re.compile(r"\d+\s*%?\s*[-–—~]\s*\d+\s*%")
+# 自引用（讨论 scanner/agent/hallucinate 本身的数字）
+SELF_REFERENTIAL = re.compile(
+    r"scanner|hallucinate|对抗评审|agent 评审|P0 事实错|本轮|本次",
+    re.IGNORECASE,
+)
+
+
+# Cheatsheet / comparison page design-target conventions
+RECALL_TARGET = re.compile(r"[Rr]ecall(?:@\d+)?\s*\d+%")  # "Recall 95%" / "recall@10 95%" = design target
+
+
+def _strip_markdown(line: str) -> str:
+    """Remove markdown bold/italic markers · let RHETORICAL_100 etc match through **bold**."""
+    return re.sub(r"[*`_]+", "", line)
+
+
+def is_definitional_match(line: str, match: str) -> bool:
+    """Return True if the % match is a concept definition or design target · not empirical claim."""
+    stripped = _strip_markdown(line)
+    # 99.x% — SLO availability convention
+    if AVAILABILITY_PATTERN.search(match):
+        return True
+    # p50/p95/p99 on same line — likely defining the percentile
+    if PERCENTILE_CONTEXT.search(line):
+        return True
+    # 100% only as rhetorical max ("不可能 100%", "追求 100% 不现实")
+    if match == "100%" and RHETORICAL_100.search(stripped):
+        return True
+    # Design criteria keywords on same line — likely SLO target not empirical claim
+    if DESIGN_CRITERIA_WORDS.search(line):
+        return True
+    # Range approximation pattern on line — typically "典型范围"
+    if RANGE_APPROX_PATTERN.search(line):
+        return True
+    # Self-referential (wiki's own observation numbers that come with commit trace as source)
+    if SELF_REFERENTIAL.search(line):
+        return True
+    # Recall target in cheatsheet/comparison context
+    if RECALL_TARGET.search(line):
+        return True
+    return False
+
 SKIP_DIRS = {"_templates"}
 
 
@@ -98,10 +157,13 @@ def scan_file(fp: Path) -> list[dict]:
         if has_source_in_context(lines, i, radius=2):
             continue
         for m in matches:
+            match_text = m.group(0)
+            if is_definitional_match(line, match_text):
+                continue
             issues.append({
                 "file": fp.relative_to(REPO_ROOT).as_posix(),
                 "line": i + 1,
-                "match": m.group(0),
+                "match": match_text,
                 "snippet": line.strip()[:120],
             })
     return issues
