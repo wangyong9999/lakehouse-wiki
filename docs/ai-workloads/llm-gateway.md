@@ -341,7 +341,7 @@ response = client.chat.completions.create(
 
 ### 争议与选择
 
-- **LiteLLM 的稳定性**：开源发展快、偶有 breaking change → **锁版本**
+- **LiteLLM 的稳定性**：2024 年后稳定性显著提升（breaking change 从月度降到季度 · 数千家企业生产运行）· 仍建议**固定主版本**并关注 release note
 - **商业 vs 自建**：团队 < 100 工程师用商业更省心
 - **LLM Router smart routing**：简单任务小模型看起来省钱，**但 routing 本身也耗资源** + 质量波动
 - **MCP 的出现**对 Gateway 冲击：两者关注点不同，**不冲突甚至互补**

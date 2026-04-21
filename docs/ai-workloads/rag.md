@@ -134,7 +134,7 @@ Chunk 决定召回上限：
 
 ### 机制 4 · Rerank
 
-**差异化关键**。bge-reranker / Cohere Rerank 3 / Jina Reranker v2。
+**差异化关键**。bge-reranker-v2-large / **Cohere Rerank v3.5**（2024-12 · 100+ 语言 SOTA）/ Jina Reranker v2。
 
 召回 50-100 → Rerank → Top 5-10。NDCG 提升 5-10 个点。
 
