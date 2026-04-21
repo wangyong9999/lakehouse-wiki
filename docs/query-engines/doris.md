@@ -4,7 +4,7 @@ type: system
 depth: 资深
 level: A
 last_reviewed: 2026-04-20
-applies_to: Apache Doris 2.1+ (2024+) · 存算分离模式 2.0+
+applies_to: Apache Doris 3.0+ (2025) · 2.1 LTS · 存算分离模式 2.0+
 tags: [query-engine, olap, mpp, mpp-database]
 category: query-engine
 repo: https://github.com/apache/doris

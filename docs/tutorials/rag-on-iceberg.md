@@ -2,7 +2,7 @@
 title: 60 分钟 RAG on Iceberg
 type: tutorial
 depth: 进阶
-applies_to: pyiceberg 0.7+ · LanceDB 0.8+ · BGE / FlagEmbedding 1.2+（2025-04）
+applies_to: pyiceberg 0.9+ · LanceDB 0.8+ · BGE / FlagEmbedding 1.2+（2026-Q2）
 last_reviewed: 2026-04-18
 tags: [tutorial, rag, iceberg, lancedb, llm]
 status: stable

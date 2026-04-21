@@ -4,7 +4,7 @@ type: concept
 depth: 资深
 level: S
 last_reviewed: 2026-04-20
-applies_to: Flink 1.20 LTS + 2.x, Iceberg v2/v3, Paimon 1.4+, Kafka 3.x
+applies_to: Flink 2.x + 1.20 LTS, Iceberg v2/v3, Paimon 1.4+, Kafka 3.x
 tags: [pipelines, resilience, exactly-once, schema-evolution, dlq, backfill]
 aliases: [管线生产韧性, Pipeline Resilience]
 related: [cdc-internals, kafka-ingestion, event-time-watermark, streaming-upsert-cdc]

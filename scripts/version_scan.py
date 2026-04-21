@@ -89,8 +89,9 @@ def extract_declared_versions(applies_str: str, product: str, aliases: list[str]
     names = [product] + aliases
     declared = []
     for name in names:
+        # \b avoids matching "iceberg" inside "pyiceberg" · anchors at word boundary
         pattern = re.compile(
-            rf"{re.escape(name)}\s+(\d+(?:\.\d+)*)",
+            rf"\b{re.escape(name)}\s+(\d+(?:\.\d+)*)",
             re.IGNORECASE,
         )
         for m in pattern.finditer(applies_str):

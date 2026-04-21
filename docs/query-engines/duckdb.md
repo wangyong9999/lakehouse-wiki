@@ -4,7 +4,7 @@ type: system
 depth: 进阶
 level: A
 last_reviewed: 2026-04-20
-applies_to: DuckDB 1.4 LTS (2025-09) · 1.5.x (2026-Q1-Q2) · 1.0 GA 2024-06
+applies_to: DuckDB 1.5.2 (2026-04) · 1.4 LTS (2025-09) · 1.0 GA 2024-06
 tags: [query-engine, olap, embedded]
 category: query-engine
 repo: https://github.com/duckdb/duckdb

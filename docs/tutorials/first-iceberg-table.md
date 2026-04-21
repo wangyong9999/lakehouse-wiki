@@ -2,7 +2,7 @@
 title: 你的第一张 Iceberg 表
 type: tutorial
 depth: 入门
-applies_to: pyiceberg 0.7+ · DuckDB 1.0+（2025-04）
+applies_to: pyiceberg 0.9+ · DuckDB 1.5.2+（2026-Q2）
 last_reviewed: 2026-04-18
 tags: [tutorial, iceberg, duckdb, pyiceberg]
 status: stable
