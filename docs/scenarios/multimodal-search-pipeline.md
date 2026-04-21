@@ -8,6 +8,9 @@ status: stable
 
 # 多模检索流水线
 
+!!! info "本页是场景视角"
+    机制深挖见：[多模 Embedding](../retrieval/multimodal-embedding.md)（CLIP / SigLIP / Jina CLIP v2 等模型矩阵）· [多模检索模式](../retrieval/multimodal-retrieval-patterns.md)（5 种 pattern 含 ColBERT / Late Interaction）· [Hybrid Search](../retrieval/hybrid-search.md)（dense+sparse 融合）· [向量数据库](../retrieval/vector-database.md)。本页**讲端到端流水线编排 + SLO 预算 + 湖上多模表建模** · 不复述 embedding / 检索机制原理。
+
 !!! tip "一句话场景"
     给定"文本查询、图像查询或文 + 图混合查询"，在一张**包含图 / 文 / 音 / 视资产**的湖表上返回 Top-K 最相关结果。
 

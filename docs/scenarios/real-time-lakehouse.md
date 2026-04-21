@@ -10,6 +10,9 @@ status: stable
 
 # Real-time Lakehouse · 端到端分钟级一体化
 
+!!! info "本页是场景视角"
+    机制深挖见：[Paimon](../lakehouse/paimon.md)（Primary Key 表 / Changelog Producer / Compaction 机制）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 原理）· [Flink](../query-engines/flink.md)（checkpoint + state） · [Pipeline 韧性](../pipelines/pipeline-resilience.md)。本页**讲端到端延迟预算 + 三条链路并行编排** · 不复述 Paimon / Flink 机制原理。
+
 !!! tip "一句话场景"
     让 **BI 仪表盘 + AI 检索 + 数据科学探索** 都能读到**分钟级新鲜度**的数据，而不是 T+1。核心方程式：Flink CDC + Paimon Primary Key 表 + **Compaction 跟得上**。
 

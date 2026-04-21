@@ -8,6 +8,9 @@ status: stable
 
 # 流式入湖
 
+!!! info "本页是场景视角"
+    机制深挖见：[CDC 内部原理](../pipelines/cdc-internals.md)（Debezium / Flink CDC / Paimon CDC）· [Pipeline 韧性](../pipelines/pipeline-resilience.md)（exactly-once / 回填 / DLQ）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 语义）· [Flink](../query-engines/flink.md)。本页**讲入湖链路编排 + SLO 预算 + 多源合流** · 不复述 CDC / Flink 机制原理。
+
 !!! tip "一句话场景"
     把**OLTP 业务库 / 日志 / 事件流**持续、低延迟地落到湖表，让后续的 BI / AI 负载从湖读到**准实时**的数据。
 
