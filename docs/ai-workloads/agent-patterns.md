@@ -267,7 +267,140 @@ Senior Agent
 
 **关键认知**：SOTA 模型在**真实通用任务** benchmark 上仍远低于人类 · 2026 agent 仍在"可演示 · 难托管"阶段。
 
-## 8. 陷阱与反模式
+## 8. 执行契约 · 幂等 / 补偿 / 恢复 / 审计 / 回放
+
+**Agent 比 RAG 难得多的地方不是"控制循环"而是"执行语义"**。Agent 调用外部副作用 · 副作用失败 · 长任务中断 · 写操作 · 这些都是**可靠系统**必修课 · 不是"Agent 模式"层面的事。
+
+### 8.1 幂等性（Idempotency）
+
+Agent 重试时不能重复副作用：
+
+```python
+@tool(idempotent=True)
+def send_email(to: str, subject: str, body: str, idempotency_key: str):
+    """发邮件。idempotency_key 用 (user_id, task_id, step_id) 组合 · 同 key 重发无效果。"""
+    if email_log.exists(idempotency_key):
+        return email_log.get(idempotency_key)  # 幂等返回
+    result = email_api.send(...)
+    email_log.write(idempotency_key, result)
+    return result
+```
+
+- **写操作 tool 必须幂等** · retry / replan 时重入安全
+- idempotency_key 由 agent framework 传 · 不要让 LLM 编
+
+### 8.2 副作用补偿（Compensation · Saga 模式）
+
+Agent 多步骤中失败 · **已做的副作用需要逆转**（类似分布式事务的 Saga）：
+
+```
+步骤 1 · create_customer → 成功
+步骤 2 · create_order → 成功
+步骤 3 · charge_payment → 失败
+↓
+补偿链（逆序）：
+  3 compensate: void_reservation
+  2 compensate: cancel_order
+  1 compensate: delete_customer（或标记 abandoned）
+```
+
+- 每个写 tool 有对应的 **compensate tool**
+- Agent framework（LangGraph / Temporal）可支持 saga 模式
+- **不适合强事务场景** · 更适合"最终一致 + 可逆"
+
+### 8.3 长任务恢复（Resumability）
+
+Agent 跑到一半挂了怎么办？
+
+```python
+# LangGraph 原生 checkpoint
+graph = workflow.compile(checkpointer=PostgresSaver(...))
+
+config = {"configurable": {"thread_id": "task-42"}}
+
+# 首次调用
+try:
+    result = graph.invoke(initial_state, config=config)
+except Exception:
+    # 崩了 · thread 42 的 state 已持久化
+
+# 恢复
+resumed = graph.invoke(None, config=config)  # None → 从 checkpoint 继续
+```
+
+- **LangGraph / Temporal / Restate** 支持 checkpoint + resume
+- 自建：每步后 atomic persist state + step number
+- 恢复时**从最近 checkpoint 重入**（不是从头）
+
+### 8.4 写操作审批（Deep HITL）
+
+通用 HITL 在 §5 讲过 · 执行契约角度更严：
+
+```
+写操作触发 · Agent 生成 action plan
+↓
+store pending_action to queue
+↓
+notify human reviewer
+↓
+  approve → execute
+  reject → abort + notify user
+  edit   → execute edited version
+  timeout → default (abort or escalate)
+```
+
+- **approval 必须异步** · 不能阻塞 agent 循环
+- 有**超时策略**（批准 / 拒绝 / 升级）
+- 审批记录入**审计表**
+
+### 8.5 多步审计（Step-level Audit Trail）
+
+```
+┌─────────────────────────────────────────────────┐
+│ audit_trail(task_id)                              │
+├─────────────────────────────────────────────────┤
+│ step_id  | tool       | args    | result | user │
+│ 1        | query_db   | {...}   | [...]  | u42  │
+│ 2        | compute    | {...}   | {...}  | u42  │
+│ 3        | send_email | {...}   | ok     | u42  │
+│ 4 (approval) reviewer=u7, decision=approve       │
+│ 5        | delete_row | {...}   | ok     | u42  │
+└─────────────────────────────────────────────────┘
+```
+
+- 每个 step 记录 tool / args / result / user / timestamp
+- 事故复盘 / 审计 / 合规基础
+- 关联 [LLM Observability](llm-observability.md) 的 trace · 一体化
+
+### 8.6 回放（Deterministic Replay）
+
+出事故后 · 用**当时的状态 + 当时的 LLM 响应**重演：
+
+```python
+# 生产环境每步 persist：LLM response · tool results · state delta
+# 事后 replay
+replay_state = load_state_at(task_id, step=3)
+next_decision = load_llm_response_at(task_id, step=4)  # 用原 response 不重调 LLM
+# 继续走 · 精确复现
+```
+
+- **LLM 调用不确定** · 生产要**persist 实际 response**（不是只 prompt）
+- 回放用于**事故分析** / **对抗测试** / **审计**
+- Temporal / Restate 的 **workflow replay** 是此模式最成熟实现
+
+### 8.7 执行契约清单（生产 Agent 必过）
+
+```
+☐ 所有写 tool 标记 idempotent + 带 idempotency_key
+☐ 关键写 tool 有 compensate pair
+☐ 长任务（> 1 min）走 checkpoint + resume
+☐ 写操作走 HITL approval 队列 · 有超时策略
+☐ 每步 step-level audit · 关联 trace
+☐ 生产 persist LLM raw response · 支持回放
+☐ 事故 playbook：如何查 audit · 如何 replay · 如何回滚副作用
+```
+
+## 9. 陷阱与反模式
 
 - **Tool 太多 > 10**：LLM 选不准 · 必须分组 / 分 server / 分 agent
 - **Tool 描述模糊**：LLM 选工具靠 description · 写清楚 + 给例子
@@ -281,7 +414,7 @@ Senior Agent
 - **只看演示不看评估**：demo 完美 · 生产 40% 失败率 · **必须 benchmark 自家任务**
 - **框架锁定早**：框架迭代快 · 生产 agent 抽象层 · 不要 API 贴死
 
-## 9. 横向对比 · 延伸阅读
+## 10. 横向对比 · 延伸阅读
 
 - [MCP](mcp.md) —— Agent 的 tool 协议 · 跨 host 标准
 - [Agents on Lakehouse](agents-on-lakehouse.md) —— 湖仓专属 tool 设计
