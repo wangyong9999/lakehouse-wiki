@@ -20,8 +20,8 @@ status: stable
 !!! abstract "TL;DR"
     - **_delta_log/ JSON 日志 + 定期 Parquet Checkpoint** 是元数据核心
     - **Databricks 深度集成**：Photon 引擎专为 Delta 优化
-    - **Deletion Vectors**（v3+）：行级删除不重写数据文件
-    - **Liquid Clustering**（v3.1+）：Z-order 的现代化继承
+    - **Deletion Vectors**（Delta 2.3+ read · 2.4+ write · 2023 引入 · 3.0 GA）：行级删除不重写数据文件 · 与 Iceberg V3 spec 无关
+    - **Liquid Clustering**（Delta 3.2+ preview · 3.3 GA · 2024）：Z-order 的现代化继承 · Delta 自有特性
     - **Uniform** (2024)：一张 Delta 表可被 Iceberg 读取器读取
     - **和 Iceberg 的关系**：技术重合度高，差异化主要在生态（Databricks 生态 vs 开放多引擎）
 

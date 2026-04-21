@@ -17,6 +17,11 @@ status: stable
 !!! tip "一句话定位"
     湖表格式的**最早登场者**（2017 Uber 开源）。核心差异化：**CoW / MoR 双表类型** + **Timeline 事件模型** + **原生 Incremental Query**。Spark 生态最深、流式 upsert 历史最长。**2024-2025 年在多引擎 / 新场景上被 Iceberg 和 Paimon 超越，但在 Spark 栈 + 主键 upsert 场景仍有价值**。
 
+!!! warning "1.0.x 升级风险 · 必读"
+    - **1.0.1 ComplexKeyGenerator regression**：单字段 record key + 多字段 partition 的配置存在 regression · 已用此配置的存量表**避免升 1.0.1**
+    - **1.0.2 Flink auto-upgrade**：Flink writer + 表自动 upgrade 写入旧表（`hoodie.write.table.version=6`）有已知 issue（GH #13753）
+    - **存量升级原则**：先在测试表验证 KeyGenerator 配置兼容 · 再灰度生产表 · 0.x → 1.0 必须跨 minor 验证
+
 !!! abstract "TL;DR"
     - **两种表类型**：CoW（读快写慢）· MoR（写快读合并）
     - **三种查询**：Snapshot / Read-Optimized / **Incremental**（Hudi 特色）
