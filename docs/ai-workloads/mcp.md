@@ -377,8 +377,10 @@ MCP **是方向**，也是 2024-2025 年 AI infra 最重要的协议进展之一
 
 ## 8. 横向对比 · 延伸阅读
 
+- [Agent Patterns](agent-patterns.md) —— Agent 机制 canonical · MCP 是 tool 协议层
+- [Agents on Lakehouse](agents-on-lakehouse.md) —— 湖仓专属 tool 设计
 - [Agentic Workflows 场景](../scenarios/agentic-workflows.md) —— Agent 的业务应用
-- [Agents on Lakehouse](agents-on-lakehouse.md) —— 团队视角
+- [Structured Output](structured-output.md) —— MCP tool 的输入 schema
 - [RAG](rag.md) —— RAG 是 Agent 的核心能力之一
 
 ### 权威阅读

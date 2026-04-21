@@ -213,7 +213,49 @@ Contextual Chunk:
 - Agent 可以决定 **多轮检索**（多 hop reasoning）
 - 结合其他工具（SQL / 代码执行 / API）
 
-详见 [Agentic Workflows](../scenarios/agentic-workflows.md)。
+详见 [Agent Patterns](agent-patterns.md) 机制 · [Agentic Workflows](../scenarios/agentic-workflows.md) 场景。
+
+### GraphRAG · 知识图谱增强（2024-2026）
+
+**Vector RAG 的极限**：无法处理"**跨多个 chunk 的综合性问题**"（如 "介绍我们公司所有主要竞争对手及其核心产品"）· 因为 vector 召回是"点对点相关" · 不理解实体之间关系。
+
+**GraphRAG 思路**（Microsoft 2024-07 开源）：
+1. **离线**：从语料库抽取实体 + 关系 → 构建 **知识图谱**（Neo4j / 自建 graph）
+2. **离线**：对图做 **社区检测**（Louvain / Leiden）· 每个社区生成 summary
+3. **在线**：Query 时两阶段
+   - 找相关**社区 summary**（回答综合性问题）
+   - 找相关**实体 + 关系**（回答具体细节）
+4. 组合 context 给 LLM
+
+```
+用户："我们团队 2025 年的主要技术挑战"
+  ↓
+Vector RAG: 找相关 chunk → 碎片化
+GraphRAG:
+  1. 相关社区 = [性能优化社区、AI 集成社区、合规社区]
+  2. 每个社区的 summary 作为 context
+  3. LLM 综合归纳 → 完整回答
+```
+
+**代表方案**：
+- **Microsoft GraphRAG**（2024-07 开源 · 2025 进入 Azure AI Foundry）· 完整工程实现
+- **LightRAG**（2024 · 香港大学）· 更轻量 · dual-level retrieval
+- **LlamaIndex KnowledgeGraphIndex** · 嵌入式图谱构建
+- **Neo4j + LLM** · 商业图数据库 + Cypher 查询
+
+**成本**：
+- 离线构建：**10-100×** 于 vector RAG 的 embedding 成本（大量 LLM 调用做实体抽取 + 社区 summary）
+- 在线查询：和 vector RAG 相当 · 甚至更快（社区 summary 是预算好的 context）
+
+**何时用 GraphRAG**：
+- ✅ 综合性 / 主题性查询（"**主要** / **所有** / **对比**"）
+- ✅ 关系复杂的领域（法律 / 学术文献 / 企业组织 / 医药）
+- ✅ 可接受 10-100× 离线成本换取质量跃升
+- ❌ 简单事实问答 · vector RAG 足够
+- ❌ 语料频繁变化 · 图谱重建成本高
+- ❌ 小规模（< 10k 文档）· 建图 ROI 不划算
+
+**2026 状态**：采用率快速上升但仍非主流 · Microsoft / 企业 KG 场景领先 · 是 Vector RAG 的补充不是替代。
 
 ## 5. 性能数字 · 评估指标
 
@@ -271,7 +313,7 @@ import lancedb
 from FlagEmbedding import FlagModel, FlagReranker
 
 embed_model = FlagModel('BAAI/bge-large-zh')
-reranker    = FlagReranker('BAAI/bge-reranker-large')
+reranker    = FlagReranker('BAAI/bge-reranker-v2-m3')  # 推 v2 · v1 已被超越
 
 db = lancedb.connect("s3://lake/lancedb")
 table = db.open_table("docs")
@@ -349,6 +391,8 @@ print(result)
 - **[*Lost in the Middle* (Liu et al., 2023)](https://arxiv.org/abs/2307.03172)**
 - **[RAGAS paper (Es et al., 2023)](https://arxiv.org/abs/2309.15217)**
 - **[CRAG (Yan et al., 2024)](https://arxiv.org/abs/2401.15884)** · **[Self-RAG (Asai et al., 2023)](https://arxiv.org/abs/2310.11511)**
+- **[Microsoft GraphRAG (2024-07)](https://github.com/microsoft/graphrag)** · **[GraphRAG paper](https://arxiv.org/abs/2404.16130)**
+- **[LightRAG (HKU 2024)](https://github.com/HKUDS/LightRAG)** · **[LlamaIndex KnowledgeGraphIndex](https://docs.llamaindex.ai/en/stable/examples/index_structs/knowledge_graph/)**
 - **[LlamaIndex](https://github.com/run-llama/llama_index)** · **[LangChain](https://github.com/langchain-ai/langchain)** · **[Haystack](https://github.com/deepset-ai/haystack)**
 
 ## 相关
