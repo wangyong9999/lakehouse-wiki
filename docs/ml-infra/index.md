@@ -31,34 +31,46 @@ last_reviewed: 2026-04-21
 
 ### 组 1 · 数据与特征
 
-工程化 ML 数据资产 —— 训推一致 / PIT 正确 / 持续 embedding。
+工程化 ML 数据资产 —— 训推一致 / PIT 正确 / 数据契约 + label 质量 / 持续 embedding。
 
 - [**Feature Store**](feature-store.md) ⭐ —— 统一定义 · PIT Join · 双存储 · SSOT 主定义（PIT / Train-Serve Skew）
+- [**Data Quality for ML**](data-quality-for-ml.md) ⭐ —— Data Contract · Quality Gates（GE / Soda / Monte Carlo）· Label Quality · 评估集泄漏防御
 - [**Embedding 流水线**](embedding-pipelines.md) —— 批 / 流 / 模型版本治理 / CDC 增量
 - [Feature Store 横比](../compare/feature-store-comparison.md) —— Feast / Tecton / Hopsworks / 云厂商 / 自建
 
 ### 组 2 · 模型生命周期
 
-模型从注册到上线到监控的完整生命 —— MLOps 伞 + 三根支柱。
+模型从实验到注册到上线到评估到监控的完整生命 —— MLOps 伞 + 五根支柱。
 
 - [**MLOps 生命周期**](mlops-lifecycle.md) ⭐ —— **贯穿叙事 · 六环节闭环总览** · 成熟度 L0-L3 · 同时覆盖 LLMOps 分支
-- [**Model Registry**](model-registry.md) —— 版本 / alias / Model Card / BOM · MLflow / UC Models / W&B Artifacts
+- [**Experiment Tracking**](experiment-tracking.md) —— MLflow / W&B / Neptune / Comet / Aim · 研究 → 生产的桥梁
+- [**Model Registry**](model-registry.md) —— 版本 / alias / Model Card / BOM · MLflow / UC Models / W&B Artifacts · ≠ 完整发布控制面
+- [**ML Evaluation**](ml-evaluation.md) ⭐ —— 离线指标 · Calibration · Fairness · A/B · Shadow 对账 · 显著性 · 传统 ML canonical（LLM/RAG eval 看 [rag-evaluation](../ai-workloads/rag-evaluation.md)）
 - [**Model Serving**](model-serving.md) —— 通用 ML serving（Ray Serve / KServe / Triton / BentoML）· Inference Graph / Shadow / Canary / Rollback runbook · LLM 推理深度看 [llm-inference](../ai-workloads/llm-inference.md)
 - [**Model Monitoring**](model-monitoring.md) ⭐ —— Drift / PSI / KS / Fairness · Evidently / Arize / Fiddler · Auto-retrain 契约
 
 ### 组 3 · 训练基础设施
 
-模型训练从单机多卡到 LLM 级并行 —— 引擎 · 资源 · 微调。
+模型训练从单机多卡到 LLM 级并行 —— 引擎 · 资源 · 微调。**本组对 LLM 训练有较多覆盖**（2024-2026 训练主战场）· **但传统 ML / tabular / CV 场景同样适用** · 各页正文都标注了适用边界。
 
-- [**训练编排**](training-orchestration.md) —— Ray Train / Kubeflow / Flyte · FSDP2 / Context Parallel / torchtitan · DCP checkpoint
-- [**GPU 调度**](gpu-scheduling.md) —— K8s / Volcano / Run:ai · MIG / MPS · B200/GB200/H200/MI300X · 多租户 + FinOps
-- [**LLM Fine-tuning**](fine-tuning-data.md) —— 数据 · 方法（SFT/DPO/ORPO/KTO/LoRA/QLoRA/PEFT）· 工具（Axolotl/LLaMA-Factory/unsloth）· 评估 · 部署一体
+- [**训练编排**](training-orchestration.md) —— Ray Train / Kubeflow / Flyte · FSDP2 / Context Parallel / torchtitan · DCP checkpoint · 通用 DDP / 小中模型场景
+- [**GPU 调度**](gpu-scheduling.md) —— K8s / Volcano / Run:ai · MIG / MPS · B200/GB200/H200/MI300X · 多租户 + FinOps · tabular / 推荐在线调度
+- [**LLM Fine-tuning**](fine-tuning-data.md) —— 数据 · 方法（SFT/DPO/ORPO/KTO/LoRA/QLoRA/PEFT）· 工具（Axolotl/LLaMA-Factory/unsloth）· 评估 · 部署一体（**LLM 场景专属**）
 
-## 灵魂 · 为什么"湖仓一等公民化"
+## 叙事角度 · 一种值得考虑的路线：湖仓一等公民化
 
-传统 MLOps 工具（MLflow、Kubeflow、SageMaker）把 ML 资产放在**独立系统**里：metadata 存 MySQL · artifact 存 S3 · 权限走 IAM · 血缘散在 W&B/MLflow。结果是**数据和模型是两套治理**。
+!!! warning "这是一种路线 · 不是唯一答案"
+    本章用"湖仓一等公民化 ML 资产"作为**叙事主线** · 是因为它在**数据已经在 Iceberg/Paimon/Delta**的团队里能让 ML 治理显著简化（共用 RBAC / 血缘 / time-travel / snapshot）。但**这不是 ML 平台的唯一路线**：
+    
+    - **部分解耦架构仍然大量成立且合理**：数据在湖 · 模型元数据在 MLflow · Feature Store 独立 · Serving 另成平台 —— 这在很多成熟团队**不是落后**，而是出于组织边界 / 演进历史 / 性能 / 合规 / 法务需要。
+    - **完全不走湖仓路径也能做好**：基于 Postgres + S3 + MLflow 的经典栈可以支撑中等规模 ML · Databricks / SageMaker / Vertex 全托管也各成一体。
+    - **判断什么时候走到什么程度**：本章的每页提供"组件视角"· 你要组合哪一套 · 取决于组织成熟度 + 业务形态 + 团队能力，**不应把"一体化到底"当成默认终点**。
+    
+    下面的湖仓一等公民化描述是**一种达成终态的路径**· 读者把它当**差异化视角**理解 · 不是判定其他路径为错。
 
-湖仓一体化（Iceberg + Unity/Polaris）提供了另一条路：
+传统 MLOps 工具（MLflow、Kubeflow、SageMaker）把 ML 资产放在**独立系统**里：metadata 存 MySQL · artifact 存 S3 · 权限走 IAM · 血缘散在 W&B/MLflow。结果往往是**数据治理和模型治理两套系统**。
+
+湖仓一体化（Iceberg + Unity/Polaris）提供了**另一条可选的路**：
 
 | ML 资产 | 湖仓一等公民化形式 |
 |---|---|
@@ -66,16 +78,31 @@ last_reviewed: 2026-04-21
 | 特征 | Feature Store View（离线 Iceberg + 在线 KV）· 带血缘 |
 | 模型 | Unity Catalog Models / 带 `training_dataset_snapshot_id` 绑定 |
 | Embedding | Iceberg / Lance 表 · 带 `embedding_model_version` + `source_snapshot_id` |
-| 微调数据集 | Iceberg/Lance 表 · `dataset_version` 字段 |
+| 微调数据集 | Iceberg / Lance 表 · `dataset_version` 字段 |
 | 推理日志 | 回写 Iceberg · 作下一轮训练数据源 |
 
-**好处**：
-- 数据 ACL / 模型 ACL / 特征 ACL **一套 RBAC** 不分裂
-- 时间旅行机制**天然**成为模型复现契约
-- 血缘**跨 ML 和 BI**统一（推荐模型用的用户表 · 也是 BI 报表的同一张）
-- **审计 / EU AI Act / GDPR**落地更容易（所有 ML artifact 在 Catalog 里可查）
+**可能的好处**（走到什么程度算有收益）：
+- 数据 ACL / 模型 ACL / 特征 ACL **一套 RBAC**（前提：Catalog 本身成熟）
+- 时间旅行机制可以作模型复现契约（前提：snapshot 保留策略能支撑）
+- 血缘跨 ML 和 BI 统一（前提：BI 也在同一 Catalog）
+- 审计 / EU AI Act / GDPR 落地（前提：合规需求确实跨数据 + 模型）
 
-这就是本章的**灵魂**：ML 平台**不是**一套独立工具栈 · 而是湖仓 Catalog 的 ML 扩展面。
+**什么时候可能不划算**：
+- 数据根本不在湖仓（部分还在 OLTP / 数仓）
+- Catalog（UC / Polaris）还没铺开 · 先做 ML 一体化会变成孤岛
+- 模型跨多种数据源（湖 + 数仓 + 三方 API）· 强绑湖仓反而限制
+- 只有 1-2 个模型 · MLflow + S3 够用 · 一体化投入 ROI 低
+
+## 章节边界再声明 · 平台基础能力 vs 场景专属能力
+
+**本章 10 页的定位不是齐平的**：
+
+| 类别 | 页面 | 说明 |
+|---|---|---|
+| **平台基础能力**（场景无关） | MLOps Lifecycle · Experiment Tracking · Feature Store · Model Registry · Model Serving · Model Monitoring · ML Evaluation · Data Quality · 训练编排 · GPU 调度 | 适用于 tabular / 推荐 / 风控 / CV / 小中模型 / LLM 所有场景 |
+| **LLM 时代特定能力** | LLM Fine-tuning · Embedding 流水线（部分） | 绑定 LLM 或向量检索 · 不是通用 ML 平台硬通货 |
+
+**注意**：ml-infra 的重心是**平台基础能力** · LLM-specific 的深度内容（推理引擎 · Prompt · Agent · RAG · Guardrails）全部在 [ai-workloads/](../ai-workloads/index.md)。本章的 LLM 相关只保留**和训练/微调/底层**直接相关的最小集。
 
 ## 角色速查
 
@@ -103,6 +130,17 @@ last_reviewed: 2026-04-21
 | LoRA 微调要选哪个工具 | [fine-tuning-data](fine-tuning-data.md) §工具生态 |
 | 推理链路是多模型 DAG 怎么部署 | [model-serving](model-serving.md) §Inference Graph |
 | Model Card / EU AI Act 合规字段 | [model-registry](model-registry.md) §合规 artifact |
+| 上线前离线 eval 该跑哪些指标 | [ml-evaluation](ml-evaluation.md) §离线指标矩阵 |
+| A/B 实验结果怎么判显著 | [ml-evaluation](ml-evaluation.md) §统计显著性 |
+| Fairness / 公平性怎么系统化测 | [ml-evaluation](ml-evaluation.md) §Fairness + [model-monitoring](model-monitoring.md) §Fairness |
+| 训练 run 多到管不过来 | [experiment-tracking](experiment-tracking.md) §组织实验 |
+| 超参搜索的 artifact 爆炸 | [experiment-tracking](experiment-tracking.md) §保留策略 |
+| 训练集里混入脏数据 / bot | [data-quality-for-ml](data-quality-for-ml.md) §Quality Gates |
+| 上游 schema 突然变了 | [data-quality-for-ml](data-quality-for-ml.md) §Data Contract |
+| 标注员打标不一致 | [data-quality-for-ml](data-quality-for-ml.md) §Label Quality |
+| 评估集泄漏到训练集 | [data-quality-for-ml](data-quality-for-ml.md) §泄漏防御 |
+| 该不该上 Feature Store | [feature-store](feature-store.md) §何时不需要 FS |
+| 是该中央平台还是业务自服务 | 本页 §平台边界与组织成本 |
 
 ## 典型生产栈 matrix
 
@@ -121,6 +159,40 @@ last_reviewed: 2026-04-21
 - K8s 重、平台团队独立 → K8s 原生栈
 - LLM 场景为主 → LLM-only 栈 + 和 ai-workloads 章深度集成
 - 多场景混布 → 以开源湖仓栈为骨架 · LLM 部分接入 LLM-only
+
+## 平台边界与组织成本 · 不是所有能力都该中央化
+
+**ML 平台团队最大的误区是"什么都自己做"**。什么该中央平台维护 · 什么该业务团队 self-serve · 什么时候只做 guardrails + golden path —— 这比工具选型更重要。
+
+### 推荐的分层
+
+| 能力 | 中央平台 | 业务团队 self-serve | Guardrails + Golden Path |
+|---|---|---|---|
+| **Feature Store 在线 store + Registry 维护** | ✅ | | |
+| **GPU 调度 + 成本归因 tag 体系** | ✅ | | |
+| **Model Monitoring 底座（metric pipe）** | ✅ | | |
+| **Compliance 合规 artifact schema** | ✅ | | |
+| **训练 pipeline 模板** | | | ✅ 给模板 + 自由定制 |
+| **模型评估** | | | ✅ 工具 + 默认 eval · 业务自加维度 |
+| **特征定义（domain-specific）** | | ✅ | |
+| **超参调优 / 模型选择** | | ✅ | |
+| **Prompt / Agent 设计** | | ✅ | |
+
+### 什么时候**不**该做平台
+
+- **业务规模小**（1-2 个模型）：中央 FS + Registry + Monitoring 投入回不来 · 让业务团队用 MLflow + S3 先跑起来
+- **组织还没准备好**：平台团队 2 人 · 业务团队 20 人 · 平台被业务拖垮 → 先做 golden path + 文档
+- **场景差异过大**：推荐 / 风控 / LLM 各自独立 · 强统一平台变成最小公倍数
+- **合规 / 法务独立管**：某些行业（金融 / 医疗）数据 ACL 和 ML 平台本该隔离
+
+### 过度平台化的代价
+
+- **冻结创新**：业务团队想换工具 · 平台团队"要求统一"
+- **平台团队成了瓶颈**：所有模型上线走平台队列
+- **黑箱累积**：平台团队离职 · 业务团队不懂底层
+- **成本虚高**：平台本身的运维 + 演进 + 支持成本
+
+**正确姿态**：平台做**最小有用集** + **宽松的 golden path** + **少数合规强约束** · 剩下让业务团队自己做决策。
 
 ## 学习路径
 
