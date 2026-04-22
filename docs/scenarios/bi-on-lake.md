@@ -10,8 +10,8 @@ status: stable
 
 # BI on Lake · 湖上分析与仪表盘
 
-!!! info "本页是场景视角"
-    机制深挖见 [BI 负载章](../bi-workloads/index.md)：[OLAP 建模](../bi-workloads/olap-modeling.md) · [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md) · [语义层](../bi-workloads/semantic-layer.md) · [仪表盘 SLO](../bi-workloads/dashboard-slo.md) · [BI × LLM](../bi-workloads/bi-plus-llm.md)。本页**不复述机制原理** · 只讲端到端编排。
+!!! info "机制深挖"
+    [BI 负载章](../bi-workloads/index.md)：[OLAP 建模](../bi-workloads/olap-modeling.md) · [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md) · [语义层](../bi-workloads/semantic-layer.md) · [仪表盘 SLO](../bi-workloads/dashboard-slo.md) · [BI × LLM](../bi-workloads/bi-plus-llm.md)。
 
 !!! tip "一句话理解"
     **湖就是数仓**——传统 BI 负载（月报、仪表盘、即席查询）直接跑在 Iceberg/Paimon 之上，不再搬到独立的数仓层。核心收益：**一份数据多引擎消费、历史可追溯、AI + BI 共底座**；核心挑战：**查询性能** + **并发隔离** + **数据建模**。
@@ -379,9 +379,6 @@ flowchart LR
 
 ## 工业案例 · BI 场景深度切面
 
-!!! info "本节定位 · BI 场景切面视角"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 只分析 3 家在 **BI on Lakehouse 场景**的独特做法。
-
 ### Databricks · Lakehouse BI（Photon + DBSQL + Genie）
 
 **为什么值得学**：Databricks 2022+ 推 DBSQL · 是"**从 ML 平台扩张到 BI**"的商业化典范。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
@@ -407,7 +404,7 @@ flowchart LR
    - 行列级 + Tag 策略 + 血缘
    - BI 侧治理做到行业顶级
 
-**规模** `[来源未验证 · 量级参考]`：全客户合计 EB 级。DBSQL 2024+ 客户规模快速增长。
+**规模** `[量级参考]`：全客户合计 EB 级。DBSQL 2024+ 客户规模快速增长。
 
 **踩坑**：Delta 生态相对 Iceberg 偏窄（2024 UniForm 缓解）· UC OSS 2024 才捐 LF AI · 抢标准晚。
 
@@ -434,7 +431,7 @@ flowchart LR
    - Text-to-SQL 自然语言问 BI
    - 对抗 Databricks Genie · SQL-first 路线
 
-**规模** `[来源未验证 · 量级参考]`：10000+ 客户 · 每日数十亿查询级。
+**规模** `[量级参考]`：10000+ 客户 · 每日数十亿查询级。
 
 **Snowflake BI 独特性**：
 - **"数据不出 Snowflake"的合规锚点**（金融 / 医疗首选）
@@ -451,7 +448,7 @@ flowchart LR
 
 1. **Trino / Presto 主交互引擎**：
    - 2015+ Presto 早期大用户 · 现在主力 Trino（自建 fork）
-   - 规模：**3M+ 查询 / 日** `[来源未验证 · 量级参考]`
+   - 规模：**3M+ 查询 / 日** `[量级参考]`
 
 2. **Iceberg 10 万+ 表 · 和 BI 深度集成**：
    - 所有 BI 报表底层表**都是 Iceberg**
@@ -521,6 +518,15 @@ flowchart LR
 - 对比：[计算引擎对比](../compare/compute-engines.md) · [OLAP 加速副本对比](../compare/olap-accelerator-comparison.md)
 - 机制章节：[BI 负载](../bi-workloads/index.md) · [OLAP 建模](../bi-workloads/olap-modeling.md) · [语义层](../bi-workloads/semantic-layer.md) · [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md) · [仪表盘 SLO](../bi-workloads/dashboard-slo.md) · [BI × LLM](../bi-workloads/bi-plus-llm.md)
 - 业务：[业务场景全景](business-scenarios.md) · [CDP / 用户分群](cdp-segmentation.md)
+
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：
+- Databricks：公司 2024-2026 财报 / 技术大会 / DBSQL 产品披露
+- Snowflake：公司 2024-2026 财报 / Summit 披露
+- Netflix：Netflix Tech Blog（Iceberg / Trino 系列）
+
+数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
 
 ## 延伸阅读
 

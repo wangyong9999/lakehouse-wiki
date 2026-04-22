@@ -336,16 +336,13 @@ spark.read.table("iceberg.features.user_stats") \
 
 ## 10.5 工业案例 · Feature Serving 场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**在线 Feature Serving 场景**的独特做法。
-
 ### LinkedIn · Venice（在线 Feature Store 工业标杆）
 
 **Venice 独特设计**（见 [cases/linkedin §5.3](../cases/linkedin.md)）：
 - **写路径走 Kafka push**（不是客户端直写）· 解决写 QPS 失控
 - **批量加载 + 实时增量**一等支持
 - **Read-optimized 存储** · ML feature 读负载极致优化
-- 规模：**百万级 QPS · ms 级 p99** `[来源未验证 · 量级参考]`
+- 规模：**百万级 QPS · ms 级 p99** `[量级参考]`
 
 **对 Feature Serving 的启示**：
 - 写路径**通过 Kafka 统一**比客户端直写更可控
@@ -387,7 +384,11 @@ spark.read.table("iceberg.features.user_stats") \
 - **vs [欺诈检测](fraud-detection.md)**：共用 Online Store，但欺诈场景延迟要求更严
 - **vs [离线训练数据流水线](offline-training-pipeline.md)**：对齐 PIT Join 与 in-flight 特征
 
-## 13. 相关 · 延伸阅读
+## 13. 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：LinkedIn Engineering Blog（Venice 系列）· Uber Engineering Blog（Palette / Genoa 系列）。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
+
+## 14. 相关 · 延伸阅读
 
 - [Feature Store](../ml-infra/feature-store.md) · [Feature Store 横比](../compare/feature-store-comparison.md)
 - [离线训练数据流水线](offline-training-pipeline.md)

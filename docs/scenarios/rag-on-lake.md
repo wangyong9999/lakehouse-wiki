@@ -10,8 +10,8 @@ status: stable
 
 # RAG on Lake · 企业知识库问答
 
-!!! info "本页是场景视角"
-    机制深挖见：[RAG 架构与范式](../ai-workloads/rag.md) · [RAG 评估](../ai-workloads/rag-evaluation.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Embedding](../retrieval/embedding.md) · [Rerank](../retrieval/rerank.md)。本页**讲湖上编排 + 5 表架构** · 不复述机制原理。
+!!! info "机制深挖"
+    [RAG 架构与范式](../ai-workloads/rag.md) · [RAG 评估](../ai-workloads/rag-evaluation.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Embedding](../retrieval/embedding.md) · [Rerank](../retrieval/rerank.md)。
 
 !!! tip "一句话理解"
     把**湖仓作为 RAG 的单一事实源**：原始语料、chunk、embedding、日志全以 Iceberg/Paimon 表承载；检索层（向量 + BM25）和 LLM 生成层都从湖上消费。**核心价值**：一份数据，多模型共用；血缘可追溯；测试和生产一致。
@@ -317,7 +317,7 @@ Query → [Dense embedding] → 向量 TopN
 
 ### 基准 Benchmark
 
-benchmark 矩阵（BEIR / MS MARCO / Natural Questions / HotpotQA / RAGBench）与各自适用场景 · 统一见 [RAG 评估章](../ai-workloads/rag-evaluation.md) · 本页不重复枚举。
+benchmark 矩阵（BEIR / MS MARCO / Natural Questions / HotpotQA / RAGBench）与各自适用场景统一见 [RAG 评估章](../ai-workloads/rag-evaluation.md)。
 
 ### RAGAS 四指标（最常用）
 
@@ -441,9 +441,6 @@ result = evaluate(
 
 ## 工业案例 · RAG 场景深度切面
 
-!!! info "本节定位 · RAG 场景的案例切面"
-    **不重复公司全栈介绍**（见 [cases/](../cases/index.md) 深度页）· 只分析 3 家在**RAG / AI 问答场景**的独特做法 · 关键数字 · 踩坑。
-
 ### Databricks · Lakehouse AI + Genie（RAG 商业化代表）
 
 **为什么值得学**：Databricks 是**RAG 商业化最完整的平台**。Unity Catalog + Vector Search + AI Functions + Foundation Model API 全栈打通。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
@@ -459,7 +456,7 @@ result = evaluate(
    - Delta 表上一等向量索引（HNSW）
    - Hybrid：向量 + Full-text BM25
    - Rerank：集成的 Rerank 模型
-   - 和本页 5 表架构高度对应
+   - 和本章 5 表架构高度对应
 
 3. **AI Functions · SQL 里直接写 RAG**：
    - `ai_embed` · `ai_retrieve` · `ai_generate` 可串联
@@ -474,7 +471,7 @@ result = evaluate(
 - UniForm 在**复杂 schema evolution 下有 bug**（2024 客户报告）· 多格式互操作不是零成本
 - UC OSS 2024 才捐 LF AI · 3 年窗口让 Polaris 抢占 Iceberg Catalog 心智
 
-**和本页推荐架构的对比**：
+**对照与复用**：
 - ✅ 5 表架构（raw_docs → chunks → embeddings → logs → evals）和 Databricks UC 架构**高度对齐**
 - ✅ Hybrid + Rerank 三段式是**工业标杆**
 - ⚠️ 商业平台深度锁定（Delta + UC + Photon）· 开源栈替代成本高
@@ -504,7 +501,7 @@ result = evaluate(
 - **不直接支持 OpenAI GPT / Anthropic Claude**（数据主权原因）
 - 追求最强 LLM 的客户要用 Claude 等需要额外接入
 
-**和本页推荐架构的对比**：
+**对照与复用**：
 - ✅ 合规场景（"数据不出栈"）· Snowflake 是**首选**
 - ⚠️ 追求最前沿 LLM（Claude 4.X · GPT 最新版）的场景 · Cortex 是短板
 

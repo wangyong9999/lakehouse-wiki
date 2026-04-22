@@ -8,18 +8,9 @@ last_reviewed: 2026-04-21
 # 场景指南
 
 !!! info "本章是场景视角 · 不复述机制"
-    `scenarios/` 讲**业务场景的端到端编排** —— 多个机制如何拼成一个业务方案 · 含真实数字 / 选型陷阱 / 跨团队协同 / **工业案例切面分析**。
+    讲**业务场景的端到端编排** + **工业案例切面**。机制原理在对应技术栈章（[lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [query-engines/](../query-engines/index.md) · [bi-workloads/](../bi-workloads/index.md) · [ai-workloads/](../ai-workloads/index.md) · [ml-infra/](../ml-infra/index.md) · [catalog/](../catalog/index.md) · [pipelines/](../pipelines/index.md)）· 本章不复述。
     
-    **机制原理**（湖表 / 检索 / 引擎 / BI 负载 / AI 负载 / Catalog）**不在本章** · 请移步对应技术栈章：[lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [query-engines/](../query-engines/index.md) · [bi-workloads/](../bi-workloads/index.md) · [ai-workloads/](../ai-workloads/index.md) · [catalog/](../catalog/index.md) · [pipelines/](../pipelines/index.md)。参见 [ADR 0006 canonical source 原则](../adr/0006-chapter-structure-dimensions.md)。
-
-!!! success "S33 重要 · 场景+案例强配对"
-    2026-Q2 S33 建立**场景-案例强配对**：
-    
-    - **scenarios/ 业务页** = 业务视角 + **内嵌工业案例切面**（每页 §工业案例节 · 150-300 行）· 含 2-4 家在**该场景下**的独特做法 / 关键数字 / 踩坑 / 和本推荐路径对比
-    - **[cases/](../cases/index.md) 全栈企业视角** = 每家公司的全平台历史 / 取舍 / 失败 / 启示
-    - **两章配对阅读**：读 scenarios/X 看"怎么做 X + 业界怎么做 X" · 深度全栈跳 cases/X
-    
-    反向索引（从场景找案例）· 见 [cases/studies.md §5.6](../cases/studies.md)。
+    和 [cases/](../cases/index.md) 配对：scenarios/X = "怎么做 X + 业界怎么做 X" · cases/X = 单家公司全栈历史与取舍。
 
 !!! tip "怎么用"
     - **带着业务问题进来** → 从 [E2E 业务场景全景](business-scenarios.md) 开始
@@ -48,20 +39,20 @@ flowchart LR
 
 - ⭐ [**E2E 业务场景全景**](business-scenarios.md) —— 业务视角的分类框架 + Top 10 主流场景 + 前沿方向 + 决策矩阵 + Benchmark 索引。**新同事带着业务问题进来，这里是第一站**。
 
-## 业务视角深挖（S33 · 每页内嵌工业案例切面）
+## 业务视角深挖
 
 **从业务问题出发的完整解决方案** · 每页含：业务图景 + 组件链路 + Benchmark + **工业案例深度切面**（2-4 家）+ 陷阱。
 
-| 场景页 | 主要内嵌案例 | 案例内容量 |
-|---|---|---:|
-| [**推荐系统 · 搜索 · 发现**](recommender-systems.md) ⭐ | Pinterest · 阿里 · LinkedIn | ~200 行 |
-| [**RAG on Lake · 企业知识库问答**](rag-on-lake.md) ⭐ | Databricks · Snowflake · Netflix（推断） | ~180 行 |
-| [**BI on Lake · 湖上分析与仪表盘**](bi-on-lake.md) ⭐ | Databricks · Snowflake · Netflix | ~180 行 |
-| [**欺诈检测 · 风险控制**](fraud-detection.md) | Uber · LinkedIn（推断） | ~120 行 |
-| [**CDP · 用户分群**](cdp-segmentation.md) | 阿里 · LinkedIn（推断） | ~100 行 |
-| [**Agentic 工作流 · 自动化**](agentic-workflows.md) | Databricks Genie · Snowflake Cortex · Anthropic | ~130 行 |
-| [**Text-to-SQL 平台**](text-to-sql-platform.md) | Databricks Genie · Snowflake Cortex Analyst · 阿里（推断） | ~130 行 |
-| [**多模检索流水线**](multimodal-search-pipeline.md) | Pinterest · 阿里 · Databricks | ~180 行 |
+| 场景页 | 主要内嵌案例 |
+|---|---|
+| [**推荐系统 · 搜索 · 发现**](recommender-systems.md) ⭐ | Pinterest · 阿里 · LinkedIn |
+| [**RAG on Lake · 企业知识库问答**](rag-on-lake.md) ⭐ | Databricks · Snowflake · Netflix |
+| [**BI on Lake · 湖上分析与仪表盘**](bi-on-lake.md) ⭐ | Databricks · Snowflake · Netflix |
+| [**欺诈检测 · 风险控制**](fraud-detection.md) | Uber · LinkedIn |
+| [**CDP · 用户分群**](cdp-segmentation.md) | 阿里 · LinkedIn |
+| [**Agentic 工作流 · 自动化**](agentic-workflows.md) | Databricks Genie · Snowflake Cortex · Anthropic |
+| [**Text-to-SQL 平台**](text-to-sql-platform.md) | Databricks Genie · Snowflake Cortex Analyst · 阿里 |
+| [**多模检索流水线**](multimodal-search-pipeline.md) | Pinterest · 阿里 · Databricks |
 
 ## 架构视角的端到端场景
 
@@ -98,7 +89,7 @@ flowchart LR
 1. 先读 [business-scenarios](business-scenarios.md) 建立业务全景
 2. 按上面"反向索引"挑一页业务深挖
 3. 读业务页前半（业务 + 架构 + 组件）
-4. 读 §工业案例节（本页最独特价值）
+4. 读 §工业案例节（业界怎么做）
 5. 想深度看某家公司 → 跳 [cases/](../cases/index.md)
 
 ### 资深架构师 · 做选型决策
@@ -119,17 +110,6 @@ flowchart LR
 - **推荐 / 电商场景**：重点读阿里切面 · 配对 [cases/alibaba](../cases/alibaba.md)
 - **流式湖仓**：[real-time-lakehouse](real-time-lakehouse.md) + Paimon · 中国团队最可复制
 - **国内工业实践**：目前 cases/ 只有阿里 · 后续补字节 / 腾讯 / 美团
-
-## 章节边界（再声明）
-
-| 章 | 定位 | 和本章的关系 |
-|---|---|---|
-| **scenarios/**（本章）| 业务场景 + 内嵌案例切面 + 端到端架构 | — |
-| [cases/](../cases/index.md) | 全栈企业参考 · 历史 / 取舍 / 失败 / 启示 | 配对阅读 |
-| [unified/](../unified/index.md) | 跨章组合架构 + 团队路线主张 | 战略决策回这里 |
-| [机制章](../lakehouse/index.md) 等 | 机制原理 canonical | 本章 link 它们 · 不复述 |
-| [compare/](../compare/index.md) | 横向对比 · 选型决策树 | 技术选型时配合读 |
-| [frontier/vendor-landscape](../frontier/vendor-landscape.md) | 厂商选型商业视角 | 商业决策时配合 |
 
 ## 和其他资源
 

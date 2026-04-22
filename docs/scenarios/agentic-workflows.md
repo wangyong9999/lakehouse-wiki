@@ -10,8 +10,8 @@ status: stable
 
 # Agentic 工作流 · 自动化
 
-!!! info "本页是场景视角"
-    机制深挖见：[AI 负载章](../ai-workloads/index.md) · [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md)（湖仓侧 Agent 机制）· [MCP](../ai-workloads/mcp.md)（Tool 协议标准）· [Prompt 管理](../ai-workloads/prompt-management.md) · [RAG](../ai-workloads/rag.md)。本页**讲 L1/L2/L3 成熟度 + 场景落地 + 评估 / 成本 / 安全** · 不复述 Agent 机制原理。
+!!! info "机制深挖"
+    [AI 负载章](../ai-workloads/index.md) · [Agents on Lakehouse](../ai-workloads/agents-on-lakehouse.md)（湖仓侧 Agent 机制）· [MCP](../ai-workloads/mcp.md)（Tool 协议标准）· [Prompt 管理](../ai-workloads/prompt-management.md) · [RAG](../ai-workloads/rag.md)。
 
 !!! tip "一句话理解"
     **LLM + 工具 + 控制循环** 自主完成多步任务——不是"问答一次"，是"执行一段工作"。真正能用的 Agent 系统 = **强工具抽象 + 评估机制 + 成本控制 + 沙箱安全** 四位一体。演示很酷，工业化落地非常难。
@@ -307,8 +307,8 @@ Agent 访问湖仓通常通过：
 
 ## 工业案例 · Agentic 场景切面
 
-!!! info "本节定位 · 场景切面"
-    Agentic 工作流是 2024-2026 新兴场景 · 公开的大厂工业案例集中在**商业数据平台的 Agent 产品**上。不重复平台全栈（见 [cases/](../cases/index.md)）· 聚焦 Agent 实现。
+!!! note
+    Agentic 工作流是 2024-2026 新兴场景 · 公开工业案例集中在**商业数据平台的 Agent 产品**上。
 
 ### Databricks · Genie Agents（BI + Agent 融合）
 
@@ -329,7 +329,7 @@ Agent 访问湖仓通常通过：
 3. **L2 → L3 渐进**：
    - 早期 Genie 是 L2（受限流程 · 强约束 SQL）
    - 2024-2026 逐步 L3（计划 · 反思 · 多步执行）
-   - 符合本页"L1/L2/L3 成熟度"推进路径
+   - 符合本章"L1/L2/L3 成熟度"推进路径
 
 **踩坑**（来自 [cases/databricks §9](../cases/databricks.md)）：
 - Genie 早期版本 **SQL 生成准确率**有限 · 需多轮优化
@@ -374,8 +374,8 @@ Agent 访问湖仓通常通过：
 
 ### 对中型团队的启示
 
-- **L1 → L2 先落地** · 不追 L3（工业教训）· 本页 L1/L2/L3 成熟度路径和 Databricks Genie 演进一致
-- **Tool 治理比 Tool 数量重要** · 和本页"Tool 设计"呼应
+- **L1 → L2 先落地** · 不追 L3（工业教训）· 本章 L1/L2/L3 成熟度路径和 Databricks Genie 演进一致
+- **Tool 治理比 Tool 数量重要** · 和本章"Tool 设计"呼应
 - **合规场景选 Snowflake Cortex · 灵活需求选 Databricks Genie · 自建选开源**（LangGraph / AutoGen）
 
 ---

@@ -365,8 +365,8 @@ CDP 没有标准 benchmark，用公开数据跑全流程：
 
 ## 工业案例 · CDP 场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 分析 2 家在 **CDP / 用户分群场景**的独特做法。CDP 公开资料相对少（商业敏感）· 以阿里为主。
+!!! note
+    CDP 公开资料相对少（商业敏感）· 以阿里为主 · LinkedIn 为合理推断。
 
 ### 阿里巴巴 · 电商 CDP（大规模画像 + 双 11 实时触达）
 
@@ -393,7 +393,7 @@ CDP 没有标准 benchmark，用公开数据跑全流程：
    - OLAP 分群查询 + 轻量 OLTP 标签更新
    - 商家后台实时看画像 / 标签 / 触达效果
 
-**规模** `[来源未验证 · 量级参考 · 阿里云官方 / 双 11 战报]`：
+**规模** `[量级参考]`：
 - 画像宽表**数百列** · 亿级行
 - 标签**数千维度**
 - 实时大屏 QPS **数百万**
@@ -402,7 +402,7 @@ CDP 没有标准 benchmark，用公开数据跑全流程：
 - MaxCompute 闭源 + 开源栈**早期互读困难** · CDP 跨栈 ETL 成本高
 - Hologres 向量能力 2024 才 GA · **向量画像（embedding-based 分群）晚追**
 
-**和本页 CDP 架构的对比**：
+**对照与复用**：
 - ✅ OneID + 画像宽表 + 标签体系 + 触达回流闭环 · 完全对齐
 - ✅ **Paimon + Flink CDC** 组合对中型电商团队最可复制
 - ⚠️ 双 11 规模**过度** · 中型团队 T+1 + 小时级已足够
@@ -450,6 +450,12 @@ CDP 没有标准 benchmark，用公开数据跑全流程：
 - [BI on Lake](bi-on-lake.md) · [Real-time Lakehouse](real-time-lakehouse.md) · [欺诈检测](fraud-detection.md)
 - [推荐系统](recommender-systems.md) · [离线训练数据流水线](offline-training-pipeline.md)
 - [业务场景全景](business-scenarios.md)
+
+## 数据来源
+
+工业案例的规模量级标 `[量级参考]`· 主要来源：
+- 阿里 CDP：阿里云官方技术博客 · 双 11 历年战报（数字为公开披露范围内 · 未独立验证）
+- LinkedIn：本节为**合理推断**· 具体分群方案公开有限
 
 ## 延伸阅读
 

@@ -8,8 +8,8 @@ status: stable
 
 # 多模检索流水线
 
-!!! info "本页是场景视角"
-    机制深挖见：[多模 Embedding](../retrieval/multimodal-embedding.md)（CLIP / SigLIP / Jina CLIP v2 等模型矩阵）· [多模检索模式](../retrieval/multimodal-retrieval-patterns.md)（5 种 pattern 含 ColBERT / Late Interaction）· [Hybrid Search](../retrieval/hybrid-search.md)（dense+sparse 融合）· [向量数据库](../retrieval/vector-database.md)。本页**讲端到端流水线编排 + SLO 预算 + 湖上多模表建模** · 不复述 embedding / 检索机制原理。
+!!! info "机制深挖"
+    [多模 Embedding](../retrieval/multimodal-embedding.md)（CLIP / SigLIP / Jina CLIP v2 等模型矩阵）· [多模检索模式](../retrieval/multimodal-retrieval-patterns.md)（5 种 pattern 含 ColBERT / Late Interaction）· [Hybrid Search](../retrieval/hybrid-search.md)（dense+sparse 融合）· [向量数据库](../retrieval/vector-database.md)。
 
 !!! tip "一句话场景"
     给定"文本查询、图像查询或文 + 图混合查询"，在一张**包含图 / 文 / 音 / 视资产**的湖表上返回 Top-K 最相关结果。
@@ -123,7 +123,7 @@ flowchart LR
 
 ## SLO 预算详细拆解
 
-多模检索 p95 < 400ms 端到端分解（典型经验 `[来源未验证 · 依模型 / 规模差异大]`）：
+多模检索 p95 < 400ms 端到端分解（典型经验 · 依模型和规模差异大）：
 
 | 阶段 | 预算 |
 |---|---|
@@ -171,9 +171,6 @@ flowchart LR
 
 ## 工业案例 · 多模检索场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 3 家在**多模检索场景**的独特做法。
-
 ### Pinterest · 多模推荐 + 搜索（PinSage + Pixie + 多模 embedding）
 
 **为什么值得学**：Pinterest 业务本质是**图片发现 + 兴趣组织** · 多模推荐是**核心业务场景**而非附加能力。**全栈视角见 [cases/pinterest](../cases/pinterest.md)**。
@@ -197,10 +194,10 @@ flowchart LR
    - **过滤感知 ANN** 在推荐场景关键
    - 规模：Homefeed p95 < 300ms · 每请求处理数十亿候选
 
-**和本页架构对比**：
+**对照与复用**：
 - ✅ 多 embedding 分列（CLIP / BGE / audio）对齐 Pinterest 经验
 - ⚠️ 自研 ANN 对中小团队过度 · 通用向量库（LanceDB / Milvus）千万级候选够用
-- ⚠️ GNN 召回训练成本高 · 本页架构的 dense + sparse + rerank 三段式对多数团队更友好
+- ⚠️ GNN 召回训练成本高 · 本章架构的 dense + sparse + rerank 三段式对多数团队更友好
 
 ### 阿里巴巴 · 电商多模搜索（OpenSearch 向量 + Flink + Hologres）
 
@@ -223,9 +220,9 @@ flowchart LR
    - 下架 / 更新 也实时
    - Paimon Changelog Producer 驱动
 
-**规模** `[来源未验证]`：双 11 多模搜索 QPS 数百万 · 商品池数亿。
+**规模** `[量级参考]`：双 11 多模搜索 QPS 数百万 · 商品池数亿。
 
-**和本页架构对比**：
+**对照与复用**：
 - ✅ Paimon + Flink CDC 实时更新是中国团队可直接复制的路径
 - ⚠️ OpenSearch 阿里云商业产品 · 开源替代用 Milvus / LanceDB
 - ⚠️ 双 11 规模过度 · 中型电商团队参考架构不参考规模
@@ -250,8 +247,8 @@ flowchart LR
    - `ai_caption`（图像描述）· `ai_transcribe`（音频转写）· `ai_embed`（向量化）
    - **SQL 里直接做多模 ETL**（见 [query-engines/compute-pushdown](../query-engines/compute-pushdown.md)）
 
-**和本页架构对比**：
-- ✅ UC Volume + Vector Search 架构和本页多模表设计思路一致
+**对照与复用**：
+- ✅ UC Volume + Vector Search 架构和本章多模表设计思路一致
 - ⚠️ 商业锁定深 · 开源栈用 Iceberg + LanceDB / Milvus + Spark 替代
 
 ### 跨案例综合对比
@@ -284,6 +281,10 @@ flowchart LR
 - 架构：[Lake + Vector](../unified/lake-plus-vector.md) · [多模数据建模](../unified/multimodal-data-modeling.md)
 - 机制：[HNSW](../retrieval/hnsw.md) · [IVF-PQ](../retrieval/ivf-pq.md) · [多模检索模式](../retrieval/multimodal-retrieval-patterns.md)
 - 工业案例：[Pinterest](../cases/pinterest.md) · [阿里巴巴](../cases/alibaba.md) · [Databricks](../cases/databricks.md)
+
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：Pinterest Engineering Blog · 阿里云官方博客 · Databricks Tech Blog。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
 
 ## 延伸阅读
 

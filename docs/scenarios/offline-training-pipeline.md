@@ -433,16 +433,13 @@ for epoch in range(10):
 
 ## 7.5 工业案例 · 离线训练流水线场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**离线训练流水线场景**的独特做法。
-
 ### Uber · Michelangelo 的训练数据流水线
 
 **核心特点**：
 - **Palette / Genoa Feature Store** 作训练数据底座
-- **PIT Join 工程化**（见本页 §PIT）· Michelangelo 内置
+- **PIT Join 工程化**（见 §PIT）· Michelangelo 内置
 - **训推一致性**是 Michelangelo 核心卖点（离线 · 在线特征同算）
-- 规模：**5000+ active 模型 · 每日重训多数** `[来源未验证]`
+- 规模：**5000+ active 模型 · 每日重训多数** `[量级参考]`
 
 **启示**：Feature Store 是 MLOps 的**数据底座** · PIT Join + snapshot 锁定是可靠训练的基础。详见 [cases/uber §5.2](../cases/uber.md)。
 
@@ -477,7 +474,11 @@ for epoch in range(10):
 - **特征表无 TTL / 不 compact**：查询越来越慢
 - **标签观测时间忽略**：30 天未购买要等 30 天才有 label
 
-## 9. 相关 · 延伸阅读
+## 9. 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：Uber Engineering Blog（Michelangelo 系列）· Netflix Tech Blog（Metaflow 系列）。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
+
+## 10. 相关 · 延伸阅读
 
 ### 相关页面
 

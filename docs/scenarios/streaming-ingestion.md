@@ -8,8 +8,8 @@ status: stable
 
 # 流式入湖
 
-!!! info "本页是场景视角"
-    机制深挖见：[CDC 内部原理](../pipelines/cdc-internals.md)（Debezium / Flink CDC / Paimon CDC）· [Pipeline 韧性](../pipelines/pipeline-resilience.md)（exactly-once / 回填 / DLQ）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 语义）· [Flink](../query-engines/flink.md)。本页**讲入湖链路编排 + SLO 预算 + 多源合流** · 不复述 CDC / Flink 机制原理。
+!!! info "机制深挖"
+    [CDC 内部原理](../pipelines/cdc-internals.md)（Debezium / Flink CDC / Paimon CDC）· [Pipeline 韧性](../pipelines/pipeline-resilience.md)（exactly-once / 回填 / DLQ）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 语义）· [Flink](../query-engines/flink.md)。
 
 !!! tip "一句话场景"
     把**OLTP 业务库 / 日志 / 事件流**持续、低延迟地落到湖表，让后续的 BI / AI 负载从湖读到**准实时**的数据。
@@ -110,16 +110,13 @@ flowchart LR
 
 ## 工业案例 · 流式入湖场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**流式入湖场景**的独特做法。
-
 ### LinkedIn · Kafka 全家桶
 
 **核心做法**（见 [cases/linkedin §5.1](../cases/linkedin.md)）：
 - **Kafka 作核心事件总线** · 所有服务"生产方只写一次 · 消费方订阅"
 - **Brooklin** · 数据分发（Kafka → 其他系统）· 2017 开源
 - **Samza → Flink**（2020+）· 流处理
-- 规模：**7000+ Kafka brokers · 每日数百 PB 事件** `[来源未验证 · 量级参考]`
+- 规模：**7000+ Kafka brokers · 每日数百 PB 事件** `[量级参考]`
 
 **启示**：Kafka 作"**公司统一事件总线**"是流式入湖的**基础范式** · 不要让每个业务自己造。
 
@@ -146,6 +143,10 @@ flowchart LR
 - [Apache Paimon](../lakehouse/paimon.md)
 - [Apache Flink](../query-engines/flink.md)
 - [Compaction](../lakehouse/compaction.md)
+
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：LinkedIn Engineering Blog（Kafka / Brooklin 系列）· 阿里云官方博客。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
 
 ## 延伸阅读
 

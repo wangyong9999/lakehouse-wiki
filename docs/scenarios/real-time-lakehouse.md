@@ -10,8 +10,8 @@ status: stable
 
 # Real-time Lakehouse · 端到端分钟级一体化
 
-!!! info "本页是场景视角"
-    机制深挖见：[Paimon](../lakehouse/paimon.md)（Primary Key 表 / Changelog Producer / Compaction 机制）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 原理）· [Flink](../query-engines/flink.md)（checkpoint + state） · [Pipeline 韧性](../pipelines/pipeline-resilience.md)。本页**讲端到端延迟预算 + 三条链路并行编排** · 不复述 Paimon / Flink 机制原理。
+!!! info "机制深挖"
+    [Paimon](../lakehouse/paimon.md)（Primary Key 表 / Changelog Producer / Compaction 机制）· [Streaming Upsert / CDC](../lakehouse/streaming-upsert-cdc.md)（入湖 upsert 原理）· [Flink](../query-engines/flink.md)（checkpoint + state） · [Pipeline 韧性](../pipelines/pipeline-resilience.md)。
 
 !!! tip "一句话场景"
     让 **BI 仪表盘 + AI 检索 + 数据科学探索** 都能读到**分钟级新鲜度**的数据，而不是 T+1。核心方程式：Flink CDC + Paimon Primary Key 表 + **Compaction 跟得上**。
@@ -215,16 +215,13 @@ INSERT INTO paimon_orders SELECT * FROM source_orders;
 
 ## 工业案例 · 流式湖仓场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 聚焦 2 家在**流式湖仓场景**的独特做法。
-
 ### 阿里巴巴 · Paimon + Flink CDC
 
 **核心特点**（见 [cases/alibaba §5.1-5.2](../cases/alibaba.md)）：
 - **Paimon LSM-tree 存储** · 为流式 upsert 优化（vs Iceberg Parquet 文件式）
 - **Flink CDC**（MySQL/PG/MongoDB/Oracle 原生 CDC source）
 - **Changelog Producer** 自动产 CDC · 下游消费增量
-- 双 11 规模：**数十万 TPS 订单 · 数百万 QPS 实时大屏** `[来源未验证]`
+- 双 11 规模：**数十万 TPS 订单 · 数百万 QPS 实时大屏** `[量级参考]`
 
 **启示**：Paimon + Flink CDC 组合是**中国团队做流式湖仓最可复制的路径**。详见 [lakehouse/paimon](../lakehouse/paimon.md)。
 
@@ -263,6 +260,10 @@ INSERT INTO paimon_orders SELECT * FROM source_orders;
 - [事件时间 / Watermark](../pipelines/event-time-watermark.md)
 - [Apache Paimon](../lakehouse/paimon.md) · [Apache Flink](../query-engines/flink.md)
 - [流式入湖场景](streaming-ingestion.md) · [BI on Lake](bi-on-lake.md)
+
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：阿里云官方博客 · 双 11 历年战报 · Uber Engineering Blog（Hudi 系列）。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
 
 ## 延伸阅读
 

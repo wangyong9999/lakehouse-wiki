@@ -281,16 +281,13 @@ flowchart LR
 
 ## 工业案例 · 推荐场景深度切面
 
-!!! info "本节定位 · 场景切面视角"
-    本节分析 3 家工业代表在**推荐场景**的独特做法 · 不重复公司全栈介绍（那在 [cases/](../cases/index.md) 各深度页）。**切入角度**：每家**如何做推荐** · 关键数字 · 踩过的坑 · 和本页推荐架构的对比。
-
 ### Pinterest · 多模推荐工业代表（PinSage + Pixie + Homefeed）
 
 **为什么值得学**：Pinterest 是**纯推荐业务公司**（核心产品 Pin + Board 推荐）· 公开论文质量最高。**全栈视角深度页见 [cases/pinterest](../cases/pinterest.md)**。
 
 **在推荐场景的独特做法**：
 
-1. **四段式推荐系统**（和本页四阶段流水线对应）：
+1. **四段式推荐系统**（和本章四阶段流水线对应）：
    - **召回**：PinSage（GNN · SIGKDD 2018）+ Pixie（实时 random walk · SIGMOD 2018）+ 内容 embedding + 协同过滤 **多路并行**
    - **粗排 / 精排**：LTR / GBDT / DNN
    - **重排**：多样性 · 新鲜度 · 广告插入
@@ -308,7 +305,7 @@ flowchart LR
    - 图结构 embedding（PinSage）
    - **每种独立训练 + 独立 ANN 索引** · 召回时多 index 并行查询 · 融合 Top-K
 
-4. **规模数字** `[来源未验证 · 量级参考 · 来自 Pinterest Engineering Blog / 论文]`：
+4. **规模数字** `[量级参考]`：
    - 5 亿+ MAU · 万亿级 Pin
    - Homefeed p95 端到端 **< 300ms**
    - 每请求处理**数十亿候选**（多级剪枝）
@@ -319,10 +316,10 @@ flowchart LR
 - **GNN 推理成本高** · 2024+ 有向更轻量召回回归的讨论
 - **A/B 实验疲劳**（实验重叠 / proxy metric / 新奇效应）· 详细讨论见 [cases/pinterest §9](../cases/pinterest.md)
 
-**和本页推荐架构的对比**：
-- ✅ Pinterest 四段式和本页四阶段完全对齐 · 可复用
+**对照与复用**：
+- ✅ Pinterest 四段式和本章四阶段完全对齐 · 可复用
 - ⚠️ 自研 ANN 对多数团队**过度** · 通用向量库（Milvus / LanceDB）在千万级候选池是够用的
-- ⚠️ GNN 召回对**训练成本**有硬门槛 · 本页推荐路径（Feature Store + 向量召回）对中型团队更友好
+- ⚠️ GNN 召回对**训练成本**有硬门槛 · 本章推荐路径（Feature Store + 向量召回）对中型团队更友好
 
 ### 阿里巴巴 · 电商推荐 + 流式湖仓底座
 
@@ -340,7 +337,7 @@ flowchart LR
    - 双 11 实时大屏 + 商家后台推荐指标都在 Hologres
    - **2024+ 向量能力 GA** · 向量召回也可以走 Hologres（对抗 Milvus / Qdrant）
 
-3. **规模数字** `[来源未验证 · 量级参考 · 来自阿里云官方博客 / 双 11 战报]`：
+3. **规模数字** `[量级参考]`：
    - 双 11 峰值**数十万 TPS 订单**
    - 实时大屏 QPS **数百万**
    - Paimon 内部表数**数万级**（大规模业务）
@@ -350,7 +347,7 @@ flowchart LR
 - **ProxiMA 自研 ANN 不开源** · 外部团队接触不到 · 通用向量库生态压力下逐步被动
 - **Hologres 向量能力 2024 才 GA** · 比 Milvus 晚 2-3 年 · "晚跟进补课"代价大
 
-**和本页推荐架构的对比**：
+**对照与复用**：
 - ✅ **Flink CDC + Paimon** 组合**最适合中国团队做流式推荐**（Hudi 包袱重 · Iceberg 流弱）
 - ✅ Hologres HSAP 思想对**实时看板 + 推荐混合场景**有参考价值
 - ⚠️ 阿里双 11 量级的架构**对中型团队是过度工程** · 规模打折看
@@ -365,7 +362,7 @@ flowchart LR
    - 写路径**走 Kafka push**（不是客户端直写）· 解决写 QPS 失控
    - **批量加载 + 实时增量**一等支持（通用 KV 把 bulk load 当次要功能）
    - Read-optimized 存储 · 对 ML feature 读负载极致优化
-   - 规模 `[来源未验证]`：**百万级 QPS · ms 级 p99**
+   - 规模 `[量级参考]`：**百万级 QPS · ms 级 p99**
 
 2. **Dense + 结构化 + Learning-to-rank 三元组**：
    - Dense embedding（用户 + 内容 embedding）
@@ -381,9 +378,9 @@ flowchart LR
 - **Samza → Flink 迁移**展示了"**敢承认自研不是最优**"的工程文化 —— 连推荐流处理系统也愿意换
 - **Feathr 捐 Apache** 说明 LinkedIn 的"单品开源 + 社区化"长期策略在推荐基础设施上延续
 
-**和本页推荐架构的对比**：
+**对照与复用**：
 - ✅ **Venice 设计哲学**（push-based write / read-optimized / batch + incremental）是任何 Feature Store 在线 store 的参考
-- ✅ Dense + 结构化 + LTR 三元组的工程组合 · 是本页推荐链路的标杆实现
+- ✅ Dense + 结构化 + LTR 三元组的工程组合 · 是本章推荐链路的标杆实现
 - ⚠️ Venice 对应 ≤ 10 万 QPS 场景可直接用 Redis · 不必上 Venice
 
 ### 跨案例综合对比
@@ -425,6 +422,15 @@ flowchart LR
 - [Embedding](../retrieval/embedding.md) · [HNSW](../retrieval/hnsw.md) · [Hybrid Search](../retrieval/hybrid-search.md)
 - [Real-time Lakehouse](real-time-lakehouse.md)（近实时个性化的底座）
 - [业务场景全景](business-scenarios.md)
+
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：
+- Pinterest：Pinterest Engineering Blog · PinSage / Pixie 论文（SIGKDD 2018 · SIGMOD 2018）
+- 阿里：阿里云官方技术博客 · 双 11 历年战报
+- LinkedIn Venice：LinkedIn Engineering Blog · Venice 官方文档
+
+数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
 
 ## 延伸阅读
 

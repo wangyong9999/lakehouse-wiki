@@ -10,8 +10,8 @@ status: stable
 
 # Text-to-SQL 平台
 
-!!! info "本页是场景视角"
-    机制深挖见：[BI × LLM](../bi-workloads/bi-plus-llm.md)（2026 产品全景 · 4 条架构路径）· [语义层](../bi-workloads/semantic-layer.md)（SL 是 LLM 的知识抓手）· [RAG](../ai-workloads/rag.md)（Schema RAG 技术基础）。本页**讲业务需求 + 工程护栏** · 不复述 RAG / SL 机制原理。
+!!! info "机制深挖"
+    [BI × LLM](../bi-workloads/bi-plus-llm.md)（2026 产品全景 · 4 条架构路径）· [语义层](../bi-workloads/semantic-layer.md)（SL 是 LLM 的知识抓手）· [RAG](../ai-workloads/rag.md)（Schema RAG 技术基础）。
 
 !!! tip "一句话理解"
     让**业务人员用自然语言查询湖仓**。"给我看过去 30 天华北区 iPhone 销量"→ 系统自动写 SQL 并返回结果。2024-2025 年 LLM + Schema 理解 + 权限穿透 → 终于可用。**下一代 BI 的关键入口**。
@@ -299,9 +299,6 @@ class TextToSQLAgent:
 
 ## 9.5 工业案例 · Text-to-SQL 场景切面
 
-!!! info "本节定位 · 场景切面"
-    不重复公司全栈（见 [cases/](../cases/index.md)）· 分析 2 家在 **Text-to-SQL 场景**的独特做法。
-
 ### Databricks · Genie（AI/BI Genie · 2024+）
 
 **为什么值得学**：Databricks Genie 是**商业平台 Text-to-SQL 的代表**。**全栈视角见 [cases/databricks](../cases/databricks.md)**。
@@ -321,7 +318,7 @@ class TextToSQLAgent:
    - Dashboard 上"问一下"· 生成 SQL · 可视化 · 可迭代
    - 类似 ChatGPT 但问 BI 数据
 
-**规模** `[来源未验证]`：Genie 2024+ 在 Databricks 客户群快速增长。
+**规模** `[量级参考]`：Genie 2024+ 在 Databricks 客户群快速增长。
 
 **踩坑**（来自 [cases/databricks §9](../cases/databricks.md)）：早期 SQL 生成准确率有限 · schema 复杂场景退化明显。
 
@@ -387,6 +384,10 @@ class TextToSQLAgent:
 - **vs [Agentic Workflows](agentic-workflows.md)**：Text-to-SQL 是 Agent 的一种 Tool
 - **vs [RAG on Lake](rag-on-lake.md)**：共用 Schema RAG 技术
 
+## 数据来源
+
+工业案例规模数字标 `[量级参考]`· 来源：Databricks AI/BI Genie 官方博客 · Snowflake Cortex Analyst 官方文档。数字为公开披露范围内 · 未独立验证 · 仅作规模量级的参考。
+
 ## 延伸阅读
 
 - **[Spider dataset](https://yale-lily.github.io/spider)** · **[BIRD benchmark](https://bird-bench.github.io/)**
@@ -399,5 +400,5 @@ class TextToSQLAgent:
 
 - [业务场景全景](business-scenarios.md) · [BI on Lake](bi-on-lake.md) · [Agentic Workflows](agentic-workflows.md)
 - [RAG](../ai-workloads/rag.md) · [MCP](../ai-workloads/mcp.md) · [向量数据库](../retrieval/vector-database.md)
-- [BI × LLM](../bi-workloads/bi-plus-llm.md) · BI 视角的 LLM 入口 · 本页是场景编排对照
+- [BI × LLM](../bi-workloads/bi-plus-llm.md) · BI 视角的 LLM 入口（场景编排对照）
 - [语义层](../bi-workloads/semantic-layer.md) · Text-to-SQL 经 SL 中介是 2026 主流路径
