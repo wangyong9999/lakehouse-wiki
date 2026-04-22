@@ -329,7 +329,7 @@ flowchart TD
 ### 相关对比
 
 - [ANN 索引对比](ann-index-comparison.md) · [稀疏检索对比](sparse-retrieval.md) · [Rerank 模型横比](rerank-models.md)
-- [向量检索前沿](../retrieval/embedding.md) · [HNSW](../retrieval/hnsw.md) · [IVF-PQ](../retrieval/ivf-pq.md) · [DiskANN](../retrieval/diskann.md)
+- [Quantization](../retrieval/quantization.md) · [Sparse Retrieval](../retrieval/sparse-retrieval.md) · [HNSW](../retrieval/hnsw.md) · [IVF-PQ](../retrieval/ivf-pq.md) · [DiskANN](../retrieval/diskann.md)
 
 ### 权威阅读
 

@@ -344,7 +344,7 @@ Iceberg spec 持续演进（v1 → v2 → v3）靠 Netflix + Apple + LinkedIn + 
 - [Iceberg](../lakehouse/iceberg.md) —— Netflix 创造的协议 canonical
 - [Catalog 策略](../catalog/strategy.md) —— Metacat 联邦 vs 统一 Catalog 对比
 - [MLOps 生命周期](../ml-infra/mlops-lifecycle.md) · [Experiment Tracking](../ml-infra/experiment-tracking.md) —— Metaflow 的机制面
-- [Iceberg v3 预览](../lakehouse/iceberg-v3.md) —— Netflix 参与的 spec 演进
+- [Iceberg v3](../lakehouse/iceberg-v3.md) —— Netflix 参与的 spec 演进
 - [案例 · LinkedIn](linkedin.md) · [案例 · Uber](uber.md) —— 同代案例对比
 - [案例综述](studies.md) —— 7 家横比矩阵
 - [三代数据系统演进史](../data-systems-evolution.md) —— 历史背景

@@ -23,7 +23,7 @@ status: stable
     - **和 LLM Gateway 分工**：**Gateway 是代理层**（路由 · 限流 · 审计）· **Inference 是执行层**（模型 · KV · batch）
 
 !!! info "本页说明"
-    本页从 `frontier/llm-inference-opt.md` 下沉而来（按 [ADR 0009](../adr/0009-frontier-to-main-migration.md) · vLLM 2025 过 1.0 · 主流生产工具链 · 已满足下沉门槛）。原 frontier 页保留为 superseded stub。
+    本页从原 `frontier/llm-inference-opt.md` 下沉（按 [ADR 0009](../adr/0009-frontier-to-main-migration.md) · vLLM 2025 过 1.0 · 主流生产工具链）· frontier/ 章节已按 [ADR 0010](../adr/0010-abolish-frontier-chapter.md) 废除。
 
 ## 1. 业务痛点 · 直接跑 Transformers 为什么慢
 

@@ -213,8 +213,8 @@ last_reviewed: 2026-04-21
 - **下游消费**：[scenarios/](../scenarios/index.md)（推荐 / 风控 / 离线训练流水线 / Feature Serving 端到端业务）
 - **横向对比**：[compare/feature-store-comparison](../compare/feature-store-comparison.md)
 
-## 前沿跳转
+## 相邻章节
 
-- [AI 治理](../ops/compliance.md) —— EU AI Act · Red Teaming 组织流程（本章 model-registry §合规字段是工程落地）
-
-**注**：原 `frontier/llm-inference-opt.md` 已按 [ADR 0009](../adr/0009-frontier-to-main-migration.md) 下沉为 [ai-workloads/llm-inference.md](../ai-workloads/llm-inference.md)。
+- [AI 合规](../ops/compliance.md) —— EU AI Act / NIST AI RMF / 中国生成式 AI 管理办法（本章 model-registry §合规字段是工程落地）
+- [Guardrails §7 Red Teaming](../ai-workloads/guardrails.md) —— 工程护栏 + 对抗测试方法
+- [LLM Inference](../ai-workloads/llm-inference.md) —— LLM 推理栈（vLLM / SGLang 等）

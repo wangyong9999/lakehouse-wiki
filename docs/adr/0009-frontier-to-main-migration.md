@@ -1,12 +1,16 @@
 ---
 title: 0009 frontier → main 下沉判据 · 成熟度门槛 + 周期审视
 type: adr
-status: accepted
+status: partially-superseded
 date: 2026-04-21
 deciders: [wangyong9999]
+superseded_partial_by: 0010-abolish-frontier-chapter
 ---
 
 # 0009. frontier → main 下沉判据
+
+!!! warning "部分 supersede（2026-04-22）"
+    本 ADR 的前提是 **保留 `frontier/` 作为 incubator**。2026-04-22 [ADR 0010](0010-abolish-frontier-chapter.md) 废除 `frontier/` 章节 · 前沿内容按主题归属。本 ADR 的"下沉判据（门槛 A / B / C）"**仍有效** · 转为"新内容写入机制章的 §前沿节"或"规模大时独立子页"的判断框架。"保留 frontier"的前提失效。
 
 ## 背景
 

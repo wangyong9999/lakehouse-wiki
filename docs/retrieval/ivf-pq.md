@@ -264,7 +264,7 @@ table.create_index(
 - **[*Billion-scale similarity search with GPUs* (Johnson et al., 2017)](https://arxiv.org/abs/1702.08734)** —— Faiss 论文
 - **[Faiss wiki](https://github.com/facebookresearch/faiss/wiki)** · **[Faiss Tutorial](https://github.com/facebookresearch/faiss/tree/main/tutorial)**
 - **[Milvus IVF 文档](https://milvus.io/docs/index.md)**
-- **[向量检索前沿](../retrieval/embedding.md)** —— 对比新量化方法
+- **[Quantization](quantization.md)** —— SQ / PQ / BQ / Matryoshka 对比
 
 ## 相关
 

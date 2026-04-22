@@ -148,7 +148,7 @@ status: stable
 - 领域分布漂移时损失更大
 - 不是所有系统都支持
 
-详见 [向量检索前沿](../retrieval/embedding.md)。
+详见 [Quantization](../retrieval/quantization.md) · [Sparse Retrieval](../retrieval/sparse-retrieval.md)。
 
 ---
 
@@ -308,7 +308,7 @@ flowchart TD
 ### 相关对比
 
 - [向量数据库对比](vector-db-comparison.md) · [Embedding 模型横比](embedding-models.md) · [稀疏检索对比](sparse-retrieval.md)
-- [向量检索前沿](../retrieval/embedding.md) —— Binary / Matryoshka / ColBERT 等新范式
+- [Quantization](../retrieval/quantization.md) · [Sparse Retrieval](../retrieval/sparse-retrieval.md) —— Binary / Matryoshka / ColBERT 等新范式
 
 ### 权威阅读
 

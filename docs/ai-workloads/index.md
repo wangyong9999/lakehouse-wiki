@@ -42,7 +42,7 @@ last_reviewed: 2026-04-21
 
 这一层是 **LLM-specific runtime** · 和 ml-infra 的通用 model serving 分工（本章讲 LLM specific · ml-infra 讲通用 ML）。
 
-- [**LLM Inference**](llm-inference.md) ⭐ —— vLLM / SGLang / TensorRT-LLM / Dynamo · KV cache / 连续批次 / PagedAttention · Serverless 托管对比（按 [ADR 0009](../adr/0009-frontier-to-main-migration.md) 从 frontier 下沉）
+- [**LLM Inference**](llm-inference.md) ⭐ —— vLLM / SGLang / TensorRT-LLM / Dynamo · KV cache / 连续批次 / PagedAttention · Serverless 托管对比
 - [**LLM Gateway**](llm-gateway.md) —— 统一代理 · 限流 / 重试 / 缓存 / 成本监控 / 路由 / 灰度
 - [**Semantic Cache**](semantic-cache.md) —— 语义缓存 + **系统级 Prompt Caching**（Anthropic / OpenAI / Gemini）机制对比
 
@@ -97,13 +97,13 @@ last_reviewed: 2026-04-21
 - [Feature Store 横比](../compare/feature-store-comparison.md)（ML 平台侧）
 - [Embedding 模型横比](../compare/embedding-models.md) · [Rerank 模型横比](../compare/rerank-models.md)（检索侧）
 
-## 前沿 · 跳转 frontier（话题仍在演进）
+## 2024-2026 新方向
 
-- [RAG 前沿](../ai-workloads/rag.md) —— CRAG / Self-RAG / Agentic RAG 深度
-- [向量检索前沿](../retrieval/embedding.md) —— RaBitQ / BQ / Matryoshka 前沿部分
-- [AI 治理](../ops/compliance.md) —— EU AI Act / Red Teaming 组织流程（和本章 [guardrails](guardrails.md) 工程层分工）
+- [RAG §4 高级范式](rag.md) —— Contextual Retrieval / CRAG / Self-RAG / Agentic RAG / GraphRAG / Multi-Query / HyDE / ColBERT v2 / LLMLingua
+- [Embedding](../retrieval/embedding.md) · [Quantization](../retrieval/quantization.md) · [Sparse Retrieval](../retrieval/sparse-retrieval.md) —— Matryoshka / Binary / SPLADE / BM42 / ColBERT
+- [AI 合规](../ops/compliance.md)（法规层）· [Guardrails §7 Red Teaming](guardrails.md)（工程层 + 对抗测试）
 
-**注**：原 `frontier/llm-inference-opt.md` 已下沉为本章 [LLM Inference](llm-inference.md)（按 [ADR 0009](../adr/0009-frontier-to-main-migration.md)）。
+**注**：参见 [ADR 0010](../adr/0010-abolish-frontier-chapter.md) · 原 frontier/ 章节已按主题归属到机制章。
 
 ## 底层依赖
 

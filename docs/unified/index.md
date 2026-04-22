@@ -246,7 +246,6 @@ flowchart LR
     sc[scenarios<br/>端到端业务]
     cs[cases<br/>工业参考]
     cmp[compare<br/>横比]
-    fr[frontier<br/>前沿]
   end
   
   uni -->|指向| lh & ret & cat & qe & ai & ml
@@ -267,5 +266,5 @@ flowchart LR
 
 - **实践参考**：[cases/](../cases/index.md) —— Netflix / LinkedIn / Uber / 六家综述
 - **业务落地**：[scenarios/rag-on-lake](../scenarios/rag-on-lake.md) · [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
-- **新方向跟踪**：[Iceberg v3](../lakehouse/iceberg-v3.md) · [Vendor Landscape](../vendor-landscape.md) · [Embedding 前沿](../retrieval/embedding.md)
+- **新方向跟踪**：[Iceberg v3](../lakehouse/iceberg-v3.md) · [Vendor Landscape](../vendor-landscape.md) · [Embedding](../retrieval/embedding.md)
 - **版本 / 数字基线**：[benchmarks](../benchmarks.md)

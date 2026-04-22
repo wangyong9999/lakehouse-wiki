@@ -201,7 +201,7 @@ A：可以，frontmatter 写数组或用 team 名。
 A：超过 6 个月的页面在季度 review 时优先刷新；如果内容仍准确，只更新日期即可。
 
 **Q：发现一页偏 hype / 过度乐观怎么办？**
-A：开 Outdated Content Issue；或直接 PR 加"现实检视"段落（参考 frontier 页面范式）。
+A：开 Outdated Content Issue；或直接 PR 加"现实检视"段落（范式：已验证 vs 论文声称 vs 坏信号识别）。
 
 ---
 
