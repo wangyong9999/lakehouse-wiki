@@ -99,9 +99,9 @@ hide:
 
 ## 常用速查
 
-- [ANN 参数速查](../cheatsheets/ann-params.md)
-- [向量 SQL 语法对照](../cheatsheets/sql-vector.md)
-- [Embedding 模型速查](../cheatsheets/embedding-quickpick.md)
+- [ANN 索引对比](../compare/ann-index-comparison.md)
+- [向量数据库 §7 多引擎 SQL](../retrieval/vector-database.md)
+- [Embedding](../retrieval/embedding.md)
 
 ## 横向对比
 

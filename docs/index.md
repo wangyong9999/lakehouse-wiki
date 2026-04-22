@@ -164,9 +164,9 @@ flowchart BT
     ---
     [ADR](adr/index.md) · 0001 站点框架、0002 Iceberg、0003 LanceDB、0004 Catalog、0005 引擎组合
 
--   :material-flash: **速查单**
+-   :material-flash: **参考查询**
     ---
-    [Iceberg](cheatsheets/iceberg.md) · [ANN 参数](cheatsheets/ann-params.md) · [向量 SQL](cheatsheets/sql-vector.md) · [Embedding](cheatsheets/embedding-quickpick.md)
+    [Iceberg §维护运维](lakehouse/iceberg.md) · [ANN 索引对比](compare/ann-index-comparison.md) · [向量数据库 §多引擎 SQL](retrieval/vector-database.md) · [Embedding 选型](retrieval/embedding.md)
 
 </div>
 
@@ -271,7 +271,6 @@ flowchart BT
 - **[横向对比 `compare/`](compare/index.md)** — 16 大选型决策
 - **[场景指南 `scenarios/`](scenarios/index.md)** — 10 个业务深挖 + 4 个架构视角
 - **[学习路径 `learning-paths/`](learning-paths/index.md)** — 4 条时间脚手架
-- **[速查单 `cheatsheets/`](cheatsheets/index.md)** — 4 张一页式参数速查
 - **[按技术栈索引](index-by-technology.md)** — AWS / GCP / Azure / Databricks / Snowflake / 开源 / 国产化
 - **[ADR `adr/`](adr/index.md)** — 团队技术决策记录
 - **[FAQ](faq.md)** — 跨目录速答

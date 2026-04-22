@@ -399,7 +399,107 @@ ALTER TABLE events CREATE BRANCH `feature-xyz` AS OF VERSION 1234;
 CALL system.fast_forward('db.events', 'main', 'feature-xyz');
 ```
 
-## 7. 陷阱与反模式
+### Schema / Partition 演化命令
+
+```sql
+-- Schema 演化
+ALTER TABLE db.events ADD COLUMN device STRING;
+ALTER TABLE db.events RENAME COLUMN payload TO raw_payload;
+ALTER TABLE db.events ALTER COLUMN amount TYPE DECIMAL(20,2);
+ALTER TABLE db.events DROP COLUMN device;
+
+-- Partition 演化
+ALTER TABLE db.events ADD PARTITION FIELD region;
+ALTER TABLE db.events REPLACE PARTITION FIELD days(ts) WITH hours(ts);
+ALTER TABLE db.events DROP PARTITION FIELD region;
+
+-- 增量读取（两 snapshot 之间）
+SELECT * FROM db.events.incremental_changes(
+  start_snapshot => 100,
+  end_snapshot   => 200
+);
+```
+
+## 7. 维护与运维命令
+
+### 维护 procedures · 定期跑
+
+```sql
+-- 合并小文件（必做 · 按表大小定频率）
+CALL system.rewrite_data_files(
+  table => 'db.events',
+  options => map('target-file-size-bytes', '536870912')
+);
+
+-- 合并 position deletes（MoR 表）
+CALL system.rewrite_position_deletes('db.events');
+
+-- 过期 snapshot · 释放空间
+CALL system.expire_snapshots(
+  'db.events',
+  TIMESTAMP '2026-03-01'
+);
+
+-- 清理孤儿文件（!! 谨慎 · 先 --dry-run）
+CALL system.remove_orphan_files(
+  table => 'db.events',
+  older_than => TIMESTAMP '2026-03-01'
+);
+```
+
+### 元数据表 · 观测 / 调试
+
+```sql
+SELECT * FROM db.events.snapshots;     -- 所有 snapshot
+SELECT * FROM db.events.manifests;     -- manifest 列表
+SELECT * FROM db.events.files;         -- 每个 data file
+SELECT * FROM db.events.history;       -- 变更历史
+SELECT * FROM db.events.partitions;    -- 当前分区
+SELECT * FROM db.events.refs;          -- 分支 / 标签引用
+SELECT * FROM db.events.delete_files;  -- delete files (MoR)
+```
+
+### 性能诊断速查
+
+| 症状 | 先看 | 常见原因 |
+|---|---|---|
+| 查询慢 | `files` · `manifests` 数量 | 小文件没合 |
+| 写入冲突 | `snapshots` 顺序 | 并发 commit |
+| 空间膨胀 | `snapshots` count | 过期未清理 |
+| Time travel 失败 | `snapshots` 保留 | `expire_snapshots` 过狠 |
+| 列出分区慢 | 分区粒度 | 粒度过细或无 |
+| MoR 查询慢 | `delete_files` 数量 | delete 积压未合 |
+
+### TBLPROPERTIES 参考
+
+```
+# 写入
+write.format.default                = parquet
+write.target-file-size-bytes        = 536870912    (512 MB)
+write.parquet.compression-codec     = zstd | snappy
+write.parquet.compression-level     = 3
+write.parquet.row-group-size-bytes  = 134217728    (128 MB)
+write.parquet.page-size-bytes       = 1048576      (1 MB)
+write.distribution-mode             = hash | range | none
+
+# 历史 / 维护
+history.expire.max-snapshot-age-ms  = 2592000000   (30 d)
+history.expire.min-snapshots-to-keep = 20
+commit.manifest-merge.enabled       = true
+commit.retry.num-retries            = 4
+commit.retry.min-wait-ms            = 100
+
+# Delete mode
+write.delete.mode                   = copy-on-write | merge-on-read
+write.update.mode                   = copy-on-write | merge-on-read
+write.merge.mode                    = copy-on-write | merge-on-read
+
+# v3 特性（需引擎支持）
+format-version                      = 2 | 3
+write.deletion-vectors.enabled      = true    (v3)
+```
+
+## 8. 陷阱与反模式
 
 - **写入不配 compaction** → 小文件炸 → 查询崩 → 必须定时 `rewrite_data_files`
 - **`expire_snapshots` 从不跑** → metadata.json 膨胀到几 MB → 每次查询加载慢
@@ -410,7 +510,7 @@ CALL system.fast_forward('db.events', 'main', 'feature-xyz');
 - **直接手改 Parquet 文件** → metadata 不一致 → 查询结果错
 - **多 writer 无协调**（两个 Spark 都写 branch=main）→ 频繁 CAS 冲突 → 应该用**分区隔离**或 **Paimon changelog**
 
-## 8. 横向对比 · 延伸阅读
+## 9. 横向对比 · 延伸阅读
 
 - [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md)
 - [Puffin vs Lance](../compare/puffin-vs-lance.md) —— 向量下沉到湖的两条路

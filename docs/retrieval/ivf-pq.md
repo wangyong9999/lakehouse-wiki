@@ -142,6 +142,17 @@ nprobe=256: recall ~99%
 
 选 recall 目标 → 对应 nprobe → 延迟估计。
 
+### 典型配方（1 亿 × 768 维）
+
+```
+nlist    = 16384       (~ √N)
+nprobe   = 32          (recall ~97%)
+M        = 96          (D/8 · 压缩更激进)
+nbits    = 8           (256 子中心)
+
+→ 每向量压缩到 ~12 字节 · 内存 ~1.2 GB
+```
+
 ## 5. 性能数字
 
 ### FAISS IVF-PQ（CPU）

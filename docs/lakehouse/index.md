@@ -81,4 +81,4 @@ applies_to: Iceberg v2/v3, Paimon 1.4+, Hudi 1.0.2+, Delta 4.0+
 
 ## 速查
 
-- [Iceberg 速查](../cheatsheets/iceberg.md)
+- [Apache Iceberg](../lakehouse/iceberg.md)

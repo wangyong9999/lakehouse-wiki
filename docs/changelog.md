@@ -37,7 +37,7 @@ hide:
 
 - `pipelines/` —— 数据管线（入湖、多模预处理、编排）
 - `ml-infra/` —— ML 基础设施（Model Registry / Serving / Training / GPU）
-- `cheatsheets/` —— 速查单（Iceberg / ANN / 向量 SQL / Embedding）
+- `cheatsheets/` —— 速查单（2026-04 S39 按主题归属合并到对应机制页 · 废除此目录）
 - `roles/` —— 按角色入口（4 种角色 + index）
 
 **新页**

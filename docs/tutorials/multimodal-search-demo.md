@@ -240,4 +240,4 @@ python 5_ui.py
 - 想加过滤？表里加 `category` 字段 + `tbl.search(vec).where("category='flower'")`
 - 想做 RAG？把 CLIP 换成文本模型 BGE，表里存文档 chunk
 - 系统读：[多模数据建模](../unified/multimodal-data-modeling.md) · [多模检索流水线](../scenarios/multimodal-search-pipeline.md) · [图像管线](../pipelines/image-pipeline.md)
-- 速查：[向量 SQL 语法对照](../cheatsheets/sql-vector.md) · [ANN 参数](../cheatsheets/ann-params.md)
+- 速查：[向量数据库 §7 多引擎 SQL](../retrieval/vector-database.md) · [ANN 索引对比](../compare/ann-index-comparison.md)

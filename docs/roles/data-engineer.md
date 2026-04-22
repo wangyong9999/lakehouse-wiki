@@ -16,7 +16,7 @@ hide:
     - **Model Serving / GPU 调度** → [ML / AI 工程师](ml-engineer.md) 或 [平台工程师](platform-engineer.md)
 
 !!! tip "高频任务速跳"
-    - **新建一张湖表** → [Iceberg](../lakehouse/iceberg.md) · [第一张 Iceberg 表 tutorial](../tutorials/first-iceberg-table.md) · [Iceberg 速查](../cheatsheets/iceberg.md)
+    - **新建一张湖表** → [Iceberg](../lakehouse/iceberg.md) · [第一张 Iceberg 表 tutorial](../tutorials/first-iceberg-table.md) · [Apache Iceberg](../lakehouse/iceberg.md)
     - **小文件治理 / Compaction** → [Compaction](../lakehouse/compaction.md) · [20 反模式](../ops/anti-patterns.md)
     - **作业跑得慢 / 定位瓶颈** → [性能调优](../ops/performance-tuning.md) · [谓词下推](../query-engines/predicate-pushdown.md) · [量级数字](../benchmarks.md)
     - **CDC 流入湖** → [Streaming Upsert · CDC](../lakehouse/streaming-upsert-cdc.md) · [Kafka 到湖](../pipelines/kafka-ingestion.md) · [流式入湖场景](../scenarios/streaming-ingestion.md)
@@ -71,7 +71,7 @@ hide:
 
 ## 常用速查
 
-- [Iceberg 速查](../cheatsheets/iceberg.md)
+- [Apache Iceberg](../lakehouse/iceberg.md)
 
 ## 随时回头看
 

@@ -280,7 +280,154 @@ ORDER BY embedding <=> $1
 LIMIT 10;
 ```
 
-## 7. 陷阱与反模式
+## 7. 多引擎 SQL 语法对照
+
+不同向量库 / SQL 引擎向量查询语法差异大 · 本节汇总**距离函数 + 代表语法** · 迁移或跨系统对比用。
+
+### 距离函数对照
+
+| 引擎 | Cosine | L2 | Inner Product |
+|---|---|---|---|
+| **pgvector** | `<=>` | `<->` | `<#>`（取反） |
+| **LanceDB** | `cosine_distance(a, b)` | `l2_distance(a, b)` | `dot(a, b)` |
+| **Milvus** | `COSINE` | `L2` | `IP` |
+| **Qdrant** | `Cosine` | `Euclidean` | `Dot` |
+| **Weaviate** | `nearVector` + distance | `distance` | — |
+| **DuckDB VSS** | `array_cosine_similarity` | `array_distance` | `array_inner_product` |
+| **ClickHouse** | `cosineDistance` | `L2Distance` | `dotProduct` |
+
+### pgvector
+
+```sql
+CREATE TABLE docs (id BIGINT, embedding VECTOR(1024));
+CREATE INDEX ON docs USING hnsw (embedding vector_cosine_ops);
+
+SELECT id, title
+FROM docs
+WHERE tenant_id = 42
+ORDER BY embedding <=> '[0.1, 0.2, ...]'::vector
+LIMIT 10;
+```
+
+### LanceDB（Python）
+
+```python
+import lancedb
+db = lancedb.connect("s3://warehouse/")
+tbl = db.open_table("docs")
+
+results = (
+  tbl.search([0.1, 0.2, ...])
+     .where("tenant_id = 42 AND kind = 'policy'")
+     .limit(10)
+     .select(["id", "title"])
+     .to_pandas()
+)
+```
+
+### Milvus · 含 Hybrid Search
+
+```python
+from pymilvus import MilvusClient, AnnSearchRequest, WeightedRanker
+
+# 单向量
+client.search(
+  collection_name="docs",
+  data=[[0.1, 0.2, ...]],
+  filter='tenant_id == 42 and kind == "policy"',
+  output_fields=["id", "title"],
+  limit=10,
+  anns_field="embedding",
+  search_params={"metric_type": "COSINE", "params": {"ef": 128}},
+)
+
+# Hybrid Search · dense + sparse + rerank
+dense_req = AnnSearchRequest(
+  data=[dense_vec], anns_field="dense_vec",
+  param={"metric_type": "COSINE"}, limit=100,
+)
+sparse_req = AnnSearchRequest(
+  data=[sparse_vec], anns_field="sparse_vec",
+  param={"metric_type": "IP"}, limit=100,
+)
+client.hybrid_search(
+  collection_name="docs", reqs=[dense_req, sparse_req],
+  rerank=WeightedRanker(0.7, 0.3), limit=10,
+)
+```
+
+### Qdrant
+
+```python
+client.search(
+  collection_name="docs",
+  query_vector=[0.1, 0.2, ...],
+  query_filter=Filter(must=[
+    FieldCondition(key="tenant_id", match=MatchValue(value=42)),
+  ]),
+  limit=10,
+)
+```
+
+### Weaviate（GraphQL）
+
+```graphql
+{
+  Get {
+    Doc(
+      nearVector: {vector: [0.1, 0.2, ...]}
+      where: {path: ["tenant_id"], operator: Equal, valueInt: 42}
+      limit: 10
+    ) { id title _additional { distance } }
+  }
+}
+```
+
+### DuckDB VSS
+
+```sql
+INSTALL vss;
+LOAD vss;
+
+CREATE TABLE docs (id BIGINT, embedding FLOAT[1024]);
+CREATE INDEX idx ON docs USING HNSW (embedding) WITH (metric = 'cosine');
+
+SELECT id, array_cosine_similarity(embedding, ?::FLOAT[1024]) AS sim
+FROM docs
+WHERE tenant_id = 42
+ORDER BY sim DESC
+LIMIT 10;
+```
+
+### ClickHouse
+
+```sql
+CREATE TABLE docs (
+  id UInt64,
+  embedding Array(Float32),
+  INDEX v embedding TYPE annoy('cosineDistance') GRANULARITY 1
+) ENGINE = MergeTree ORDER BY id;
+
+SELECT id, cosineDistance(embedding, [0.1, 0.2, ...]) AS d
+FROM docs
+WHERE tenant_id = 42
+ORDER BY d
+LIMIT 10;
+```
+
+### 归一化惯例
+
+- **入库前**做 L2 归一化（`v / ||v||`）· 入库后用 **cosine** 距离
+- 所有引擎的 Inner Product / Cosine 都等价 · 存储 / 内存更一致
+
+### 跨引擎陷阱
+
+- **维度类型不匹配**（FLOAT[1024] vs DECIMAL[1024]）
+- **ORDER BY DESC 忘改**（cosine distance 越小越近 · similarity 越大越近）
+- **跨语言客户端 tensor dtype 不一致**（numpy float64 vs float32）
+- **索引未建就全扫**（慢得想杀程序）
+
+## 8. 陷阱与反模式
 
 - **把向量库当主 DB**：它只做向量检索——源数据该在 OLTP / 湖上
 - **只看召回不看业务指标**：recall@10 = 0.99 但业务转化率不涨，可能是 rerank 或 LLM 问题
@@ -291,7 +438,7 @@ LIMIT 10;
 - **规模估错**：1M 以内瞎选都行；10M+ 开始选错系统就推倒重来
 - **分布式多 shard 但副本未 tune**：副本少 → 挂一个就雪崩；副本多 → 成本爆
 
-## 8. 横向对比 · 延伸阅读
+## 9. 横向对比 · 延伸阅读
 
 - **[向量数据库对比](../compare/vector-db-comparison.md)** —— Milvus / LanceDB / Qdrant / Weaviate / pgvector 详细对比
 - [ANN 索引对比](../compare/ann-index-comparison.md) —— HNSW / IVF-PQ / DiskANN / Flat

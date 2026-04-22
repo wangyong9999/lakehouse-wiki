@@ -56,7 +56,7 @@ hide:
 
 ## 常用速查
 
-- [Iceberg 速查](../cheatsheets/iceberg.md) —— 常用 SQL 和时间旅行
+- [Apache Iceberg](../lakehouse/iceberg.md) —— 常用 SQL 和时间旅行
 
 ## 场景
 
