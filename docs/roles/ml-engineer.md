@@ -97,11 +97,12 @@ hide:
 
 > **一月 AI 方向** 覆盖：Embedding 与多模 · 向量检索三大索引（HNSW / IVF-PQ / DiskANN） · Hybrid Search + Rerank · RAG 原理与评估 · Feature Store · MLOps 生命周期 · Agent 基础。
 
-## 常用速查
+## 常用参考
 
-- [ANN 索引对比](../compare/ann-index-comparison.md)
-- [向量数据库 §7 多引擎 SQL](../retrieval/vector-database.md)
-- [Embedding](../retrieval/embedding.md)
+- [ANN 索引对比 §决策速查](../compare/ann-index-comparison.md) · 规模 + 预算 → 索引选择
+- [向量数据库 §7 多引擎 SQL](../retrieval/vector-database.md) · pgvector / Milvus / Qdrant 等语法
+- [Embedding §3 一分钟速选](../retrieval/embedding.md) · 按场景快速选型
+- [HNSW §场景典型配方](../retrieval/hnsw.md) · M / ef 参数
 
 ## 横向对比
 

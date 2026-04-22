@@ -79,6 +79,6 @@ applies_to: Iceberg v2/v3, Paimon 1.4+, Hudi 1.0.2+, Delta 4.0+
 
 - [ADR-0002 选择 Iceberg 作为主表格式](../adr/0002-iceberg-as-primary-table-format.md)
 
-## 速查
+## 常用参考
 
-- [Apache Iceberg](../lakehouse/iceberg.md)
+- [Apache Iceberg §6 维护与运维命令](iceberg.md) · 建表 / 维护 / 元数据表 / Properties

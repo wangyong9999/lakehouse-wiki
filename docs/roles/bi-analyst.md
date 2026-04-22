@@ -54,9 +54,10 @@ hide:
 
 > **一月 BI 方向** 覆盖：OLAP 建模（星型 / 宽表 / Data Vault）· 物化视图与查询加速 · 语义层 / dbt · OLAP 加速副本（StarRocks / ClickHouse）· BI on Lake 场景端到端 · SLA / SLO 打法。
 
-## 常用速查
+## 常用参考
 
-- [Apache Iceberg](../lakehouse/iceberg.md) —— 常用 SQL 和时间旅行
+- [Apache Iceberg §5 代码示例 + §6 维护](../lakehouse/iceberg.md) —— 常用 SQL 和时间旅行
+- [物化视图](../bi-workloads/materialized-view.md) · [查询加速](../bi-workloads/query-acceleration.md)
 
 ## 场景
 

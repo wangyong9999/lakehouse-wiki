@@ -220,4 +220,4 @@ for s in sorted(tbl.metadata.snapshots, key=lambda s: s.timestamp_ms):
 
 - [你的第二条路：多模检索 Demo](multimodal-search-demo.md)
 - 系统读：[Apache Iceberg](../lakehouse/iceberg.md) · [Snapshot](../lakehouse/snapshot.md) · [Manifest](../lakehouse/manifest.md)
-- 速查：[Apache Iceberg](../lakehouse/iceberg.md)
+- 参考：[Apache Iceberg §6 维护与运维命令](../lakehouse/iceberg.md) · 建表 / 维护 / 元数据表 / Properties

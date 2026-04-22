@@ -320,7 +320,7 @@ CALL system.remove_orphan_files('db.sales');
 
 详见 [Catalog 全景对比](../compare/catalog-landscape.md)。
 
-## 5. 性能数字
+## 4. 性能数字
 
 | 场景 | 规模 | 基线 |
 |---|---|---|
@@ -336,7 +336,7 @@ CALL system.remove_orphan_files('db.sales');
 - 最大表 PB 级、数十亿 data files
 - Planning 从 Hive 的分钟级降到 Iceberg 的秒级
 
-## 6. 代码示例
+## 5. 代码示例
 
 ### 建表 + 写入（PySpark + Iceberg）
 
@@ -420,7 +420,7 @@ SELECT * FROM db.events.incremental_changes(
 );
 ```
 
-## 7. 维护与运维命令
+## 6. 维护与运维命令
 
 ### 维护 procedures · 定期跑
 
@@ -494,12 +494,13 @@ write.delete.mode                   = copy-on-write | merge-on-read
 write.update.mode                   = copy-on-write | merge-on-read
 write.merge.mode                    = copy-on-write | merge-on-read
 
-# v3 特性（需引擎支持）
+# v3 特性（需引擎支持 · property 详见 iceberg-v3.md）
 format-version                      = 2 | 3
-write.deletion-vectors.enabled      = true    (v3)
 ```
 
-## 8. 陷阱与反模式
+**v3 新配置**（Binary DV / Row Lineage / Variant / Geo 等）具体 property 名和配置方式 · 见 [Iceberg v3 · spec 演进与采用](iceberg-v3.md)。
+
+## 7. 陷阱与反模式
 
 - **写入不配 compaction** → 小文件炸 → 查询崩 → 必须定时 `rewrite_data_files`
 - **`expire_snapshots` 从不跑** → metadata.json 膨胀到几 MB → 每次查询加载慢
@@ -510,7 +511,7 @@ write.deletion-vectors.enabled      = true    (v3)
 - **直接手改 Parquet 文件** → metadata 不一致 → 查询结果错
 - **多 writer 无协调**（两个 Spark 都写 branch=main）→ 频繁 CAS 冲突 → 应该用**分区隔离**或 **Paimon changelog**
 
-## 9. 横向对比 · 延伸阅读
+## 8. 横向对比 · 延伸阅读
 
 - [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md)
 - [Puffin vs Lance](../compare/puffin-vs-lance.md) —— 向量下沉到湖的两条路
