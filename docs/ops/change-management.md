@@ -195,7 +195,93 @@ client.set_registered_model_alias(
 - 每季度 Flag review
 - **Flag 债务**（Flag 超过 6 月未删 · 需处理）
 
-## 6. 最小可用清单
+## 6. Release Governance · 发布治理
+
+**机制有了 · 权责也要有**。数据 + 模型 + AI 混合系统的发布 · 比传统服务复杂：影响面大、回滚代价不对称、多 stakeholder。
+
+!!! warning "和 incident-management 的分工"
+    - **Release Governance**（本节）：**发布前** · 审批 · 冻结 · 签字 · 发布窗口
+    - **Incident Rollback**（[incident-management §Mitigation](incident-management.md)）：**发布后 · 事故触发的紧急回滚** · 和计划内回滚是两件事
+    - 回滚**机制**（怎么回）本页 §4 已讲 · 本节讲**回滚的权责**（谁能按回滚按钮）
+
+### 6.1 变更分级 · 风险驱动审批
+
+**不是所有变更一个标准**。按风险分级决定审批深度：
+
+| 级别 | 典型 | 审批 | 冻结窗口 |
+|---|---|---|---|
+| **Low** · 日常 | dbt 模型加列（nullable）· 新 Dashboard · 非关键表新建 | PR 自动 + 1 reviewer | 无 |
+| **Medium** · 常规 | 生产 ETL 逻辑改 · 非 breaking schema 变 · 新模型 challenger | 2 reviewer + owner approve + CI 过 | 大节 / 年度审计前 |
+| **High** · 重要 | Breaking schema 变 · Champion 模型切 · 新 Agent tool · 数据产品退役 | 平台治理 + 消费方代表 + CAB 会 | P0 事故期 / 大促 / 月结 |
+| **P0** · 紧急 | 安全补丁 · 生产 P0 修复 | Break-glass SOP（见 [security-permissions](security-permissions.md)）| 永远允许 · 但事后 postmortem |
+
+### 6.2 Release Approval · 审批机制
+
+**不是"人眼过一下" · 是有权责留痕**：
+
+- **Reviewer**（Low/Medium）：看代码 · 过 CI · 批 merge
+- **Owner approval**：数据产品 owner 明确 "ok 发"· 留 ticket
+- **CAB**（Change Advisory Board · High 级）：平台 + 治理 + 安全 + 业务方代表 · 周会或异步 · 签字
+- **平台守门人**（超高风险 · 跨多团队）：有一票否决权 · 防单团队破坏全平台
+
+### 6.3 冻结窗口 · 何时不发
+
+**典型冻结规则**（团队根据业务调）：
+- **月结期**（财务 / 业务 KPI 报表敏感）：月末最后 3 天不动底座
+- **大促 / 活动**：双 11 / 黑五 · T-7 到活动结束冻结生产写变更
+- **P0/P1 事故期**：整个 incident cycle 期间冻结非事故变更
+- **审计期**：SOC 2 / 财报审计前后 2 周
+- **长假 / 值守薄弱**：春节 / 圣诞 · 只允许 P0 紧急
+
+**例外**：冻结期 P0 紧急变更 · 走 break-glass SOP · 事后 postmortem。
+
+### 6.4 签字 / 权责留痕
+
+**每次 High 级变更必须留的审计证据**：
+1. **变更单**（ticket / RFC 文档）· 含：动机 / 影响面 / 风险 / 回滚方案 / 通知面
+2. **审批记录**（谁 approve · 何时）
+3. **通知记录**（Breaking change · 消费方 ack）
+4. **发布窗口声明**（计划开始 / 结束时间）
+5. **回滚 runbook 链接**（不是脑子里 · 必须文档化）
+6. **发布后验证报告**（smoke test / 关键 metric 确认）
+
+**工具参考**：
+- ServiceNow / Jira Service Management · 变更工单
+- GitHub Deployment Protection Rules · 发布门禁
+- ArgoCD / Spinnaker · 发布流水线审批
+- Datadog / Grafana 发布标记 · 发布时间点进可观测
+
+### 6.5 回滚权责 · 谁能按按钮
+
+**机制**和**权责**分开：
+- **机制**（见 §4）：数据 Time Travel · ML Alias · AI Registry · 都支持秒级回滚
+- **权责**（本节）：谁在什么条件下可以触发
+
+**典型权责矩阵**：
+
+| 场景 | 回滚触发者 | 审批 | 通知 |
+|---|---|---|---|
+| **自动回滚**（SLO 破 / 错误率突增）| 系统自动 | 事后 review | 自动通知 oncall |
+| **Oncall 触发**（P0/P1 事故）| Oncall 工程师 | IC 确认 · 无需 CAB | 事后 incident ticket |
+| **计划内回滚**（发现 bug · 主动回退）| Owner + IC | 审批层同原发布 | Change ticket 更新 |
+| **数据回滚**（误改 / 污染）| Data owner | 平台 + 合规（若涉 audit）| 消费方通知 |
+| **P0 安全事件**| Security team | Break-glass | Incident + postmortem |
+
+**反模式**：
+- **只有原发布人能回滚** → oncall 工程师被卡 · 事故扩大
+- **回滚需要 CAB 批** → P0 事故时 CAB 开会耽误 · 应授权 IC 先回滚事后补批
+- **自动回滚没通知** → oncall 看到告警不知系统已自愈 · 浪费响应资源
+
+### 6.6 Release Governance · 成熟度
+
+| 级别 | 状态 |
+|---|---|
+| **L0** | PR merge = 发布 · 无审批 · 无 ticket |
+| **L1** | 有 CI · Medium+ 要 2 reviewer · 但无冻结窗口 · 无 CAB |
+| **L2** | 分级清晰 · CAB 定期开 · 冻结窗口遵守 · 签字留痕 |
+| **L3** | 自动化 CAB（risk score 决定路径）· 发布流水线和 audit 集成 · 回滚权责文档化和演练 |
+
+## 7. 最小可用清单
 
 团队上线变更管理至少要：
 
@@ -207,8 +293,11 @@ client.set_registered_model_alias(
 - [ ] 关键表 snapshot 保留 30+ 天
 - [ ] Feature Flag 用在高风险变更
 - [ ] 每次生产发布有回滚 runbook
+- [ ] High 级变更有 CAB 审批 · 留 ticket
+- [ ] 冻结窗口有文档（大促 / 月结 / 审计期）
+- [ ] 回滚权责矩阵文档化 · 演练过
 
-## 7. 陷阱 · 反模式
+## 8. 陷阱 · 反模式
 
 - **PR 不跑 CI · 人眼 review** · 质量靠运气
 - **Schema 偷偷加 required 列** · 下游写入失败
@@ -218,7 +307,7 @@ client.set_registered_model_alias(
 - **回滚 runbook 只在个别脑子里** · 事故时没人会
 - **变更没 changelog** · 3 月后不知道做过什么
 
-## 8. 和其他章节
+## 9. 和其他章节
 
 - [migration-playbook](migration-playbook.md) · 跨系统迁移
 - [incident-management](incident-management.md) · 变更引起事故的响应
@@ -230,7 +319,7 @@ client.set_registered_model_alias(
 - [lakehouse/schema-evolution](../lakehouse/schema-evolution.md) · 湖表 schema 演化
 - [ai-workloads/prompt-management](../ai-workloads/prompt-management.md) · Prompt 版本管理
 
-## 9. 延伸阅读
+## 10. 延伸阅读
 
 - *Database Reliability Engineering*（Campbell / Majors）
 - *Designing Data-Intensive Applications* · Ch 4 Encoding and Evolution

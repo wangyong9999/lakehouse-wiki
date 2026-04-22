@@ -219,6 +219,131 @@ AI 应用（LLM · Agent · RAG）有**专属权限维度**：
 
 **canonical 在 [ai-workloads/authorization](../ai-workloads/authorization.md)** · 本页不重复。
 
+## 执行治理 · 日常运维面
+
+**很多团队权限架构设计得好 · 但翻车在日常执行上**——access review 不做 · 服务账号滥用 · break-glass 事后没回收 · 离职账号留半年。本节讲**节奏化的执行**。
+
+### Access Review · 季度节奏
+
+**目标**：每个权限"有人 own · 有明确依据 · 定期 recertify"。
+
+```
+季度触发 → 导出权限快照 → Owner review → 差异确认 → 吊销无依据的 → 更新 baseline
+```
+
+**季度 access review 清单**：
+- [ ] **人员权限**：每个用户当前权限 vs 上季度 · 差异给对应 owner 确认
+- [ ] **团队权限**：团队角色（role）成员对比 · 离职 / 换岗自动剔除
+- [ ] **服务账号**：见 §服务账号生命周期
+- [ ] **外部访问**：合作伙伴 / 外包 / 第三方 token · 有效期 + review
+- [ ] **管理员权限**：admin / root · 最严格 · 至少双人 review
+
+**工具**：AWS Access Analyzer / SailPoint / Okta Access Review / Databricks Account Console / Snowflake ACCOUNT_USAGE.GRANTS。
+
+**常见问题**：
+- **Review 形同虚设**：owner 全部 "approve" 不细看 → 要求**列出有变化**的条目单独确认 · 而不是全量 rubber-stamp
+- **粒度太粗**：只 review `role_membership` · 不看具体权限 → 列级 / 行级策略也要 review
+- **滞后**：季度太长 · 大公司可做月度 · 敏感权限（prod write）更短
+
+### Break-glass · 紧急提权 SOP
+
+**场景**：P0 生产事故 · 需要临时超权限（如 prod 写权限紧急修复）。
+
+**原则**：
+1. **永远有通道**（不能卡死 · 否则事故扩大）
+2. **永远留痕**（谁在何时用什么理由提了什么权）
+3. **永远回收**（有 TTL · 自动撤销）
+
+**典型 SOP**：
+
+```
+1. 事故触发 → IC 判断需要 break-glass
+2. oncall 通过 break-glass 工具申请（PIM / 自建）· 填事故 ID + 理由
+3. 自动 / 人工 approve（P0 事故 · 单人批 · 双人背书）
+4. 临时 role 生效（TTL 4 小时 · 最长 24 小时）
+5. 所有操作 audit（SIEM 告警 · 实时通知 Security Team）
+6. TTL 到期自动撤销 · 人工二次确认不再需要
+7. 事故 postmortem 附 break-glass 使用记录 · review 是否必要
+```
+
+**工具参考**：Azure PIM · AWS IAM Access Analyzer + Temporary Credentials · Teleport · HashiCorp Boundary · 自建（基于 Vault short-TTL tokens）。
+
+**反模式**：
+- **常驻 admin 不用 break-glass** → admin 账号就是 break-glass 的滥用版
+- **Break-glass TTL 几天** → 实际成了常驻 · 应 < 24 小时
+- **Break-glass 不告警** → Security 不知情
+- **事故结束不清理** → 下次事故就常驻了
+
+### Recertification · 年度重认证
+
+**区别于 Access Review**：
+- Access Review = 季度 · 看**差异** · owner 确认增量
+- Recertification = 年度 · **重零**整个权限 · owner 重新证明"为什么此人需要此权限"
+
+**Recertification 触发**：
+- 年度固定节奏（多数团队）
+- 合规要求（SOC 2 / HIPAA / PCI DSS · 通常年度 attest）
+- 重大事件（被审计 / 入侵 / 大规模组织变动）
+
+**流程**：
+1. 导出当前全量权限快照
+2. 按 owner 分解 · 每人收到一份"你 own 的权限列表"
+3. Owner 对每条标 `keep / revoke / transfer`
+4. 未在 deadline 响应的默认 `revoke`（grace 2 周）
+5. 生成重认证报告 · 合规 attest 可用
+
+### 服务账号生命周期
+
+**服务账号**（service account / technical user）是生产最大权限泄漏源——常年不过期 · 权限过大 · 密钥不轮换。
+
+**5 阶段生命周期**：
+
+```
+创建 → 日常 → 轮换 → 监控 → 退役
+```
+
+| 阶段 | 要求 |
+|---|---|
+| **创建** | Owner 填清楚 · 用途明确 · 最小权限 · 有效期（建议 1 年）· 密钥存 Vault |
+| **日常** | 监控使用 · 未使用 30 天告警 · 每季度 review owner |
+| **轮换** | Vault 自动轮换（DB 账号 30 天 · 云 IAM 90 天）· 不轮换的降级 |
+| **监控** | 所有服务账号操作进 SIEM · 异常用量告警（见 §异常检测）|
+| **退役** | Owner 离职 / 业务下线 → 30 天 grace → 自动 disable → 90 天后删除 |
+
+**关键**：
+- **一人一号 · 一服务一号**：不共享 service account · 审计追责才可能
+- **永远不手写长期 key**：短 TTL token · 或机器身份（IRSA / Workload Identity）
+- **Legacy account 特殊对待**：存量的常驻 key 必须定期审 · 迁移到短 token
+
+### Off-boarding · 离职 / 换岗回收
+
+**最常翻车环节**——HR 流程和技术权限回收脱节。
+
+**SOP**：
+1. HR 触发 leaver event（自动同步到 IdP：Okta / Azure AD / Workday）
+2. IdP 禁用账号 → 自动 propagate 到下游（SSO → 所有系统）
+3. **强制撤销**短期 token / session · 避免"禁用后 token 还有效"
+4. Owner 权限 transfer（上游表 / 服务账号）· 见 [data-governance §2.2](data-governance.md)
+5. 特殊资源手动清理：本地密钥 / 代码库 secret scan / 第三方 SaaS
+
+**换岗**（同公司不同团队）：
+- 先 grant 新权限 · 后 revoke 旧权限（过渡 30 天）
+- 避免"换岗当日直接切"引起业务中断
+
+**定期核对**：
+- IdP 用户列表 vs HR 系统 · 月度 diff
+- 每季度全量 leaver audit · 遗漏账号立即处理
+
+### 执行治理 Operating Cadence
+
+| 周期 | 活动 |
+|---|---|
+| 日 | Break-glass 使用 + 异常权限操作告警 review |
+| 周 | 新增用户 / 服务账号审视 · 高权限变更 review |
+| 月 | 服务账号使用率 + 未用账号清理 · Leaver 审计 |
+| 季度 | **Access Review** · 全量权限 diff + owner 确认 |
+| 年度 | **Recertification** · 合规 attest · 长周期 key 轮换 check |
+
 ## 最小可用清单
 
 团队上线湖仓权限至少要做到：
@@ -227,7 +352,11 @@ AI 应用（LLM · Agent · RAG）有**专属权限维度**：
 - [ ] 对象存储 long-lived key **不下发给人**
 - [ ] Catalog 颁发短时 STS token
 - [ ] Audit log 开启并保存 ≥ 90 天
-- [ ] 每季度权限 review
+- [ ] 每季度权限 review（Access Review · 差异确认）
+- [ ] 年度 recertification · 合规 attest
+- [ ] Break-glass SOP 文档化 + 工具化（TTL + 告警 + 回收）
+- [ ] 服务账号有 owner · 有 TTL · 自动轮换
+- [ ] Off-boarding HR → IdP → 下游 propagate 链路打通
 - [ ] PII 列有 Mask 或 Tag 策略
 - [ ] GDPR 删除流程打通（Iceberg `DELETE` + 向量库 + 缓存）
 

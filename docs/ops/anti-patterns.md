@@ -14,16 +14,24 @@ status: stable
 # 湖仓 + AI 28 反模式
 
 !!! tip "一句话定位"
-    **新手最常踩的坑总汇**。涵盖**表格式设计 · 入湖 · 查询 · 检索 · AI · 运维 · 治理**七个维度的 20 个反模式。每条带**症状 / 根因 / 正确做法**。**上线前自查一遍，能避 80% 的生产事故**。
+    **生产前自查清单的反向版本** —— 跨栈常见翻车汇总（表格式 / 入湖 / 查询 / 检索 / AI / 运维 / 治理）· 每条带**症状 / 根因 / 正确做法**。**上线前自查一遍能避 80% 的生产事故**。
 
-!!! abstract "TL;DR"
-    - **表格式**：分区过度 · 小文件爆炸 · 从不 expire
-    - **入湖**：多引擎并发写 · CDC 无保序 · 流批交叉污染
-    - **查询**：SELECT * · 无 WHERE · 长查询不隔离
-    - **检索**：纯向量无 Rerank · 权限写 Prompt · chunk 一刀切
-    - **AI / ML**：Train-Serve Skew · 无 PIT · 无漂移监控
-    - **运维**：Catalog 混用 · 无备份 · 无审计
-    - **治理**：数据沼泽 · 标签不治理 · 口径不统一
+!!! info "本页范围 · 和 canonical 分工"
+    本页是**跨栈生产自查**· 不是各主题的深度 canonical：
+    
+    - **ops 自有反模式**（运维 / 治理 / 事故 / 变更 / 成本层面）· 本页是 canonical
+    - **cross-cutting 反模式**（表格式 / 查询 / 检索 / AI / ML 机制层）· 本页只是**生产视角速览** · 深度见各对应章节：
+      - 表格式：[lakehouse/iceberg §反模式](../lakehouse/iceberg.md) · [lakehouse/delete-files](../lakehouse/delete-files.md)
+      - 入湖 / CDC：[pipelines/cdc-internals](../pipelines/cdc-internals.md) · [pipelines/pipeline-resilience](../pipelines/pipeline-resilience.md)
+      - 查询：[query-engines/trino](../query-engines/trino.md) · [query-engines/spark](../query-engines/spark.md)
+      - 检索 / RAG：[ai-workloads/rag](../ai-workloads/rag.md) · [retrieval/hybrid-search](../retrieval/hybrid-search.md)
+      - AI / ML：[ai-workloads/guardrails](../ai-workloads/guardrails.md) · [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) · [ml-infra/model-serving](../ml-infra/model-serving.md)
+    - **约束**：本页每条反模式 ≤ 20 行 · 超过 20 行的深度 · 进对应 canonical · 避免本页无边膨胀
+
+!!! abstract "TL;DR · 7 组 28 条"
+    - **表格式 / 入湖 / 查询 / 检索 / AI / ML / 运维治理 / AI 应用** · cross-cutting 速览 + 深度指针
+    - 分组内反模式按"实际踩坑频次"排序（头部优先修）
+    - 每条配**症状 → 根因 → 正确做法** · 生产自查用
 
 ---
 

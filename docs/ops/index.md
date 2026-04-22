@@ -132,7 +132,7 @@ last_reviewed: 2026-04-21
 1. [compliance](compliance.md) · 全球合规法规
 2. [data-governance](data-governance.md) · 治理工程
 3. [security-permissions](security-permissions.md) §审计 + §数据保护
-4. [ops/compliance §4]((../ops/compliance.md) · AI 治理（相邻章）
+4. [compliance §4 AI 合规](compliance.md) · 法规层
 
 ### 数据 / ML 工程师
 
@@ -150,7 +150,74 @@ last_reviewed: 2026-04-21
 3. [capacity-planning](capacity-planning.md) · 容量预算
 4. [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) §FinOps · GPU 成本
 
-## 4. 成熟度模型 L0-L3
+## 4. 生产 Operating Model · 闭环视角
+
+**为什么要这节**：ops/ 不止是"能力清单"（可观测 / SLO / 安全 / DR / 成本 / 事故）· 而是一个**闭环的生产体系**。知道每个能力是起点 · 但**怎么串成日常运转**才是生产。
+
+### 4.1 闭环图 · 从上线前到长期演进
+
+```mermaid
+flowchart LR
+    ready[1 · 上线前<br/>准入 Readiness]
+    observe[2 · 稳态<br/>观测 Observe]
+    respond[3 · 出问题<br/>响应 Respond]
+    recover[4 · 事后<br/>恢复 Recover]
+    change[5 · 演进<br/>变更 Change]
+    review[6 · 长期<br/>复盘 Review]
+    
+    ready --> observe
+    observe --> respond
+    respond --> recover
+    recover --> review
+    change --> ready
+    review --> change
+    
+    observe -. 容量 / 成本 / 合规 .-> review
+```
+
+| 阶段 | 核心文档 | 输出 |
+|---|---|---|
+| **1 · Readiness** | [production-checklist](production-checklist.md) + [sla-slo](sla-slo.md) | 准入打分 · SLO 承诺 |
+| **2 · Observe** | [observability](observability.md) + [sla-slo](sla-slo.md) + [capacity-planning](capacity-planning.md) | Dashboard · 告警 · Error Budget · cost dashboard |
+| **3 · Respond** | [incident-management](incident-management.md) + [troubleshooting](troubleshooting.md) | SEV 分级 · 响应 · 止血 |
+| **4 · Recover** | [disaster-recovery](disaster-recovery.md) + [change-management §回滚](change-management.md) | 数据 / 服务 / 配置恢复 |
+| **5 · Change** | [change-management](change-management.md) + [migration-playbook](migration-playbook.md) | CI/CD · Schema · Release governance |
+| **6 · Review** | [incident-management §Postmortem](incident-management.md) + [anti-patterns](anti-patterns.md) | 事故复盘 · 反模式自查 · 架构债务 |
+
+### 4.2 Operating Cadence · 节奏表
+
+**生产团队最容易失效的不是"工具"· 是"节奏"**。下表给出建议周期（按团队规模调整）：
+
+| 周期 | 活动 | 文档指引 |
+|---|---|---|
+| **日** | Oncall 交班 · 关键 dashboard 扫一眼 | [incident-management §Oncall](incident-management.md) |
+| **周** | 告警 review · Error Budget 消耗 · 上周事故扫 | [sla-slo §Error Budget](sla-slo.md) |
+| **双周** | Backlog triage · 架构债务评估 · 数据质量趋势 | [data-governance](data-governance.md) |
+| **月** | 成本 review · 容量预测 · P0/P1 事故复盘合辑 · 合规 checklist 自查 | [cost-optimization](cost-optimization.md) · [compliance](compliance.md) |
+| **季度** | SLO 重定 · DR 演练 · Access review · Stale 数据清理 · 对抗评审 | [disaster-recovery §演练](disaster-recovery.md) · [security-permissions](security-permissions.md) |
+| **年度** | TCO review · 技术栈演进决策 · 灾备策略 · 合规证书更新 | [tco-model](tco-model.md) |
+
+**不演练 = 不存在**：DR 演练 / postmortem cadence / access review 这三项最容易"设立但不执行"· 必须节奏化。
+
+### 4.3 角色矩阵 · 谁负责什么
+
+| 活动 | SRE / DRE | 平台工程师 | 数据 / ML 工程师 | 合规 / 治理 | 业务 / 产品 |
+|---|---|---|---|---|---|
+| **定 SLO** | **R** | C | C | I | **A** |
+| **Oncall 轮值** | **R** | **R** | C | — | I |
+| **Incident 指挥** | **R**（IC 角色） | C | C | I | I |
+| **Postmortem** | **R** | C | C | I | I |
+| **Release 审批** | C | **R** | C | C | **A**（关键变更） |
+| **Access Review** | C | **R** | I | **A** | I |
+| **Cost Review** | C | **R** | C | — | **A** |
+| **合规审计** | C | C | I | **R** | **A** |
+| **DR 演练** | **R** | **R** | C | I | I |
+
+（R=Responsible · A=Accountable · C=Consulted · I=Informed）
+
+**关键判断**：上表如果某一列全是 C/I · 该角色基本没被纳入生产体系 · 需要重新审视。
+
+## 5. 成熟度模型 L0-L3
 
 **对照自己团队的阶段**（借鉴 Google SRE Maturity 和 FinOps Framework）：
 
@@ -204,7 +271,7 @@ last_reviewed: 2026-04-21
 
 **对应**：持续改进 · 跟进业界动向（[benchmarks](../benchmarks.md) · [vendor-landscape](../vendor-landscape.md)）+ 工业案例学习（[cases/](../cases/index.md)）
 
-## 5. 和其他章节的关系
+## 6. 和其他章节的关系
 
 ```mermaid
 flowchart TB
@@ -236,7 +303,7 @@ flowchart TB
 
 **原则**：ops/ **只做工程落地** · 具体的 ML/AI 机制 canonical 在对应专章 · 通过 admonition 指向。
 
-## 6. 新同事 30 天入门路径
+## 7. 新同事 30 天入门路径
 
 **Week 1**：读本页 index + [anti-patterns](anti-patterns.md) 自查团队当前状态
 
@@ -246,7 +313,7 @@ flowchart TB
 
 **Week 4**：读 [production-checklist](production-checklist.md) · 对照当前上线流程补漏
 
-## 7. 版本复检
+## 8. 版本复检
 
 !!! info "时效性 · 按 ADR 0007 SOP 复检"
     运维工具链变化快（OpenTelemetry GenAI 2024 / EU AI Act 2024-08 / FinOps Foundation 2025 更新）。**本章 applies_to: 2024-2026 · last_reviewed: 2026-04-21** · 下次计划 2026-Q3 复检。

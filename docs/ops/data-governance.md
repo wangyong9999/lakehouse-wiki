@@ -1,147 +1,296 @@
 ---
-title: 数据治理 · 血缘 · 契约 · 合规
+title: 数据治理 · 生产 Operating Model
 type: concept
 depth: 资深
-level: A
-last_reviewed: 2026-04-21
+level: S
+last_reviewed: 2026-04-22
 applies_to: OpenLineage 1.x · DataHub 0.14+ · Unity Catalog · Data Contracts 规范 · 2024-2026 实践
-tags: [ops, governance, lineage, contract]
-aliases: [Data Governance, 血缘, 数据契约]
-related: [security-permissions, observability, catalog-strategy, data-quality-for-ml]
+tags: [ops, governance, lineage, contract, data-product]
+aliases: [Data Governance, 数据治理, 血缘, 数据契约]
+related: [security-permissions, observability, catalog-strategy, data-quality-for-ml, change-management]
 systems: [datahub, openlineage, unity-catalog]
 status: stable
 ---
 
-!!! warning "章节分工声明（S34 重要）"
-    - **本页**：湖仓通用治理——**血缘 · Data Contract · 合规标签 · Catalog 治理平面集成**
-    - **ML 数据质量**（PIT · Label Quality · Evaluation 集泄漏 · GE/Soda ML 用法 · Data Quality Gates）→ [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) **canonical**
-    - **Catalog 治理平面机制**（UC / Polaris / Gravitino）→ [catalog/strategy](../catalog/strategy.md) canonical
+!!! warning "章节分工声明"
+    - **本页**：数据治理的**生产 operating model**——owner 生命周期 / 血缘 ops / Data Contract 治理 / Stale review / 数据产品退役 / 治理指标
+    - **ML 数据质量机制**（PIT · Label Quality · Quality Gates · GE/Soda 深度）→ [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) canonical
+    - **Catalog 平面机制**（UC / Polaris / Gravitino）→ [catalog/strategy](../catalog/strategy.md) canonical
     - **合规法规**（GDPR / EU AI Act 等）→ [compliance](compliance.md)
-    - **观测集成** → [observability](observability.md) §专用面 Data Quality Observability
-    - 本页瘦身后关注**治理工程视角**（血缘 / 契约 / 合规标签）· 不讲 ML 数据质量工程细节
+    - **变更流程**（Schema / Breaking change）→ [change-management](change-management.md) canonical
+    - 本页视角：**治理怎么运作** · 不做工具对比 / 不讲 ML 质量机制
 
-# 数据治理
+# 数据治理 · 生产 Operating Model
 
 !!! tip "一句话理解"
-    数据治理不是"合规部门的事"。在湖仓一体化时代，它是**工程基础能力**：**血缘（谁生出了谁）+ 质量（能信多少）+ 契约（跨团队承诺）+ 合规（能不能留）**。
+    数据治理在生产里不是"合规部门的事"· 是**工程日常 operating model**：**owner 有 · 血缘可查 · 契约成文 · stale 会清 · 退役有 SOP**。工具只是载体 · **节奏 + 权责 + 指标**才是核心。
 
-## 四件主线
+!!! abstract "TL;DR"
+    - **治理五支柱**：Owner / Lineage / Contract / Retention & Retirement / Metrics
+    - **关键节奏**：周（契约变更 review）· 月（stale/orphan 清理）· 季度（全量 owner / tag review）
+    - **治理成功判定**：80% 表有 owner · 关键表（top 100）契约化 · 血缘覆盖率 > 70% · Stale > 90 天表 < 5%
+    - **常见失败**：工具买了没 owner 用 / 治理平面没和 BI 嵌 / 契约写了不 CI 卡
 
-### 1. 血缘（Lineage）
+## 1. 治理的五支柱 Operating Model
 
-"这个字段从哪来？"是每个 BI 分析师每周问的问题。血缘就是答案。
-
-- **表级血缘**：`table_a → transform → table_b`
-- **列级血缘**：`table_a.col_x → transform → table_b.col_y` （更精细，AI 场景尤其重要）
-- **跨引擎血缘**：Spark / Flink / Trino / dbt 作业都要能吐血缘事件
-
-工具链：
-
-- **OpenLineage** —— 标准事件协议（引擎 → 治理系统）
-- **DataHub** —— 收集与可视化，社区最活跃
-- **Marquez** —— OpenLineage 的参考实现
-- **Unity Catalog** —— 自带血缘
-
-血缘的价值从"出事后溯源"放大到"**变更影响分析**"—— 改一张上游表，自动知道下游谁会爆。
-
-### 2. 质量（Data Quality）
-
-"这张表能信吗？" 数据质量体系三要素：
-
-- **期望（Expectation）** —— `order_amount >= 0`、`not null customer_id`
-- **校验（Validation）** —— 定期或事件触发跑校验
-- **可见（Visibility）** —— 结果写回 Catalog，BI 用户查表能看到"质量评分"
-
-!!! info "数据质量工程深度在 [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md)"
-    S27 建立了 data-quality-for-ml 作 ML 数据质量 canonical（三层 Quality Gates · Label Quality · 评估集泄漏 · Schema Evolution 对 ML 的影响 · 工具矩阵 GE / Soda / Monte Carlo / Anomalo / Elementary · 成熟度 L0-L3）· **本页不重复机制细节**。
-
-工具链（精简 · 指向 canonical 深度）：
-- **Great Expectations / Soda / dbt tests** · OSS 数据质量框架
-- **Elementary**（dbt-native · 2024 活跃）· **Monte Carlo / Anomalo**（企业自动异常检测）
-- **Iceberg / Paimon Stats Plugin** · 自带列直方图
-
-质量门禁是治理第一道防线。具体的 Data Contract + Quality Gates 工程实施 · 去 data-quality-for-ml canonical。
-
-### 3. 契约（Data Contract）
-
-跨团队协作时，数据提供方和消费方的**"正式承诺"**：
-
-```yaml
-contract:
-  table: orders_dwd
-  owner: data-platform-team
-  sla:
-    freshness: "< 1h"
-    availability: "99.5%"
-  schema:
-    - name: order_id
-      type: bigint
-      nullable: false
-    - name: amount
-      type: decimal(18,2)
-      pii: false
-  quality:
-    - expect: "amount >= 0"
-    - expect: "order_id is unique"
+```mermaid
+flowchart TB
+    owner[1 · Owner<br/>每张表有 owner]
+    lineage[2 · Lineage<br/>血缘可查]
+    contract[3 · Contract<br/>契约成文]
+    retire[4 · Retirement<br/>stale 会清]
+    metric[5 · Metrics<br/>治理指标可观测]
+    
+    owner --> lineage
+    lineage --> contract
+    contract --> retire
+    metric -.观测.-> owner & lineage & contract & retire
 ```
 
-破坏契约 = 通知消费方，不是"悄悄加列删列"。dbt / Sodas / Great Expectations 都有 contract 能力。
+没有 owner · lineage 没人维护；没有 lineage · contract 签不了；没有 contract · retirement 没依据；没有 metric · 整套没人监督。**五者按顺序落地**。
 
-### 4. 合规 / 数据保护
+## 2. Owner 生命周期
 
-- **PII 识别与分级**：sensitivity tag → 权限策略自动生效
-- **保留策略**：哪些数据保留多久、过期自动删除
-- **跨境合规**：数据驻留区
-- **删除权（GDPR）**：跨所有系统删干净
+表 / 列 / 数据产品的 **owner** 是治理的一等元数据。没 owner = **无主地**。
 
-## 和一体化湖仓的耦合
+### 2.1 创建期 · owner 准入
 
-一体化时代治理的**三个新维度**：
+**规则**：
+- 新建表 **必填** owner（team + 责任人）
+- CI 阻断：`CREATE TABLE without owner` 不允许进 main（dbt meta / Iceberg table properties / UC owner 强制）
+- 紧急例外：允许 7 天 grace · 过期自动降级为 "staging" 表（禁止生产消费）
 
-1. **向量 / 模型也要血缘** —— `doc_chunks → embed() → doc_vectors → model_v3`
-2. **RAG 输出要可溯源** —— LLM 回答引用到具体 chunk，chunk 归属到具体源表
-3. **模型版本与数据版本绑定** —— 模型训练的时候用了哪个 snapshot
+### 2.2 移交期 · owner transfer
 
-没有治理平面，这些都说不清。**Catalog = 治理平面**这句话就是这个意思。
+**触发**：人员离职 / 团队重组 / 业务拆分 / 收购合并。
 
-## 落地顺序
+**流程**：
+1. 发起 owner transfer ticket（Atlan / DataHub / UC 内置 transfer API）
+2. 新 owner 确认 + 旧 owner 签字 + 平台审批
+3. Catalog 字段更新 · 通知下游消费方（自动邮件 + Slack）
+4. Grace 期 30 天 · 旧 owner 仍可接问题
 
-不要一上来搞"完美治理"。按价值顺序：
+### 2.3 退役期 · owner 撤销
 
-1. **Week 1**：owner + 基本 tag（pii 标注）
-2. **Month 1**：质量门禁（关键表 5–10 条期望）
-3. **Month 3**：血缘（OpenLineage 事件打通）
-4. **Quarter 1**：契约化最关键 3–5 张表
-5. **Year 1**：跨系统治理平面（DataHub / Unity）
+**触发**：数据产品下线 / 业务退出 / 表归档。
 
-## 陷阱
+**流程**：见 §5 数据产品退役。
 
-- **把治理等同于审计** —— 审计是合规视角；治理是工程视角
-- **工具选太多** —— DataHub + Ranger + Marquez + 自研…互相对不上
-- **治理平面没有用户** —— BI 用户不用 = 没价值；要把它嵌到 BI 工具里
-- **契约流于形式** —— 没有 CI 卡 schema 变更 = 契约白写
+### 2.4 owner 缺失的应对
 
-## 最小有用治理平面
+- Catalog 定期扫 "无 owner 表" · 月度报表列出
+- 连续 3 月无 owner 的表 · 归 "平台 orphan 池" · 批量降级为 read-only
+- **owner 缺失率**是治理核心指标（见 §7）
 
-对中等规模团队：
+## 3. 血缘 Ops
 
-- [ ] Catalog 里每张表有 owner + business description
-- [ ] PII 列打 tag，对应 Mask 策略
-- [ ] 关键表（Top 20）有 3–5 条质量规则
-- [ ] OpenLineage 事件从 Spark / Flink / Airflow 出来
-- [ ] 每季度 stale / orphan review
-- [ ] 敏感数据删除流程 SOP
+血缘不是"有就行"· 是**可信 + 可用 + 覆盖率可追**。
 
-## 相关
+### 3.1 覆盖率
 
-- [可观测性](observability.md) —— 治理的邻居
-- [安全与权限](security-permissions.md)
-- [统一 Catalog 策略](../catalog/strategy.md)
-- [Unity Catalog](../catalog/unity-catalog.md)
+**目标**：关键数据产品 100% · 全表血缘 > 70%
 
-## 延伸阅读
+**事件源清单**（OpenLineage 接入）：
+- ✅ Spark 作业（内置集成）
+- ✅ dbt（OpenLineage dbt integration）
+- ✅ Flink（OpenLineage flink-sql integration）
+- ✅ Airflow / Dagster（provider）
+- ⚠️ Trino · 社区集成演进中 · 部分查询类型丢失
+- ⚠️ 自定义 ETL 脚本（需手动 emit · 常成盲区）
+
+### 3.2 血缘质量
+
+**验证**（覆盖 check 不是一次性）：
+- **端到端连通性**：从 BI dashboard 反向追到 ODS 表 · 不能断链
+- **列级血缘**：改 ODS 列 · 下游可用 catalog 查影响范围 · 否则列级血缘失效
+- **事件 freshness**：血缘事件最多滞后 1 小时 · 否则变更分析不可用
+
+### 3.3 血缘 Ops 节奏
+
+| 周期 | 活动 |
+|---|---|
+| 日 | 血缘事件摄入监控（丢失告警）|
+| 周 | 新增表血缘覆盖率 check |
+| 月 | 断链报表 · 关键链路缺口清理 |
+| 季度 | 列级血缘 coverage audit |
+
+## 4. Data Contract 治理
+
+**契约 = 提供方和消费方的正式承诺**。详细机制见 [ml-infra/data-quality-for-ml §2](../ml-infra/data-quality-for-ml.md) canonical · 本节讲 **治理流程**。
+
+### 4.1 哪些表需要契约
+
+**不是所有表都需要**。优先级：
+1. **外部 API 依赖表**（其他系统 / 客户查）
+2. **跨团队共享表**（DWD / DWS / ADS 层）
+3. **ML 训练 / 在线推理依赖表**
+4. **合规关键表**（PII · 金融 · 医疗）
+
+**不建议**：中间层 staging / 个人探索 / 临时分析表 · 不签契约（过度治理）。
+
+### 4.2 契约生命周期
+
+```
+起草 → 评审 → 签字 → CI 集成 → 运行中 → 变更 → 退役
+```
+
+**关键治理点**：
+- **起草**：owner + 主要消费方共创 · 不是单方面拟订
+- **评审**：平台治理组 check 结构（必填字段 / 约定格式）
+- **签字**：owner + 每个主要消费方代表 · 留 ticket
+- **CI 集成**：schema / 关键 expectation 进 dbt test · 违反阻断 merge
+- **变更**：按 [change-management §Schema Evolution](change-management.md) · Breaking change 30 天通知
+- **退役**：见 §5
+
+### 4.3 Breaking Change 治理
+
+和 [change-management §2.2](change-management.md) 对齐：
+- 提前 **30 天** 通知所有消费方
+- 新旧版本并存期（双写）
+- 下游逐个切
+- 全切完弃用旧版 · 留 stub 90 天
+
+**治理侧责任**：确保通知真到消费方（不只是发 Slack · 要求 ack） · 跟踪迁移进度。
+
+## 5. 数据产品 Retirement · 退役 SOP
+
+**多数团队最弱的一环**：建了不清 · 数据湖变"数据沼泽"。
+
+### 5.1 退役触发信号
+
+Catalog 定期扫描 · 触发候选：
+- **90 天无查询**（access log）
+- **90 天无上游写入**（无 snapshot commit）
+- **Owner 离职 + 无继任 60 天**
+- **主要消费方已迁移**（血缘下游为空）
+- **替代表已上线**（owner 显式标记 deprecated）
+
+### 5.2 退役流程（4 阶段）
+
+```
+候选 → 通知期 → Deprecated → Archived → Deleted
+ (系统扫)  (30 天)    (read-only)  (冷归档)  (永久删)
+```
+
+| 阶段 | 周期 | 行为 |
+|---|---|---|
+| **候选** | 触发时 | Catalog 标 `candidate-for-retirement` · 邮件 owner + 最近消费方 |
+| **通知** | 30 天 | Owner 确认退役 / 续约；消费方 ack |
+| **Deprecated** | 30-90 天 | 表标 read-only · 查询返回 warning · 阻断写入 |
+| **Archived** | 90-365 天 | 数据转冷存储（Glacier / 归档 bucket）· metadata 保留 |
+| **Deleted** | 365 天后 | 物理删除 · 审计日志留 7 年（合规需要） |
+
+**合规例外**：审计 / 金融 / 医疗等法规要求保留的表 · 不走此流程 · 走合规 retention schedule。
+
+### 5.3 Orphan 清理
+
+**无 owner + 无下游 + 无查询**的表 · 特殊处理：
+- 季度扫描 · 批量列表
+- 若无人认领 · 直接进 Deprecated 阶段
+- 平台 orphan-cleanup runbook 季度执行一次
+
+## 6. Retention / 保留策略
+
+**不是"数据越多越好"**。治理视角：每张表有**明确保留窗口**。
+
+| 数据类型 | 典型保留 | 触发依据 |
+|---|---|---|
+| 实时事件日志 | 7-30 天 热 + 90 天冷 | 成本 |
+| ODS 业务数据 | 1-3 年 | 合规 + 业务 |
+| DWS / ADS 聚合 | 3-10 年 | 业务审计 |
+| 金融交易 | 7 年+ | 监管 |
+| 医疗数据 | HIPAA 6 年+ | 法规 |
+| 用户 PII | 业务结束 + GDPR 删除权 | 合规 |
+| ML 训练数据 snapshot | 3 年（复现期）| 可追溯 |
+| 模型 artifact | 3 年 + 金融 7 年 | 审计 |
+
+**实施**：对象存储 lifecycle policy + 表级 retention metadata · Iceberg `expire_snapshots` 配合。
+
+## 7. 治理指标 · 可观测
+
+**治理好坏**不靠感觉 · 靠指标。
+
+### 7.1 核心指标
+
+| 指标 | 目标 | 测量 |
+|---|---|---|
+| **Owner 缺失率** | < 5% | 总表数中无 owner 占比 |
+| **血缘覆盖率** | > 70% 全表 / 100% 关键表 | OpenLineage 事件覆盖 |
+| **契约化率**（关键表）| Top 100 → 80% | 有 contract 的关键表占比 |
+| **Stale 表占比** | < 10% | 90 天无查询表占比 |
+| **Schema 违规变更** | 0 | CI 阻断未 review 的 schema 变更数 |
+| **Breaking change 通知期合规** | 100% | 满足 30 天通知的变更比例 |
+| **PII 表 tag 覆盖** | 100% | 含 PII 列的表有 tag 的比例 |
+
+### 7.2 治理 Dashboard
+
+上面指标集中一张 dashboard · 平台治理组周 review。
+
+## 8. 和 catalog / 合规 / 变更的集成
+
+**治理平面 = Catalog 之上的 ops 层**：
+
+```
+Catalog（UC / Polaris / Nessie）
+  ↓ metadata API
+治理平面（DataHub / Atlan / Collibra）
+  ↓ 治理 operating model
+- Owner 生命周期（本节 §2）
+- 血缘 ops（本节 §3）
+- Contract 治理（本节 §4）
+- Retirement（本节 §5）
+- 合规标签（→ compliance §实现 1）
+- 变更审批（→ change-management §release governance）
+```
+
+**关键**：治理工具**必须和 BI / 变更流程嵌合**· 单独的治理平面没人用 · 就是死工具。
+
+## 9. 实施路径 · 按成熟度
+
+### L0 起步（所有表无 owner / 无血缘）
+- Week 1-4：Catalog owner 字段 · Top 100 关键表补 owner（手动）
+- Week 4-8：PII 列打 tag · 关键表 Top 20 加 5 条质量规则
+- Month 3：OpenLineage 从 Spark / Airflow 打通（主 ETL）
+
+### L1 稳定（有 owner 但乱）
+- 治理 dashboard 上线 · 暴露 owner 缺失率
+- 关键表 Top 50 契约化（§4）
+- 血缘从 dbt + Flink 扩展
+
+### L2 生产级
+- Retirement SOP 上线 · 季度 stale 清理
+- 治理指标进 SLO（owner 缺失率 < 5% 等）
+- Breaking change 流程 CI 卡
+
+### L3 卓越
+- 列级血缘全链 · RAG / ML 场景可追
+- 契约化率 80%+
+- 自动化 retention policy
+- 跨 region 治理平面统一
+
+## 10. 陷阱 · 反模式
+
+- **买 DataHub 没 owner 填** · 治理死
+- **契约写了不 CI 卡** · 形同虚设
+- **治理平面和 BI 不嵌** · BI 用户不查 = 没价值
+- **owner 名义挂人不负责** · "挂名 owner"需要定期 review 实际 DRI
+- **Retirement 只标不删** · 成本照烧
+- **工具链太多** · DataHub + Atlan + Ranger + 自研互相对不上
+- **治理指标只给治理组看** · 应该让业务 / owner 都能看到自己的 dashboard
+
+## 11. 和其他章节
+
+- [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) · ML 数据质量 canonical
+- [catalog/strategy](../catalog/strategy.md) · Catalog 选型
+- [security-permissions](security-permissions.md) · 权限 / Access Review
+- [compliance](compliance.md) · 合规法规
+- [change-management](change-management.md) · Schema 变更 / release governance
+- [observability](observability.md) · 治理 dashboard 集成
+
+## 12. 延伸阅读
 
 - *OpenLineage Specification*: <https://openlineage.io/>
 - DataHub docs: <https://datahubproject.io/docs/>
-- *Data Contracts* —— Andrew Jones 的书与博客系列
-- *Great Expectations* docs
+- *Data Contracts* · Andrew Jones（治理权威）
+- *Data Mesh* · Zhamak Dehghani
+- Netflix / LinkedIn / Uber 治理技术博客

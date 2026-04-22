@@ -3,13 +3,27 @@ title: TCO 模型 · 自建 vs 云 vs SaaS · 含 AI 场景
 type: concept
 depth: 资深
 level: S
-last_reviewed: 2026-04-21
+last_reviewed: 2026-04-22
 applies_to: 2024-2026 云 + 商业产品定价 · 含 AI / LLM 场景
 tags: [ops, cost, tco, economics, ai-tco]
 aliases: [TCO, Total Cost of Ownership]
 related: [cost-optimization, capacity-planning, data-systems-evolution]
 status: stable
 ---
+
+!!! warning "章节分工声明"
+    - **本页**：**架构级战略成本决策**（build-vs-buy / SaaS-vs-self-hosted / 长期 TCO / 拐点分析 / AI 场景经济学）
+    - **月度 / 周度工程控费实操**（五线成本 / 8 条实操 / FinOps 日常）→ [cost-optimization](cost-optimization.md)
+    - **容量 sizing 计算** → [capacity-planning](capacity-planning.md)
+    - 本页回答"**方案选哪个**"· cost-optimization 回答"**选定后怎么省**"
+
+!!! warning "数值适用前提 · 仅作粗估"
+    本页价格 / 拐点 / 人力成本依赖：
+    - **区域 / 合同 / 汇率**：list price vs enterprise discount 相差 30-50%
+    - **规模非线性**：小规模和大规模经济学差异巨大
+    - **时效**：云价格每季度变化 · LLM token 价格半年常降 50%+
+    
+    所有拐点 / 系数 **仅作决策起点** · **必须基于自家实际账单 + 代表性业务 POC 校准**。
 
 # TCO 模型 · 总体成本分析
 

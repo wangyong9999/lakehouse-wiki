@@ -138,6 +138,75 @@ status: stable
 | 49 | ADR（重要决策）已归档 | **S** | 1 年后可追溯"为什么这样做" |
 | 50 | 接入方对接文档 / SLA 公告 | **S**（对外服务）| 下游能自助 |
 
+## 分场景准入子模板 · 增量项
+
+**通用 50 条是基线**。不同产品类型还有**场景独有**的准入项 · 本节列增量（不重复通用）。
+
+### 场景 A · 数据产品上线（Iceberg 表 / dbt 模型 / 数据管线）
+
+| # | 项 | 级别 | 通过标准 |
+|---|---|---|---|
+| A1 | **Data Contract** 签字 · 消费方 ack | **M**（跨团队）| 关键字段 / SLA 契约化 |
+| A2 | **Owner** · 主 / 备 owner · Catalog 填 | **M** | 紧急时找到人 |
+| A3 | **血缘打通** · OpenLineage 事件可追 | **S** | 上下游可视化 |
+| A4 | **dbt test** · 关键字段 unique / not_null / relationships | **M** | CI 阻断 |
+| A5 | **Freshness SLO** · 明确到小时 / 分钟级 | **M** | 数据产品基线 |
+| A6 | **Schema 变更流程** · 走 change-management | **M** | Breaking change 30 天通知 |
+| A7 | **Retention policy** · 保留期明确 · lifecycle rule 配 | **M** | 合规 + 成本 |
+| A8 | **PII tag** · 涉敏感字段标注 | **M**（含 PII）| mask / audit 策略生效 |
+
+### 场景 B · ML Serving 上线（模型服务 API）
+
+| # | 项 | 级别 | 通过标准 |
+|---|---|---|---|
+| B1 | **Model Registry alias** · champion / challenger 清晰 | **M** | 回滚 5 分钟内 |
+| B2 | **Shadow → Canary → Champion** 路径验证 | **M** | 至少通过 shadow 1 周 |
+| B3 | **Model Card** · 训练数据 · 评估 · 限制文档 | **M** | 合规要求（EU AI Act）|
+| B4 | **Drift 监控** · PSI / 分布对比 | **M** | 见 [ml-infra/model-monitoring](../ml-infra/model-monitoring.md) |
+| B5 | **Feature Store 契约** · 训推一致性 | **M** | 防训推 skew |
+| B6 | **Serving SLO** · p50 / p99 延迟 + 吞吐 | **M** | |
+| B7 | **Auto-retrain 触发** · 明确条件（drift / 时间 / 业务 KPI） | **S** | 长期维护 |
+| B8 | **Fallback 策略** · 模型挂了降级到规则 / 上一版 | **M** | 防单点 |
+
+### 场景 C · LLM / RAG 应用上线（Chatbot · 企业问答 · Copilot）
+
+| # | 项 | 级别 | 通过标准 |
+|---|---|---|---|
+| C1 | **Prompt 版本化** · Registry 管理 | **M** | 回滚 < 1min |
+| C2 | **Guardrails** · Input / Output / Tool 三层护栏 | **M** | 见 [ai-workloads/guardrails](../ai-workloads/guardrails.md) |
+| C3 | **Model pinning** · `claude-sonnet-4-5-YYYY-MM-DD` 具体版本 | **M** | 防 provider 漂移 |
+| C4 | **Token budget** · 人 / 租户 / 应用维度配额 | **M** | 成本熔断 |
+| C5 | **幻觉 SLO** · faithfulness / groundedness 阈值 | **M** | 见 [sla-slo §AI SLO](sla-slo.md) |
+| C6 | **RAG 评估集** · Golden Set 100+ 条 · CI 跑 RAGAS | **M** | prompt / 模型变更 gate |
+| C7 | **引用 / Source 溯源** · 答案可追溯到 chunk | **M** | 合规 + 审计 |
+| C8 | **Prompt 注入 / 越狱** 回归测试 | **M** | CI 跑 Llama-Attacks / PyRIT 子集 |
+| C9 | **Conversation history 合规** · PII 脱敏 · retention | **M**（含 PII）| |
+| C10 | **LLM Gateway** · 统一路由 · 限流 · fallback | **M** | 见 [ai-workloads/llm-gateway](../ai-workloads/llm-gateway.md) |
+
+### 场景 D · 向量检索服务上线（搜索 · 推荐 · 多模）
+
+| # | 项 | 级别 | 通过标准 |
+|---|---|---|---|
+| D1 | **Embedding 模型 pinning** · 版本 + checkpoint 锁 | **M** | 防 drift |
+| D2 | **索引参数** · M / efConstruction / ef 定 + 文档 | **M** | recall / 延迟 trade-off 记录 |
+| D3 | **Recall / NDCG 基线** · Golden query 评测 | **M** | 质量 SLO |
+| D4 | **Filter-aware 测试** · 元数据过滤 + ANN 组合 case | **S** | 长尾场景 |
+| D5 | **冷 / 热数据分层** · 热在 mem · 冷在 SSD / 归档 | **S** | 成本 |
+| D6 | **Hybrid（dense + sparse）** · BM25 + dense fallback | **S** | 召回 |
+| D7 | **Rerank 层** · Cross-encoder · 可选开关 | **S** | 精度 |
+| D8 | **批量 + 增量 写入**协调 · 防 OOM / 索引 lag | **M** | |
+
+### 场景 E · 平台能力升级（Catalog / 引擎 / 底座变更）
+
+| # | 项 | 级别 | 通过标准 |
+|---|---|---|---|
+| E1 | **影响面评估** · 血缘下游所有系统清单 | **M** | 知道谁会受影响 |
+| E2 | **多 stakeholder 审批** · CAB 级别（见 [change-management §6.1](change-management.md)） | **M** | Breaking 变更必需 |
+| E3 | **全量引擎版本对齐** · 混用风险评估（如 Iceberg v3）| **M** | 见 [troubleshooting §Iceberg v3](troubleshooting.md) |
+| E4 | **灰度迁移** · 先试点表 / 服务 · 稳后全量 | **M** | |
+| E5 | **并行期** · 新旧栈共存窗口 · 回滚预案 | **M** | 防一次性切坏 |
+| E6 | **兼容矩阵文档** · 支持版本 / 废弃版本清单 | **S** | 长期维护 |
+
 ## 成熟度判定
 
 - **< 30 项 Must 通过**：不应上线 · 先补齐

@@ -24,6 +24,14 @@ status: stable
     - **ML 数据质量**（PIT / Label Quality）→ [ml-infra/data-quality-for-ml](../ml-infra/data-quality-for-ml.md) canonical
     - 本页讲**怎么看清湖仓通用平面** + **各专用观测的集成点**
 
+!!! warning "数值适用前提 · 仅作粗估"
+    本页出现的阈值 / 告警线 / 延迟目标依赖：
+    - **SLO 前提**：业务可接受度（BI 秒级 / RAG 秒级 / 流式分钟级 各异）
+    - **规模前提**：并发量 / 数据规模
+    - **环境前提**：自建 vs 云托管 · 不同云厂商 baseline 差异
+    
+    仅作 **量级参考**（±2-5× 常见）· 具体阈值 **必须结合业务 SLO + 历史 baseline 定** · 不可直接照抄。数据来源 · 见 [benchmarks](../benchmarks.md)。
+
 ## 1. 四个观测平面（湖仓通用）
 
 ### 平面 1 · 写入平面
@@ -89,6 +97,47 @@ status: stable
 - Top 10 最贵查询 / 最贵表
 - GPU-hour · LLM-token 两大 AI 成本
 - 工具：Kubecost · CloudHealth · AWS Cost Explorer + 自建 tag 归因
+
+## 2.5 层间集成点 · 专用面如何接入通用基础设施
+
+**§1 通用四平面** + **§2 专用三面** 不是两套栈 · 是**共享底座 + 专用语义**：
+
+```mermaid
+flowchart LR
+    subgraph storage["共享存储层"]
+        prom[Prometheus / Mimir]
+        loki[Loki / Elastic]
+        otel[OTel Collector]
+        iceberg[Iceberg audit tables]
+    end
+    
+    subgraph general["§1 湖仓通用"]
+        g1[写入]
+        g2[Catalog]
+        g3[查询]
+        g4[数据质量]
+    end
+    
+    subgraph special["§2 专用面"]
+        s1[ML 模型监控]
+        s2[LLM Obs]
+        s3[Cost Obs]
+    end
+    
+    general --> prom & loki & otel
+    special --> prom & loki & otel & iceberg
+```
+
+**集成要点**：
+- **Metrics**：ML / LLM 指标（drift · hallucination · token）走同一 Prometheus · label 区分
+- **Trace**：OTel GenAI convention（2024）统一 · LLM trace 和数据管线 trace 可关联
+- **Lineage**：OpenLineage 事件同一流 · 数据 / 模型 / prompt 血缘统一
+- **Cost**：tag / label 统一（团队 / 产品 / 环境）· 任何资源都可归因
+- **Audit**：统一写 Iceberg audit 表 · 跨平面查询
+
+**反模式**：
+- ML 团队自搭 Prometheus · LLM 团队用 Datadog · 运维用 Zabbix · **三栈不通** · Incident 时无法跨平面追
+- Grafana 上 ML / LLM / 成本 Dashboard 都不挂平台统一认证 · 切换账号频繁
 
 ## 3. 基础设施选型 · 2024-2026 生态
 

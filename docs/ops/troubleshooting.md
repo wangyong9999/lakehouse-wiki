@@ -220,6 +220,9 @@ CALL system.rewrite_data_files('my_table', strategy => 'sort');
 
 ## 组 3 · AI 应用故障（2024-2026 新增）
 
+!!! info "本组定位 · 故障形状 + 定位三步 + canonical 指针"
+    每个问题只列 **典型现象 + 排查顺序 + 修复姿势** · 不展开机制 / 深度工具 —— **深度见各 canonical 页**（行内标注）。本组目的 = **生产事故发生时能快速定位到哪个 canonical 去查** · 不重复 ai-workloads/ · ml-infra/ · retrieval/ 章节的深度内容。
+
 ### 问题 11：LLM 调用延迟 / 超时
 
 **现象**：应用端 p95 从 2s 涨到 15s · 或 504 超时率飙升。
@@ -337,6 +340,9 @@ CALL system.rewrite_data_files('my_table', strategy => 'sort');
 
 ## 组 4 · ML 训练 / Serving 故障
 
+!!! info "本组定位"
+    同组 3 · 短概述 + 定位 + canonical 指针。深度见 [ml-infra/](../ml-infra/index.md) · 尤其 [training-orchestration](../ml-infra/training-orchestration.md) · [model-serving](../ml-infra/model-serving.md) · [gpu-scheduling](../ml-infra/gpu-scheduling.md)。
+
 ### 问题 17：GPU OOM / 训练崩溃
 
 **现象**：`CUDA out of memory` · `NCCL error` · 训练 hang 住。
@@ -361,6 +367,8 @@ CALL system.rewrite_data_files('my_table', strategy => 'sort');
 
 **修复工具**：`nvidia-smi` · `dcgm-exporter` · PyTorch Profiler · `nsys` · `rccl-tests`
 
+**深度见** [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) · [ml-infra/training-orchestration](../ml-infra/training-orchestration.md)。
+
 ### 问题 18：Checkpoint 坏 / 无法恢复
 
 **现象**：从 checkpoint 恢复报 `state_dict` 不匹配 · 或文件损坏。
@@ -378,6 +386,8 @@ CALL system.rewrite_data_files('my_table', strategy => 'sort');
 - 保留 **N 个历史 checkpoint**（不要只留 latest）
 - 模型代码版本化 · checkpoint metadata 记 `torch_version` / `model_commit`
 - 关键模型 · checkpoint 跨区复制
+
+**深度见** [ml-infra/training-orchestration](../ml-infra/training-orchestration.md) · [ml-infra/model-registry](../ml-infra/model-registry.md)。
 
 ### 问题 19：训练集复现不了
 
