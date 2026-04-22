@@ -290,7 +290,7 @@ n = power.solve_power(
 - [Feature Store](feature-store.md) §PIT —— 评估集 PIT 正确性
 - [Data Quality for ML](data-quality-for-ml.md) —— 评估集泄漏防御
 - [rag-evaluation](../ai-workloads/rag-evaluation.md) —— LLM / RAG / Agent 评估
-- [AI 治理](../frontier/ai-governance.md) —— EU AI Act Fairness 合规
+- [AI 治理](../ops/compliance.md) —— EU AI Act Fairness 合规
 
 ## 13. 延伸阅读
 

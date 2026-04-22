@@ -1,30 +1,99 @@
 ---
-title: 量级数字总汇 · Benchmark Numbers at a Glance
+title: Benchmark 参考 · 量级数字总汇
 type: reference
 depth: 进阶
 level: A
-last_reviewed: 2026-04-18
+last_reviewed: 2026-04-22
 applies_to: 2024-2026 主流栈 · 硬件参考 H100 / A100 / NVMe
-tags: [frontier, benchmark, reference]
-aliases: [基准数字, Performance Cheat Sheet]
+tags: [reference, benchmark]
+aliases: [基准数字, Performance Cheat Sheet, Benchmark Reference]
 status: stable
 ---
 
-# 量级数字总汇
+# Benchmark 参考 · 量级数字总汇
 
 !!! tip "一句话定位"
-    团队决策时"心里有数"的数字一览。**量级参考**（数量级 ~ ±2-5×）· **非精确 benchmark**。
+    两用一页 · 上半是 **Benchmark 体系索引**（选型参照系哪儿找）· 下半是 **量级数字总汇**（团队决策时"心里有数"）。**量级参考**（数量级 ~ ±2-5×）· **非精确 benchmark** · 自家数据跑过才算数。
 
 !!! warning "使用方法"
     - 数字仅为**数量级**（上下浮动 2-5× 常见）
     - **自家业务 benchmark 永远是最终依据**
     - 版本升级 / 硬件迭代 / 数据分布都会带来显著变化
-    - 本页每半年 review 一次；数字来源见每段标注
+    - 本页每半年 review 一次 · 数字来源见每段标注
 
 **可信度标注**：
 - 🔵 引自官方 spec / benchmark
 - 🟢 公开博客 / 论文（注明来源）
 - 🟡 经验估算（多家工程师共识的量级）
+
+## 0. Benchmark 体系索引
+
+### 0.1 湖仓 / OLAP
+
+| Benchmark | 测什么 | 主要规模 | 备注 |
+| --- | --- | --- | --- |
+| **TPC-DS** | 决策支持（多表 join） | 100GB / 1TB / 10TB | OLAP 长期主流 benchmark |
+| **TPC-H** | 仓库查询 | 1GB - 10TB | 较早的标准 |
+| **SSB**（Star Schema Benchmark） | 星型模式 | 灵活 | 小而美 |
+| **ClickBench** | 单表查询 | 100M 行 Hits 数据 | ClickHouse 倡导 · 单表密集 |
+| **tpch-tools** / **duckdb-benchmarks** | 引擎对比 | 多规模 | 常见用于公开对比 |
+
+### 0.2 向量检索
+
+| Benchmark | 测什么 | 规模 | 备注 |
+| --- | --- | --- | --- |
+| **ANN-Benchmarks** | 各 ANN 算法 | 1M - 1B 向量 | 最权威 |
+| **Big-ANN-Benchmarks** | 十亿级 | 1B - 10B | 学界 + 工业 |
+| **VectorDBBench** (Zilliz) | 向量 DB 端到端 | 千万 - 亿 | 跨系统 benchmark |
+| **MTEB Retrieval** | 基于 embedding 的检索 | 多领域 | 评估 embedding 模型 |
+
+### 0.3 Embedding 模型
+
+| Benchmark | 测什么 | 语种 |
+| --- | --- | --- |
+| **MTEB**（Massive Text Embedding Benchmark） | 56 个任务 | 多语 · 英语为主 |
+| **C-MTEB** | MTEB 中文版 | 中文 |
+| **MMTEB** | 多语言扩展 | 100+ |
+| **BEIR** | 检索专项 | 英语 |
+
+### 0.4 LLM
+
+| Benchmark | 测什么 | 备注 |
+| --- | --- | --- |
+| **MMLU** | 57 学科常识 | 英语通识 |
+| **C-Eval** / **C-MMLU** | 中文通识 | 中文 |
+| **GSM8K** | 数学推理 | 难 |
+| **HumanEval** / **MBPP** | 代码 | Python |
+| **HELM** | 综合框架 | 不是单一 benchmark |
+| **LMSys Chatbot Arena** | 人工 ELO | 最贴近真实体验 |
+
+### 0.5 RAG 评估
+
+| Benchmark / 工具 | 测什么 |
+| --- | --- |
+| **RAGAS** 内置指标 | Groundedness / Context Relevance / Answer Relevance |
+| **BEIR / MTEB Retrieval** | 检索阶段 |
+| **MS MARCO** | 问答语料 |
+| **Natural Questions** | 问答 |
+| **RGB** | RAG 鲁棒性专项 |
+
+### 0.6 读 benchmark 的三条原则
+
+1. **看绝对数字无意义** —— 硬件 / 配置 / 数据分布都影响。看**相对顺序**和**差距幅度**
+2. **找"测评负载和你负载接近"的 benchmark** —— 你做点查就别看 TPC-DS 的大 shuffle 分数
+3. **复现关键几个** —— 自己跑得通 · 才能排除 cherry-pick
+
+### 0.7 自家 benchmark 建议
+
+- **固化 Golden Set**（100-500 条真实 query）
+- **每次选型 / 升级都跑一遍**
+- 结果入表：
+  ```
+  benchmark_run_id | engine | config | metric | value | ts
+  ```
+- 定期 review · 识别退化
+
+---
 
 ## 1. 湖仓 / 表格式
 
@@ -318,11 +387,10 @@ Total p95:        1.5-2s
 
 ## 相关
 
-- [Benchmark 参考](benchmarks.md) —— Benchmark 体系介绍
-- [LLM 推理优化](llm-inference-opt.md)
-- [向量检索前沿](vector-trends.md)
-- [TCO 模型](../ops/tco-model.md)
-- [业务场景全景](../scenarios/business-scenarios.md)
+- [LLM Inference](ai-workloads/llm-inference.md) · 推理栈性能数字
+- [Embedding](retrieval/embedding.md) · [Quantization](retrieval/quantization.md) · 向量模型与压缩
+- [TCO 模型](ops/tco-model.md)
+- [业务场景全景](scenarios/business-scenarios.md)
 
 ## 延伸阅读
 

@@ -38,7 +38,7 @@ title: <页标题>
 type: concept | system | comparison | scenario | reference | learning-path | adr
 depth: 入门 | 进阶 | 资深            # 建议阅读门槛
 level: S | A | B                    # S 核心资产 · A 重要主题 · B 维持水位
-applies_to: <版本 / 时效范围>        # 如 "Iceberg 1.4+"、"2024-2026 主流"；当前参考版本见 frontier/benchmark-numbers.md §12
+applies_to: <版本 / 时效范围>        # 如 "Iceberg 1.4+"、"2024-2026 主流"；当前参考版本见 benchmarks.md §12
 tags: [...]
 owner: <team / person>              # 该页负责人（可选但推荐）
 last_reviewed: YYYY-MM-DD            # 最近一次人工 review 日期（建议季度刷新）

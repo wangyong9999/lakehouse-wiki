@@ -396,7 +396,7 @@ Model Monitoring     ← 监控 + 漂移告警 → 回 Registry 推 challenger
 - [Model Monitoring](model-monitoring.md) —— 上线后守门
 - [LLM Fine-tuning](fine-tuning-data.md) —— LoRA adapter 生产
 - [Unity Catalog](../catalog/unity-catalog.md) —— UC Models
-- [AI 治理](../frontier/ai-governance.md) —— EU AI Act 法规层
+- [AI 治理](../ops/compliance.md) —— EU AI Act 法规层
 - [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
 
 ## 17. 延伸阅读

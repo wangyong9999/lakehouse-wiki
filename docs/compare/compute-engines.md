@@ -165,4 +165,4 @@ Single process
 - *Presto / Trino Architecture*（Trino docs）
 - *Lightning-Fast Big Data Analytics with Spark*
 - *Stream Processing with Flink*（Akidau）
-- Benchmark 参考：[Benchmark 参考](../frontier/benchmarks.md)
+- Benchmark 参考：[Benchmark 参考](../benchmarks.md)

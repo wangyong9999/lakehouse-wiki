@@ -12,11 +12,9 @@ status: stable
 ---
 
 !!! warning "章节分工声明"
-    - **本页**：合规法规的**工程实施视角**（具体要求 · 技术对应 · 落地清单）
-    - **AI 治理战略视角**（Red Teaming 组织 · 伦理框架 · 前沿讨论）→ [frontier/ai-governance](../frontier/ai-governance.md)
+    - **本页**：合规法规的**工程实施视角**（具体要求 · 技术对应 · 落地清单）· 含 §4 AI 合规（EU AI Act · NIST AI RMF · 中国生成式 AI 管理办法）
+    - **Guardrails 技术层 + Red Teaming 方法** → [ai-workloads/guardrails](../ai-workloads/guardrails.md)
     - **Model Card / 模型许可工程实施** → [ml-infra/model-registry](../ml-infra/model-registry.md) §合规 artifact
-    - **Guardrails 技术层** → [ai-workloads/guardrails](../ai-workloads/guardrails.md)
-    - 本页讲**法规对数据 / AI 平台的具体工程要求**
 
 # 数据合规
 
@@ -220,7 +218,7 @@ PARTITIONED BY (days(event_ts));
 
 ## 4. AI 合规叠加（2024-2026 重点）
 
-AI 法规**2024-2026 爆发** · 本节详细讲工程影响。战略视角和 Red Teaming 去 [frontier/ai-governance](../frontier/ai-governance.md)。
+AI 法规**2024-2026 爆发** · 本节详细讲工程影响。Red Teaming 方法论和 Guardrails 工具见 [ai-workloads/guardrails](../ai-workloads/guardrails.md) §7。
 
 ### 4.1 EU AI Act（2024-08 生效 · 2026-08 全量执行）
 
@@ -366,5 +364,5 @@ AI 法规**2024-2026 爆发** · 本节详细讲工程影响。战略视角和 R
 ## 相关
 
 - [数据治理](data-governance.md) · [安全与权限](security-permissions.md) · [多租户](multi-tenancy.md)
-- [AI 治理](../frontier/ai-governance.md)
+- [AI 治理](../ops/compliance.md)
 - [TCO 与定价模型](tco-model.md)

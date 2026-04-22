@@ -483,7 +483,7 @@ Query → Hybrid (dense + BM25) → Rerank (Cross-encoder) → Prompt → LLM (v
 
 | 领域 | Benchmark / Dataset | 对应 |
 |---|---|---|
-| OLAP | TPC-DS 10/100/1000, TPC-H, SSB, ClickBench | [Benchmark 参考](../frontier/benchmarks.md) |
+| OLAP | TPC-DS 10/100/1000, TPC-H, SSB, ClickBench | [Benchmark 参考](../benchmarks.md) |
 | 检索 | BEIR, MS MARCO, Natural Questions, HotpotQA | RAG / 搜索 |
 | 多模检索 | MS COCO, Flickr30k, LAION 子集, MS-COCO image-text | 多模检索 |
 | 推荐 | Criteo, MovieLens, Taobao User Behavior | 推荐系统 |

@@ -165,6 +165,7 @@ nav:
       - 扩展 / 前沿:
           - Materialized View: lakehouse/materialized-view.md
           - 多模湖仓: lakehouse/multi-modal-lake.md
+          - Iceberg v3 · spec 演进: lakehouse/iceberg-v3.md
       - 系统实现:
           - Apache Iceberg: lakehouse/iceberg.md
           - Apache Paimon: lakehouse/paimon.md
@@ -369,22 +370,6 @@ nav:
       - 反模式 · 清单:
           - 28 反模式: ops/anti-patterns.md
           - 生产上线检查清单: ops/production-checklist.md
-  - 研究前沿:
-      - frontier/index.md
-      - AI · 检索前沿:
-          - LLM 推理优化: frontier/llm-inference-opt.md
-          - RAG 前沿 2025: frontier/rag-advances-2025.md
-          - 向量检索前沿: frontier/vector-trends.md
-          - AI 治理: frontier/ai-governance.md
-          - DiskANN 论文笔记: frontier/diskann-paper.md
-      - Benchmark:
-          - Benchmark 参考: frontier/benchmarks.md
-          - 量级数字总汇: frontier/benchmark-numbers.md
-      - 生态 · 演进:
-          - Lakehouse 厂商与开源生态格局: frontier/vendor-landscape.md
-          - Iceberg v3 预览: frontier/iceberg-v3-preview.md
-          - 三代数据系统演进史: frontier/data-systems-evolution.md
-          - Modern Data Stack 全景: frontier/modern-data-stack.md
   - 速查单:
       - cheatsheets/index.md
       - Iceberg 速查: cheatsheets/iceberg.md
@@ -402,6 +387,7 @@ nav:
       - 0007 版本刷新 SOP: adr/0007-version-refresh-sop.md
       - 0008 对抗评审 SOP: adr/0008-adversarial-review-sop.md
       - 0009 frontier → main 下沉判据: adr/0009-frontier-to-main-migration.md
+      - 0010 废除 frontier 章节: adr/0010-abolish-frontier-chapter.md
   - 附录:
       - FAQ: faq.md
       - 术语表: glossary.md
@@ -409,6 +395,11 @@ nav:
       - 横向对比索引: compare/index.md
       - 按技术栈索引: index-by-technology.md
       - 按 Tag 浏览: tags/index.md
+      - 参考资料:
+          - Benchmark 参考 · 量级数字: benchmarks.md
+          - Lakehouse 厂商与生态格局: vendor-landscape.md
+          - Modern Data Stack 全景: modern-data-stack.md
+          - 三代数据系统演进史: data-systems-evolution.md
       - Changelog: changelog.md
       - 贡献指南: contributing.md
 

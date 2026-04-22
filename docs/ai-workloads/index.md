@@ -26,7 +26,7 @@ last_reviewed: 2026-04-21
     - **ML 平台**（Feature Store / Model Registry / Model Serving / 训练编排 / GPU 调度）→ [ml-infra/](../ml-infra/index.md)
     - **BI × LLM**（Text-to-SQL / 语义层 LLM 集成 / Auto-Viz）→ [bi-workloads/bi-plus-llm.md](../bi-workloads/bi-plus-llm.md)
     - **端到端业务场景**（RAG on Lake / Agentic Workflows / 推荐系统）→ [scenarios/](../scenarios/index.md)
-    - **前沿 / 研究 / 治理规范**（EU AI Act / Red Teaming 组织流程）→ [frontier/](../frontier/index.md)
+    - **法规 / 治理规范**（EU AI Act / NIST AI RMF / 中国生成式 AI 管理办法）→ [ops/compliance §4](../ops/compliance.md)
 
 ## 三层分组
 
@@ -80,7 +80,7 @@ last_reviewed: 2026-04-21
 **SRE / Security**：
 - 层 3 · guardrails + authorization + llm-observability · 三件都读
 - llm-gateway（运维视角）
-- 相邻 [AI 治理](../frontier/ai-governance.md)（法规层）
+- 相邻 [AI 治理](../ops/compliance.md)（法规层）
 
 ## 角色建议速查
 
@@ -99,9 +99,9 @@ last_reviewed: 2026-04-21
 
 ## 前沿 · 跳转 frontier（话题仍在演进）
 
-- [RAG 前沿](../frontier/rag-advances-2025.md) —— CRAG / Self-RAG / Agentic RAG 深度
-- [向量检索前沿](../frontier/vector-trends.md) —— RaBitQ / BQ / Matryoshka 前沿部分
-- [AI 治理](../frontier/ai-governance.md) —— EU AI Act / Red Teaming 组织流程（和本章 [guardrails](guardrails.md) 工程层分工）
+- [RAG 前沿](../ai-workloads/rag.md) —— CRAG / Self-RAG / Agentic RAG 深度
+- [向量检索前沿](../retrieval/embedding.md) —— RaBitQ / BQ / Matryoshka 前沿部分
+- [AI 治理](../ops/compliance.md) —— EU AI Act / Red Teaming 组织流程（和本章 [guardrails](guardrails.md) 工程层分工）
 
 **注**：原 `frontier/llm-inference-opt.md` 已下沉为本章 [LLM Inference](llm-inference.md)（按 [ADR 0009](../adr/0009-frontier-to-main-migration.md)）。
 

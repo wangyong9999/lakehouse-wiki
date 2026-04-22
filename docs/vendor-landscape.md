@@ -3,9 +3,9 @@ title: Lakehouse 厂商与开源生态格局（2025-2026）
 type: reference
 depth: 资深
 level: A
-last_reviewed: 2026-04-18
+last_reviewed: 2026-04-22
 applies_to: 2025-2026 市场 · 定价有效期请以官方为准
-tags: [frontier, market, vendor, ecosystem]
+tags: [reference, market, vendor, ecosystem]
 aliases: [Vendor Landscape]
 related: [tco-model, data-systems-evolution, modern-data-stack]
 status: stable
@@ -319,6 +319,6 @@ status: stable
 
 ## 相关
 
-- [TCO 模型](../ops/tco-model.md) —— 具体成本分析
+- [TCO 模型](ops/tco-model.md) —— 具体成本分析
 - [三代数据系统演进史](data-systems-evolution.md) · [Modern Data Stack](modern-data-stack.md)
-- [业务场景全景](../scenarios/business-scenarios.md) · [横向对比](../compare/index.md)
+- [业务场景全景](scenarios/business-scenarios.md) · [横向对比](compare/index.md)

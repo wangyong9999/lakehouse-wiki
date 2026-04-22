@@ -18,7 +18,7 @@ last_reviewed: 2026-04-21
     - **AI 应用权限**（Tool ACL / Identity 流转）→ [ai-workloads/authorization](../ai-workloads/authorization.md) canonical
     - **GPU 调度 / FinOps for ML** → [ml-infra/gpu-scheduling](../ml-infra/gpu-scheduling.md) canonical
     - **Catalog 治理平面** → [catalog/strategy](../catalog/strategy.md) canonical
-    - **AI 治理（EU AI Act · Red Teaming 组织层）** → [frontier/ai-governance](../frontier/ai-governance.md)
+    - **AI 治理（EU AI Act · Red Teaming 组织层）** → [ops/compliance §4]((../ops/compliance.md)
     - 本章以上主题**只做工程落地视角** · 不重复战略 / 机制 canonical
 
 !!! abstract "TL;DR"
@@ -132,7 +132,7 @@ last_reviewed: 2026-04-21
 1. [compliance](compliance.md) · 全球合规法规
 2. [data-governance](data-governance.md) · 治理工程
 3. [security-permissions](security-permissions.md) §审计 + §数据保护
-4. [frontier/ai-governance](../frontier/ai-governance.md) · AI 治理（相邻章）
+4. [ops/compliance §4]((../ops/compliance.md) · AI 治理（相邻章）
 
 ### 数据 / ML 工程师
 
@@ -202,7 +202,7 @@ last_reviewed: 2026-04-21
 - AI/LLM 生产 SLO 体系（幻觉率 / token budget）
 - DRE 专职团队
 
-**对应**：持续改进 · 跟进业界前沿（[frontier/](../frontier/index.md)）+ 工业案例学习（[cases/](../cases/index.md)）
+**对应**：持续改进 · 跟进业界动向（[benchmarks](../benchmarks.md) · [vendor-landscape](../vendor-landscape.md)）+ 工业案例学习（[cases/](../cases/index.md)）
 
 ## 5. 和其他章节的关系
 
@@ -228,15 +228,10 @@ flowchart TB
     m_gpu[GPU + FinOps]
   end
   
-  subgraph frontier["frontier/"]
-    f_ai[AI 治理]
-  end
-  
   o_obs -.分工.-> a_obs
   o_obs -.分工.-> m_mon
   o_sec -.分工.-> a_auth
   o_cost -.分工.-> m_gpu
-  ops -.工程落地.-> f_ai
 ```
 
 **原则**：ops/ **只做工程落地** · 具体的 ML/AI 机制 canonical 在对应专章 · 通过 admonition 指向。
@@ -264,4 +259,4 @@ flowchart TB
 - [ml-infra/](../ml-infra/index.md) · ML 平台（运维的 ML 视角）
 - [ai-workloads/](../ai-workloads/index.md) · AI 应用（运维的 LLM 视角）
 - [catalog/](../catalog/index.md) · Catalog（治理平面）
-- [frontier/ai-governance](../frontier/ai-governance.md) · AI 治理前沿
+- [ops/compliance §4]((../ops/compliance.md) · AI 治理前沿

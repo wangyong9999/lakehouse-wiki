@@ -3,7 +3,7 @@ title: Modern Data Stack · 现代数据栈全景
 type: concept
 depth: 进阶
 level: S
-last_reviewed: 2026-04-18
+last_reviewed: 2026-04-22
 applies_to: 2024-2026 业界主流
 tags: [foundations, mds, ecosystem]
 aliases: [现代数据栈, MDS]
@@ -301,9 +301,9 @@ BI / RAG / Chat-to-Insight
 - **Semantic Search on Data**（"找描述类似'超级 VIP'的用户群"）
 
 详见：
-- [Text-to-SQL 场景](../scenarios/business-scenarios.md#text-to-sql-semantic-sql)
-- [Agentic Workflows](../scenarios/agentic-workflows.md)
-- [MCP · Model Context Protocol](../ai-workloads/mcp.md)
+- [Text-to-SQL 场景](scenarios/business-scenarios.md#text-to-sql-semantic-sql)
+- [Agentic Workflows](scenarios/agentic-workflows.md)
+- [MCP · Model Context Protocol](ai-workloads/mcp.md)
 
 ## 7. 典型反模式
 
@@ -325,5 +325,5 @@ BI / RAG / Chat-to-Insight
 ## 相关
 
 - [三代数据系统演进史](data-systems-evolution.md)
-- [湖表](../lakehouse/lake-table.md) · [业务场景全景](../scenarios/business-scenarios.md)
-- [BI on Lake](../scenarios/bi-on-lake.md)
+- [湖表](lakehouse/lake-table.md) · [业务场景全景](scenarios/business-scenarios.md)
+- [BI on Lake](scenarios/bi-on-lake.md)

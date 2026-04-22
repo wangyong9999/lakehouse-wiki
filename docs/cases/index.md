@@ -15,7 +15,7 @@ last_reviewed: 2026-04-21
     - **不讲机制原理**：机制去对应技术栈章（[lakehouse/](../lakehouse/index.md) / [retrieval/](../retrieval/index.md) / [catalog/](../catalog/index.md) / [query-engines/](../query-engines/index.md) / [ai-workloads/](../ai-workloads/index.md) / [ml-infra/](../ml-infra/index.md)）
     - **架构模式 / 战略主张**：去 [unified/](../unified/index.md) · 本章**不做战略判断**
     - **业务场景端到端**：去 [scenarios/](../scenarios/index.md) · 讲具体业务
-    - **厂商选型商业视角**：去 [frontier/vendor-landscape](../frontier/vendor-landscape.md)
+    - **厂商选型商业视角**：去 [Vendor Landscape](../vendor-landscape.md)
     
     **用法**：做架构设计 / 选型评审 / 方案论证时翻一翻 · 知道"业界是怎么做的 · 为什么这么做 · 哪里踩过坑"。
 
@@ -131,9 +131,9 @@ last_reviewed: 2026-04-21
 | 学 **大规模 Iceberg 运维** | [Netflix](netflix.md)（10 万+ 表）| [LinkedIn · OpenHouse](linkedin.md) |
 | 学 **中国工业实践** | [阿里巴巴](alibaba.md) | （后续加字节 / 腾讯 / 美团）|
 
-## 5. 和 frontier/vendor-landscape 的分工
+## 5. 和 vendor-landscape 的分工
 
-| | **本章 cases/** | **[frontier/vendor-landscape](../frontier/vendor-landscape.md)** |
+| | **本章 cases/** | **[Vendor Landscape](../vendor-landscape.md)** |
 |---|---|---|
 | **视角** | **案例事实**（历史 · 规模 · 取舍 · 教训）| **厂商选型**（商业产品横比 · 定价 · 生态） |
 | **性质** | reference 拆解 | compare + 前沿观察 |
@@ -227,15 +227,15 @@ last_reviewed: 2026-04-21
 
 - *Designing Data-Intensive Applications*（Kleppmann · 数据系统设计必读）
 - *The Composable Data Stack*（a16z · 数据栈演进视角）
-- *Modern Data Stack* 分析（本 wiki [frontier/modern-data-stack](../frontier/modern-data-stack.md)）
+- *Modern Data Stack* 分析（本 wiki [Modern Data Stack](../modern-data-stack.md)）
 - 各家开源项目官方文档（Iceberg / Paimon / Hudi / Delta · Kafka / Pinot / Flink 等）
 
 ## 11. 章节相关
 
 - [unified/](../unified/index.md) —— 跨章组合视角
-- [frontier/vendor-landscape](../frontier/vendor-landscape.md) —— 厂商选型商业视角
-- [frontier/modern-data-stack](../frontier/modern-data-stack.md) —— 现代数据栈全景
-- [frontier/data-systems-evolution](../frontier/data-systems-evolution.md) —— 三代数据系统演进史（Netflix / LinkedIn / Uber 在第三代）
+- [Vendor Landscape](../vendor-landscape.md) —— 厂商选型商业视角
+- [Modern Data Stack](../modern-data-stack.md) —— 现代数据栈全景
+- [数据系统演进史](../data-systems-evolution.md) —— 三代数据系统演进史（Netflix / LinkedIn / Uber 在第三代）
 - [compare/iceberg-vs-paimon-vs-hudi-vs-delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 表格式横比
 - [catalog/strategy](../catalog/strategy.md) —— Catalog 选型决策（综合 7 家案例经验）
 - [lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [catalog/](../catalog/index.md) · [ml-infra/](../ml-infra/index.md) · [ai-workloads/](../ai-workloads/index.md) —— 机制 canonical

@@ -37,7 +37,7 @@ last_reviewed: 2026-04-18
 | Rerank | [Rerank](retrieval/rerank.md) |
 | Snapshot · MVCC on Object Store | [Snapshot](lakehouse/snapshot.md) |
 | Manifest · 元数据索引 | [Manifest](lakehouse/manifest.md) |
-| 量级数字汇总 | [量级数字总汇](frontier/benchmark-numbers.md) |
+| 量级数字汇总 | [量级数字总汇](benchmarks.md) |
 
 ## 权威资源（优于本手册）
 
@@ -72,4 +72,4 @@ last_reviewed: 2026-04-18
 
 ## 相关
 
-- [贡献指南](contributing.md) · [术语表](glossary.md) · [量级数字总汇](frontier/benchmark-numbers.md)
+- [贡献指南](contributing.md) · [术语表](glossary.md) · [量级数字总汇](benchmarks.md)

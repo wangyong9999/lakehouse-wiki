@@ -66,6 +66,6 @@ status: stable
 
 ## 进阶
 
-- 读一篇 SIGMOD / VLDB 上的最新向量 / 湖仓论文写 paper note（贡献到 `frontier/`）
+- 读一篇 SIGMOD / VLDB 上的最新向量 / 湖仓论文写 paper note（并入对应机制章的 §前沿进展 节）
 - 为团队 wiki 补一页你最有把握的概念 / 系统页
 - 向 `adr/` 写一个"在 X 场景下我们选择 Y"的决策记录

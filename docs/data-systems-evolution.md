@@ -3,7 +3,7 @@ title: 三代数据系统演进史 · Database → Data Warehouse → Lakehouse
 type: concept
 depth: 进阶
 level: S
-last_reviewed: 2026-04-18
+last_reviewed: 2026-04-22
 applies_to: 历史梳理（1970s-2025）
 tags: [foundations, history, evolution]
 aliases: [数据系统简史, Data Systems Evolution]
@@ -299,9 +299,9 @@ Iceberg / Paimon （湖底座）
 
 ## 相关
 
-- [湖表](../lakehouse/lake-table.md) · [Iceberg](../lakehouse/iceberg.md) · [Paimon](../lakehouse/paimon.md)
+- [湖表](lakehouse/lake-table.md) · [Iceberg](lakehouse/iceberg.md) · [Paimon](lakehouse/paimon.md)
 - [Modern Data Stack](modern-data-stack.md)
-- [一体化架构](../unified/index.md) · [业务场景全景](../scenarios/business-scenarios.md)
+- [一体化架构](unified/index.md) · [业务场景全景](scenarios/business-scenarios.md)
 
 ## 延伸阅读
 

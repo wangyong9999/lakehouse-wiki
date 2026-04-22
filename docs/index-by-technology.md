@@ -51,7 +51,7 @@ hide:
 - **ML**：[MLflow](ml-infra/mlops-lifecycle.md) · [Databricks Feature Store](compare/feature-store-comparison.md) · Vector Search
 - **协作**：Notebook / Workflows / DLT
 - **优势**：一站式；**劣势**：锁定
-- 对比：[湖仓演进史](frontier/data-systems-evolution.md)
+- 对比：[湖仓演进史](data-systems-evolution.md)
 
 ---
 
@@ -95,7 +95,7 @@ hide:
 - **Embedding**：BGE / E5 / Cohere（[对比](compare/embedding-models.md)）
 - **Rerank**：bge-reranker / Cohere Rerank（[对比](compare/rerank-models.md)）
 - **LLM**：[vLLM / SGLang / TGI](ai-workloads/llm-inference.md)
-- **前沿**：[Contextual Retrieval / CRAG / Self-RAG](frontier/rag-advances-2025.md)
+- **前沿**：[Contextual Retrieval / CRAG / Self-RAG](ai-workloads/rag.md)
 - **管线**：LangChain / LlamaIndex / Haystack
 - **评估**：RAGAS / TruLens
 - **协议**：[MCP](ai-workloads/mcp.md)
@@ -159,11 +159,11 @@ hide:
 
 ## 安全 / 合规栈
 
-- **治理 Catalog**：[Unity](catalog/unity-catalog.md) / [DataHub / OpenMetadata](frontier/modern-data-stack.md)
+- **治理 Catalog**：[Unity](catalog/unity-catalog.md) / [DataHub / OpenMetadata](modern-data-stack.md)
 - **血缘**：DataHub / OpenLineage
 - **质量**：Great Expectations / Soda / dbt tests
 - **合规**：[GDPR / HIPAA / PDPA / 个保法](ops/compliance.md)
-- **AI 治理**：[EU AI Act / Guardrails / Red Teaming](frontier/ai-governance.md)
+- **AI 治理**：[EU AI Act / Guardrails / Red Teaming](ops/compliance.md)
 
 ---
 

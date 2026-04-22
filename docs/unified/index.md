@@ -267,5 +267,5 @@ flowchart LR
 
 - **实践参考**：[cases/](../cases/index.md) —— Netflix / LinkedIn / Uber / 六家综述
 - **业务落地**：[scenarios/rag-on-lake](../scenarios/rag-on-lake.md) · [scenarios/multimodal-search-pipeline](../scenarios/multimodal-search-pipeline.md)
-- **前沿跟踪**：[frontier/iceberg-v3-preview](../frontier/iceberg-v3-preview.md) · [frontier/vendor-landscape](../frontier/vendor-landscape.md) · [frontier/vector-trends](../frontier/vector-trends.md)
-- **版本 / 数字基线**：[frontier/benchmark-numbers](../frontier/benchmark-numbers.md)
+- **新方向跟踪**：[Iceberg v3](../lakehouse/iceberg-v3.md) · [Vendor Landscape](../vendor-landscape.md) · [Embedding 前沿](../retrieval/embedding.md)
+- **版本 / 数字基线**：[benchmarks](../benchmarks.md)

@@ -347,7 +347,7 @@ mlflow.set_registered_model_alias(
 - **Model Card** 记录：数据来源 · 预期用途 · 已知偏见 · 许可（base model 许可如 Llama 3 Community License · Gemma 条款）
 - **EU AI Act** 高风险系统：技术文档必须包含训练数据描述
 
-详细合规见 [AI 治理](../frontier/ai-governance.md) · [Model Registry](model-registry.md) §合规。
+详细合规见 [AI 治理](../ops/compliance.md) · [Model Registry](model-registry.md) §合规。
 
 ## 9. 陷阱 · 反模式
 
@@ -382,7 +382,7 @@ mlflow.set_registered_model_alias(
 - [RAG/LLM/Agent 评估](../ai-workloads/rag-evaluation.md) —— 评估 canonical
 - [离线训练数据流水线](../scenarios/offline-training-pipeline.md)
 - [Lance Format](../foundations/lance-format.md)
-- [AI 治理](../frontier/ai-governance.md) —— 合规
+- [AI 治理](../ops/compliance.md) —— 合规
 
 ## 12. 延伸阅读
 

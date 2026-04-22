@@ -355,4 +355,4 @@ Samza → Flink 是 2024 LinkedIn 展现的**稀缺品质**。工业界太多"�
 - [Feature Store 横比](../compare/feature-store-comparison.md) —— Feathr 对比
 - [catalog/](../catalog/index.md) —— DataHub 在 catalog 生态
 - [案例 · Netflix](netflix.md) · [案例 · Uber](uber.md) —— 同代案例
-- [案例综述](studies.md) · [Modern Data Stack](../frontier/modern-data-stack.md)
+- [案例综述](studies.md) · [Modern Data Stack](../modern-data-stack.md)

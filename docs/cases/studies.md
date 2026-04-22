@@ -33,7 +33,7 @@ status: stable
     - **OSS 基础设施代表**：[Netflix](netflix.md)（Iceberg 诞生地）· [LinkedIn](linkedin.md)（Kafka 全家桶）· [Uber](uber.md)（Hudi + Michelangelo）
     - **多模推荐工业代表**：[Pinterest](pinterest.md)（PinSage + Homefeed）
     - **中国工业代表**：[阿里巴巴](alibaba.md)（Paimon 诞生地 + Flink 深度使用）
-    - **配合 [Vendor Landscape](../frontier/vendor-landscape.md)**（厂商选型视角）使用
+    - **配合 [Vendor Landscape](../vendor-landscape.md)**（厂商选型视角）使用
 
 ## 1. 评估坐标系 · 8 维
 
@@ -301,14 +301,14 @@ status: stable
     - **机制原理**：去对应技术栈章（[lakehouse/](../lakehouse/index.md) / [catalog/](../catalog/index.md) / [retrieval/](../retrieval/index.md) / [ml-infra/](../ml-infra/index.md) / [ai-workloads/](../ai-workloads/index.md)）
     - **架构组合决策**：[unified/](../unified/index.md)
     - **业务场景端到端**：[scenarios/](../scenarios/index.md)
-    - **厂商选型（商业视角）**：[frontier/vendor-landscape](../frontier/vendor-landscape.md)
-    - **前沿未来**：[frontier/](../frontier/index.md)
+    - **厂商选型（商业视角）**：[Vendor Landscape](../vendor-landscape.md)
+    - **Benchmark 参考**：[benchmarks](../benchmarks.md)
 
 ## 10. 相关 · 延伸阅读
 
 - 各家深度案例：[Databricks](databricks.md) · [Snowflake](snowflake.md) · [Netflix](netflix.md) · [LinkedIn](linkedin.md) · [Uber](uber.md) · [Pinterest](pinterest.md) · [阿里巴巴](alibaba.md)
-- [Modern Data Stack](../frontier/modern-data-stack.md) —— 现代数据栈全景
-- [Vendor Landscape](../frontier/vendor-landscape.md) —— 厂商选型（商业视角）
+- [Modern Data Stack](../modern-data-stack.md) —— 现代数据栈全景
+- [Vendor Landscape](../vendor-landscape.md) —— 厂商选型（商业视角）
 - [Iceberg vs Paimon vs Hudi vs Delta](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) —— 表格式横比
 - [Catalog 策略](../catalog/strategy.md) —— Catalog 选型决策
 - [Lake + Vector 融合架构](../unified/lake-plus-vector.md) —— 架构组合视角

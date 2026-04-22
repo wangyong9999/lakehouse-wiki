@@ -215,6 +215,6 @@ last_reviewed: 2026-04-21
 
 ## 前沿跳转
 
-- [AI 治理](../frontier/ai-governance.md) —— EU AI Act · Red Teaming 组织流程（本章 model-registry §合规字段是工程落地）
+- [AI 治理](../ops/compliance.md) —— EU AI Act · Red Teaming 组织流程（本章 model-registry §合规字段是工程落地）
 
 **注**：原 `frontier/llm-inference-opt.md` 已按 [ADR 0009](../adr/0009-frontier-to-main-migration.md) 下沉为 [ai-workloads/llm-inference.md](../ai-workloads/llm-inference.md)。

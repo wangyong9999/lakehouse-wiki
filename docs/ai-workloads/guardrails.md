@@ -21,11 +21,11 @@ status: stable
     - **2026 主流工具**：**Llama Guard 3**（Meta · 开源内容分类）· **NeMo Guardrails 2026 IORails**（NVIDIA · 对话约束 + 并行执行）· **Guardrails AI**（结构化验证）· **Lakera Guard**（商业 prompt injection）· **OpenAI Moderation / Guardrails API** · **Azure Content Safety**
     - **集成模式 3 种**：Pre-LLM（input filter）· Post-LLM（output filter）· In-LLM（作为 agent tool 调用）
     - **生产建议**：组合式 · 不是单一工具 · "**Llama Guard + Guardrails AI + NeMo + Pattern 匹配**"defense-in-depth
-    - **和 [frontier/ai-governance](../frontier/ai-governance.md) 分工清晰**：**本页讲工程落地** · ai-governance 讲**法规 / 组织流程**（EU AI Act · Red Teaming · 合规审计）
+    - **法规 / 组织流程**（EU AI Act · NIST AI RMF · 中国生成式 AI 管理办法）→ [ops/compliance §4](../ops/compliance.md)
 
 !!! info "边界"
-    - **工程 guardrails** → 本页
-    - **治理 · 法规 · 组织流程**（EU AI Act / Red Teaming / 合规审计）→ [frontier/ai-governance](../frontier/ai-governance.md)
+    - **工程 guardrails + Red Teaming 方法** → 本页
+    - **法规 / 合规审计 / 组织流程** → [ops/compliance §4](../ops/compliance.md)
     - **评估 / Benchmark**（越狱攻击基准）→ 部分在本页 · 部分在 [RAG 评估](rag-evaluation.md) · Agent 评估见 [Agent Patterns](agent-patterns.md)
 
 ## 1. 业务痛点 · Guardrails 防什么
@@ -282,20 +282,40 @@ def check_content_safety(text: str) -> dict:
 - 商业 API（Lakera · OpenAI · Azure）：按调用计费 · 1000 call/day 量级几 $/month
 - **ROI 评估**：合规 + 品牌风险 · 通常远超成本
 
-## 7. 和 frontier/ai-governance 的分工
+## 7. Red Teaming · 对抗测试方法
 
-**本页（工程落地）**：
-- 具体工具 / API 对比
-- 集成模式代码
-- 生产延迟 / 成本
-- defense-in-depth 架构
+**定位**：guardrails 是**被动防护** · Red Teaming 是**主动攻击** · 两者互补。专门团队或工具**主动攻击 AI 系统**，发现 guardrails 漏洞后反哺防护。
 
-**[frontier/ai-governance](../frontier/ai-governance.md)（治理 / 法规）**：
-- **EU AI Act** 2024 过 · 2025-2026 生效梯次 · 高风险 AI 系统义务
-- **NIST AI Risk Management Framework**
-- **Red Teaming 组织流程**（不是工具 · 是方法论和团队）
-- **合规审计** · 数据供应链 · 模型供应链
-- **公司层 AI policy** 制定
+### 攻击维度
+
+| 攻击 | 做什么 | 典型 |
+|---|---|---|
+| **Prompt Injection** | 指令劫持 | "忽略前面指令 · 做 X" |
+| **Jailbreak** | 绕过安全训练 | DAN · AIM · 多轮诱导 · role-play |
+| **Adversarial Input** | 字形 / 同义替换 / 噪声 | 错字绕过 keyword filter |
+| **Data Poisoning** | 投毒训练 / RAG 语料 | 污染检索源使 RAG 生成错答 |
+| **Model Extraction** | 大量 query 复刻模型 | 用 API 输出蒸馏目标模型 |
+| **Membership Inference** | 推断数据是否在训练集 | 隐私 / 合规风险 |
+
+### 工具
+
+- **Microsoft PyRIT**（Python Risk Identification Tool · 开源 · 覆盖主流攻击）
+- **Garak**（LLM vulnerability scanner · 模块化攻击集）
+- **Promptfoo**（评估 + 对抗测试一体）
+- **Llama-Attacks** 数据集
+
+### 推荐流程
+
+1. **每季度一次**全面 red team（内部或第三方）
+2. **持续 automated red team**（CI 跑对抗测试 · 回归）
+3. **第三方审计**（合规要求 · 如 EU AI Act 高风险系统）
+4. **Bug Bounty**（Anthropic / OpenAI 公开奖金模式）
+
+### Red Teaming 反哺 guardrails
+
+- 每次发现新攻击模式 → 加入 guardrail 规则库 / 训练集
+- 公开攻击模式（如 Do Anything Now）列入 CI 回归
+- Red Team 报告 → 合规审计材料（见 [ops/compliance §4](../ops/compliance.md)）
 
 ## 8. 陷阱与反模式
 
@@ -315,7 +335,7 @@ def check_content_safety(text: str) -> dict:
 - [Structured Output](structured-output.md) —— Guardrails AI 的基础 · schema validation
 - [LLM Gateway](llm-gateway.md) —— guardrails 集成的主要集成点
 - [Agent Patterns](agent-patterns.md) —— agent 的 HITL 是一种 guardrails
-- [frontier/ai-governance](../frontier/ai-governance.md) —— 治理 / 法规层
+- [ops/compliance §4](../ops/compliance.md) —— 法规层 / 组织流程
 - [RAG 评估](rag-evaluation.md) —— Groundedness 检查
 
 ### 权威阅读
@@ -333,4 +353,4 @@ def check_content_safety(text: str) -> dict:
 ## 相关
 
 - [LLM Gateway](llm-gateway.md) · [Agent Patterns](agent-patterns.md) · [Structured Output](structured-output.md) · [RAG](rag.md)
-- [frontier/ai-governance](../frontier/ai-governance.md) · [安全与权限](../ops/security-permissions.md)
+- [ops/compliance §4 AI 合规](../ops/compliance.md) · [安全与权限](../ops/security-permissions.md)

@@ -172,7 +172,7 @@ flowchart BT
 
 !!! tip "或者，直接按你手头的具体事"
     - **选表格式** → [四大表格式对比](compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) · [ADR-0002](adr/0002-iceberg-as-primary-table-format.md)
-    - **查询慢定位** → [性能调优](ops/performance-tuning.md) · [20 反模式](ops/anti-patterns.md) · [量级数字](frontier/benchmark-numbers.md)
+    - **查询慢定位** → [性能调优](ops/performance-tuning.md) · [20 反模式](ops/anti-patterns.md) · [量级数字](benchmarks.md)
     - **已有数仓做 RAG** → [RAG](ai-workloads/rag.md) · [RAG on Lake 场景](scenarios/rag-on-lake.md) · [Embedding 流水线](ml-infra/embedding-pipelines.md)
     - **平台权限 / 多租户** → [安全与权限](ops/security-permissions.md) · [统一 Catalog 策略](catalog/strategy.md) · [多租户隔离](ops/multi-tenancy.md)
     - **小文件治理** → [Compaction](lakehouse/compaction.md) · [FAQ](faq.md)
@@ -230,7 +230,6 @@ flowchart BT
 | **一体化架构** ⭐ | 湖 + 向量融合、多模建模（跨章组合视角）| [unified](unified/index.md) |
 | **工业案例** | Netflix / LinkedIn / Uber / 六家横比 | [cases](cases/index.md) |
 | 运维与生产 | 可观测性 / 性能 / 成本 / 安全 / 治理 / 迁移 / 排障 | [ops](ops/index.md) |
-| 研究前沿 | 论文笔记、Benchmark | [frontier](frontier/index.md) |
 
 ---
 
@@ -249,20 +248,21 @@ flowchart BT
 - [推荐系统深挖](scenarios/recommender-systems.md) · [欺诈检测](scenarios/fraud-detection.md) · [CDP 分群](scenarios/cdp-segmentation.md) · [Agentic 工作流](scenarios/agentic-workflows.md) · [Text-to-SQL 平台](scenarios/text-to-sql-platform.md)
 
 ### 选型决策（工业最常查）
-- [**量级数字总汇**](frontier/benchmark-numbers.md) — 湖仓 / 检索 / LLM 各场景量级参考
+- [**量级数字总汇**](benchmarks.md) — 湖仓 / 检索 / LLM 各场景量级参考
 - [**湖仓 20 反模式**](ops/anti-patterns.md) — 上线前自查清单
 - [Feature Store 横比](compare/feature-store-comparison.md) · [OLAP 加速副本](compare/olap-accelerator-comparison.md) · [流处理引擎](compare/streaming-engines.md) · [Rerank 模型](compare/rerank-models.md) · [稀疏检索](compare/sparse-retrieval.md) · [调度系统](compare/orchestrators.md)
 
 ### 深度案例
 - [**Netflix**](cases/netflix.md) · [**LinkedIn**](cases/linkedin.md) · [**Uber**](cases/uber.md) — 工业数据平台完整拆解
 
-### 前沿研究
-- [**RAG 前沿**](frontier/rag-advances-2025.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG（带现实检视）
-- [**LLM Inference**](ai-workloads/llm-inference.md) — vLLM / SGLang / TRT-LLM / Dynamo / speculative（按 ADR 0009 已从 frontier 下沉）
-- [**向量检索前沿**](frontier/vector-trends.md) — Matryoshka / Binary / SPLADE / ColBERT
-- [**AI 治理**](frontier/ai-governance.md) — EU AI Act / Guardrails / Red Teaming
-- [**Iceberg v3 预览**](frontier/iceberg-v3-preview.md) — spec 演进与团队实务
-- [**Lakehouse 厂商与开源生态格局**](frontier/vendor-landscape.md) — 客观厂商对比
+### 2024-2026 新方向（各机制章 §前沿 / 深度页）
+- [**RAG §4 高级范式**](ai-workloads/rag.md) — Contextual Retrieval / CRAG / Self-RAG / Agentic RAG / GraphRAG
+- [**LLM Inference**](ai-workloads/llm-inference.md) — vLLM / SGLang / TRT-LLM / Dynamo / speculative
+- [**Embedding · Matryoshka + Quantization**](retrieval/embedding.md) · [Quantization · Binary / SQ / PQ](retrieval/quantization.md) · [Sparse · SPLADE / BM42](retrieval/sparse-retrieval.md)
+- [**AI 合规**](ops/compliance.md) — EU AI Act / NIST AI RMF / 中国生成式 AI 管理办法
+- [**Guardrails + Red Teaming**](ai-workloads/guardrails.md) — 工程护栏 + 对抗测试
+- [**Iceberg v3**](lakehouse/iceberg-v3.md) — spec 2025-06 ratified · 引擎 rolling out
+- [**Vendor Landscape**](vendor-landscape.md) — 客观厂商对比
 
 ---
 

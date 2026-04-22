@@ -326,11 +326,11 @@ def splade_encode(text):
 - **[ColBERTv2 (NAACL 2022)](https://arxiv.org/abs/2112.01488)**
 - **[Elser docs (Elastic)](https://www.elastic.co/guide/en/machine-learning/current/ml-nlp-elser.html)**
 - **[BEIR benchmark (NeurIPS 2021)](https://arxiv.org/abs/2104.08663)**
-- **[向量检索前沿](../frontier/vector-trends.md)** · **[Hybrid Search](../retrieval/hybrid-search.md)** · **[Rerank](../retrieval/rerank.md)**
+- **[向量检索前沿](../retrieval/embedding.md)** · **[Hybrid Search](../retrieval/hybrid-search.md)** · **[Rerank](../retrieval/rerank.md)**
 
 ## 相关
 
 - [Hybrid Search](../retrieval/hybrid-search.md) · [Rerank](../retrieval/rerank.md)
 - [向量数据库](../retrieval/vector-database.md) · [ANN 索引对比](ann-index-comparison.md)
-- [向量检索前沿](../frontier/vector-trends.md)
+- [向量检索前沿](../retrieval/embedding.md)
 - [Rerank 模型横比](rerank-models.md)

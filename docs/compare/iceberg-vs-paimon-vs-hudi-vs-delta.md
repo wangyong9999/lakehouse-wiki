@@ -61,7 +61,7 @@ status: stable
 - Deletion Vectors · Row Lineage · Multi-Table Transaction · Geo / Variant 类型
 - 2025 Q2 预计社区投票
 - **和 Delta v4 的协议融合**是长期趋势
-- 详见 [Iceberg v3 预览](../frontier/iceberg-v3-preview.md)
+- 详见 [Iceberg v3 预览](../lakehouse/iceberg-v3.md)
 
 ### 4. Hudi 相对降速
 
@@ -253,8 +253,8 @@ status: stable
 
 - 各系统深度页：[Iceberg](../lakehouse/iceberg.md) · [Paimon](../lakehouse/paimon.md) · [Hudi](../lakehouse/hudi.md) · [Delta](../lakehouse/delta-lake.md)
 - [DB 存储引擎 vs 湖表](db-engine-vs-lake-table.md) · [Catalog 全景对比](catalog-landscape.md)
-- [Iceberg v3 预览](../frontier/iceberg-v3-preview.md) —— 下一代
-- [Lakehouse 厂商与开源生态格局](../frontier/vendor-landscape.md) —— 商业视角
+- [Iceberg v3 预览](../lakehouse/iceberg-v3.md) —— 下一代
+- [Lakehouse 厂商与开源生态格局](../vendor-landscape.md) —— 商业视角
 
 ## 延伸阅读
 

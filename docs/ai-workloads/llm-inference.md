@@ -320,4 +320,3 @@ LLM 推理优化领域**商业博弈和技术演进交织** · 读文档时要�
 
 - [LLM Gateway](llm-gateway.md) · [Semantic Cache](semantic-cache.md) · [Guardrails](guardrails.md)
 - [RAG](rag.md) · [Agent Patterns](agent-patterns.md) · [MCP](mcp.md)
-- [frontier/llm-inference-opt](../frontier/llm-inference-opt.md) —— 本页前身 · 已 superseded

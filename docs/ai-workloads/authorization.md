@@ -262,7 +262,7 @@ MCP 2025-11 spec 有 `roots` / `tools` 权限声明 · 但**生态落地参差**
 - [LLM Observability](llm-observability.md) —— audit log 落地
 - [Unity Catalog](../catalog/unity-catalog.md) · [Polaris](../catalog/polaris.md) · [Nessie](../catalog/nessie.md)
 - [安全与权限](../ops/security-permissions.md) —— 湖仓基础 ACL
-- [frontier/ai-governance](../frontier/ai-governance.md) —— 法规层（EU AI Act 等）
+- [ops/compliance §4]((../ops/compliance.md) —— 法规层（EU AI Act 等）
 
 ## 延伸阅读
 

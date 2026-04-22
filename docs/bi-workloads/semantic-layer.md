@@ -558,5 +558,5 @@ flowchart LR
 - [BI × LLM](bi-plus-llm.md) · LLM 时代的 BI 入口 · SL 是其知识抓手
 - [Text-to-SQL 平台](../scenarios/text-to-sql-platform.md) · 走 SL API 路径的 Text-to-SQL
 - [MCP](../ai-workloads/mcp.md) · dbt SL 通过 MCP 暴露给 LLM
-- [Modern Data Stack](../frontier/modern-data-stack.md) —— Semantic Layer 是其中一环
+- [Modern Data Stack](../modern-data-stack.md) —— Semantic Layer 是其中一环
 - [BI on Lake 场景](../scenarios/bi-on-lake.md)

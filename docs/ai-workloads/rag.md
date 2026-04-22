@@ -184,6 +184,9 @@ Chunk 决定召回上限：
     - 🟡 **CRAG / Self-RAG** · 实验验证 · 适合复杂检索可用性不稳定的场景
     - 🟡 **Agentic RAG** · 需 Agent 能力成熟 · 成本显著高
     - 🟡 **GraphRAG** · 综合性查询优势 · 但 10-100× 离线构建成本
+    - 🟡 **Multi-Query / HyDE** · query 改写 · 多一次 LLM 调用
+    - 🟡 **ColBERT v2 / Late Interaction** · 精度高但存储 10-20×
+    - 🟡 **LLMLingua 上下文压缩** · 长文档场景省 60-80% token
 
 ### Contextual Retrieval（Anthropic 2024）
 
@@ -265,6 +268,70 @@ GraphRAG:
 - ❌ 小规模（< 10k 文档）· 建图 ROI 不划算
 
 **2026 状态**：采用率快速上升但仍非主流 · Microsoft / 企业 KG 场景领先 · 是 Vector RAG 的补充不是替代。
+
+### Query 改写 · Multi-Query / HyDE
+
+**Multi-Query**：LLM 把原 query 改写成 N 个变体并行检索 · 结果用 RRF 融合。
+
+```
+Query: "怎么提升 RAG 的 recall"
+  ↓ LLM 改写
+  - "如何优化 RAG 检索的召回率"
+  - "Hybrid search 怎么提升 recall"
+  - "Rerank 对 RAG 效果的影响"
+  ↓ 并行检索 + RRF 融合
+```
+
+**HyDE (Hypothetical Document Embeddings · Gao et al. 2022)**：先让 LLM 生成"假设答案"· 用假设答案的 embedding 检索 · 直觉是假设答案和真实文档分布接近。
+
+**评价**：
+- ✅ LlamaIndex / LangChain 原生支持 · 集成成本低
+- 🟡 **Multi-Query** 在 recall 受限场景（query 歧义 / 多角度）有效 · 典型提升 5-8%
+- 🟡 **HyDE** 在 factoid 问题上有效 · 探索性 / 开放式问题**可能误导**（假设答案错会偏 · 实测常 < 5%）
+- ❌ 两者都多一次 LLM 调用 · 延迟 + 成本上升 · 先测基线是否真缺 recall 再引入
+
+### ColBERT v2 · Late Interaction
+
+**核心思想**：每个 token 保留独立向量 · 检索时 query × doc token 级 MaxSim 聚合 · 不是单向量压成一个。
+
+```
+query tokens × doc tokens → max-sim 矩阵 → 相关性
+```
+
+**评价**：
+- ✅ 精度接近 Cross-Encoder Rerank · 延迟显著低于 rerank
+- ❌ **存储成本 10-20×** 于普通 dense · 规模上不去（百万 doc 级别尚可 · 亿级不现实）
+- 🟡 适合**重精度轻规模**场景（代码助手 / 文档图像 retrieval 即 ColPali / 领域精搜）
+- 详细 late-interaction 机制见 [retrieval/multimodal-retrieval-patterns Pattern E](../retrieval/multimodal-retrieval-patterns.md)
+
+### Contextual Compression · LLMLingua
+
+用小模型**压缩** retrieved contexts · 减少输入给主 LLM 的 token 数：
+
+```
+100 chunk (100k token)
+  ↓ Small LLM (LLMLingua / LongLLMLingua)
+50 高密度 chunk (30k token)
+  ↓ 主 LLM 生成
+```
+
+**效果**：Token 成本降 60-80% · 质量下降 < 5%（原文报告 · 自家数据需实测）· 长文档场景 ROI 显著。
+
+### §4 小结 · 现实检视 · 已验证 vs 仅论文
+
+**已在工业规模验证**（可上）：
+- Hybrid Search（BM25 + Dense + RRF）· Cross-Encoder Rerank · Contextual Retrieval —— 2025 "新 baseline"
+
+**论文好 / 工业复现有限**：
+- CRAG · Self-RAG · Agentic RAG · HyDE —— 自家数据实测再决定
+
+**学术信号 / 规模限制**：
+- ColBERT v2 · LLM-as-Reranker · Self-RAG 需 fine-tune —— 特定场景有效
+
+**坏信号识别**：
+- 论文报告 NDCG +20% 但**没提推理成本** → 警惕
+- 只在 Wikipedia / 新闻上验证 → 企业闭域可能失效
+- "我们用 XXX 做到 95% 准确率"但**不说 baseline** → 几乎无信息
 
 ## 5. 性能数字 · 评估指标
 

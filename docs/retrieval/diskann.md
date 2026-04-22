@@ -260,12 +260,10 @@ col.create_index(
 
 ## 10. 延伸阅读
 
-- **[*DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node* (NeurIPS 2019)](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/)**
+- **[*DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node* (NeurIPS 2019)](https://www.microsoft.com/en-us/research/publication/diskann-fast-accurate-billion-point-nearest-neighbor-search-on-a-single-node/)** —— 原论文：SIFT1B 10 亿向量 · recall@10 > 95% 时 p99 < 10ms · 内存仅原数据 ~10%
 - **[*FreshDiskANN* (2021)](https://arxiv.org/abs/2105.09613)**
 - **[Filtered DiskANN (SIGMOD 2023)](https://dl.acm.org/doi/10.1145/3588931.3615606)**
 - **[DiskANN GitHub](https://github.com/microsoft/DiskANN)**
-- **[DiskANN 论文笔记](../frontier/diskann-paper.md)**
-- **[向量检索前沿](../frontier/vector-trends.md)**
 
 ## 相关
 

@@ -305,7 +305,7 @@ Feature Store 的 drift 监控（§3 机制 5）**是 Model Monitoring 的子集
 - [Model Serving](model-serving.md) §Shadow/Canary/Rollback —— 切流操作
 - [Model Registry](model-registry.md) §alias API —— promote / rollback 机制
 - [LLM Observability](../ai-workloads/llm-observability.md) —— LLM 应用侧对偶
-- [AI 治理](../frontier/ai-governance.md) —— EU AI Act 合规层
+- [AI 治理](../ops/compliance.md) —— EU AI Act 合规层
 
 ## 14. 延伸阅读
 

@@ -62,4 +62,4 @@ flowchart TB
 - [Lance Format](lance-format.md) —— AI 时代"文件 + 轻表一体化"的另一条路径（见上文主线收尾的路径对照）
 - [Arrow · FlightSQL · ADBC](../query-engines/arrow-ecosystem.md) —— 内存交换与传输公共层
 
-> 想看"湖仓怎么来的"或"现代数据栈十大环节"这类**历史与生态视角**？移到了 [研究前沿 · 演进史](../frontier/data-systems-evolution.md) 与 [Modern Data Stack 全景](../frontier/modern-data-stack.md)。
+> 想看"湖仓怎么来的"或"现代数据栈十大环节"这类**历史与生态视角**？移到了 [研究前沿 · 演进史](../data-systems-evolution.md) 与 [Modern Data Stack 全景](../modern-data-stack.md)。
