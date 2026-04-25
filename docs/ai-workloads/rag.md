@@ -14,6 +14,13 @@ status: stable
 
 # RAG · 检索增强生成
 
+!!! info "本页是 RAG 范式 canonical (按 [ADR-0006](../adr/0006-chapter-structure-dimensions.md))"
+    本页讲 **RAG 算法范式 + 演进路线** · 是 RAG 主题的 canonical 入口。
+    
+    - **湖仓上的 RAG 工程实践**（5 表架构 / 端到端流水线 / 延迟预算）→ [scenarios/rag-on-lake](../scenarios/rag-on-lake.md)
+    - **RAG 评估方法**（RAGAS / BEIR / 离线 + 在线闭环）→ [rag-evaluation](rag-evaluation.md)
+    - **公司切面**（Databricks / Snowflake / Netflix 各自 RAG 实现）→ 对应 [cases/](../cases/index.md) 深度页
+
 !!! tip "一句话理解"
     **在生成前先检索**把"语料库中最相关的片段"作为上下文塞给 LLM。对抗幻觉、让知识可更新、让企业私有数据可问答的**最主流范式**。2025 年工业 RAG = **Hybrid 召回 + Rerank + Contextual 压缩 + LLM + 引用回写**。
 

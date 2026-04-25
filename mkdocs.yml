@@ -313,7 +313,7 @@ nav:
           - 训练编排: ml-infra/training-orchestration.md
           - GPU 调度: ml-infra/gpu-scheduling.md
           - LLM Fine-tuning: ml-infra/fine-tuning-data.md
-  - 一体化架构:
+  - 一体化架构 · 跨章决策中心:
       - unified/index.md
       - Lake + Vector 融合架构: unified/lake-plus-vector.md
       - 多模数据建模: unified/multimodal-data-modeling.md

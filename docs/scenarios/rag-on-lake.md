@@ -11,8 +11,12 @@ last_reviewed: 2026-04-22
 
 # RAG on Lake · 企业知识库问答
 
-!!! info "机制深挖"
-    [RAG 架构与范式](../ai-workloads/rag.md) · [RAG 评估](../ai-workloads/rag-evaluation.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Embedding](../retrieval/embedding.md) · [Rerank](../retrieval/rerank.md)。
+!!! info "本页是 RAG **工程实践视角** · 范式 canonical 见 [ai-workloads/rag](../ai-workloads/rag.md)"
+    本页讲**湖仓上 RAG 的 5 表架构 / 端到端流水线 / 延迟预算 / 工程陷阱**。
+    
+    **算法范式与演进**（Vanilla / Contextual / CRAG / Self-RAG / Agentic）→ [ai-workloads/rag](../ai-workloads/rag.md) (canonical)
+    
+    **机制深挖**：[RAG 评估](../ai-workloads/rag-evaluation.md) · [向量数据库](../retrieval/vector-database.md) · [Hybrid Search](../retrieval/hybrid-search.md) · [Embedding](../retrieval/embedding.md) · [Rerank](../retrieval/rerank.md)。
 
 !!! tip "一句话理解"
     把**湖仓作为 RAG 的单一事实源**：原始语料、chunk、embedding、日志全以 Iceberg/Paimon 表承载；检索层（向量 + BM25）和 LLM 生成层都从湖上消费。**核心价值**：一份数据，多模型共用；血缘可追溯；测试和生产一致。

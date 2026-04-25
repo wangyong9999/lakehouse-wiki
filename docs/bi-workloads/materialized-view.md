@@ -14,6 +14,11 @@ status: stable
 
 # 物化视图 · IVM / Query Rewrite / Iceberg MV
 
+!!! info "本页是 BI 工程实践视角 (canonical)"
+    本页讲 **BI 工程师视角 + IVM 算法家族 + Query Rewrite + 产品选型矩阵** · 是 BI 视角的 canonical 页（按 [ADR-0006](../adr/0006-chapter-structure-dimensions.md)）。
+    
+    **湖表协议层视角**（spec vs 实现差异 / 协议标准化进展 / Embedding MV 启发）见 [lakehouse/materialized-view](../lakehouse/materialized-view.md)。
+
 !!! tip "一句话定位"
     把"查询结果预先算好存成表"——BI 高频相同聚合的主力加速手段。湖仓 MV 的技术关键是**增量维护（IVM）算法**和**查询改写（Query Rewrite）优化器**——**不是把 MV 建出来**而是让 MV **又新又被用到**。
 
