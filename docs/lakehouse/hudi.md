@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-18
 applies_to: Hudi 1.0.2+ (2025) · 0.14 LTS
 tags: [lakehouse, table-format, streaming]
+related: [lake-table, iceberg, paimon, delta-lake, streaming-upsert-cdc, compaction]
 category: table-format
 repo: https://github.com/apache/hudi
 license: Apache-2.0

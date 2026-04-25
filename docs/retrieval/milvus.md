@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-20
 applies_to: Milvus 2.4+ / 2.5+（2024-2026 生产主流）
 tags: [retrieval, vector, distributed]
+related: [vector-database, hnsw, ivf-pq, lancedb, qdrant, weaviate]
 category: vector-db
 repo: https://github.com/milvus-io/milvus
 license: Apache-2.0

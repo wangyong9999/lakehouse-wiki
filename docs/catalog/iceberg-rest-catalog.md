@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-18
 applies_to: Iceberg REST Catalog spec v1（2024+）
 tags: [catalog, iceberg, protocol]
+related: [strategy, unity-catalog, polaris, nessie]
 category: catalog
 repo: https://github.com/apache/iceberg
 license: Apache-2.0

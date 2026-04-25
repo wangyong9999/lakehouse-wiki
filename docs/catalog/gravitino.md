@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Apache Gravitino 1.0+（2025-06 毕业为 Apache TLP）· 1.1 (2025 后期)
 tags: [catalog, federation, metadata]
+related: [strategy, unity-catalog, polaris]
 category: catalog
 repo: https://github.com/apache/gravitino
 license: Apache-2.0

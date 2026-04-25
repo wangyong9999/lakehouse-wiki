@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Weaviate 1.23+（2024-2026 主流）· OSS + Weaviate Cloud
 tags: [retrieval, vector, modules, rag]
+related: [vector-database, hnsw, milvus, qdrant]
 category: vector-db
 repo: https://github.com/weaviate/weaviate
 license: BSD-3-Clause

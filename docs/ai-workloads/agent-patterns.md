@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: LangGraph 0.2+ · Microsoft Agent Framework (AutoGen + SK 合并) · OpenAI Agents SDK · Claude Agent SDK · Google ADK · CrewAI · 2024-2026
 tags: [ai, agent, llm, langgraph, autogen, claude-sdk]
+related: [rag, mcp, agents-on-lakehouse, structured-output, authorization]
 status: stable
 ---
 

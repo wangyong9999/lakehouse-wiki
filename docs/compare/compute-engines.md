@@ -6,6 +6,7 @@ level: B
 depth: 进阶
 prerequisites: [oltp-vs-olap]
 tags: [comparison, query-engine, trino, spark, flink, duckdb]
+related: [trino, spark, flink]
 subjects: [trino, spark, flink, duckdb]
 status: stable
 last_reviewed: 2026-04-22

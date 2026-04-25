@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Qdrant 1.x（2024-2026 主流）· OSS + Qdrant Cloud
 tags: [retrieval, vector, filter-aware, rust]
+related: [vector-database, hnsw, milvus, weaviate, lancedb]
 category: vector-db
 repo: https://github.com/qdrant/qdrant
 license: Apache-2.0

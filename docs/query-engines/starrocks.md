@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: StarRocks 4.0+ (2025-10) · 存算分离模式 3.0+ · 湖读路径成熟
 tags: [query-engine, olap, mpp, mpp-database]
+related: [clickhouse, doris, trino, olap-modeling]
 category: query-engine
 repo: https://github.com/StarRocks/starrocks
 license: Apache-2.0 / Elastic

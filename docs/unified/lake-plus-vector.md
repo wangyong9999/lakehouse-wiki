@@ -7,7 +7,7 @@ last_reviewed: 2026-04-21
 applies_to: Iceberg 1.10+ · Puffin · Lance 0.20+ · LanceDB · Milvus 2.5+ · Unity Catalog · Polaris · 2024-2026 实践
 tags: [unified, multimodal, vector, lakehouse, cross-chapter]
 aliases: [湖上向量, 一体化湖仓]
-related: [vector-database, lake-table, lance-format, puffin, multimodal-data-modeling, catalog-strategy]
+related: [vector-database, lake-table, lance-format, puffin, multimodal-data-modeling, strategy]
 systems: [iceberg, lancedb, milvus, unity-catalog, polaris]
 status: stable
 ---

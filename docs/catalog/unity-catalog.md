@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-20
 applies_to: Unity Catalog OSS 0.4.1（2026-04 最新 · LF AI & Data 沙箱项目）· Databricks Unity Catalog（商业托管）
 tags: [catalog, governance, multimodal, ai-assets]
+related: [strategy, polaris, nessie, gravitino, iceberg-rest-catalog]
 category: catalog
 repo: https://github.com/unitycatalog/unitycatalog
 license: Apache-2.0

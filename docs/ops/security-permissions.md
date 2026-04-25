@@ -7,7 +7,7 @@ last_reviewed: 2026-04-21
 applies_to: Zero Trust 架构 · OIDC / OAuth 2.1 / SAML · Credential Vending · HashiCorp Vault · AWS Secrets Manager · mTLS / Service Mesh · 2024-2026 实践
 tags: [ops, security, acl, zero-trust, oidc, credential-vending]
 aliases: [Security, Permissions, RBAC, Zero Trust]
-related: [catalog-strategy, observability, data-governance, compliance, multi-tenancy, authorization]
+related: [strategy, observability, data-governance, compliance, multi-tenancy, authorization]
 systems: [unity-catalog, polaris, ranger, vault, opa]
 status: stable
 ---

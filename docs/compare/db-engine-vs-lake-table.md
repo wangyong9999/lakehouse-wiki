@@ -4,6 +4,7 @@ applies_to: "2024-2026 主流"
 type: comparison
 level: B
 tags: [comparison, lakehouse, storage]
+related: [db-engine-vs-lake-table, lake-table]
 subjects: [db-storage-engine, lake-table]
 status: stable
 last_reviewed: 2026-04-17

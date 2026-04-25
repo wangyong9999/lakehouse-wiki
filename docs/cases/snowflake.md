@@ -7,7 +7,7 @@ last_reviewed: 2026-04-21
 applies_to: Snowflake Data Cloud · Snowpark · Cortex (COMPLETE/EMBED/SEARCH/SENTIMENT) · Open Catalog (Polaris 托管) · Horizon Catalog · Snowpark ML · Streamlit · Unistore · Native Apps · 2024-2026 公开资料
 tags: [case-study, snowflake, cortex, polaris, open-catalog, snowpark, unistore]
 aliases: [Snowflake Data Cloud]
-related: [studies, databricks, polaris, catalog-strategy, compute-pushdown]
+related: [studies, databricks, polaris, strategy, compute-pushdown]
 systems: [snowflake, cortex, polaris, snowpark, streamlit]
 status: stable
 ---

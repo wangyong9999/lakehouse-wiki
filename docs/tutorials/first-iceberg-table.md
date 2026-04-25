@@ -6,6 +6,7 @@ depth: 入门
 applies_to: pyiceberg 0.9+ · DuckDB 1.5.2+（2026-Q2）
 last_reviewed: 2026-04-18
 tags: [tutorial, iceberg, duckdb, pyiceberg]
+related: [iceberg, lake-table, snapshot]
 status: stable
 ---
 

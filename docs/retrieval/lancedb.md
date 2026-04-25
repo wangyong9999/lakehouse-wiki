@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-20
 applies_to: LanceDB 0.8+（2024-2026 主流）· Lance v2 列式格式 · OSS + LanceDB Cloud 双版本
 tags: [retrieval, vector, lakehouse, embedded]
+related: [vector-database, lance-format, milvus, qdrant]
 category: vector-db
 repo: https://github.com/lancedb/lancedb
 license: Apache-2.0

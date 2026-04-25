@@ -7,7 +7,7 @@ last_reviewed: 2026-04-22
 applies_to: OpenLineage 1.x · DataHub 0.14+ · Unity Catalog · Data Contracts 规范 · 2024-2026 实践
 tags: [ops, governance, lineage, contract, data-product]
 aliases: [Data Governance, 数据治理, 血缘, 数据契约]
-related: [security-permissions, observability, catalog-strategy, data-quality-for-ml, change-management]
+related: [security-permissions, observability, strategy, data-quality-for-ml, change-management]
 systems: [datahub, openlineage, unity-catalog]
 status: stable
 ---

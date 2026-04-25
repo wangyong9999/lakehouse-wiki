@@ -8,7 +8,7 @@ applies_to: Iceberg · Paimon · Delta · Hudi · UniForm · Catalog（UC/Polari
 prerequisites: [bulk-loading]
 tags: [ops, migration, delta-to-iceberg, hudi-to-paimon, saas-migration]
 aliases: [Migration, 迁移]
-related: [bulk-loading, iceberg, streaming-ingestion, change-management, catalog-strategy]
+related: [bulk-loading, iceberg, streaming-ingestion, change-management, strategy]
 systems: [iceberg, paimon, delta, hudi, unity-catalog, polaris, milvus, lancedb]
 status: stable
 ---

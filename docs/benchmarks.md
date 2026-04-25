@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-22
 applies_to: 2024-2026 主流栈 · 硬件参考 H100 / A100 / NVMe
 tags: [reference, benchmark]
+related: [vendor-landscape, modern-data-stack, data-systems-evolution]
 aliases: [基准数字, Performance Cheat Sheet, Benchmark Reference]
 status: stable
 ---

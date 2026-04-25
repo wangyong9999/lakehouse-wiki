@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: OTel GenAI semantic conventions（2026-Q1 experimental · stable 待定）· Langfuse 3.x · LangSmith · Phoenix（Arize）· Helicone · OpenLLMetry · 2024-2026 生态
 tags: [ai, llm, observability, tracing, langfuse, langsmith, phoenix, opentelemetry]
+related: [rag-evaluation, guardrails, observability]
 aliases: [LLM Tracing, LLM Monitoring, GenAI Observability]
 status: stable
 ---

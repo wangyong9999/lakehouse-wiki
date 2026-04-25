@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Apache Polaris 1.3+ (2026-02 毕业 TLP) · Snowflake Open Catalog (商业托管)
 tags: [catalog, iceberg, rest, snowflake]
+related: [strategy, unity-catalog, iceberg-rest-catalog, nessie]
 category: catalog
 repo: https://github.com/apache/polaris
 license: Apache-2.0

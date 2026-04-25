@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: ClickHouse 26.3+（2026-Q1 最新 · 26.x 系列主流）· 湖读走 24.10+ iceberg()/s3() 表函数
 tags: [query-engine, olap, columnar, mpp-database]
+related: [starrocks, doris, olap-modeling]
 category: query-engine
 repo: https://github.com/ClickHouse/ClickHouse
 license: Apache-2.0

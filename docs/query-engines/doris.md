@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Apache Doris 3.0+ (2025) · 2.1 LTS · 存算分离模式 2.0+
 tags: [query-engine, olap, mpp, mpp-database]
+related: [starrocks, clickhouse, olap-modeling]
 category: query-engine
 repo: https://github.com/apache/doris
 license: Apache-2.0

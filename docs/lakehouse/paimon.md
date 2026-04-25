@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-18
 applies_to: Paimon 1.4+（2025-01 1.0 GA · 1.4 当前 stable）
 tags: [lakehouse, table-format, streaming]
+related: [lake-table, iceberg, streaming-upsert-cdc, cdc, compaction]
 category: table-format
 repo: https://github.com/apache/paimon
 license: Apache-2.0

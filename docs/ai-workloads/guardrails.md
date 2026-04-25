@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: Llama Guard 3 · NeMo Guardrails 2026 (IORails) · Guardrails AI · Lakera Guard · OpenAI Moderation / Guardrails API · Azure Content Safety · 2024-2026
 tags: [ai, safety, guardrails, prompt-injection, pii, content-safety]
+related: [rag, agent-patterns, authorization, llm-observability]
 aliases: [Content Safety, Prompt Injection Defense]
 status: stable
 ---

@@ -4,6 +4,7 @@ applies_to: "2024-2026 主流"
 type: comparison
 level: B
 tags: [comparison, embedding, retrieval]
+related: [vector-database, embedding, hybrid-search]
 subjects: [bge, e5, jina, openai-embedding, cohere]
 status: stable
 last_reviewed: 2026-04-20

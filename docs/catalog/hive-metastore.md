@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: Hive Metastore 2.x/3.x/4.0（Hive 4.0 GA 2024）
 tags: [catalog, legacy, hive]
+related: [strategy, glue, iceberg-rest-catalog]
 category: catalog
 repo: https://github.com/apache/hive
 license: Apache-2.0

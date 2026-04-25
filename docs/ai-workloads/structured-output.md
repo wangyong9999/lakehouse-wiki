@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-21
 applies_to: OpenAI Structured Outputs (2024-08+) · Anthropic Tool Use · Gemini JSON mode · Instructor · Outlines · Marvin · 2024-2026
 tags: [ai, llm, json-mode, function-calling, structured-output, pydantic]
+related: [agent-patterns, guardrails, rag]
 aliases: [JSON Mode, Function Calling, Tool Use]
 status: stable
 ---

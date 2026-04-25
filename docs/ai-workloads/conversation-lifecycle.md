@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: LangChain Memory · LangGraph Checkpointing · Letta / ReMe / LIGHT 框架 · Anthropic Prompt Caching · 2024-2026 会话工程
 tags: [ai, llm, conversation, memory, session-state, multi-turn]
+related: [agent-patterns, prompt-management, semantic-cache]
 aliases: [Conversation State, Session Management, Multi-turn Dialogue]
 status: stable
 ---

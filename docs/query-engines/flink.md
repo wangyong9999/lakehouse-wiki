@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-18
 applies_to: Flink 1.20 LTS (2024-08) · Flink 2.x (2025+) · Flink CDC 3.6+ (2026-03)
 tags: [query-engine, streaming, cdc, real-time]
+related: [spark, cdc, streaming-upsert-cdc, paimon]
 category: query-engine
 repo: https://github.com/apache/flink
 license: Apache-2.0

@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: DuckDB 1.5.2 (2026-04) · 1.4 LTS (2025-09) · 1.0 GA 2024-06
 tags: [query-engine, olap, embedded]
+related: [trino, arrow-ecosystem, vectorized-execution]
 category: query-engine
 repo: https://github.com/duckdb/duckdb
 license: MIT

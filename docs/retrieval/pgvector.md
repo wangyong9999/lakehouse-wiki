@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: pgvector 0.7+ / 0.8+（2024-2026 主流）· PostgreSQL 13+
 tags: [retrieval, vector, postgres, extension]
+related: [vector-database, hnsw, ivf-pq]
 category: vector-db
 repo: https://github.com/pgvector/pgvector
 license: PostgreSQL License

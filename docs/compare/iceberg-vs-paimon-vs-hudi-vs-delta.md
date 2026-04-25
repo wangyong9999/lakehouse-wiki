@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-18
 applies_to: Iceberg 1.10+/v3 稳定 · Paimon 1.4+ · Hudi 1.0.2+ · Delta 4.0+
 tags: [comparison, lakehouse, table-format]
+related: [iceberg, paimon, hudi, delta-lake]
 subjects: [iceberg, paimon, hudi, delta-lake]
 status: stable
 ---

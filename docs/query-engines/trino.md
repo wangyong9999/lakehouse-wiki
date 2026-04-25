@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-18
 applies_to: Trino 480+（2026-03 稳定版 · Presto 分叉后演进主流）
 tags: [query-engine, olap, federated]
+related: [spark, duckdb, starrocks, predicate-pushdown, vectorized-execution]
 category: query-engine
 repo: https://github.com/trinodb/trino
 license: Apache-2.0

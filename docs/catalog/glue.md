@@ -6,6 +6,7 @@ level: A
 last_reviewed: 2026-04-20
 applies_to: AWS Glue Data Catalog (托管服务) · 与 Iceberg / Delta / Hudi / Spark / Trino / Athena 集成
 tags: [catalog, aws, managed, glue]
+related: [strategy, hive-metastore, iceberg-rest-catalog]
 category: catalog
 license: AWS proprietary (托管服务)
 status: stable

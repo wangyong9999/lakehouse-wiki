@@ -6,6 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: vLLM 0.10+ · SGLang 0.4+ · TensorRT-LLM / Triton · Dynamo · 2024-2026 生态
 tags: [ai, llm, inference, serving, vllm, sglang]
+related: [llm-gateway, semantic-cache, rag, agent-patterns]
 status: stable
 ---
 

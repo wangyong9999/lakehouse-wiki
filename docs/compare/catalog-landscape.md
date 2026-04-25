@@ -4,6 +4,7 @@ applies_to: "2024-2026 主流"
 type: comparison
 level: B
 tags: [comparison, catalog]
+related: [strategy, unity-catalog, polaris]
 subjects: [hive-metastore, iceberg-rest-catalog, nessie, unity-catalog, polaris]
 status: stable
 last_reviewed: 2026-04-21
