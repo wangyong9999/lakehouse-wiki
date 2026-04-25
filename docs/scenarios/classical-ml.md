@@ -5,7 +5,7 @@ type: scenario
 level: S
 depth: 资深
 prerequisites: [lake-table, feature-store]
-tags: [scenario, ml, classical, prediction, xgboost]
+tags: [scenario, ml-infra, classical, prediction, xgboost]
 related: [offline-training-pipeline, feature-serving, feature-store, mlops-lifecycle, recommender-systems]
 status: stable
 last_reviewed: 2026-04-20

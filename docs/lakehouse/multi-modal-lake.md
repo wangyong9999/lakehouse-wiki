@@ -5,7 +5,7 @@ depth: 资深
 level: S
 last_reviewed: 2026-04-19
 applies_to: Iceberg v3, Paimon 1.4+, Lance v2, Vortex (LF AI Incubation), GeoParquet spec
-tags: [lakehouse, multi-modal, vector, geography, variant, graph, ai]
+tags: [lakehouse, multimodal, vector, geography, variant, graph, ai]
 aliases: [多模态湖表, Multi-modal Lakehouse]
 related: [lake-table, iceberg, paimon, lance-format, puffin, vector-database]
 systems: [iceberg, paimon, lance, milvus]

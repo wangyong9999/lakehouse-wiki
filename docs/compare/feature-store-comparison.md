@@ -5,7 +5,7 @@ type: comparison
 level: B
 depth: 进阶
 prerequisites: [feature-store]
-tags: [comparison, feature-store, mlops]
+tags: [comparison, feature-store, ml-infra]
 related: [feature-store, feature-serving, offline-training-pipeline, recommender-systems, fraud-detection]
 status: stable
 last_reviewed: 2026-04-20

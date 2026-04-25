@@ -5,7 +5,7 @@ depth: 资深
 level: S
 last_reviewed: 2026-04-18
 applies_to: Feast 0.40+, Tecton, Hopsworks 3.x, Databricks FS / Vertex AI FS / SageMaker FS
-tags: [ai, feature-store, mlops, recommender, fraud]
+tags: [ai, feature-store, ml-infra, recommender, fraud]
 aliases: [特征平台, 特征存储]
 related: [feature-serving, offline-training-pipeline, recommender-systems, fraud-detection, rag]
 systems: [feast, tecton, hopsworks, databricks, vertex-ai, sagemaker]

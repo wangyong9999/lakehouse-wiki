@@ -6,7 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: Iceberg REST v1 · Polaris 1.3+ (2026-02 TLP) · Gravitino 1.0+ (TLP) · Unity Catalog OSS 0.4.1+ · Nessie 0.107.4+ · AWS Glue · Snowflake Open Catalog · Hive 4.0 · 2024-2026 实践
 prerequisites: [iceberg-rest-catalog, unity-catalog, polaris, nessie, gravitino]
-tags: [catalog, governance, strategy, multi-modal, decision-tree]
+tags: [catalog, governance, strategy, multimodal, decision-tree]
 aliases: [统一 Catalog 策略, Catalog Strategy, 治理平面]
 related: [iceberg-rest-catalog, unity-catalog, polaris, nessie, gravitino, hive-metastore, glue, lake-plus-vector]
 systems: [unity-catalog, polaris, gravitino, nessie, iceberg-rest, glue]

@@ -5,7 +5,7 @@ depth: 资深
 level: S
 last_reviewed: 2026-04-18
 applies_to: MLflow 2+, Kubeflow 1.7+, Ray 2.x, Databricks / SageMaker / Vertex AI
-tags: [ai, mlops, lifecycle, lakehouse]
+tags: [ai, ml-infra, lifecycle, lakehouse]
 aliases: [MLOps, ML 工程闭环]
 related: [feature-store, offline-training-pipeline, feature-serving, model-registry, model-serving]
 systems: [mlflow, kubeflow, ray, airflow, dvc]

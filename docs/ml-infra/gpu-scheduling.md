@@ -6,7 +6,7 @@ level: S
 last_reviewed: 2026-04-21
 applies_to: Kubernetes 1.30+ · Volcano 1.9+ · YuniKorn 1.5+ · Run:ai · Karmada 1.11+ · AWS Capacity Blocks · GCP DWS · NVIDIA GB200/H200/B200 · AMD MI300X · 2024-2026 实践
 prerequisites: [training-orchestration, model-serving]
-tags: [ml-infra, gpu, scheduling, k8s, finops, multi-tenant]
+tags: [ml-infra, gpu, scheduling, k8s, finops, multi-tenancy]
 aliases: [GPU 调度, GPU Scheduling, Multi-tenant GPU]
 related: [training-orchestration, model-serving, model-monitoring, fine-tuning-data, cost-optimization]
 systems: [kubernetes, ray, volcano, yunikorn, run-ai, karmada]

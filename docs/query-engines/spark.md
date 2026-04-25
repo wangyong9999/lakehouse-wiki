@@ -5,7 +5,7 @@ depth: 资深
 level: S
 last_reviewed: 2026-04-18
 applies_to: Spark 4.1+ (2025-12) · 3.5.8 LTS · Spark Connect · AQE · Photon 类对标 · 4.x 是 runtime 模型更新代
-tags: [query-engine, batch, streaming, ml, etl]
+tags: [query-engine, batch, streaming, ml-infra, etl]
 category: query-engine
 repo: https://github.com/apache/spark
 license: Apache-2.0

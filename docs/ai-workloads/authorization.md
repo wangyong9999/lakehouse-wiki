@@ -5,7 +5,7 @@ depth: 资深
 level: S
 last_reviewed: 2026-04-21
 applies_to: Unity Catalog · Polaris · Iceberg 行列级 ACL · MCP 权限 · Agent tool 权限 · 2024-2026 最佳实践
-tags: [ai, security, authorization, acl, multi-tenant, identity]
+tags: [ai, security, authorization, acl, multi-tenancy, identity]
 aliases: [AI Access Control, Tool Permission, Tenant Isolation]
 status: stable
 ---
