@@ -166,6 +166,16 @@ docs/assets/diagrams/
 - **年度审视**：识别废弃页、整体结构是否需要调整
 - **避免"为更新而更新"**：内容仍准确就保留旧 `last_reviewed`，不为刷日期而无意义改动
 
+### 季度自检 5 问
+
+每季度顺手检查：
+
+1. **过时**：S 级页内容仍准吗？版本 / 数字 / 厂商动态有更新吗？
+2. **canonical 漂移**：是否出现"同概念在多章重复深描述"（违反 [ADR-0006](adr/0006-chapter-structure-dimensions.md)）？
+3. **章节组织**：每章 index.md 仍有"组织轴"声明吗（按 [ADR-0011](adr/0011-chapter-internal-organization.md)）？
+4. **元数据**：新加页有 `level`/`applies_to`/`related` 吗？
+5. **死链**：`mkdocs build --strict` 仍 0 warning 吗？lychee 报告异常多吗？
+
 ---
 
 ## 本地预览

@@ -388,6 +388,7 @@ nav:
       - 0008 对抗评审 SOP: adr/0008-adversarial-review-sop.md
       - 0009 frontier → main 下沉判据: adr/0009-frontier-to-main-migration.md
       - 0010 废除 frontier 章节: adr/0010-abolish-frontier-chapter.md
+      - 0011 章节内部组织模式: adr/0011-chapter-internal-organization.md
   - 附录:
       - 数据来源声明: about-sources.md
       - 参考资料:
