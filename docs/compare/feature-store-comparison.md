@@ -6,6 +6,7 @@ prerequisites: [feature-store]
 tags: [comparison, feature-store, mlops]
 related: [feature-store, feature-serving, offline-training-pipeline, recommender-systems, fraud-detection]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # Feature Store 横向对比

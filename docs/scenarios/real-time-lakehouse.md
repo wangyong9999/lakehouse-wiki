@@ -6,6 +6,7 @@ prerequisites: [streaming-upsert-cdc, paimon, event-time-watermark]
 tags: [scenario, real-time, streaming, lakehouse]
 related: [streaming-ingestion, bi-on-lake, rag-on-lake, paimon, flink]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # Real-time Lakehouse · 端到端分钟级一体化

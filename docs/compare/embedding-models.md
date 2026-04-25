@@ -4,6 +4,7 @@ type: comparison
 tags: [comparison, embedding, retrieval]
 subjects: [bge, e5, jina, openai-embedding, cohere]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # Embedding 模型横比

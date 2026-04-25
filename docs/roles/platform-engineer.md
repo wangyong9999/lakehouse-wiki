@@ -3,6 +3,7 @@ title: 平台 / 基础设施工程师
 description: Catalog、权限、可观测性、成本、迁移 —— 平台视角的优先阅读
 hide:
   - toc
+last_reviewed: 2026-04-21
 ---
 
 # 平台 / 基础设施工程师 · 优先阅读清单

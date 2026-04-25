@@ -6,6 +6,7 @@ aliases: [Multi-Version Concurrency Control]
 related: [snapshot, lake-table]
 systems: [postgres, innodb, iceberg, delta]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # MVCC（Multi-Version Concurrency Control）

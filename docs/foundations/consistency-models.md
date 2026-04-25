@@ -6,6 +6,7 @@ aliases: [Consistency Models, CAP]
 related: [mvcc, object-storage, lake-table]
 systems: [s3, spanner, iceberg]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # 一致性模型

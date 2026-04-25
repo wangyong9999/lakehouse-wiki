@@ -6,6 +6,7 @@ aliases: [Apache ORC, Optimized Row Columnar]
 related: [parquet, lance-format]
 systems: [hive, spark, trino]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # ORC（Optimized Row Columnar）

@@ -4,6 +4,7 @@ type: comparison
 tags: [comparison, lakehouse, storage]
 subjects: [db-storage-engine, lake-table]
 status: stable
+last_reviewed: 2026-04-17
 ---
 
 # DB 存储引擎 vs 湖表

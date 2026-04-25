@@ -6,6 +6,7 @@ prerequisites: [lake-table, event-time-watermark]
 tags: [scenario, cdp, segmentation, growth, marketing]
 related: [bi-on-lake, recommender-systems, real-time-lakehouse, fraud-detection]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # CDP · 用户分群 · 精细化运营

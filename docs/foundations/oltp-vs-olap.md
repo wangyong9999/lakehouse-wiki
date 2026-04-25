@@ -6,6 +6,7 @@ aliases: [Transactional vs Analytical]
 related: [columnar-vs-row, lake-table, mvcc]
 systems: [postgres, innodb, clickhouse, iceberg]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # OLTP vs OLAP

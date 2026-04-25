@@ -1,6 +1,7 @@
 ---
 title: 基础
 description: 存储、文件格式、计算、分布式等前置知识
+last_reviewed: 2026-04-22
 ---
 
 # 基础

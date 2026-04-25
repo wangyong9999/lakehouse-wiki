@@ -6,6 +6,7 @@ prerequisites: [oltp-vs-olap]
 tags: [comparison, query-engine, trino, spark, flink, duckdb]
 subjects: [trino, spark, flink, duckdb]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # Trino vs Spark vs Flink vs DuckDB · 计算引擎对比

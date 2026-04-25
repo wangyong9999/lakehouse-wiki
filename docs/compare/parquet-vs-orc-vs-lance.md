@@ -4,6 +4,7 @@ type: comparison
 tags: [comparison, file-format]
 subjects: [parquet, orc, lance]
 status: stable
+last_reviewed: 2026-04-17
 ---
 
 # Parquet vs ORC vs Lance

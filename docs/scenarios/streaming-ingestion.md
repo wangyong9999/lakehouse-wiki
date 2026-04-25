@@ -4,6 +4,7 @@ type: scenario
 tags: [scenario, streaming, cdc, lakehouse]
 related: [streaming-upsert-cdc, paimon, flink, lake-table]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 流式入湖

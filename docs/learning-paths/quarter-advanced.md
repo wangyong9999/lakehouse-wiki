@@ -5,6 +5,7 @@ tags: [learning-path, advanced]
 audience: 已完成 1 月 AI 或 1 月 BI 路径、想成为一体化湖仓方向资深工程师的人
 duration: 3 月
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 一季度资深路径

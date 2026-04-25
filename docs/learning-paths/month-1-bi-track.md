@@ -5,6 +5,7 @@ tags: [learning-path, bi, olap]
 audience: 完成新人路径后、想深入 BI / OLAP 方向的工程师
 duration: 1 月
 status: stable
+last_reviewed: 2026-04-21
 ---
 
 # 一月 BI 方向路径

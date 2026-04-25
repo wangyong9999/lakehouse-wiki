@@ -6,6 +6,7 @@ aliases: [Columnar vs Row]
 related: [parquet, lance-format, vectorized-execution]
 systems: [parquet, orc, lance, innodb]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # 列式 vs 行式存储

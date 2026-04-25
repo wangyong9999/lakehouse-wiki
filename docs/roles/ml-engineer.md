@@ -3,6 +3,7 @@ title: ML / AI 工程师
 description: 向量检索、Embedding、RAG、Feature Store、Model Serving
 hide:
   - toc
+last_reviewed: 2026-04-22
 ---
 
 # ML / AI 工程师 · 优先阅读清单

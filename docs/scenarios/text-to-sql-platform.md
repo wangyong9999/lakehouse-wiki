@@ -6,6 +6,7 @@ prerequisites: [rag, vector-database, lake-table]
 tags: [scenario, text-to-sql, llm, nlp, self-service]
 related: [agentic-workflows, business-scenarios, rag-on-lake, bi-on-lake]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # Text-to-SQL 平台

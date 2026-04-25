@@ -5,6 +5,7 @@ depth: 进阶
 tags: [comparison, orchestration, airflow, dagster, prefect]
 related: [modern-data-stack]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 调度 / Orchestration 横比

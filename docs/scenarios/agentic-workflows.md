@@ -6,6 +6,7 @@ prerequisites: [rag, agents-on-lakehouse, prompt-management]
 tags: [scenario, agent, llm, automation]
 related: [agents-on-lakehouse, rag, prompt-management, rag-evaluation, compute-pushdown]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # Agentic 工作流 · 自动化

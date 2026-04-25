@@ -7,6 +7,7 @@ tags: [foundations, architecture]
 related: [object-storage, lake-table]
 systems: [snowflake, databricks, starrocks, neon]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # 存算分离（Compute-Storage Separation）

@@ -5,6 +5,7 @@ depth: 进阶
 tags: [comparison, streaming, flink, spark, kafka, risingwave]
 related: [flink, spark, real-time-lakehouse, paimon]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # 流处理引擎横比

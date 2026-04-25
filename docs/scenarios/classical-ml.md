@@ -6,6 +6,7 @@ prerequisites: [lake-table, feature-store]
 tags: [scenario, ml, classical, prediction, xgboost]
 related: [offline-training-pipeline, feature-serving, feature-store, mlops-lifecycle, recommender-systems]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # 经典 ML 预测 · 分类 / 回归 / 时序

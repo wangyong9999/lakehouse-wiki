@@ -1,6 +1,7 @@
 ---
 title: 学习路径
 description: 按时间维度的认知脚手架 —— 给新人一条路
+last_reviewed: 2026-04-18
 ---
 
 # 学习路径

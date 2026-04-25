@@ -6,6 +6,7 @@ prerequisites: [lake-table, event-time-watermark, feature-store]
 tags: [scenario, fraud, risk, realtime, graph]
 related: [real-time-lakehouse, feature-serving, streaming-ingestion, recommender-systems]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 欺诈检测 · 风险控制

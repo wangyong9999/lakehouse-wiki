@@ -6,6 +6,7 @@ prerequisites: [lake-table, iceberg, trino, duckdb]
 tags: [scenario, bi, lakehouse, olap, data-warehouse]
 related: [lake-table, iceberg, paimon, trino, duckdb, starrocks-duckdb, real-time-lakehouse, cdp-segmentation]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # BI on Lake · 湖上分析与仪表盘

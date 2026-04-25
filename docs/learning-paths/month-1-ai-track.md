@@ -5,6 +5,7 @@ tags: [learning-path, ai, retrieval]
 audience: 完成"一周新人路径"后、想深入 AI / 检索方向的工程师
 duration: 1 月
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 一月 AI 方向路径

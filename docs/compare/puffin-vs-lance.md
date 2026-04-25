@@ -6,6 +6,7 @@ prerequisites: [puffin, lance-format, lake-plus-vector]
 tags: [comparison, vector, iceberg, lance, puffin]
 subjects: [iceberg-puffin, lance-format]
 status: stable
+last_reviewed: 2026-04-17
 ---
 
 # Puffin vs Lance · 向量下沉到湖的两条路

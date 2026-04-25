@@ -6,6 +6,7 @@ aliases: [Lance]
 related: [parquet, vector-database, lancedb]
 systems: [lance, lancedb]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # Lance Format

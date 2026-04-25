@@ -4,6 +4,7 @@ type: comparison
 tags: [comparison, catalog]
 subjects: [hive-metastore, iceberg-rest-catalog, nessie, unity-catalog, polaris]
 status: stable
+last_reviewed: 2026-04-21
 ---
 
 # Catalog 全景对比

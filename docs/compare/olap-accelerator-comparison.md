@@ -6,6 +6,7 @@ prerequisites: [lake-table]
 tags: [comparison, olap, starrocks, clickhouse, doris, druid, pinot, accelerator]
 related: [bi-on-lake, real-time-lakehouse, compute-engines, lake-table]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # OLAP 加速副本横比

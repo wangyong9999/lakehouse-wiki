@@ -7,6 +7,7 @@ tags: [foundations, arrow, interchange]
 related: [parquet, duckdb, spark, vectorized-execution]
 systems: [arrow, duckdb, polars, pyspark, lance]
 status: stable
+last_reviewed: 2026-04-20
 ---
 
 # Arrow · FlightSQL · ADBC · 内存与传输的公共层

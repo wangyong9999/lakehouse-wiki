@@ -5,6 +5,7 @@ depth: 资深
 tags: [comparison, retrieval, sparse, bm25, splade, colbert]
 related: [hybrid-search, rerank, vector-database]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 稀疏检索对比 · BM25 / SPLADE / ColBERT / Elser

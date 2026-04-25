@@ -6,6 +6,7 @@ prerequisites: [rag, vector-database, hybrid-search, lake-table, embedding]
 tags: [scenario, rag, lakehouse, retrieval, llm]
 related: [rag, vector-database, hybrid-search, lake-table, hnsw, rerank, evaluation, agentic-workflows]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # RAG on Lake · 企业知识库问答

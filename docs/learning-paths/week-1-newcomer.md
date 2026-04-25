@@ -5,6 +5,7 @@ tags: [learning-path, onboarding]
 audience: 刚入组的工程师
 duration: 1 周
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # 一周新人路径

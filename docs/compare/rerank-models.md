@@ -5,6 +5,7 @@ depth: 进阶
 tags: [comparison, rerank, cross-encoder]
 related: [rerank, rag, hybrid-search]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # Rerank 模型横比

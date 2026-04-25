@@ -6,6 +6,7 @@ aliases: [Predicate Pushdown, 下推优化]
 related: [parquet, manifest, query-acceleration]
 systems: [iceberg, parquet, trino, spark]
 status: stable
+last_reviewed: 2026-04-21
 ---
 
 # 谓词下推（Predicate Pushdown）

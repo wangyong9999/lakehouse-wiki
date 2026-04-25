@@ -6,6 +6,7 @@ prerequisites: [lake-table, duckdb]
 tags: [scenario, ad-hoc, notebook, data-science]
 related: [bi-on-lake, business-scenarios, classical-ml]
 status: stable
+last_reviewed: 2026-04-18
 ---
 
 # 即席探索 / Notebook 分析

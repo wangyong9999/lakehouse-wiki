@@ -6,6 +6,7 @@ prerequisites: [vector-database, feature-store, embedding, lake-table]
 tags: [scenario, recommender, search, embedding, feature-store]
 related: [feature-store, embedding, hnsw, rag-on-lake, feature-serving, offline-training-pipeline]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 推荐系统 · 搜索 · 发现

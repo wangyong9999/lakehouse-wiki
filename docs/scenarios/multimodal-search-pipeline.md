@@ -4,6 +4,7 @@ type: scenario
 tags: [scenario, multimodal, retrieval]
 related: [multimodal-embedding, lake-plus-vector, hybrid-search, multimodal-data-modeling]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # 多模检索流水线

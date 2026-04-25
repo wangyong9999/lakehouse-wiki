@@ -6,6 +6,7 @@ prerequisites: [lake-table, vector-database]
 tags: [scenarios, business, atlas]
 related: [bi-on-lake, rag-on-lake, multimodal-search-pipeline, real-time-lakehouse]
 status: stable
+last_reviewed: 2026-04-22
 ---
 
 # E2E 业务场景全景
