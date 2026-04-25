@@ -24,8 +24,12 @@ last_reviewed: 2026-04-22
 - **Arrow / FlightSQL / ADBC** —— 见 [Arrow 生态](query-engines/arrow-ecosystem.md)
 - **ASR（Automatic Speech Recognition）** —— 见 [音频管线](pipelines/audio-pipeline.md)
 - **AWQ / GPTQ（LLM 量化）** —— 见 [LLM Inference](ai-workloads/llm-inference.md)
+- **AQE（Adaptive Query Execution）** —— Spark 自适应查询执行，见 [Apache Spark](query-engines/spark.md)
+- **Backfill（数据回灌）** —— 见 [迁移手册](ops/migration-playbook.md) · [Bulk Loading](pipelines/bulk-loading.md)
 - **Benchmark** —— 见 [Benchmark 参考](benchmarks.md) · [量级数字总汇](benchmarks.md)
+- **Bin-packing（compaction 算法之一）** —— 把小文件按大小桶合并到目标尺寸，见 [Compaction](lakehouse/compaction.md)
 - **Binary Embedding** —— 见 [Quantization](retrieval/quantization.md)
+- **Bloom Filter** —— 概率型存在性判断，用于谓词下推前置过滤，见 [谓词下推](query-engines/predicate-pushdown.md) · [Puffin](lakehouse/puffin.md)
 - **Branching & Tagging** —— Iceberg 原生分支标签，见 [Branching & Tagging](lakehouse/branching-tagging.md)
 - **Bulk Loading** —— 见 [Bulk Loading](pipelines/bulk-loading.md)
 - **Business Scenarios（业务场景全景）** —— 见 [业务场景全景](scenarios/business-scenarios.md)
@@ -33,6 +37,7 @@ last_reviewed: 2026-04-22
 - **Case Studies（案例拆解）** —— 见 [案例拆解](cases/studies.md)
 - **Catalog** —— 见 [Catalog 章节](catalog/index.md)
 - **CDC（Change Data Capture）** —— 见 [Streaming Upsert / CDC](lakehouse/streaming-upsert-cdc.md)
+- **CBO（Cost-Based Optimizer）** —— 基于代价的查询优化器，见 [Apache Spark](query-engines/spark.md) · [Trino](query-engines/trino.md)
 - **CDP（Customer Data Platform）** —— 见 [CDP · 用户分群](scenarios/cdp-segmentation.md)
 - **Classical ML（经典 ML 预测）** —— 见 [经典 ML 预测](scenarios/classical-ml.md)
 - **ColBERT / Late Interaction** —— 见 [多模检索模式 Pattern E](retrieval/multimodal-retrieval-patterns.md) · [RAG §4 ColBERT v2](ai-workloads/rag.md)
@@ -52,7 +57,10 @@ last_reviewed: 2026-04-22
 
 ## D – F
 
+- **Data Contract（数据契约）** —— 见 [Data Quality for ML](ml-infra/data-quality-for-ml.md)
 - **Data Governance** —— 见 [数据治理](ops/data-governance.md)
+- **Data Lineage（血缘）** —— 见 [数据治理](ops/data-governance.md) · [Unity Catalog](catalog/unity-catalog.md)
+- **Dedupe（去重）** —— 见 [Streaming Upsert / CDC](lakehouse/streaming-upsert-cdc.md)
 - **Data Systems Evolution（演进史）** —— 见 [三代数据系统演进史](data-systems-evolution.md)
 - **Debezium** —— 见 [Kafka 到湖](pipelines/kafka-ingestion.md)
 - **Delete Files** —— 见 [Delete Files](lakehouse/delete-files.md)
@@ -84,12 +92,15 @@ last_reviewed: 2026-04-22
 - **HyDE** —— 见 [RAG §4 高级范式](ai-workloads/rag.md)
 - **Iceberg** —— 见 [Apache Iceberg](lakehouse/iceberg.md)
 - **Iceberg REST Catalog** —— 见 [Iceberg REST Catalog](catalog/iceberg-rest-catalog.md)
+- **Iceberg v3** —— Iceberg 协议下一代演进，见 [Iceberg v3](lakehouse/iceberg-v3.md)
 - **Image Pipeline** —— 见 [图像管线](pipelines/image-pipeline.md)
+- **Incident Management** —— 见 [事故管理](ops/incident-management.md)
 - **IVF-PQ** —— 见 [IVF-PQ](retrieval/ivf-pq.md)
 
 ## J – M
 
 - **Kafka → 湖** —— 见 [Kafka 到湖](pipelines/kafka-ingestion.md)
+- **Lakehouse（湖仓）** —— 数据湖 + 数仓融合架构，见 [湖仓章节](lakehouse/index.md) · [演进史](data-systems-evolution.md)
 - **Lake Table（湖表）** —— 见 [湖表](lakehouse/lake-table.md)
 - **Lake + Vector** —— 见 [Lake + Vector 融合架构](unified/lake-plus-vector.md)
 - **Lance Format** —— 见 [Lance Format](foundations/lance-format.md)
@@ -124,6 +135,7 @@ last_reviewed: 2026-04-22
 ## N – R
 
 - **Nessie** —— 见 [Nessie](catalog/nessie.md)
+- **OpenLineage** —— 数据血缘开放标准，见 [数据治理](ops/data-governance.md)
 - **Object Storage** —— 见 [对象存储](foundations/object-storage.md)
 - **Observability** —— 见 [可观测性](ops/observability.md)
 - **Offline Training Pipeline** —— 见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)
@@ -138,6 +150,7 @@ last_reviewed: 2026-04-22
 - **Partition Evolution** —— 见 [Partition Evolution](lakehouse/partition-evolution.md)
 - **Performance Tuning** —— 见 [性能调优](ops/performance-tuning.md)
 - **pgvector** —— 见 [pgvector](retrieval/pgvector.md)
+- **PII（Personally Identifiable Information）** —— 见 [Guardrails](ai-workloads/guardrails.md) · [合规](ops/compliance.md)
 - **PIT Join（Point-in-Time）** —— 主定义见 [Feature Store](ml-infra/feature-store.md)（工程落地见 [离线训练数据流水线](scenarios/offline-training-pipeline.md)）
 - **Train-Serve Skew（训推漂移）** —— 主定义见 [Feature Store](ml-infra/feature-store.md)（反模式汇总见 [20 反模式](ops/anti-patterns.md)）
 - **Polaris** —— 见 [Apache Polaris](catalog/polaris.md)
@@ -151,6 +164,7 @@ last_reviewed: 2026-04-22
 - **RAG** —— 见 [RAG](ai-workloads/rag.md)
 - **RAG Evaluation** —— 见 [RAG 评估](ai-workloads/rag-evaluation.md)
 - **RAGAS** —— 见 [RAG 评估](ai-workloads/rag-evaluation.md)
+- **RBAC（Role-Based Access Control）** —— 见 [安全与权限](ops/security-permissions.md)
 - **Recall@K** —— 见 [检索评估](retrieval/evaluation.md)
 - **Recommender System（推荐系统）** —— 见 [推荐系统](scenarios/recommender-systems.md)
 - **Red Teaming** —— 见 [Guardrails §7 Red Teaming](ai-workloads/guardrails.md)
@@ -160,16 +174,22 @@ last_reviewed: 2026-04-22
 
 ## S – Z
 
+- **SCD（Slowly Changing Dimension）** —— 维度表慢变模型 Type 1/2/3，见 [OLAP 建模](bi-workloads/olap-modeling.md)
+- **Schema Drift** —— Schema 漂移，见 [Schema Evolution](lakehouse/schema-evolution.md) · [Data Quality for ML](ml-infra/data-quality-for-ml.md)
 - **Schema Evolution** —— 见 [Schema Evolution](lakehouse/schema-evolution.md)
 - **Security** —— 见 [安全与权限](ops/security-permissions.md)
 - **Self-RAG** —— 见 [RAG §4 高级范式](ai-workloads/rag.md)
 - **Semantic Cache** —— 见 [Semantic Cache](ai-workloads/semantic-cache.md)
+- **Semantic Layer** —— 见 [语义层](bi-workloads/semantic-layer.md)
 - **SGLang** —— 见 [LLM Inference](ai-workloads/llm-inference.md)
+- **SLA / SLO / SLI** —— 见 [SLA · SLO · DRE](ops/sla-slo.md)
 - **Snapshot** —— 见 [Snapshot](lakehouse/snapshot.md)
+- **Snapshot Isolation** —— MVCC 提供的事务隔离级别，见 [MVCC](foundations/mvcc.md) · [一致性模型](foundations/consistency-models.md)
 - **Spark** —— 见 [Apache Spark](query-engines/spark.md)
 - **Speculative Decoding** —— 见 [LLM Inference](ai-workloads/llm-inference.md)
 - **SPLADE** —— 见 [Sparse Retrieval](retrieval/sparse-retrieval.md) · [Hybrid Search](retrieval/hybrid-search.md)
 - **SOC 2** —— 见 [合规](ops/compliance.md)
+- **Star Schema / Snowflake Schema** —— 维度建模经典模式，见 [OLAP 建模](bi-workloads/olap-modeling.md)
 - **StarRocks** —— 见 [StarRocks](query-engines/starrocks.md)
 - **Streaming Engines（流处理对比）** —— 见 [流处理引擎横比](compare/streaming-engines.md)
 - **Streaming Upsert / CDC** —— 见 [Streaming Upsert / CDC](lakehouse/streaming-upsert-cdc.md)
