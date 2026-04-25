@@ -1,6 +1,7 @@
 ---
 title: 30 分钟湖上多模检索 Demo
 type: tutorial
+level: A
 depth: 进阶
 applies_to: LanceDB 0.8+ · open_clip_torch 2.x（2025-04）
 last_reviewed: 2026-04-18

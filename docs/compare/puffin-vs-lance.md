@@ -2,6 +2,7 @@
 title: Puffin vs Lance · 向量下沉到湖的两条路
 applies_to: "2024-2026 主流"
 type: comparison
+level: B
 depth: 资深
 prerequisites: [puffin, lance-format, lake-plus-vector]
 tags: [comparison, vector, iceberg, lance, puffin]

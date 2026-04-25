@@ -1,6 +1,7 @@
 ---
 title: Delete Files（行级删除）
 type: concept
+level: A
 depth: 资深
 last_reviewed: 2026-04-18
 applies_to: Iceberg v2 (position/equality) · v3 (Deletion Vector) · Delta 4.0+ · Paimon 1.4+ · Hudi 1.0.2+

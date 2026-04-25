@@ -2,6 +2,7 @@
 title: 一致性模型
 applies_to: "通用基础概念 · 长期稳定"
 type: concept
+level: B
 tags: [foundations, distributed]
 aliases: [Consistency Models, CAP]
 related: [mvcc, object-storage, lake-table]

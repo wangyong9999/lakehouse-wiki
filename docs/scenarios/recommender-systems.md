@@ -2,6 +2,7 @@
 title: 推荐系统 · 搜索 · 发现
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: S
 depth: 资深
 prerequisites: [vector-database, feature-store, embedding, lake-table]
 tags: [scenario, recommender, search, embedding, feature-store]

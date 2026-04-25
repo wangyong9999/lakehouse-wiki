@@ -1,6 +1,7 @@
 ---
 title: Compaction（合并）
 type: concept
+level: A
 depth: 进阶
 last_reviewed: 2026-04-18
 applies_to: Iceberg v2/v3, Delta 4.0+, Paimon 1.4+, Hudi 1.0.2+

@@ -2,6 +2,7 @@
 title: Real-time Lakehouse · 端到端分钟级一体化
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: S
 depth: 资深
 prerequisites: [streaming-upsert-cdc, paimon, event-time-watermark]
 tags: [scenario, real-time, streaming, lakehouse]

@@ -1,6 +1,7 @@
 ---
 title: 你的第一张 Iceberg 表
 type: tutorial
+level: A
 depth: 入门
 applies_to: pyiceberg 0.9+ · DuckDB 1.5.2+（2026-Q2）
 last_reviewed: 2026-04-18

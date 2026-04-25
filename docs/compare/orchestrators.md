@@ -2,6 +2,7 @@
 title: 调度 / Orchestration 横比 · Airflow / Dagster / Prefect / DolphinScheduler
 applies_to: "2024-2026 主流"
 type: comparison
+level: A
 depth: 进阶
 tags: [comparison, orchestration, airflow, dagster, prefect]
 related: [modern-data-stack]

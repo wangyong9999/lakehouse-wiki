@@ -1,6 +1,7 @@
 ---
 title: Puffin（Iceberg 辅助索引文件）
 type: concept
+level: A
 depth: 进阶
 last_reviewed: 2026-04-18
 applies_to: Iceberg Puffin spec v1+ (v3 新增 deletion-vector-v1)

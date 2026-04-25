@@ -2,6 +2,7 @@
 title: Text-to-SQL 平台 · 自然语言查询数据仓库
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: S
 depth: 资深
 prerequisites: [rag, vector-database, lake-table]
 tags: [scenario, text-to-sql, llm, nlp, self-service]

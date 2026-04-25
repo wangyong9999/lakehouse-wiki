@@ -2,6 +2,7 @@
 title: OLAP 加速副本横比 · StarRocks / ClickHouse / Doris / Druid / Pinot
 applies_to: "2024-2026 主流"
 type: comparison
+level: B
 depth: 进阶
 prerequisites: [lake-table]
 tags: [comparison, olap, starrocks, clickhouse, doris, druid, pinot, accelerator]

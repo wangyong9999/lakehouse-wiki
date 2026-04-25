@@ -2,6 +2,7 @@
 title: BI on Lake · 湖上分析与仪表盘
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: S
 depth: 资深
 prerequisites: [lake-table, iceberg, trino, duckdb]
 tags: [scenario, bi, lakehouse, olap, data-warehouse]

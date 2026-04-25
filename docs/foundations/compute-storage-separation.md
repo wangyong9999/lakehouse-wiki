@@ -2,6 +2,7 @@
 title: 存算分离
 applies_to: "通用基础概念 · 长期稳定"
 type: concept
+level: B
 depth: 入门
 prerequisites: [object-storage]
 tags: [foundations, architecture]

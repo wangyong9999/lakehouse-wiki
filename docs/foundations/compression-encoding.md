@@ -1,6 +1,7 @@
 ---
 title: 压缩与编码
 type: concept
+level: B
 depth: 进阶
 prerequisites: [parquet, columnar-vs-row]
 tags: [foundations, compression, encoding, parquet, orc]

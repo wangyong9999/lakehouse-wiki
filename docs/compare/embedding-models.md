@@ -2,6 +2,7 @@
 title: Embedding 模型横比（BGE / E5 / Jina / OpenAI / Cohere）
 applies_to: "2024-2026 主流"
 type: comparison
+level: B
 tags: [comparison, embedding, retrieval]
 subjects: [bge, e5, jina, openai-embedding, cohere]
 status: stable

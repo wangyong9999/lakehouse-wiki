@@ -2,6 +2,7 @@
 title: RAG on Lake · 企业知识库问答
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: S
 depth: 资深
 prerequisites: [rag, vector-database, hybrid-search, lake-table, embedding]
 tags: [scenario, rag, lakehouse, retrieval, llm]

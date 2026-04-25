@@ -1,6 +1,7 @@
 ---
 title: Parquet
 type: concept
+level: B
 depth: 进阶
 tags: [foundations, file-format]
 aliases: [Apache Parquet]

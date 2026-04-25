@@ -2,6 +2,7 @@
 title: OLTP vs OLAP
 applies_to: "通用基础概念 · 长期稳定"
 type: concept
+level: B
 tags: [foundations, workload]
 aliases: [Transactional vs Analytical]
 related: [columnar-vs-row, lake-table, mvcc]

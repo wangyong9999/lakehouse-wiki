@@ -1,6 +1,7 @@
 ---
 title: 对象存储 (Object Storage)
 type: concept
+level: B
 depth: 进阶
 tags: [foundations, storage]
 aliases: [Object Store, 对象存储]

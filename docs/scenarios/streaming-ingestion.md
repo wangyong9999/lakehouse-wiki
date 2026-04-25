@@ -2,6 +2,7 @@
 title: 流式入湖（Streaming Ingestion）
 applies_to: "2024-2026 工业实践"
 type: scenario
+level: A
 tags: [scenario, streaming, cdc, lakehouse]
 related: [streaming-upsert-cdc, paimon, flink, lake-table]
 status: stable

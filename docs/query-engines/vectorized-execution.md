@@ -1,6 +1,7 @@
 ---
 title: 向量化执行（Vectorized Execution）
 type: concept
+level: B
 depth: 进阶
 tags: [foundations, execution]
 aliases: [Vectorized Query Processing, 向量化查询]
