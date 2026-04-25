@@ -7,7 +7,7 @@ body:
     id: page
     attributes:
       label: 页面路径
-      placeholder: docs/frontier/llm-inference-opt.md
+      placeholder: docs/ai-workloads/llm-inference-opt.md
     validations:
       required: true
   - type: textarea
@@ -46,4 +46,4 @@ body:
       label: 你愿意提交 PR 吗
       options:
         - label: 我愿意提 PR 修复
-        - label: 需要原 owner 跟进
+        - label: 需要维护者跟进

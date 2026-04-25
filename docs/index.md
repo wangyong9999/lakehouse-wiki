@@ -3,6 +3,7 @@ title: 首页
 description: 多模一体化湖仓 · 面向 AI 与 BI 负载的工程手册
 hide:
   - toc
+last_reviewed: 2026-04-22
 ---
 
 # 多模一体化湖仓手册
@@ -180,9 +181,9 @@ flowchart BT
 
 ---
 
-## 团队主线：一体化架构
+## 推荐主线：一体化架构
 
-> 这是**本团队的推荐主线**，不是普适最优。纯 BI / 纯 OLTP / 纯 Classical ML 训练团队可以跳过整块；同时做"湖仓 + 向量检索 + 多模"的团队才需要把这里读透。
+> 这是**本手册的推荐主线**，不是普适最优。纯 BI / 纯 OLTP / 纯 Classical ML 训练团队可以跳过整块；同时做"湖仓 + 向量检索 + 多模"的团队才需要把这里读透。
 
 <div class="grid cards" markdown>
 

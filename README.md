@@ -17,13 +17,11 @@ mkdocs serve
 
 然后打开 <http://127.0.0.1:8000/>
 
-## 贡献
+## 反馈与贡献
 
-详见 [贡献指南](docs/contributing.md)。简而言之：
-
-1. 开 Issue（用对应模板）或直接 fork
-2. 按 `docs/_templates/` 下的对应模板新建页面
-3. 开 PR，CI 绿 + review 合格后自动发布
+- 发现错误 / 过时 / 坏链接 → 走 [Issue 模板](https://github.com/wangyong9999/lakehouse-wiki/issues/new/choose) 或直接 PR
+- 内容更新以事件驱动为主（新论文 / 新工具 / 厂商变更 / 生产事故 / 季度自检）
+- 写作规范见 [贡献指南](docs/contributing.md)
 
 ## 内容组织
 
