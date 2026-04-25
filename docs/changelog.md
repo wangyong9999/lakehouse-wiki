@@ -13,6 +13,62 @@ hide:
 !!! note "关于日期"
     早期版本（v0.1 – v0.7）集中在同一天完成多轮推进，日期为当次 commit 时间而非真实迭代周期。手册进入稳定期后才采用月度 / 季度节奏。真实历史见 [commit log](https://github.com/wangyong9999/lakehouse-wiki/commits/main)。
 
+## 2026-04-25 · T1 治理大改造 · 元数据 + 边界 + 导航 + 章节规范
+
+**P1 · 信息架构 / 导航**
+
+- 主菜单提升「速查与索引」组：FAQ / 术语表 / 横向对比索引 / 按技术栈索引 / 按 Tag 浏览（原埋附录第 50+ 位 → 第 3 大菜单组）
+- 4 个入口 index.md（roles / learning-paths / scenarios / cases）顶部统一加 5 维交叉链 admonition
+- 一体化架构 nav 标题改为「一体化架构 · 跨章决策中心」，明示作用
+
+**P2 · 模块边界清理**
+
+- materialized-view 双份对称 admonition（lakehouse 协议视角 / bi-workloads BI 视角，各为 canonical）
+- RAG canonical 标定 = `ai-workloads/rag.md` 范式总论；satellites（`scenarios/rag-on-lake.md` 工程实践、cases/* 公司切面）加 admonition 指回
+- ADR-0006 加条款锚定 unified/ 极窄设计是 feature 不是塌陷
+- contributing.md 加「新内容归属决策 5 问」+ scenarios/cases 边界规则
+
+**P3 · Frontmatter 机械补**
+
+- 84 页按类别批补 type/status/tags/applies_to
+  - ADR / META / index 页 → reference 类型 + chapter tag
+  - foundations → applies_to「通用基础概念 · 长期稳定」
+  - scenarios → applies_to「2024-2026 工业实践」
+  - 其余技术页 → applies_to「2024-2026 主流」
+
+**P4 · level 字段补 44 页**
+
+- 启发式：行数 + 章节角色（cases/scenarios 偏 S · foundations/compare 偏 B · 其余按行数）
+- 覆盖率 63% → 80%
+
+**P5 · tag 治理（保守归并）**
+
+- 13 处同义词归并（vector-database → vector · mlops → ml-infra · multi-modal → multimodal 等）
+- **辩证发现**：原以为「386 tag 失控」，深入看发现 87% 长尾是合法产品名（vllm / ragas / langfuse / mcp 等）· 不该删 · 只做同义归并 · 405 → 395
+
+**P6 · related 字段补 44 页**
+
+- 章节启发式：compare 解析 filename 提取对比对象 · system 页用同章兄弟 + canonical 概念 · ai-workloads 用同章相邻
+- slug 修正：catalog-strategy → strategy 等
+
+**P7 · glossary 扩充 18 个高频缺词**
+
+- 新增：AQE / Backfill / Bin-packing / Bloom Filter / CBO / Data Contract / Data Lineage / Dedupe / Iceberg v3 / Incident Management / Lakehouse / OpenLineage / PII / RBAC / SCD / Schema Drift / Semantic Layer / SLA·SLO·SLI / Snapshot Isolation / Star Schema
+- 160 → 180 条目；保持「指向型反查索引」性质（非定义型）
+
+**P8 · 章节组织规范**
+
+- 新 ADR-0011：章节内部组织模式 · 显式声明轴 + 不强求统一
+- 不同章节按其领域内在结构组织（抽象层轴 / 生命周期轴 / 关注点轴 / 主题+产品轴 等）· 但 index.md 必须显式声明本章组织轴
+- contributing.md 加「季度自检 5 问」（过时 / canonical 漂移 / 章节组织 / 元数据 / 死链）
+
+**辩证修正记录**
+
+- B2 unified/ 章节原计划「彻底废除」· 深读后发现是 [ADR-0006](adr/0006-chapter-structure-dimensions.md) 极严格归属验证的设计成果（跨章 orchestrator + 6 维地图 + 团队路线主张）· 改为「保留 + 防误解声明」
+- D1 tag 失控原以为要大幅删长尾 · 深查发现长尾多是合法产品名 · 改为保守同义归并
+
+**总计**：9 commits · 影响 ~250 文件改动 · 不破坏内容 · 全程 mkdocs build --strict 通过
+
 ## 2026-04-17 · v0.8 · 品牌化与一致性修复
 
 **品牌**
