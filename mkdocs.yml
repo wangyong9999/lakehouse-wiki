@@ -131,6 +131,12 @@ nav:
           - 你的第一张 Iceberg 表: tutorials/first-iceberg-table.md
           - 30 分钟湖上多模检索 Demo: tutorials/multimodal-search-demo.md
           - 60 分钟 RAG on Iceberg: tutorials/rag-on-iceberg.md
+  - 速查与索引:
+      - FAQ: faq.md
+      - 术语表: glossary.md
+      - 横向对比索引: compare/index.md
+      - 按技术栈索引: index-by-technology.md
+      - 按 Tag 浏览: tags/index.md
   - 基础:
       - foundations/index.md
       - 物理存储层:
@@ -383,12 +389,7 @@ nav:
       - 0009 frontier → main 下沉判据: adr/0009-frontier-to-main-migration.md
       - 0010 废除 frontier 章节: adr/0010-abolish-frontier-chapter.md
   - 附录:
-      - FAQ: faq.md
-      - 术语表: glossary.md
       - 数据来源声明: about-sources.md
-      - 横向对比索引: compare/index.md
-      - 按技术栈索引: index-by-technology.md
-      - 按 Tag 浏览: tags/index.md
       - 参考资料:
           - Benchmark 参考 · 量级数字: benchmarks.md
           - Lakehouse 厂商与生态格局: vendor-landscape.md

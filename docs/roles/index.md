@@ -8,6 +8,14 @@ last_reviewed: 2026-04-18
 
 # 按角色入门
 
+!!! info "其他入口方式"
+    本页是「按角色」入口。也可以从其他维度进入：
+    
+    - **按时间顺序学** → [学习路径](../learning-paths/index.md)
+    - **按业务问题查** → [场景指南](../scenarios/index.md)
+    - **按工业案例学** → [工业案例](../cases/index.md)
+    - **按技术栈反查** → [按技术栈索引](../index-by-technology.md)
+
 不同角色需要关心的知识面完全不同。选一条对应身份进去。
 
 <div class="grid cards" markdown>

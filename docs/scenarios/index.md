@@ -7,6 +7,14 @@ last_reviewed: 2026-04-21
 
 # 场景指南
 
+!!! info "其他入口方式"
+    本页是「按业务场景」入口。也可以从其他维度进入：
+    
+    - **按角色读** → [按角色入门](../roles/index.md)
+    - **按时间顺序学** → [学习路径](../learning-paths/index.md)
+    - **按工业案例学** → [工业案例](../cases/index.md)（与本章配对阅读，下面 §三角关系详）
+    - **按技术栈反查** → [按技术栈索引](../index-by-technology.md)
+
 !!! info "本章是场景视角 · 不复述机制"
     讲**业务场景的端到端编排** + **工业案例切面**。机制原理在对应技术栈章（[lakehouse/](../lakehouse/index.md) · [retrieval/](../retrieval/index.md) · [query-engines/](../query-engines/index.md) · [bi-workloads/](../bi-workloads/index.md) · [ai-workloads/](../ai-workloads/index.md) · [ml-infra/](../ml-infra/index.md) · [catalog/](../catalog/index.md) · [pipelines/](../pipelines/index.md)）· 本章不复述。
     
