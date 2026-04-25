@@ -1,5 +1,6 @@
 ---
 title: 0001 选择 MkDocs Material 作为站点框架
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-17

@@ -1,5 +1,6 @@
 ---
 title: Text-to-SQL 平台 · 自然语言查询数据仓库
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 资深
 prerequisites: [rag, vector-database, lake-table]

@@ -1,5 +1,8 @@
 ---
 title: 数据来源与引用说明
+type: reference
+status: stable
+tags: [reference, sources]
 description: 手册内数字 / 引用 / 断言的来源分级 —— 给工程师的阅读参考
 last_reviewed: 2026-04-18
 ---

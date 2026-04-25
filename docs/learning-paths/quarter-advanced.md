@@ -1,5 +1,6 @@
 ---
 title: 一季度资深路径
+applies_to: "2024-2026 主流"
 type: learning-path
 tags: [learning-path, advanced]
 audience: 已完成 1 月 AI 或 1 月 BI 路径、想成为一体化湖仓方向资深工程师的人

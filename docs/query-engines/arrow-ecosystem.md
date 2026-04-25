@@ -1,5 +1,6 @@
 ---
 title: Arrow · FlightSQL · ADBC
+applies_to: "2024-2026 主流"
 type: concept
 depth: 进阶
 prerequisites: [columnar-vs-row, parquet]

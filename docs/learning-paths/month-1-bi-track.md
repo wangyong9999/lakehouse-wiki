@@ -1,5 +1,6 @@
 ---
 title: 一月 BI 方向路径
+applies_to: "2024-2026 主流"
 type: learning-path
 tags: [learning-path, bi, olap]
 audience: 完成新人路径后、想深入 BI / OLAP 方向的工程师

@@ -1,5 +1,8 @@
 ---
 title: Changelog
+type: reference
+status: stable
+tags: [reference, changelog]
 description: 手册版本变更记录
 hide:
   - toc

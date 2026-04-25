@@ -1,5 +1,6 @@
 ---
 title: 0006 章节结构与维度划分 · 多维并存 + canonical source 原则
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-21

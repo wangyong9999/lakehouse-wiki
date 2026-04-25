@@ -1,5 +1,8 @@
 ---
 title: 按技术栈索引 · Technology Index
+type: reference
+status: stable
+tags: [reference, index, technology]
 description: 你团队的技术栈 → 对应相关的手册内容
 hide:
   - toc

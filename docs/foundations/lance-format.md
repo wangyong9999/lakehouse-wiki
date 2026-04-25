@@ -1,5 +1,6 @@
 ---
 title: Lance Format
+applies_to: "通用基础概念 · 长期稳定"
 type: concept
 tags: [foundations, file-format, multimodal, vector]
 aliases: [Lance]

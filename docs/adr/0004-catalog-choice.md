@@ -1,5 +1,6 @@
 ---
 title: 0004 Catalog 选型：Iceberg REST + 逐步引入 Unity Catalog
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-17

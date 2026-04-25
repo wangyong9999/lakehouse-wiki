@@ -1,5 +1,6 @@
 ---
 title: 一月 AI 方向路径
+applies_to: "2024-2026 主流"
 type: learning-path
 tags: [learning-path, ai, retrieval]
 audience: 完成"一周新人路径"后、想深入 AI / 检索方向的工程师

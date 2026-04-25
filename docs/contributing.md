@@ -1,5 +1,8 @@
 ---
 title: 贡献指南
+type: reference
+status: stable
+tags: [reference, contributing]
 description: 本手册的写作规范、frontmatter 字段、画图与数字引用约定
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: 0002 选择 Iceberg 作为主表格式
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-17

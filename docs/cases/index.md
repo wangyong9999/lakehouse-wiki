@@ -1,5 +1,8 @@
 ---
 title: 工业案例 · 数据平台参考
+type: reference
+status: stable
+tags: [index, cases]
 description: 7 家工业数据平台深度案例 · Databricks / Snowflake / Netflix / LinkedIn / Uber / Pinterest / 阿里巴巴 · 统一 12 节坐标系深度拆解
 applies_to: 2024-2026 各家公开资料 · 具体技术栈版本见各深度页 applies_to
 last_reviewed: 2026-04-21

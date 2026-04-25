@@ -1,5 +1,8 @@
 ---
 title: 首页
+type: reference
+status: stable
+tags: [index, home]
 description: 多模一体化湖仓 · 面向 AI 与 BI 负载的工程手册
 hide:
   - toc

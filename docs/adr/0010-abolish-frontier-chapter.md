@@ -1,5 +1,6 @@
 ---
 title: 0010 废除 frontier 章节 · 前沿内容按主题归属
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-22

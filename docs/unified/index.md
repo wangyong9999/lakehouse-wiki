@@ -1,5 +1,8 @@
 ---
 title: 一体化架构 · 跨章整合决策中心
+type: reference
+status: stable
+tags: [index, unified]
 description: 多模一体化湖仓的跨章 orchestrator · 6 维整合地图 + 成熟度模型 + 决策流程 + 团队路线主张
 applies_to: 2024-2026 工业界一体化湖仓实践 · Iceberg 1.10+ · Paimon 1.4+ · Lance · Unity Catalog OSS · Polaris · Gravitino · vLLM · Ray · 详细版本在各章 canonical
 last_reviewed: 2026-04-21

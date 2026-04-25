@@ -1,5 +1,6 @@
 ---
 title: 一周新人路径
+applies_to: "2024-2026 主流"
 type: learning-path
 tags: [learning-path, onboarding]
 audience: 刚入组的工程师

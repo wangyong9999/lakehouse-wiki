@@ -1,5 +1,6 @@
 ---
 title: Rerank 模型横比 · bge / Cohere / Jina / Voyage / LLM-as-Reranker
+applies_to: "2024-2026 主流"
 type: comparison
 depth: 进阶
 tags: [comparison, rerank, cross-encoder]

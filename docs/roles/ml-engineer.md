@@ -1,5 +1,8 @@
 ---
 title: ML / AI 工程师
+type: reference
+status: stable
+tags: [role, ml-engineer]
 description: 向量检索、Embedding、RAG、Feature Store、Model Serving
 hide:
   - toc

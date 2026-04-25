@@ -1,5 +1,6 @@
 ---
 title: 流处理引擎横比 · Flink / Spark Streaming / Kafka Streams / RisingWave
+applies_to: "2024-2026 主流"
 type: comparison
 depth: 进阶
 tags: [comparison, streaming, flink, spark, kafka, risingwave]

@@ -1,5 +1,6 @@
 ---
 title: Agentic 工作流 · 自动化
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 资深
 prerequisites: [rag, agents-on-lakehouse, prompt-management]

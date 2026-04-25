@@ -1,5 +1,6 @@
 ---
 title: 多模检索流水线（Multimodal Search Pipeline）
+applies_to: "2024-2026 工业实践"
 type: scenario
 tags: [scenario, multimodal, retrieval]
 related: [multimodal-embedding, lake-plus-vector, hybrid-search, multimodal-data-modeling]

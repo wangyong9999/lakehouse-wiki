@@ -1,5 +1,6 @@
 ---
 title: 0005 查询引擎组合：Spark + Trino + Flink + DuckDB（+ StarRocks 按需）
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-17

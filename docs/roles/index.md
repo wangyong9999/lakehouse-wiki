@@ -1,5 +1,8 @@
 ---
 title: 按角色入门
+type: reference
+status: stable
+tags: [index, roles]
 description: 根据你在团队的位置，给一张优先阅读清单
 hide:
   - toc

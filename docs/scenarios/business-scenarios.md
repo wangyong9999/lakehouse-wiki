@@ -1,5 +1,6 @@
 ---
 title: E2E 业务场景全景 · Business Scenarios Atlas
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 进阶
 prerequisites: [lake-table, vector-database]

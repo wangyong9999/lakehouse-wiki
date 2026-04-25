@@ -1,5 +1,8 @@
 ---
 title: 多模检索
+type: reference
+status: stable
+tags: [index, retrieval]
 description: 向量数据库 · ANN 索引 · 检索流水线 · 多模 Embedding · 产品实现
 last_reviewed: 2026-04-20
 ---

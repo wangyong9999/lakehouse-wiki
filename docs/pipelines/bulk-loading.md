@@ -1,5 +1,6 @@
 ---
 title: Bulk Loading（批量装载）
+applies_to: "2024-2026 主流"
 type: concept
 depth: 进阶
 level: A

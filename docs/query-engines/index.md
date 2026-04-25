@@ -1,5 +1,8 @@
 ---
 title: 数据处理与分析引擎
+type: reference
+status: stable
+tags: [index, query-engines]
 description: 湖仓之上做 SQL / 批 / 流 / 分析的三类引擎——纯查询引擎 · 通用处理框架 · MPP OLAP 数据库
 last_reviewed: 2026-04-20
 ---

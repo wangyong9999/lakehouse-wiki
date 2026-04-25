@@ -1,5 +1,8 @@
 ---
 title: 数据工程师
+type: reference
+status: stable
+tags: [role, data-engineer]
 description: 入湖、建表、ETL、Compaction、性能 —— 数据工程师的优先阅读
 hide:
   - toc

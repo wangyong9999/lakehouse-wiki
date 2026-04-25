@@ -1,5 +1,8 @@
 ---
 title: 数据管线
+type: reference
+status: stable
+tags: [index, pipelines]
 description: 入湖、CDC、多模预处理、编排 —— 湖仓的"血管"
 last_reviewed: 2026-04-20
 ---

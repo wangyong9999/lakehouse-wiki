@@ -1,5 +1,6 @@
 ---
 title: 经典 ML 预测 · 分类 / 回归 / 时序
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 资深
 prerequisites: [lake-table, feature-store]

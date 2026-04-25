@@ -1,5 +1,6 @@
 ---
 title: 0003 多模向量存储选 LanceDB（辅以 Milvus）
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-17

@@ -1,5 +1,6 @@
 ---
 title: 稀疏检索对比 · BM25 / SPLADE / ColBERT / Elser
+applies_to: "2024-2026 主流"
 type: comparison
 depth: 资深
 tags: [comparison, retrieval, sparse, bm25, splade, colbert]

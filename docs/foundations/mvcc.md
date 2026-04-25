@@ -1,5 +1,6 @@
 ---
 title: MVCC（多版本并发控制）
+applies_to: "通用基础概念 · 长期稳定"
 type: concept
 tags: [foundations, concurrency]
 aliases: [Multi-Version Concurrency Control]

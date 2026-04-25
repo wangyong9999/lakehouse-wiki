@@ -1,5 +1,8 @@
 ---
 title: 平台 / 基础设施工程师
+type: reference
+status: stable
+tags: [role, platform-engineer]
 description: Catalog、权限、可观测性、成本、迁移 —— 平台视角的优先阅读
 hide:
   - toc

@@ -1,5 +1,6 @@
 ---
 title: 0007 版本刷新 SOP · known_versions.yml + version_scan.py + 季度刷新
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-21

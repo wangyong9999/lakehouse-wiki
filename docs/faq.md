@@ -1,5 +1,8 @@
 ---
 title: FAQ · 常见问题速答
+type: reference
+status: stable
+tags: [reference, faq]
 description: 跨目录的具体问题与速答
 last_reviewed: 2026-04-22
 ---

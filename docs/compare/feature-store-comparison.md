@@ -1,5 +1,6 @@
 ---
 title: Feature Store 横向对比
+applies_to: "2024-2026 主流"
 type: comparison
 depth: 进阶
 prerequisites: [feature-store]

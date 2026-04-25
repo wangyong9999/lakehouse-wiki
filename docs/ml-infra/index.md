@@ -1,5 +1,8 @@
 ---
 title: ML 平台
+type: reference
+status: stable
+tags: [index, ml-infra]
 description: 湖仓一等公民化 ML 资产 · 数据 / 特征 / 模型 / 训练 / 部署 / 监控 六环节闭环
 applies_to: 2024-2026 MLOps · MLflow 2.9+ · Feast 0.40+ · Ray 2.9+ · Kubeflow 1.8+ · Databricks UC Models · Tecton · Hopsworks 4.x
 last_reviewed: 2026-04-21

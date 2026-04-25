@@ -1,5 +1,8 @@
 ---
 title: 场景指南
+type: reference
+status: stable
+tags: [index, scenarios]
 description: 端到端业务场景 · 内嵌工业案例切面分析 · 场景+案例配对阅读
 applies_to: 2024-2026 工业实践 · 具体技术栈版本见各场景页 applies_to
 last_reviewed: 2026-04-21

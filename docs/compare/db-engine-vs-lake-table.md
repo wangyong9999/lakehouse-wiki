@@ -1,5 +1,6 @@
 ---
 title: DB 存储引擎 vs 湖表
+applies_to: "2024-2026 主流"
 type: comparison
 tags: [comparison, lakehouse, storage]
 subjects: [db-storage-engine, lake-table]

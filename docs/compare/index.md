@@ -1,5 +1,8 @@
 ---
 title: 横向对比
+type: reference
+status: stable
+tags: [index, compare]
 description: 同层对象之间的硬比，每一页都直接回答一个选型问题
 last_reviewed: 2026-04-18
 ---

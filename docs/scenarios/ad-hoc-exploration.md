@@ -1,5 +1,6 @@
 ---
 title: 即席探索 / Notebook 分析 · 数据科学家的主战场
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 进阶
 prerequisites: [lake-table, duckdb]

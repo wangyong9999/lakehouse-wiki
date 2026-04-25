@@ -1,5 +1,8 @@
 ---
 title: BI / 数据分析师
+type: reference
+status: stable
+tags: [role, bi-analyst]
 description: 湖上 SQL、建模、物化视图、仪表盘 —— BI 视角的优先阅读
 hide:
   - toc

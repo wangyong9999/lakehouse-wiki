@@ -1,5 +1,6 @@
 ---
 title: OLAP 加速副本横比 · StarRocks / ClickHouse / Doris / Druid / Pinot
+applies_to: "2024-2026 主流"
 type: comparison
 depth: 进阶
 prerequisites: [lake-table]

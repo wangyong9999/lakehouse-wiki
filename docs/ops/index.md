@@ -1,5 +1,8 @@
 ---
 title: 运维与生产 · Operations
+type: reference
+status: stable
+tags: [index, ops]
 description: 湖仓 + AI 生产运维完整能力体系 · 6 组 17 页 · 从能见度到生产准入
 applies_to: 2024-2026 湖仓 / AI 生产运维实践
 last_reviewed: 2026-04-21

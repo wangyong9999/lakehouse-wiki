@@ -1,5 +1,6 @@
 ---
 title: 欺诈检测 · 风险控制
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 资深
 prerequisites: [lake-table, event-time-watermark, feature-store]

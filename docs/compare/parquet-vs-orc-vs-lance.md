@@ -1,5 +1,6 @@
 ---
 title: Parquet vs ORC vs Lance
+applies_to: "2024-2026 主流"
 type: comparison
 tags: [comparison, file-format]
 subjects: [parquet, orc, lance]

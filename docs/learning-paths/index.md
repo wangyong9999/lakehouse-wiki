@@ -1,5 +1,8 @@
 ---
 title: 学习路径
+type: reference
+status: stable
+tags: [index, learning-paths]
 description: 按时间维度的认知脚手架 —— 给新人一条路
 last_reviewed: 2026-04-18
 ---

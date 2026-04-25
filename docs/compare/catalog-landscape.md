@@ -1,5 +1,6 @@
 ---
 title: Catalog 全景对比（HMS / REST / Nessie / Unity / Polaris / Gravitino）
+applies_to: "2024-2026 主流"
 type: comparison
 tags: [comparison, catalog]
 subjects: [hive-metastore, iceberg-rest-catalog, nessie, unity-catalog, polaris]

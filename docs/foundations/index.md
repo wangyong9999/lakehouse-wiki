@@ -1,5 +1,8 @@
 ---
 title: 基础
+type: reference
+status: stable
+tags: [index, foundations]
 description: 存储、文件格式、计算、分布式等前置知识
 last_reviewed: 2026-04-22
 ---

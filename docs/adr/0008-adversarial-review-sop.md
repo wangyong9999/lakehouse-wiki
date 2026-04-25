@@ -1,5 +1,6 @@
 ---
 title: 0008 对抗评审 SOP · 季度 Agent 驱动 + 人工复核
+tags: [adr, decision, governance]
 type: adr
 status: accepted
 date: 2026-04-21

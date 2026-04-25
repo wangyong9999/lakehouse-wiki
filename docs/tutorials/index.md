@@ -1,5 +1,8 @@
 ---
 title: Tutorials · 手把手
+type: reference
+status: stable
+tags: [index, tutorials]
 description: 可以在 30–60 分钟内跑通的端到端 Tutorial
 hide:
   - toc

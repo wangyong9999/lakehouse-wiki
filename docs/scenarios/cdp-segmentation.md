@@ -1,5 +1,6 @@
 ---
 title: CDP · 用户分群 · 精细化运营
+applies_to: "2024-2026 工业实践"
 type: scenario
 depth: 进阶
 prerequisites: [lake-table, event-time-watermark]

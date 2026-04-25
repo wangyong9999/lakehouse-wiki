@@ -1,5 +1,8 @@
 ---
 title: ADR（架构决策记录）
+type: reference
+status: stable
+tags: [index, adr]
 description: 团队级别的技术决策留痕
 ---
 

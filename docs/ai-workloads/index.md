@@ -1,5 +1,8 @@
 ---
 title: AI 应用
+type: reference
+status: stable
+tags: [index, ai-workloads]
 description: LLM 时代的应用层 · 三层分组 · 应用模式 / 应用-Runtime 桥 / 工程纪律
 applies_to: 2024-2026 LLM 应用工程 · vLLM 0.10+ / SGLang 0.4+ / LangGraph 0.2+ / MCP 2025-11 spec
 last_reviewed: 2026-04-21

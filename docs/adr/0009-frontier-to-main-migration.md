@@ -1,5 +1,6 @@
 ---
 title: 0009 frontier → main 下沉判据 · 成熟度门槛 + 周期审视
+tags: [adr, decision, governance]
 type: adr
 status: partially-superseded
 date: 2026-04-21

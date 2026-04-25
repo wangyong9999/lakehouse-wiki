@@ -1,5 +1,8 @@
 ---
 title: BI 负载
+type: reference
+status: stable
+tags: [index, bi-workloads]
 description: 湖仓上 OLAP / 仪表盘 / 指标中台 / BI × LLM 的工程机制
 last_reviewed: 2026-04-20
 ---
