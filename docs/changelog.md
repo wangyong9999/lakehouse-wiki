@@ -13,6 +13,39 @@ hide:
 !!! note "关于日期"
     早期版本（v0.1 – v0.7）集中在同一天完成多轮推进，日期为当次 commit 时间而非真实迭代周期。手册进入稳定期后才采用月度 / 季度节奏。真实历史见 [commit log](https://github.com/wangyong9999/lakehouse-wiki/commits/main)。
 
+## 2026-04-25 · T2 治理收尾 · 长期参考库 + 章节组织声明 + 元数据深化
+
+**P1 · ADR-0011 同步**：补 ADR/index.md 已有列表（漏加修正）
+
+**P2 · related slug 修复**：8 处失效 slug 修正（含我 P6 自身的 lance vs lance-format bug）；YAML field 解析改用精确分隔符避免贪婪 bug
+
+**P3 · 长期参考库 + 章节组织声明（最大头）**：
+- 新增 `docs/references/<chapter>/` 目录结构 + 13 章 references 索引
+  - 6 章 bootstrap 含完整起步内容（lakehouse / retrieval / ai-workloads / ml-infra / catalog / ops）
+  - 7 章占位含基础起步条目（foundations / query-engines / bi-workloads / pipelines / scenarios / cases / unified）
+- 新 ADR-0012 治理 references 长期维护规范（每条带类型 + 价值描述 + 辩证标注：工业验证 / 仅论文 / 厂商主张）
+- 修订 ADR-0011：从"X 轴"抽象标签 → "子组 + 一句话定位"实用格式
+  - **辩证发现**：原"主题+产品双层轴"等抽象标签反而增加认知负担，读者要的是直接看子组
+- 13 章 index.md 统一加"本章组织"admonition · 列子组 + 关键页 + 指向对应 references/
+- nav 加"参考资料库"子菜单（在"速查与索引"组下）
+
+**P4 · depth 字段补 13 页**：foundations 入门/进阶 / scenarios 资深 / compare/query-engines 进阶 · 启发式
+
+**外部权威验证**（按本轮新增方法论）：
+- LangChain / LlamaIndex 官方文档结构与 ai-workloads/ 三层组织 cross-check
+- Google MLOps 成熟度模型与 ml-infra/ 三组分布对齐
+- Apache Iceberg 官方 docs 结构与 lakehouse/ 五组接近
+- 直接用 WebFetch 拉取，避免凭模型记忆写
+
+**辩证修正记录**：
+- T2-P4 (level 审视) 取消：hooks/page_badges 验证发现 level 是纯元数据无 UI 消费，原计划价值低 → 替换为 depth 补齐（depth 才是真 UI 字段）
+- prerequisites 缺 172 页跳过：必须逐页判断真前置，不能批补
+- aliases / systems / level 字段：跳过（纯元数据，无 UI 消费，价值低）
+- tag 长尾砍：T1 已辩证否决（产品名合法）
+- 自身 bug 揭露：P2 第一次正则贪婪导致 27 文件误改 → 立即回退 + 用精确分隔符重做
+
+**总计**：5 commits · 影响 ~50 文件改动 · 14 个新文件（ADR-0012 + 13 references 索引）· 全程 mkdocs build --strict 通过
+
 ## 2026-04-25 · T1 治理大改造 · 元数据 + 边界 + 导航 + 章节规范
 
 **P1 · 信息架构 / 导航**
