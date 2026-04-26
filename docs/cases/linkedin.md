@@ -7,7 +7,7 @@ last_reviewed: 2026-04-21
 applies_to: Kafka · Apache Pinot 1.x · Samza · Venice · Azkaban · DataHub · Feathr (ASF Incubator · 2024+) · OpenHouse (2024 开源) · Iceberg (2023+ 迁移中) · 2024-2026 公开资料
 tags: [case-study, linkedin, kafka, pinot, venice, openhouse, datahub, iceberg]
 aliases: [LinkedIn Data Platform]
-related: [studies, netflix, uber, kafka-ingestion, studies]
+related: [studies, netflix, uber, kafka-ingestion]
 systems: [kafka, pinot, samza, venice, datahub, feathr, openhouse, iceberg]
 status: stable
 ---

@@ -5,7 +5,7 @@ type: comparison
 depth: 进阶
 level: B
 tags: [comparison, lakehouse, storage]
-related: [db-engine-vs-lake-table, lake-table]
+related: [lake-table, iceberg, snapshot]
 subjects: [db-storage-engine, lake-table]
 status: stable
 last_reviewed: 2026-04-17
