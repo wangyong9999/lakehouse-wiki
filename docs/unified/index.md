@@ -10,6 +10,15 @@ last_reviewed: 2026-04-21
 
 # 一体化架构 · 跨章整合决策中心
 
+!!! info "本章组织"
+    本章 3 页（极小 · 跨章 orchestrator · 见 [ADR-0006](../adr/0006-chapter-structure-dimensions.md)）：
+    
+    - 本页 ([unified/index](index.md)) —— 6 维整合地图 + 成熟度模型 + 决策流程 + 团队路线主张
+    - [Lake + Vector 融合架构](lake-plus-vector.md) —— 3 范式选型决策
+    - [多模数据建模](multimodal-data-modeling.md) —— 多模表 schema 设计
+    
+    外部权威：[`docs/references/unified/`](../references/unified/index.md)（Lakehouse 论文 · Composable Data Stack）。
+
 !!! info "本章为什么只有 3 页 · 这是 feature 不是 bug"
     本章按 [ADR-0006 §章节归属规则](../adr/0006-chapter-structure-dimensions.md) **极严格**约束：每次新增必须验证"≥5 个单章都无法单独承载"才放这里。
     

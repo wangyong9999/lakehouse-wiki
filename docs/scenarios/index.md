@@ -10,6 +10,17 @@ last_reviewed: 2026-04-21
 
 # 场景指南
 
+!!! info "本章组织"
+    本章按 4 个业务领域 + 1 个全景入口：
+    
+    - **全景入口**：[E2E 业务场景全景](business-scenarios.md)
+    - **BI · 分析**：[BI on Lake](bi-on-lake.md) / [即席探索](ad-hoc-exploration.md)
+    - **RAG · AI**：[RAG on Lake](rag-on-lake.md) / [Agentic 工作流](agentic-workflows.md) / [Text-to-SQL](text-to-sql-platform.md) / [多模检索流水线](multimodal-search-pipeline.md)
+    - **流 · 实时**：[流式入湖](streaming-ingestion.md) / [Real-time Lakehouse](real-time-lakehouse.md) / [CDP 用户分群](cdp-segmentation.md) / [欺诈检测](fraud-detection.md)
+    - **ML · 推荐**：[离线训练数据流水线](offline-training-pipeline.md) / [Feature Serving](feature-serving.md) / [经典 ML](classical-ml.md) / [推荐系统](recommender-systems.md)
+    
+    外部权威：[`docs/references/scenarios/`](../references/scenarios/index.md)（推荐 / RAG / Agent 经典论文 · 工业实践博客）。
+
 !!! info "其他入口方式"
     本页是「按业务场景」入口。也可以从其他维度进入：
     

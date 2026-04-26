@@ -10,6 +10,15 @@ last_reviewed: 2026-04-21
 
 # ML 平台
 
+!!! info "本章组织"
+    本章按 3 个子组（按 ML 生命周期）：
+    
+    - **数据与特征**：[Feature Store](feature-store.md) / [Data Quality for ML](data-quality-for-ml.md) / [Embedding 流水线](embedding-pipelines.md) + [Feature Store 横比](../compare/feature-store-comparison.md)
+    - **模型生命周期**：[MLOps 生命周期](mlops-lifecycle.md) / [Experiment Tracking](experiment-tracking.md) / [Model Registry](model-registry.md) / [ML Evaluation](ml-evaluation.md) / [Model Serving](model-serving.md) / [Model Monitoring](model-monitoring.md)
+    - **训练基础设施**：[训练编排](training-orchestration.md) / [GPU 调度](gpu-scheduling.md) / [LLM Fine-tuning](fine-tuning-data.md)
+    
+    外部权威：[`docs/references/ml-infra/`](../references/ml-infra/index.md)（Google MLOps Maturity · MLflow / Kubeflow / Feast 文档 · Chip Huyen 教科书）。**Google MLOps 关键 components**（Data validation / Feature stores / ML metadata / Pipeline orchestration / Model registries / Monitoring）与本章三组分布对齐。
+
 !!! tip "一句话定位"
     **把 ML 资产放进湖仓一等公民体系的工程层**。数据是 Iceberg 表、特征是 Feature Store View、模型是 Registry 里带 snapshot 血缘的 artifact —— **六环节闭环（数据/特征/训练/评估/部署/监控）全部带版本、可审计、可回滚**。这是相对 Chip Huyen 2022、Google MLOps Maturity、Databricks MLOps Stacks 的差异化叙事。
 

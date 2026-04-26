@@ -10,6 +10,18 @@ last_reviewed: 2026-04-21
 
 # 运维与生产
 
+!!! info "本章组织"
+    本章按 6 个能力组：
+    
+    - **日常运维 · 效率**：[可观测性](observability.md) / [性能调优](performance-tuning.md) / [故障排查手册](troubleshooting.md)
+    - **容量 · 目标**：[SLA · SLO · DRE](sla-slo.md) / [容量规划](capacity-planning.md)
+    - **成本 · 效益**：[成本优化 · FinOps](cost-optimization.md) / [TCO 模型](tco-model.md)
+    - **安全 · 治理 · 合规**：[安全与权限](security-permissions.md) / [数据治理](data-governance.md) / [多租户隔离](multi-tenancy.md) / [合规](compliance.md)
+    - **DR · 变更 · 事故**：[灾难恢复 DR](disaster-recovery.md) / [变更管理](change-management.md) / [事故管理](incident-management.md) / [迁移手册](migration-playbook.md)
+    - **反模式 · 清单**：[28 反模式](anti-patterns.md) / [生产上线检查清单](production-checklist.md)
+    
+    外部权威：[`docs/references/ops/`](../references/ops/index.md)（Google SRE Book · DataOps Manifesto · FinOps Foundation · NIST Privacy / GDPR / EU AI Act）。
+
 !!! tip "一句话定位"
     **把湖仓 + AI 系统稳定地跑在生产上所需要的工程能力**。覆盖**能见度 · 性能成本 · 安全合规 · 变更迁移 · 故障响应 · 生产准入**6 能力组 · 17 页 · 从 L0 起步到 L3 卓越的完整路径。
 

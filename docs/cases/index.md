@@ -10,6 +10,16 @@ last_reviewed: 2026-04-21
 
 # 工业案例 · 数据平台参考
 
+!!! info "本章组织"
+    本章按 3 类样本类型（公开资料性质决定 · 详见下方 §S32 admonition）+ 综述：
+    
+    - **商业产品平台**：[Databricks](databricks.md) / [Snowflake](snowflake.md)
+    - **大厂内部数据平台**：[Netflix](netflix.md) / [LinkedIn](linkedin.md) / [Uber](uber.md) / [阿里巴巴](alibaba.md)
+    - **业务系统案例**：[Pinterest](pinterest.md)
+    - **综述横比**：[7 家横比矩阵](studies.md)
+    
+    外部权威：[`docs/references/cases/`](../references/cases/index.md)（各家官方 Engineering Blog · 关键论文如 Iceberg / PinSage / Snowflake Elastic DW）。
+
 !!! info "其他入口方式"
     本页是「按工业案例」入口。也可以从其他维度进入：
     

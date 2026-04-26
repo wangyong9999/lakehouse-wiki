@@ -9,6 +9,18 @@ last_reviewed: 2026-04-20
 
 # BI 负载
 
+!!! info "本章组织"
+    本章 6 页**主题平铺**（无子组 · 各主题相对独立）：
+    
+    - [OLAP 建模](olap-modeling.md) —— 维度 / 宽表 / Data Vault
+    - [语义层 · Metrics Layer](semantic-layer.md) —— dbt SL / Cube · BI × LLM 抓手
+    - [物化视图（BI 视角）](materialized-view.md) —— IVM / Query Rewrite
+    - [查询加速](query-acceleration.md) —— OLAP 副本 / Cache / Z-order
+    - [仪表盘 SLO](dashboard-slo.md) —— BI 服务可靠性
+    - [BI × LLM](bi-plus-llm.md) —— Text-to-SQL / Insight Bot
+    
+    外部权威：[`docs/references/bi-workloads/`](../references/bi-workloads/index.md)（Kimball 维度建模 · dbt SL / Cube / Materialize / Snowflake Cortex Analyst 文档）。
+
 !!! tip "一句话定位"
     **"湖仓就是数仓"时代**——BI 负载从独立数仓迁到 Iceberg/Paimon 之上。本章讲**机制和原理**（建模 · 物化视图 · 查询加速 · 语义层 · 仪表盘 SLO · BI × LLM）· 不讲端到端场景编排（看 [BI on Lake 场景页](../scenarios/bi-on-lake.md)）。
 

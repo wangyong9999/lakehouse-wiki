@@ -137,6 +137,21 @@ nav:
       - 横向对比索引: compare/index.md
       - 按技术栈索引: index-by-technology.md
       - 按 Tag 浏览: tags/index.md
+      - 参考资料库:
+          - references/index.md
+          - 湖仓 / 表格式: references/lakehouse/index.md
+          - 多模检索 / 向量: references/retrieval/index.md
+          - AI 应用 / RAG / Agent: references/ai-workloads/index.md
+          - ML 平台 / MLOps: references/ml-infra/index.md
+          - Catalog / 治理平面: references/catalog/index.md
+          - 运维 / SRE / DataOps: references/ops/index.md
+          - 基础理论: references/foundations/index.md
+          - 查询引擎: references/query-engines/index.md
+          - BI 负载: references/bi-workloads/index.md
+          - 数据管线: references/pipelines/index.md
+          - 业务场景: references/scenarios/index.md
+          - 工业案例: references/cases/index.md
+          - 一体化架构: references/unified/index.md
   - 基础:
       - foundations/index.md
       - 物理存储层:
@@ -389,6 +404,7 @@ nav:
       - 0009 frontier → main 下沉判据: adr/0009-frontier-to-main-migration.md
       - 0010 废除 frontier 章节: adr/0010-abolish-frontier-chapter.md
       - 0011 章节内部组织模式: adr/0011-chapter-internal-organization.md
+      - 0012 外部参考资料库: adr/0012-references-library.md
   - 附录:
       - 数据来源声明: about-sources.md
       - 参考资料:

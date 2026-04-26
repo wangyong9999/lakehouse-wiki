@@ -9,6 +9,15 @@ last_reviewed: 2026-04-22
 
 # 基础
 
+!!! info "本章组织"
+    本章按 3 个子组（物理底层 → 概念演进）：
+    
+    - **物理存储层**：[对象存储](object-storage.md) / [存算分离](compute-storage-separation.md)
+    - **列式数据文件**：[列式 vs 行式](columnar-vs-row.md) / [Parquet](parquet.md) / [ORC](orc.md) / [Lance Format](lance-format.md) / [压缩与编码](compression-encoding.md) + [横比](../compare/parquet-vs-orc-vs-lance.md)
+    - **系统与并发理论**：[MVCC](mvcc.md) / [OLTP vs OLAP](oltp-vs-olap.md) / [一致性模型](consistency-models.md)
+    
+    外部权威：[`docs/references/foundations/`](../references/foundations/index.md)（DDIA · 经典 DBMS 论文 · 列式 / MVCC 奠基论文）。
+
 湖仓与多模检索系统的共同"石头地基"。先把这一节过掉，再读后面 Snapshot、ANN、向量化执行就不会卡壳。
 
 !!! info "和 `lakehouse/` 的分界"

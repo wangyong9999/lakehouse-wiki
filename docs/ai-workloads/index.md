@@ -10,6 +10,15 @@ last_reviewed: 2026-04-21
 
 # AI 应用
 
+!!! info "本章组织"
+    本章按 3 层（按 LLM 应用栈位置）：
+    
+    - **层 1 · 应用模式**：[RAG](rag.md) / [MCP](mcp.md) / [Agent Patterns](agent-patterns.md) / [Structured Output](structured-output.md) / [Agents on Lakehouse](agents-on-lakehouse.md) —— 写什么样的 AI 应用
+    - **层 2 · 应用-Runtime 桥**：[LLM Inference](llm-inference.md) / [LLM Gateway](llm-gateway.md) / [Semantic Cache](semantic-cache.md) —— LLM 怎么被服务到应用
+    - **层 3 · 工程纪律**：[Prompt 管理](prompt-management.md) / [Evaluation](rag-evaluation.md) / [LLM Observability](llm-observability.md) / [Guardrails](guardrails.md) / [Authorization](authorization.md) / [Conversation Lifecycle](conversation-lifecycle.md) —— 生产 AI 必过的质量 / 安全 / 运维
+    
+    外部权威：[`docs/references/ai-workloads/`](../references/ai-workloads/index.md)（RAG / Agent 论文 · LangChain / LlamaIndex / Anthropic 官方文档 · MCP spec）。**LlamaIndex Component Guides**（Indexing / Loading / Querying / Evaluating / Observability）覆盖类似主题，本章按"层"分组比按"组件"分组更突出生产工程化路径。
+
 !!! tip "一句话定位"
     **湖仓 + 多模检索是底座 · AI 应用是负载**。本章讲 "LLM 应用层怎么被工程化" · 按**三层分组**组织页面（**应用模式 / 应用-Runtime 桥 / 工程纪律**）· 让读者知道不同层该什么时间进入。**不讲 ML 平台底层**（Model Serving / Feature Store / GPU 调度 → 看 ml-infra）· **不讲检索机制**（Embedding / ANN / Rerank → 看 retrieval）。
 

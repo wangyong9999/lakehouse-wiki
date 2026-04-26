@@ -9,6 +9,18 @@ last_reviewed: 2026-04-20
 
 # 数据处理与分析引擎（章节里简称"查询引擎"）
 
+!!! info "本章组织"
+    本章按 5 个子组（按引擎类型分流）：
+    
+    - **引擎通用原理**：[向量化执行](vectorized-execution.md) / [谓词下推](predicate-pushdown.md) / [Compute Pushdown](compute-pushdown.md)
+    - **纯查询引擎**：[Trino](trino.md) / [DuckDB](duckdb.md)
+    - **通用处理框架**：[Spark](spark.md) / [Flink](flink.md)
+    - **MPP OLAP 数据库**：[StarRocks](starrocks.md) / [ClickHouse](clickhouse.md) / [Doris](doris.md)
+    - **数据接入协议**：[Arrow / FlightSQL / ADBC](arrow-ecosystem.md)
+    - **横向对比**：[计算引擎对比](../compare/compute-engines.md) / [流处理引擎横比](../compare/streaming-engines.md) / [OLAP 加速副本横比](../compare/olap-accelerator-comparison.md)
+    
+    外部权威：[`docs/references/query-engines/`](../references/query-engines/index.md)（Presto / Spark SQL / Flink / DuckDB / Volcano / 向量化执行论文）。
+
 !!! warning "读这一章前先分清三类 · 否则容易选错"
     **"查询引擎"是 umbrella term**——这一章实际覆盖 **3 类定位完全不同**的产品，混成一类看容易选错：
 

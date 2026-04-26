@@ -9,6 +9,17 @@ last_reviewed: 2026-04-20
 
 # 数据管线
 
+!!! info "本章组织"
+    本章按 5 个子组（数据从哪来 → 怎么处理）：
+    
+    - **架构总览**：[管线架构模式](pipeline-patterns.md) / [事件时间 Watermark](event-time-watermark.md)
+    - **入湖模式**：[CDC 内核](cdc-internals.md) / [Kafka 到湖](kafka-ingestion.md) / [托管入湖](managed-ingestion.md) / [Bulk Loading](bulk-loading.md)
+    - **模态管线**：[图像](image-pipeline.md) / [视频](video-pipeline.md) / [音频](audio-pipeline.md) / [文档](document-pipeline.md)
+    - **韧性**：[管线韧性](pipeline-resilience.md)
+    - **编排**：[编排系统](orchestration.md) + [横比](../compare/orchestrators.md)
+    
+    外部权威：[`docs/references/pipelines/`](../references/pipelines/index.md)（Debezium / Dataflow Model / Streaming Systems · Airflow / Dagster / Prefect 文档）。
+
 湖仓的"**数据从哪来**"和"**数据怎么处理**"集中在这一节：入湖协议、CDC 技术、托管 EL(T) 工具、多模内容预处理、编排调度，以及生产必修的管线韧性横切主题。
 
 !!! info "和其他章节的边界"

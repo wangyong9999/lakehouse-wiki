@@ -9,6 +9,18 @@ last_reviewed: 2026-04-20
 
 # 多模检索
 
+!!! info "本章组织"
+    本章按 5 个子组：
+    
+    - **基础概念**：[向量数据库](vector-database.md) / [Embedding](embedding.md) / [多模 Embedding](multimodal-embedding.md)
+    - **多模专题**：[多模检索架构模式](multimodal-retrieval-patterns.md) / [检索单元粒度](retrieval-granularity.md)
+    - **ANN 索引**：[HNSW](hnsw.md) / [IVF-PQ](ivf-pq.md) / [DiskANN](diskann.md) / [Quantization](quantization.md)
+    - **检索流水线**：[Hybrid Search](hybrid-search.md) / [Sparse Retrieval](sparse-retrieval.md) / [Filter-aware ANN](filter-aware-search.md) / [跨模态查询](cross-modal-queries.md) / [Rerank](rerank.md) / [评估](evaluation.md)
+    - **产品实现**：[Milvus](milvus.md) / [LanceDB](lancedb.md) / [Qdrant](qdrant.md) / [Weaviate](weaviate.md) / [pgvector](pgvector.md)
+    - **横向对比**：[ANN 索引](../compare/ann-index-comparison.md) / [向量库](../compare/vector-db-comparison.md) / [Embedding 模型](../compare/embedding-models.md) / [Rerank 模型](../compare/rerank-models.md) / [稀疏检索](../compare/sparse-retrieval.md)
+    
+    外部权威：[`docs/references/retrieval/`](../references/retrieval/index.md)（HNSW / PQ / DiskANN / CLIP 等论文 · BEIR / MTEB benchmark · Pinecone Learning Center）。
+
 本章聚焦 **"向量检索（ANN）+ 稀疏检索 + 多模 embedding + 多模专题"** · 覆盖：基础概念 · 多模架构模式 · 检索粒度 · ANN 索引 · 检索流水线 · 产品实现。
 
 !!! warning "本章真正聚焦"

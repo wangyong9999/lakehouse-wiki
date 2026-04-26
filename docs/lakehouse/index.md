@@ -10,6 +10,17 @@ last_reviewed: 2026-04-22
 
 # 湖仓表格式
 
+!!! info "本章组织"
+    本章按 5 个子组：
+    
+    - **核心协议**：[湖表](lake-table.md) / [Snapshot](snapshot.md) / [Manifest](manifest.md) / [Schema Evolution](schema-evolution.md) / [Partition Evolution](partition-evolution.md) / [Time Travel](time-travel.md) / [Branching & Tagging](branching-tagging.md) / [Puffin](puffin.md)
+    - **运维机制**：[Streaming Upsert / CDC](streaming-upsert-cdc.md) / [Delete Files](delete-files.md) / [Compaction](compaction.md)
+    - **扩展前沿**：[Materialized View（协议视角）](materialized-view.md) / [多模湖仓](multi-modal-lake.md) / [Iceberg v3](iceberg-v3.md)
+    - **系统实现**：[Iceberg](iceberg.md) / [Paimon](paimon.md) / [Hudi](hudi.md) / [Delta Lake](delta-lake.md)
+    - **横向对比**：[DB vs 湖表](../compare/db-engine-vs-lake-table.md) / [4 表格式](../compare/iceberg-vs-paimon-vs-hudi-vs-delta.md) / [Puffin vs Lance](../compare/puffin-vs-lance.md)
+    
+    外部权威：[`docs/references/lakehouse/`](../references/lakehouse/index.md)。**对比 Apache Iceberg 官方 docs 结构**（Tables → Branching/Config/Evolution/Maintenance/Performance/Reliability/Schemas/Partitioning · 与本章组织接近）。
+
 聚焦"建在对象存储上的表"——它怎么组织元数据、怎么做 ACID、怎么支持演化与时间旅行。
 
 !!! info "和 `foundations/` 的分界 · 湖表的物理底座"

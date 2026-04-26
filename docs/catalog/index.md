@@ -10,6 +10,18 @@ last_reviewed: 2026-04-20
 
 # 元数据与 Catalog
 
+!!! info "本章组织"
+    本章按 4 层 + 1 个总入口：
+    
+    - **总入口**：[Catalog 策略 · 选型决策](strategy.md)
+    - **协议层**：[Iceberg REST Catalog](iceberg-rest-catalog.md)
+    - **OSS 实现层**：[Polaris](polaris.md) / [Nessie](nessie.md) / [Unity Catalog](unity-catalog.md) / [Gravitino](gravitino.md)
+    - **商业托管层**：[AWS Glue Data Catalog](glue.md)
+    - **存量 / 历史**：[Hive Metastore](hive-metastore.md)
+    - **横向对比**：[Catalog 全景对比](../compare/catalog-landscape.md)
+    
+    外部权威：[`docs/references/catalog/`](../references/catalog/index.md)（Iceberg REST spec · Polaris / Nessie / UC / Gravitino 官方文档）。
+
 Catalog 是湖仓的"表注册中心"。一体化湖仓时代它的角色已膨胀成"**治理平面**"——不只注册表，还要管向量、模型、文件 Volume、权限、血缘。
 
 !!! warning "读这一章前先理清四层 · 否则很容易选错"
