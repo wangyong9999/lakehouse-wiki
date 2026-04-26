@@ -2,6 +2,7 @@
 title: 列式 vs 行式存储
 applies_to: "通用基础概念 · 长期稳定"
 type: concept
+depth: 入门
 level: B
 tags: [foundations, storage]
 aliases: [Columnar vs Row]

@@ -2,6 +2,7 @@
 title: 谓词下推（Predicate Pushdown）
 applies_to: "2024-2026 主流"
 type: concept
+depth: 进阶
 level: B
 tags: [foundations, execution, optimization]
 aliases: [Predicate Pushdown, 下推优化]

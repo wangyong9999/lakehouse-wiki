@@ -2,6 +2,7 @@
 title: ORC
 applies_to: "通用基础概念 · 长期稳定"
 type: concept
+depth: 入门
 level: B
 tags: [foundations, file-format]
 aliases: [Apache ORC, Optimized Row Columnar]

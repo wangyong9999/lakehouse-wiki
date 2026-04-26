@@ -2,6 +2,7 @@
 title: Catalog 全景对比（HMS / REST / Nessie / Unity / Polaris / Gravitino）
 applies_to: "2024-2026 主流"
 type: comparison
+depth: 进阶
 level: B
 tags: [comparison, catalog]
 related: [strategy, unity-catalog, polaris]
