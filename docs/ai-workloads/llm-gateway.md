@@ -7,7 +7,7 @@ last_reviewed: 2026-04-18
 applies_to: LiteLLM 1.x · Portkey · Helicone · OpenRouter · 2024-2026 生态
 tags: [ml-infra, llm, gateway, router]
 aliases: [LLM Proxy, LLM Router]
-related: [rag, mcp, llm-inference-opt]
+related: [rag, mcp, llm-inference]
 systems: [litellm, portkey, helicone, openrouter, vllm]
 status: stable
 ---

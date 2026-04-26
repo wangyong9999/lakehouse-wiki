@@ -8,7 +8,7 @@ applies_to: MLflow 2.9+（alias API）· Unity Catalog Models · W&B Artifacts �
 prerequisites: [feature-store, unified-catalog-strategy]
 tags: [ml-infra, model, registry, model-card, compliance]
 aliases: [模型注册中心, Model Registry, Model Card]
-related: [feature-store, model-serving, model-monitoring, unity-catalog, data-governance, fine-tuning-data, ai-governance]
+related: [feature-store, model-serving, model-monitoring, unity-catalog, data-governance, fine-tuning-data, compliance]
 systems: [mlflow, unity-catalog, wandb, databricks, huggingface-hub, oci]
 status: stable
 ---

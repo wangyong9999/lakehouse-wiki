@@ -6,7 +6,7 @@ level: B
 depth: 资深
 prerequisites: [puffin, lance-format, lake-plus-vector]
 tags: [comparison, vector, iceberg, lance, puffin]
-related: [puffin, lance]
+related: [puffin, lance-format]
 subjects: [iceberg-puffin, lance-format]
 status: stable
 last_reviewed: 2026-04-17

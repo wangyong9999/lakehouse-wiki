@@ -7,7 +7,7 @@ last_reviewed: 2026-04-21
 applies_to: GDPR · HIPAA · PDPA · 个保法 · CCPA · SOC2 · EU AI Act (2024-08 生效) · NIST AI RMF · 中国《生成式 AI 服务管理办法》(2023-07) · 2024-2026 实践
 tags: [ops, compliance, governance, privacy, eu-ai-act, ai-compliance]
 aliases: [Compliance, Data Privacy, AI Compliance]
-related: [data-governance, security-permissions, ai-governance, model-registry]
+related: [data-governance, security-permissions, compliance, model-registry]
 status: stable
 ---
 
